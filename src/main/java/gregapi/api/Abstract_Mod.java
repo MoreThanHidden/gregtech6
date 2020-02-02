@@ -23,17 +23,16 @@ import static gregapi.data.CS.*;
 
 import java.util.List;
 
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartedEvent;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.common.event.FMLServerStoppedEvent;
-import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import gregapi.code.ArrayListNoNulls;
 import gregapi.compat.ICompat;
 import gregapi.util.CR;
 import gregapi.util.UT;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
+import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
+import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
+import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
+import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
 
 /**
  * @author Gregorius Techneticies
@@ -106,12 +105,10 @@ public abstract class Abstract_Mod {
 	public abstract String getModNameForLog();
 	/** Return the actual Proxy. Note: DO NOT RETURN mProxy! */
 	public abstract Abstract_Proxy getProxy();
-	/** Called on PreInit */
-	public abstract void onModPreInit2(FMLPreInitializationEvent aEvent);
-	/** Called on Init */
-	public abstract void onModInit2(FMLInitializationEvent aEvent);
-	/** Called on PostInit */
-	public abstract void onModPostInit2(FMLPostInitializationEvent aEvent);
+	/** Called on CommonSetup */
+	public abstract void onModCommonSetup(FMLCommonSetupEvent aEvent);
+	/** Called on LoadComplete */
+	public abstract void onModLoadComplete(FMLLoadCompleteEvent aEvent);
 	/** Called on Server Start */
 	public abstract void onModServerStarting2(FMLServerStartingEvent aEvent);
 	/** Called after Server Start */
@@ -121,12 +118,10 @@ public abstract class Abstract_Mod {
 	/** Called after Server Stop */
 	public abstract void onModServerStopped2(FMLServerStoppedEvent aEvent);
 	
-	/** Called after the Last GT PreInit Phase happened. */
-	public void onModFinalPreInit(FMLPreInitializationEvent aEvent) {/**/}
-	/** Called after the Last GT Init Phase happened. */
-	public void onModFinalInit(FMLInitializationEvent aEvent) {/**/}
-	/** Called after the Last GT PostInit Phase happened. */
-	public void onModFinalPostInit(FMLPostInitializationEvent aEvent) {/**/}
+	/** Called after the Last GT CommonSetup Phase happened. */
+	public void onModFinalCommonSetup(FMLCommonSetupEvent aEvent) {/**/}
+	/** Called after the Last GT LoadComplete Phase happened. */
+	public void onModFinalLoadComplete(FMLLoadCompleteEvent aEvent) {/**/}
 	
 	
 	@Override public String toString() {return getModID();}
@@ -148,7 +143,7 @@ public abstract class Abstract_Mod {
 	
 	// Just add Calls to these from within your Mods load phases.
 	
-	public void onModPreInit(FMLPreInitializationEvent aEvent) {
+	public void onModPreInit(FMLCommonSetupEvent aEvent) {
 		if (mStartedPreInit) return;
 		try {
 			mProxy = getProxy();
@@ -162,9 +157,9 @@ public abstract class Abstract_Mod {
 			
 			mStartedPreInit = T;
 			sStartedPreInit++;
-			if (mProxy != null) mProxy.onProxyBeforePreInit(this, aEvent);
-			onModPreInit2(aEvent);
-			if (mProxy != null) mProxy.onProxyAfterPreInit(this, aEvent);
+			if (mProxy != null) mProxy.onProxyBeforeCommonSetup(this, aEvent);
+			onModCommonSetup(aEvent);
+			if (mProxy != null) mProxy.onProxyAfterCommonSetup(this, aEvent);
 			sFinishedPreInit++;
 			mFinishedPreInit = T;
 			
@@ -176,7 +171,7 @@ public abstract class Abstract_Mod {
 				for (ICompat tCompat : mCompatClasses) {
 					String tString = tCompat.toString();
 					UT.LoadingBar.step(UT.Code.stringValid(tString)?tString:"UNNAMED");
-					try {tCompat.onPreLoad(aEvent);} catch(Throwable e) {e.printStackTrace(ERR);}
+					try {tCompat.onCommonSetup(aEvent);} catch(Throwable e) {e.printStackTrace(ERR);}
 				}
 				UT.LoadingBar.finish();
 			}
@@ -185,7 +180,7 @@ public abstract class Abstract_Mod {
 			
 			loadRunnables("Saving Configs", sConfigs);
 			
-			if (sFinishedPreInit >= sModCountUsingGTAPI) for (Abstract_Mod tMod : MODS_USING_GT_API) try {tMod.onModFinalPreInit(aEvent);} catch(Throwable e) {e.printStackTrace(ERR);}
+			if (sFinishedPreInit >= sModCountUsingGTAPI) for (Abstract_Mod tMod : MODS_USING_GT_API) try {tMod.onModFinalCommonSetup(aEvent);} catch(Throwable e) {e.printStackTrace(ERR);}
 			
 			OUT.println(getModNameForLog() + ": =======================");
 			ORD.println(getModNameForLog() + ": =======================");
@@ -194,56 +189,10 @@ public abstract class Abstract_Mod {
 			e.printStackTrace(ERR);
 			throw new RuntimeException(e);
 		}
+
 	}
 	
-	public void onModInit(FMLInitializationEvent aEvent) {
-		if (mStartedInit) return;
-		try {
-			OUT.println(getModNameForLog() + ": ===================");
-			ORD.println(getModNameForLog() + ": ===================");
-			
-			loadRunnables("Before Init", mBeforeInit); mBeforeInit.clear(); mBeforeInit = null;
-			
-			OUT.println(getModNameForLog() + ": Init-Phase started!");
-			ORD.println(getModNameForLog() + ": Init-Phase started!");
-			
-			mStartedInit = T;
-			sStartedInit++;
-			if (mProxy != null) mProxy.onProxyBeforeInit(this, aEvent);
-			onModInit2(aEvent);
-			if (mProxy != null) mProxy.onProxyAfterInit(this, aEvent);
-			sFinishedInit++;
-			mFinishedInit = T;
-			
-			OUT.println(getModNameForLog() + ": Init-Phase finished!");
-			ORD.println(getModNameForLog() + ": Init-Phase finished!");
-			
-			if (!mCompatClasses.isEmpty()) {
-				UT.LoadingBar.start("Loading Compat (Init)", mCompatClasses.size());
-				for (ICompat tCompat : mCompatClasses) {
-					String tString = tCompat.toString();
-					UT.LoadingBar.step(UT.Code.stringValid(tString)?tString:"UNNAMED");
-					try {tCompat.onLoad(aEvent);} catch(Throwable e) {e.printStackTrace(ERR);}
-				}
-				UT.LoadingBar.finish();
-			}
-			
-			loadRunnables("After Init", mAfterInit); mAfterInit.clear(); mAfterInit = null;
-			
-			loadRunnables("Saving Configs", sConfigs);
-			
-			if (sFinishedInit >= sModCountUsingGTAPI) for (Abstract_Mod tMod : MODS_USING_GT_API) try {tMod.onModFinalInit(aEvent);} catch(Throwable e) {e.printStackTrace(ERR);}
-			
-			OUT.println(getModNameForLog() + ": ====================");
-			ORD.println(getModNameForLog() + ": ====================");
-		} catch(Throwable e) {
-			loadRunnables("Saving Configs after Exception!", sConfigs);
-			e.printStackTrace(ERR);
-			throw new RuntimeException(e);
-		}
-	}
-	
-	public void onModPostInit(FMLPostInitializationEvent aEvent) {
+	public void onModPostInit(FMLLoadCompleteEvent aEvent) {
 		if (mStartedPostInit) return;
 		try {
 			OUT.println(getModNameForLog() + ": =======================");
@@ -256,9 +205,9 @@ public abstract class Abstract_Mod {
 			
 			mStartedPostInit = T;
 			sStartedPostInit++;
-			if (mProxy != null) mProxy.onProxyBeforePostInit(this, aEvent);
-			onModPostInit2(aEvent);
-			if (mProxy != null) mProxy.onProxyAfterPostInit(this, aEvent);
+			if (mProxy != null) mProxy.onProxyBeforeLoadComplete(this, aEvent);
+			onModLoadComplete(aEvent);
+			if (mProxy != null) mProxy.onProxyAfterLoadComplete(this, aEvent);
 			sFinishedPostInit++;
 			mFinishedPostInit = T;
 			
@@ -270,7 +219,7 @@ public abstract class Abstract_Mod {
 				for (ICompat tCompat : mCompatClasses) {
 					String tString = tCompat.toString();
 					UT.LoadingBar.step(UT.Code.stringValid(tString)?tString:"UNNAMED");
-					try {tCompat.onPostLoad(aEvent);} catch(Throwable e) {e.printStackTrace(ERR);}
+					try {tCompat.onLoadComplete(aEvent);} catch(Throwable e) {e.printStackTrace(ERR);}
 				}
 				UT.LoadingBar.finish();
 			}
@@ -279,7 +228,7 @@ public abstract class Abstract_Mod {
 			
 			loadRunnables("Finalize", mFinalize); mFinalize.clear(); mFinalize = null;
 			
-			if (sFinishedPostInit >= sModCountUsingGTAPI) for (Abstract_Mod tMod : MODS_USING_GT_API) try {tMod.onModFinalPostInit(aEvent);} catch(Throwable e) {e.printStackTrace(ERR);}
+			if (sFinishedPostInit >= sModCountUsingGTAPI) for (Abstract_Mod tMod : MODS_USING_GT_API) try {tMod.onModLoadComplete(aEvent);} catch(Throwable e) {e.printStackTrace(ERR);}
 			
 			sFinalized++;
 			mFinalized = T;

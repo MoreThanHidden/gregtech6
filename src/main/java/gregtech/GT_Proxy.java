@@ -22,19 +22,8 @@ package gregtech;
 import static gregapi.data.CS.*;
 
 import java.net.URL;
-import java.util.EnumSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.eventhandler.Event.Result;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.Phase;
-import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;
-import cpw.mods.fml.common.network.FMLNetworkEvent.ClientConnectedToServerEvent;
 import gregapi.GT_API;
 import gregapi.api.Abstract_Mod;
 import gregapi.api.Abstract_Proxy;
@@ -65,31 +54,25 @@ import gregtech.entities.Override_Drops;
 import gregtech.entities.projectiles.EntityArrow_Material;
 import gregtech.tileentity.misc.MultiTileEntityCertificate;
 import net.minecraft.block.Block;
-import net.minecraft.entity.ai.EntityAITempt;
-import net.minecraft.entity.monster.EntityEnderman;
-import net.minecraft.entity.monster.EntitySkeleton;
-import net.minecraft.entity.passive.EntityOcelot;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.monster.EndermanEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.world.gen.feature.WorldGenMinable;
+import net.minecraft.potion.Effects;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.GenerationStage;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.terraingen.BiomeEvent;
-import net.minecraftforge.event.terraingen.DecorateBiomeEvent;
-import net.minecraftforge.event.terraingen.OreGenEvent.GenerateMinable;
-import net.minecraftforge.event.terraingen.OreGenEvent.GenerateMinable.EventType;
-import net.minecraftforge.event.terraingen.PopulateChunkEvent;
-import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public abstract class GT_Proxy extends Abstract_Proxy {
 	public final HashSetNoNulls<String> mSupporterListSilver = new HashSetNoNulls<>();
@@ -101,25 +84,23 @@ public abstract class GT_Proxy extends Abstract_Proxy {
 	public int mSkeletonsShootGTArrows = 16, mFlintChance = 30;
 	
 	public GT_Proxy() {
-		MinecraftForge.EVENT_BUS         .register(this);
-		MinecraftForge.ORE_GEN_BUS       .register(this);
-		MinecraftForge.TERRAIN_GEN_BUS   .register(this);
-		FMLCommonHandler.instance().bus().register(this);
+		MinecraftForge.EVENT_BUS                       .register(this);
+		FMLJavaModLoadingContext.get().getModEventBus().register(this);
 	}
 	
 	@Override
-	public void onProxyBeforePreInit(Abstract_Mod aMod, FMLPreInitializationEvent aEvent) {
-		super.onProxyBeforePreInit(aMod, aEvent);
+	public void onProxyBeforeCommonSetup(Abstract_Mod aMod, FMLCommonSetupEvent aEvent) {
+		super.onProxyBeforeCommonSetup(aMod, aEvent);
 		new Thread(new Runnable() {@Override public void run() {
 		
 		if (ConfigsGT.CLIENT.get(ConfigCategories.news, "version_checker", T)) try {
 			// Using http because Java screws up https on Windows at times.
-			String tVersion = javax.xml.xpath.XPathFactory.newInstance().newXPath().compile("metadata/versioning/release/text()").evaluate(javax.xml.parsers.DocumentBuilderFactory.newInstance().newDocumentBuilder().parse((new URL("http://gregtech.mechaenetia.com/com/gregoriust/gregtech/gregtech_1.7.10/maven-metadata.xml")).openConnection().getInputStream()), javax.xml.xpath.XPathConstants.STRING).toString().substring(0, 7);
+			//String tVersion = javax.xml.xpath.XPathFactory.newInstance().newXPath().compile("metadata/versioning/release/text()").evaluate(javax.xml.parsers.DocumentBuilderFactory.newInstance().newDocumentBuilder().parse((new URL("http://gregtech.mechaenetia.com/com/gregoriust/gregtech/gregtech_1.7.10/maven-metadata.xml")).openConnection().getInputStream()), javax.xml.xpath.XPathConstants.STRING).toString().substring(0, 7);
 			// Check if the first 4 Characters of the Version Number are the same, quick and dirty check that doesn't require Number parsing.
 			// And just ignore the first Versions of each Major Release, since that one is usually the buggiest or a quickfix.
-			mVersionOutdated = !tVersion.endsWith("00") && !tVersion.endsWith("01") && !BuildInfo.version.startsWith(tVersion.substring(0, 4));
+			//mVersionOutdated = !tVersion.endsWith("00") && !tVersion.endsWith("01") && !BuildInfo.version.startsWith(tVersion.substring(0, 4));
 			
-			OUT.println("GT_Download_Thread: Current Version = '" + BuildInfo.version.substring(0, 7) + "'; Recent Version = '" + tVersion + "'; Majorly Outdated = " + (mVersionOutdated?"Yes":"No"));
+			//OUT.println("GT_Download_Thread: Current Version = '" + BuildInfo.version.substring(0, 7) + "'; Recent Version = '" + tVersion + "'; Majorly Outdated = " + (mVersionOutdated?"Yes":"No"));
 		} catch(Throwable e) {OUT.println("GT_Download_Thread: Failed Downloading Version Number of the latest Major Version!");}
 		
 		if (downloadSupporterListSilverFromMain()) {
@@ -153,21 +134,26 @@ public abstract class GT_Proxy extends Abstract_Proxy {
 	}
 	
 	@SubscribeEvent
-	public void onClientConnectedToServerEvent(ClientConnectedToServerEvent aEvent) {
+	public void onClientLoggedInEvent(PlayerEvent.PlayerLoggedInEvent event) {
 		//
 	}
 	
 	@SubscribeEvent
 	public void onEndermanTeleportEvent(EnderTeleportEvent aEvent) {
-		if (aEvent.entityLiving instanceof EntityEnderman && aEvent.entityLiving.getActivePotionEffect(Potion.weakness) != null) aEvent.setCanceled(T);
+		if (aEvent.getEntityLiving() instanceof EndermanEntity && aEvent.getEntityLiving().getActivePotionEffect(Effects.WEAKNESS) != null) aEvent.setCanceled(T);
 	}
+
 	
-	private static final EnumSet<EventType> PREVENTED_ORES = EnumSet.of(EventType.COAL, EventType.IRON, EventType.GOLD, EventType.DIAMOND, EventType.REDSTONE, EventType.LAPIS, EventType.QUARTZ);
-	
-	@SubscribeEvent
-	public void onOreGenEvent(GenerateMinable aEvent) {
-		if (mDisableVanillaOres && aEvent.generator instanceof WorldGenMinable && PREVENTED_ORES.contains(aEvent.type)) aEvent.setResult(Result.DENY);
+
+	private static final List<Block> PREVENTED_ORES = Arrays.asList(Blocks.COAL_ORE, Blocks.IRON_ORE, Blocks.GOLD_ORE, Blocks.DIAMOND_ORE, Blocks.REDSTONE_ORE, Blocks.LAPIS_ORE, Blocks.NETHER_QUARTZ_ORE);
+
+	//TODO: Make this happen somewhere
+	private static void removeVanillaOreFromGeneration() {
+		for (Biome biome : ForgeRegistries.BIOMES) {
+			biome.getFeatures(GenerationStage.Decoration.UNDERGROUND_ORES).clear();
+		}
 	}
+
 	@SubscribeEvent
 	public void onTerrainGenEvent(DecorateBiomeEvent.Decorate aEvent) {
 		if (aEvent.world.provider.dimensionId == 0) {
@@ -432,7 +418,7 @@ public abstract class GT_Proxy extends Abstract_Proxy {
 	}
 	
 	@SubscribeEvent
-	public void onServerTickEvent(ServerTickEvent aEvent) {
+	public void onServerTickEvent(TickEvent.ServerTickEvent aEvent) {
 		if (aEvent.side.isServer() && aEvent.phase == Phase.START && SERVER_TIME > 20) {
 			try {
 				Iterator<EntityOcelot> tIterator = mOcelots.iterator();

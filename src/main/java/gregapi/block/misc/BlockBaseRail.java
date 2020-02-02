@@ -35,6 +35,7 @@ import gregapi.render.IIconContainer;
 import gregapi.util.ST;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
+import net.minecraft.block.RailBlock;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.command.IEntitySelector;
 import net.minecraft.creativetab.CreativeTabs;
@@ -61,7 +62,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 @Optional.InterfaceList(value = {
 	@Optional.Interface(iface = "micdoodle8.mods.galacticraft.api.block.IPartialSealableBlock", modid = ModIDs.GC)
 })
-public class BlockBaseRail extends BlockRailBase implements IBlockBase, IBlockSealable {
+public class BlockBaseRail extends RailBlock implements IBlockBase, IBlockSealable {
 	public final String mNameInternal;
 	public final float mSpeed, mExplosionResistance;
 	public final IIconContainer mIconPrimary, mIconSecondary;

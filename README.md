@@ -1,4 +1,8 @@
-This is the Git Repository for GregTech-6
+This is a Fork of Gregtech 6 for Hidden's GregTech-6 Port to 1.15.2
+
+This will be a tedious port from 1.7.10 to 1.15.2 that I'll work on from time to time in my spare time.
+
+Thanks to Greg for all the work that has gone into GT6 and to the other contributors, I'll attempt to bring this experience to the newer versions of Minecraft.
 
 # License
 
@@ -11,8 +15,17 @@ derivative of it are licensed under the
 
 # Support
 
-You can use the Issue Tracker, or you can just use the Forums. Since you should need a Forum Account to log into this anyways, I would recommend you to go for the Forums if you have an Issue.
+You can use the Issue Tracker on this branch, don't bug Greg with crap I've broken.
 
 # Dev Environment Setup
 
-TODO: OvermindDL1 should replace this with proper instructions. ;)
+IntelliJ:
+1. Open IDEA, and import project.
+2. Select your build.gradle file and have it import.
+3. Run the following command: "gradlew genIntellijRuns" (./gradlew genIntellijRuns if you are on Mac/Linux)
+4. Refresh the Gradle Project in IDEA if required.
+
+Eclipse:
+1. Run the following command: "gradlew genEclipseRuns" (./gradlew genEclipseRuns if you are on Mac/Linux)
+2. Open Eclipse, Import > Existing Gradle Project > Select Folder
+   or run "gradlew eclipse" to generate the project.

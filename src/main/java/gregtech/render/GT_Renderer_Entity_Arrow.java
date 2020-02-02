@@ -21,22 +21,32 @@ package gregtech.render;
 
 import static gregapi.data.CS.*;
 
-import cpw.mods.fml.client.registry.RenderingRegistry;
-import net.minecraft.client.renderer.entity.RenderArrow;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.ArrowRenderer;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.client.registry.IRenderFactory;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
-public class GT_Renderer_Entity_Arrow extends RenderArrow {
+public class GT_Renderer_Entity_Arrow extends ArrowRenderer implements IRenderFactory {
 	private final ResourceLocation mTexture;
 	
-	public GT_Renderer_Entity_Arrow(Class<? extends Entity> aArrowClass, String aTextureName) {
-		mTexture = new ResourceLocation(RES_PATH_ENTITY+aTextureName+".png");
+	public GT_Renderer_Entity_Arrow(EntityType aArrowClass, String aTextureName) {
+		super(Minecraft.getInstance().getRenderManager());
+		mTexture = new ResourceLocation(RES_PATH_ENTITY+aTextureName);
 		RenderingRegistry.registerEntityRenderingHandler(aArrowClass, this);
 	}
-	
+
 	@Override
-	protected ResourceLocation getEntityTexture(EntityArrow p_110775_1_) {
+	public ResourceLocation getEntityTexture(Entity entity) {
 		return mTexture;
+	}
+
+	@Override
+	public EntityRenderer createRenderFor(EntityRendererManager manager) {
+		return this;
 	}
 }

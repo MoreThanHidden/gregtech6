@@ -22,28 +22,13 @@ package gregtech;
 import static gregapi.data.CS.*;
 import static gregapi.util.CR.*;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
-import appeng.api.AEApi;
-import cpw.mods.fml.common.LoadController;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.ModContainer;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLInterModComms;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartedEvent;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.common.event.FMLServerStoppedEvent;
-import cpw.mods.fml.common.event.FMLServerStoppingEvent;
-import cpw.mods.fml.common.registry.EntityRegistry;
 import gregapi.api.Abstract_Mod;
 import gregapi.api.Abstract_Proxy;
 import gregapi.block.prefixblock.PrefixBlockItem;
@@ -53,7 +38,6 @@ import gregapi.code.ItemStackContainer;
 import gregapi.code.TagData;
 import gregapi.compat.CompatMods;
 import gregapi.data.ANY;
-import gregapi.data.CS.DirectoriesGT;
 import gregapi.data.CS.FluidsGT;
 import gregapi.data.CS.ItemsGT;
 import gregapi.data.CS.ModIDs;
@@ -81,11 +65,7 @@ import gregapi.util.CR;
 import gregapi.util.OM;
 import gregapi.util.ST;
 import gregapi.util.UT;
-import gregtech.blocks.fluids.BlockOcean;
 import gregtech.compat.*;
-import gregtech.entities.projectiles.EntityArrow_Material;
-import gregtech.entities.projectiles.EntityArrow_Potion;
-import gregtech.items.tools.early.GT_Tool_Scoop;
 import gregtech.loaders.a.*;
 import gregtech.loaders.b.Loader_Books;
 import gregtech.loaders.b.Loader_Fuels;
@@ -95,107 +75,111 @@ import gregtech.loaders.b.Loader_MultiTileEntities;
 import gregtech.loaders.b.Loader_OreProcessing;
 import gregtech.loaders.b.Loader_Worldgen;
 import gregtech.loaders.c.*;
-import ic2.core.Ic2Items;
-import net.minecraft.block.Block;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraftforge.common.ChestGenHooks;
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.fluids.FluidContainerRegistry;
-import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.oredict.OreDictionary;
+import net.minecraft.item.Items;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
+import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
+import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
+import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
+import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
+import net.minecraftforge.registries.ForgeRegistries;
 
 /**
  * @author Gregorius Techneticies
  */
-@Mod(modid=ModIDs.GT, name="GregTech", version="GT6-MC1710", dependencies="required-after:"+ModIDs.GAPI_POST)
+@Mod(ModIDs.GT)
 public class GT6_Main extends Abstract_Mod {
-	@SidedProxy(modId = ModIDs.GT, clientSide = "gregtech.GT_Client", serverSide = "gregtech.GT_Server")
-	public static GT_Proxy gt_proxy;
+	public static GT_Proxy gt_proxy = DistExecutor.runForDist(() -> GT_Client::new,() -> GT_Server::new);
 	
 	public GT6_Main() {
 		GT = this;
 		NW_GT = new NetworkHandler(MD.GT.mID, "GREG");
 	}
-	
+
 	@Override
-	public void onModPreInit2(FMLPreInitializationEvent aEvent) {
+	public void onModCommonSetup(FMLCommonSetupEvent aEvent) {
 		try {
-			OUT.println(getModNameForLog() + ": Sorting GregTech to the end of the Mod List for further processing.");
-			LoadController tLoadController = ((LoadController)UT.Reflection.getFieldContent(Loader.instance(), "modController", T, T));
-			List<ModContainer> tModList = tLoadController.getActiveModList(), tNewModsList = new ArrayList<>(tModList.size());
-			ModContainer tGregTech = null;
-			for (short i = 0; i < tModList.size(); i++) {
-				ModContainer tMod = tModList.get(i);
-				if (tMod.getModId().equalsIgnoreCase(MD.GT.mID)) tGregTech = tMod; else tNewModsList.add(tMod);
-			}
-			if (tGregTech != null) tNewModsList.add(tGregTech);
-			UT.Reflection.getField(tLoadController, "activeModList", T, T).set(tLoadController, tNewModsList);
+			//OUT.println(getModNameForLog() + ": Sorting GregTech to the end of the Mod List for further processing.");
+			//TODO: Move Gregtech to the end of the mod list
+
+			// LoadController tLoadController = ((LoadController)UT.Reflection.getFieldContent(Loader.instance(), "modController", T, T));
+			//List<ModContainer> tModList = tLoadController.getActiveModList(), tNewModsList = new ArrayList<>(tModList.size());
+			//ModContainer tGregTech = null;
+			//for (short i = 0; i < tModList.size(); i++) {
+			//	ModContainer tMod = tModList.get(i);
+			//	if (tMod.getModId().equalsIgnoreCase(MD.GT.mID)) tGregTech = tMod; else tNewModsList.add(tMod);
+			//}
+			//if (tGregTech != null) tNewModsList.add(tGregTech);
+			//UT.Reflection.getField(tLoadController, "activeModList", T, T).set(tLoadController, tNewModsList);
 		} catch(Throwable e) {
 			if (D1) e.printStackTrace(ERR);
 		}
 
-		File tFile = new File(DirectoriesGT.CONFIG_GT, "GregTech.cfg");
-		if (!tFile.exists()) tFile = new File(DirectoriesGT.CONFIG_GT, "gregtech.cfg");
-		Configuration tMainConfig = new Configuration(tFile);
+		//TODO: New Config System
+		//File tFile = new File(DirectoriesGT.CONFIG_GT, "GregTech.cfg");
+		//if (!tFile.exists()) tFile = new File(DirectoriesGT.CONFIG_GT, "gregtech.cfg");
+		//Configuration tMainConfig = new Configuration(tFile);
 
-		gt_proxy.mSkeletonsShootGTArrows = tMainConfig.get("general", "SkeletonsShootGTArrows", 16).getInt(16);
-		gt_proxy.mFlintChance            = tMainConfig.get("general", "FlintAndSteelChance"   , 30).getInt(30);
-		gt_proxy.mDisableVanillaOres     = tMainConfig.get("general", "DisableVanillaOres"    , T).getBoolean(T);
-		mDisableIC2Ores                  = tMainConfig.get("general", "DisableIC2Ores"        , T).getBoolean(T);
+		//gt_proxy.mSkeletonsShootGTArrows = tMainConfig.get("general", "SkeletonsShootGTArrows", 16).getInt(16);
+		//gt_proxy.mFlintChance            = tMainConfig.get("general", "FlintAndSteelChance"   , 30).getInt(30);
+		//gt_proxy.mDisableVanillaOres     = tMainConfig.get("general", "DisableVanillaOres"    , T).getBoolean(T);
+		//mDisableIC2Ores                  = tMainConfig.get("general", "DisableIC2Ores"        , T).getBoolean(T);
 
-		if (tMainConfig.get("general", "IncreaseDungeonLoot", T).getBoolean(T)) {
-			OUT.println(getModNameForLog() + ": Increasing general amount of Loot in Dungeon Chests and alike");
-			ChestGenHooks tChest;
-			tChest = ChestGenHooks.getInfo(ChestGenHooks.BONUS_CHEST                ); tChest.setMax(tChest.getMax()+ 8); tChest.setMin(tChest.getMin()+ 4);
-			tChest = ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST              ); tChest.setMax(tChest.getMax()+12); tChest.setMin(tChest.getMin()+ 6);
-			tChest = ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_DESERT_CHEST       ); tChest.setMax(tChest.getMax()+ 8); tChest.setMin(tChest.getMin()+ 4);
-			tChest = ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_JUNGLE_CHEST       ); tChest.setMax(tChest.getMax()+16); tChest.setMin(tChest.getMin()+ 8);
-			tChest = ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_JUNGLE_DISPENSER   ); tChest.setMax(tChest.getMax()+ 2); tChest.setMin(tChest.getMin()+ 1);
-			tChest = ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR         ); tChest.setMax(tChest.getMax()+ 4); tChest.setMin(tChest.getMin()+ 2);
-			tChest = ChestGenHooks.getInfo(ChestGenHooks.VILLAGE_BLACKSMITH         ); tChest.setMax(tChest.getMax()+12); tChest.setMin(tChest.getMin()+ 6);
-			tChest = ChestGenHooks.getInfo(ChestGenHooks.STRONGHOLD_CROSSING        ); tChest.setMax(tChest.getMax()+ 8); tChest.setMin(tChest.getMin()+ 4);
-			tChest = ChestGenHooks.getInfo(ChestGenHooks.STRONGHOLD_CORRIDOR        ); tChest.setMax(tChest.getMax()+ 6); tChest.setMin(tChest.getMin()+ 3);
-			tChest = ChestGenHooks.getInfo(ChestGenHooks.STRONGHOLD_LIBRARY         ); tChest.setMax(tChest.getMax()+16); tChest.setMin(tChest.getMin()+ 8);
-		}
-		if (tMainConfig.get("general", "SmallerVanillaToolDurability", T).getBoolean(T)) {
+		//if (tMainConfig.get("general", "IncreaseDungeonLoot", T).getBoolean(T)) {
+			//TODO: Loot Tables
+			//OUT.println(getModNameForLog() + ": Increasing general amount of Loot in Dungeon Chests and alike");
+			//ChestGenHooks tChest;
+			//tChest = ChestGenHooks.getInfo(ChestGenHooks.BONUS_CHEST                ); tChest.setMax(tChest.getMax()+ 8); tChest.setMin(tChest.getMin()+ 4);
+			//tChest = ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST              ); tChest.setMax(tChest.getMax()+12); tChest.setMin(tChest.getMin()+ 6);
+			//tChest = ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_DESERT_CHEST       ); tChest.setMax(tChest.getMax()+ 8); tChest.setMin(tChest.getMin()+ 4);
+			//tChest = ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_JUNGLE_CHEST       ); tChest.setMax(tChest.getMax()+16); tChest.setMin(tChest.getMin()+ 8);
+			//tChest = ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_JUNGLE_DISPENSER   ); tChest.setMax(tChest.getMax()+ 2); tChest.setMin(tChest.getMin()+ 1);
+			//tChest = ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR         ); tChest.setMax(tChest.getMax()+ 4); tChest.setMin(tChest.getMin()+ 2);
+			//tChest = ChestGenHooks.getInfo(ChestGenHooks.VILLAGE_BLACKSMITH         ); tChest.setMax(tChest.getMax()+12); tChest.setMin(tChest.getMin()+ 6);
+			//tChest = ChestGenHooks.getInfo(ChestGenHooks.STRONGHOLD_CROSSING        ); tChest.setMax(tChest.getMax()+ 8); tChest.setMin(tChest.getMin()+ 4);
+			//tChest = ChestGenHooks.getInfo(ChestGenHooks.STRONGHOLD_CORRIDOR        ); tChest.setMax(tChest.getMax()+ 6); tChest.setMin(tChest.getMin()+ 3);
+			//tChest = ChestGenHooks.getInfo(ChestGenHooks.STRONGHOLD_LIBRARY         ); tChest.setMax(tChest.getMax()+16); tChest.setMin(tChest.getMin()+ 8);
+		//}
+		//if (tMainConfig.get("general", "SmallerVanillaToolDurability", T).getBoolean(T)) {
 			OUT.println(getModNameForLog() + ": Nerfing Vanilla Tool Durability");
-			Items.wooden_sword   .setMaxDamage(  4);
-			Items.wooden_pickaxe .setMaxDamage(  4);
-			Items.wooden_shovel  .setMaxDamage(  4);
-			Items.wooden_axe     .setMaxDamage(  4);
-			Items.wooden_hoe     .setMaxDamage(  4);
-			Items.stone_sword    .setMaxDamage( 16);
-			Items.stone_pickaxe  .setMaxDamage( 16);
-			Items.stone_shovel   .setMaxDamage( 16);
-			Items.stone_axe      .setMaxDamage( 16);
-			Items.stone_hoe      .setMaxDamage( 16);
-			Items.iron_sword     .setMaxDamage( 80);
-			Items.iron_pickaxe   .setMaxDamage( 80);
-			Items.iron_shovel    .setMaxDamage( 80);
-			Items.iron_axe       .setMaxDamage( 80);
-			Items.iron_hoe       .setMaxDamage( 80);
-			Items.golden_sword   .setMaxDamage(  8);
-			Items.golden_pickaxe .setMaxDamage(  8);
-			Items.golden_shovel  .setMaxDamage(  8);
-			Items.golden_axe     .setMaxDamage(  8);
-			Items.golden_hoe     .setMaxDamage(  8);
-			Items.diamond_sword  .setMaxDamage(240);
-			Items.diamond_pickaxe.setMaxDamage(240);
-			Items.diamond_shovel .setMaxDamage(240);
-			Items.diamond_axe    .setMaxDamage(240);
-			Items.diamond_hoe    .setMaxDamage(240);
-		}
+			Items.WOODEN_SWORD   .maxDamage = 4;
+			Items.WOODEN_PICKAXE .maxDamage = 4;
+			Items.WOODEN_SHOVEL  .maxDamage = 4;
+			Items.WOODEN_AXE     .maxDamage = 4;
+			Items.WOODEN_HOE     .maxDamage = 4;
+			Items.STONE_SWORD    .maxDamage = 16;
+			Items.STONE_PICKAXE  .maxDamage = 16;
+			Items.STONE_SHOVEL   .maxDamage = 16;
+			Items.STONE_AXE      .maxDamage = 16;
+			Items.STONE_HOE      .maxDamage = 16;
+			Items.IRON_SWORD     .maxDamage = 80;
+			Items.IRON_PICKAXE   .maxDamage = 80;
+			Items.IRON_SHOVEL    .maxDamage = 80;
+			Items.IRON_AXE       .maxDamage = 80;
+			Items.IRON_HOE       .maxDamage = 80;
+			Items.GOLDEN_SWORD   .maxDamage = 8;
+			Items.GOLDEN_PICKAXE .maxDamage = 8;
+			Items.GOLDEN_SHOVEL  .maxDamage = 8;
+			Items.GOLDEN_AXE     .maxDamage = 8;
+			Items.GOLDEN_HOE     .maxDamage = 8;
+			Items.DIAMOND_SWORD  .maxDamage = 240;
+			Items.DIAMOND_PICKAXE.maxDamage = 240;
+			Items.DIAMOND_SHOVEL .maxDamage = 240;
+			Items.DIAMOND_AXE    .maxDamage = 240;
+			Items.DIAMOND_HOE    .maxDamage = 240;
+		//}
 
 
-		BlockOcean.SPREAD_TO_AIR                        = tMainConfig.get("general", "OceanBlocksSpreadToAir"       , T).getBoolean(T);
+		//BlockOcean.SPREAD_TO_AIR = tMainConfig.get("general", "OceanBlocksSpreadToAir", T).getBoolean(T);
 
-		tMainConfig.save();
+		//tMainConfig.save();
 
 		if (COMPAT_IC2 != null && !MD.IC2C.mLoaded) {
 			OUT.println(getModNameForLog() + ": Removing all original Scrapbox Drops.");
@@ -210,8 +194,9 @@ public class GT6_Main extends Abstract_Mod {
 			COMPAT_IC2.scrapbox(200.0F, IL.IC2_Scrap.get(1));
 		}
 
-		EntityRegistry.registerModEntity(EntityArrow_Material.class , "GT_Entity_Arrow"         , 1, GT, 160, 1, T);
-		EntityRegistry.registerModEntity(EntityArrow_Potion.class   , "GT_Entity_Arrow_Potion"  , 2, GT, 160, 1, T);
+		//TODO: Register Arrow Entity
+		//EntityRegistry.registerModEntity(EntityArrow_Material.class , "GT_Entity_Arrow"         , 1, GT, 160, 1, T);
+		//EntityRegistry.registerModEntity(EntityArrow_Potion.class   , "GT_Entity_Arrow_Potion"  , 2, GT, 160, 1, T);
 
 		for (OreDictMaterial tWood : ANY.Wood.mToThis) OP.plate.disableItemGeneration(tWood);
 		OP.ingot        .disableItemGeneration(MT.Butter, MT.ButterSalted, MT.Chocolate, MT.Cheese, MT.MeatRaw, MT.MeatCooked, MT.FishRaw, MT.FishCooked, MT.Tofu, MT.SoylentGreen);
@@ -223,16 +208,15 @@ public class GT6_Main extends Abstract_Mod {
 		OP.gemLegendary .disableItemGeneration(MT.EnergiumRed, MT.EnergiumCyan);
 
 
-		RM.pulverizing(ST.make(Blocks.cobblestone   , 1, W), ST.make(Blocks.sand, 1, 0), null, 0, F);
-		RM.pulverizing(ST.make(Blocks.stone         , 1, W), ST.make(Blocks.cobblestone, 1, 0), null, 0, F);
-		RM.pulverizing(ST.make(Blocks.gravel        , 1, W), ST.make(Items.flint, 1, 0), OP.dustSmall.mat(MT.Flint, 1), 10, F);
-		RM.pulverizing(ST.make(Blocks.furnace       , 1, W), ST.make(Blocks.sand, 6, 0), null, 0, F);
-		RM.pulverizing(ST.make(Blocks.lit_furnace   , 1, W), ST.make(Blocks.sand, 6, 0), null, 0, F);
-		RM.pulverizing(ST.make(Items.bone           , 1, W), IL.Dye_Bonemeal.get(2), IL.Dye_Bonemeal.get(1), 50, T);
-		RM.pulverizing(ST.make(Items.blaze_rod      , 1, W), ST.make(Items.blaze_powder, 3, 0), ST.make(Items.blaze_powder, 1, 0), 50, T);
-		RM.pulverizing(ST.make(Blocks.pumpkin       , 1, W), ST.make(Items.pumpkin_seeds, 4, 0), null, 0, F);
-		RM.pulverizing(ST.make(Items.melon          , 1, W), ST.make(Items.melon_seeds, 1, 0), null, 0, F);
-		RM.pulverizing(ST.make(Blocks.wool          , 1, W), ST.make(Items.string, 2, 0), ST.make(Items.string, 1, 0), 50, F);
+		RM.pulverizing(ST.make(Blocks.COBBLESTONE   , 1, W), ST.make(Blocks.SAND, 1, 0), null, 0, F);
+		RM.pulverizing(ST.make(Blocks.STONE         , 1, W), ST.make(Blocks.COBBLESTONE, 1, 0), null, 0, F);
+		RM.pulverizing(ST.make(Blocks.GRAVEL        , 1, W), ST.make(Items.FLINT, 1, 0), OP.dustSmall.mat(MT.Flint, 1), 10, F);
+		RM.pulverizing(ST.make(Blocks.FURNACE       , 1, W), ST.make(Blocks.SAND, 6, 0), null, 0, F);
+		RM.pulverizing(ST.make(Items.BONE           , 1, W), IL.Dye_Bonemeal.get(2), IL.Dye_Bonemeal.get(1), 50, T);
+		RM.pulverizing(ST.make(Items.BLAZE_ROD      , 1, W), ST.make(Items.BLAZE_POWDER, 3, 0), ST.make(Items.BLAZE_POWDER, 1, 0), 50, T);
+		RM.pulverizing(ST.make(Blocks.PUMPKIN       , 1, W), ST.make(Items.PUMPKIN_SEEDS, 4, 0), null, 0, F);
+		RM.pulverizing(ST.make(Items.MELON          , 1, W), ST.make(Items.MELON_SEEDS, 1, 0), null, 0, F);
+		RM.pulverizing(ST.make(Blocks.WHITE_WOOL          , 1, W), ST.make(Items.STRING, 2, 0), ST.make(Items.STRING, 1, 0), 50, F);
 
 		new Loader_Fluids().run();
 		new Loader_Tools().run();
@@ -249,11 +233,13 @@ public class GT6_Main extends Abstract_Mod {
 //      new Loader_CoverBehaviors().run();
 //      new Loader_Sonictron().run();
 
-		new CompatMods(MD.MC, this) {@Override public void onPostLoad(FMLPostInitializationEvent aInitEvent) {
+		new CompatMods(MD.MC, this) {@Override public void onLoadComplete(FMLLoadCompleteEvent aInitEvent) {
 			// Clearing the AE Grindstone Recipe List, so we don't need to worry about pre-existing Recipes.
-			if (MD.AE.mLoaded) AEApi.instance().registries().grinder().getRecipes().clear();
+			//TODO: Re-add AE Support
+			//if (MD.AE.mLoaded) AEApi.instance().registries().grinder().getRecipes().clear();
 			// We ain't got Water in that Water Bottle. That would be an infinite Water Exploit.
-			for (FluidContainerData tData : FluidContainerRegistry.getRegisteredFluidContainerData()) if (tData.filledContainer.getItem() == Items.potionitem && ST.meta_(tData.filledContainer) == 0) {tData.fluid.amount = 0; break;}
+			//TODO: Fluid Container Exploit Fix
+			//for (FluidContainerData tData : FluidContainerRegistry.getRegisteredFluidContainerData()) if (tData.filledContainer.getItem() == Items.potionitem && ST.meta_(tData.filledContainer) == 0) {tData.fluid.amount = 0; break;}
 
 			ArrayListNoNulls<Runnable> tList = new ArrayListNoNulls<>(F,
 				new Loader_BlockResistance(),
@@ -334,7 +320,7 @@ public class GT6_Main extends Abstract_Mod {
 		new Compat_Recipes_ExtraUtilities       (MD.ExU           , this);
 		new Compat_Recipes_WRCBE                (MD.WR_CBE_C      , this);
 
-		new CompatMods(MD.GT, this) {@Override public void onPostLoad(FMLPostInitializationEvent aInitEvent) {
+		new CompatMods(MD.GT, this) {@Override public void onLoadComplete(FMLLoadCompleteEvent aInitEvent) {
 			ArrayListNoNulls<Runnable> tList = new ArrayListNoNulls<>(F,
 				new Loader_Recipes_Replace(),
 				new Loader_Recipes_Copy(),
@@ -343,16 +329,13 @@ public class GT6_Main extends Abstract_Mod {
 			);
 			for (Runnable tRunnable : tList) try {tRunnable.run();} catch(Throwable e) {e.printStackTrace(ERR);}
 		}};
-	}
 
-	@Override
-	public void onModInit2(FMLInitializationEvent aEvent) {
-		for (FluidContainerData tData : FluidContainerRegistry.getRegisteredFluidContainerData()) if (tData.filledContainer.getItem() == Items.potionitem && ST.meta_(tData.filledContainer) == 0) {tData.fluid.amount = 0; break;}
+		//for (FluidContainerData tData : FluidContainerRegistry.getRegisteredFluidContainerData()) if (tData.filledContainer.getItem() == Items.potionitem && ST.meta_(tData.filledContainer) == 0) {tData.fluid.amount = 0; break;}
 		OP.chemtube.mContainerItem = OP.chemtube.mat(MT.Empty, 1);
 
 		new Loader_Late_Items_And_Blocks().run();
 
-		if (MD.IC2C.mLoaded) for (int i = 0; i <= 6; i++) FMLInterModComms.sendMessage(MD.IC2C.mID, "generatorDrop", ST.save(UT.NBT.makeInt("Key", i), "Value", IL.IC2_Machine.get(1)));
+		//if (MD.IC2C.mLoaded) for (int i = 0; i <= 6; i++) FMLInterModComms.sendMessage(MD.IC2C.mID, "generatorDrop", ST.save(UT.NBT.makeInt("Key", i), "Value", IL.IC2_Machine.get(1)));
 
 		ArrayListNoNulls<Runnable> tList = new ArrayListNoNulls<>(F,
 			new Loader_MultiTileEntities(),
@@ -365,28 +348,28 @@ public class GT6_Main extends Abstract_Mod {
 	}
 
 	@Override
-	public void onModPostInit2(FMLPostInitializationEvent aEvent) {
+	public void onModLoadComplete(FMLLoadCompleteEvent aEvent) {
 		if (!MD.RC.mLoaded) {
-			CR.shaped(ST.make(Blocks.rail          ,  4, 0), DEF_REV_NCC | DEL_OTHER_SHAPED_RECIPES, "RSR", "RSR", "RSR", 'R', OP.railGt.dat(ANY.Fe), 'S', OP.stick.dat(MT.WoodSealed));
-			CR.shaped(ST.make(Blocks.golden_rail   ,  4, 0), DEF_REV_NCC | DEL_OTHER_SHAPED_RECIPES, "RSR", "GDG", "RSR", 'R', OP.railGt.dat(ANY.Fe), 'S', OP.stick.dat(MT.WoodSealed), 'D', OD.itemRedstone, 'G', OP.railGt.dat(MT.Au));
-			CR.shaped(ST.make(Blocks.detector_rail ,  4, 0), DEF_REV_NCC | DEL_OTHER_SHAPED_RECIPES, "RSR", "RPR", "RDR", 'R', OP.railGt.dat(ANY.Fe), 'S', OP.stick.dat(MT.WoodSealed), 'D', OD.itemRedstone, 'P', ST.make(Blocks.stone_pressure_plate, 1, W));
+			CR.shaped(ST.make(Blocks.RAIL          ,  4, 0), DEF_REV_NCC | DEL_OTHER_SHAPED_RECIPES, "RSR", "RSR", "RSR", 'R', OP.railGt.dat(ANY.Fe), 'S', OP.stick.dat(MT.WoodSealed));
+			CR.shaped(ST.make(Blocks.POWERED_RAIL   ,  4, 0), DEF_REV_NCC | DEL_OTHER_SHAPED_RECIPES, "RSR", "GDG", "RSR", 'R', OP.railGt.dat(ANY.Fe), 'S', OP.stick.dat(MT.WoodSealed), 'D', OD.itemRedstone, 'G', OP.railGt.dat(MT.Au));
+			CR.shaped(ST.make(Blocks.DETECTOR_RAIL ,  4, 0), DEF_REV_NCC | DEL_OTHER_SHAPED_RECIPES, "RSR", "RPR", "RDR", 'R', OP.railGt.dat(ANY.Fe), 'S', OP.stick.dat(MT.WoodSealed), 'D', OD.itemRedstone, 'P', ST.make(Blocks.STONE_PRESSURE_PLATE, 1, W));
 
-			CR.shaped(ST.make(Blocks.activator_rail,  1, 0), DEF | DEL_OTHER_SHAPED_RECIPES, "RSR", "RTR", "RSR", 'R', OP.railGt.dat(MT.Al             ), 'S', OP.stick.dat(MT.WoodSealed), 'T', OD.craftingRedstoneTorch);
-			CR.shaped(ST.make(Blocks.activator_rail,  1, 0), DEF | DEL_OTHER_SHAPED_RECIPES, "RSR", "RTR", "RSR", 'R', OP.railGt.dat(MT.Bronze         ), 'S', OP.stick.dat(MT.WoodSealed), 'T', OD.craftingRedstoneTorch);
-			CR.shaped(ST.make(Blocks.activator_rail,  2, 0), DEF | DEL_OTHER_SHAPED_RECIPES, "RSR", "RTR", "RSR", 'R', OP.railGt.dat(ANY.Fe            ), 'S', OP.stick.dat(MT.WoodSealed), 'T', OD.craftingRedstoneTorch);
-			CR.shaped(ST.make(Blocks.activator_rail,  3, 0), DEF | DEL_OTHER_SHAPED_RECIPES, "RSR", "RTR", "RSR", 'R', OP.railGt.dat(ANY.Steel         ), 'S', OP.stick.dat(MT.WoodSealed), 'T', OD.craftingRedstoneTorch);
-			CR.shaped(ST.make(Blocks.activator_rail,  4, 0), DEF | DEL_OTHER_SHAPED_RECIPES, "RSR", "RTR", "RSR", 'R', OP.railGt.dat(MT.StainlessSteel ), 'S', OP.stick.dat(MT.WoodSealed), 'T', OD.craftingRedstoneTorch);
-			CR.shaped(ST.make(Blocks.activator_rail,  6, 0), DEF | DEL_OTHER_SHAPED_RECIPES, "RSR", "RTR", "RSR", 'R', OP.railGt.dat(MT.Ti             ), 'S', OP.stick.dat(MT.WoodSealed), 'T', OD.craftingRedstoneTorch);
-			CR.shaped(ST.make(Blocks.activator_rail,  6, 0), DEF | DEL_OTHER_SHAPED_RECIPES, "RSR", "RTR", "RSR", 'R', OP.railGt.dat(ANY.W             ), 'S', OP.stick.dat(MT.WoodSealed), 'T', OD.craftingRedstoneTorch);
-			CR.shaped(ST.make(Blocks.activator_rail, 12, 0), DEF | DEL_OTHER_SHAPED_RECIPES, "RSR", "RTR", "RSR", 'R', OP.railGt.dat(MT.TungstenSteel  ), 'S', OP.stick.dat(MT.WoodSealed), 'T', OD.craftingRedstoneTorch);
-			CR.shaped(ST.make(Blocks.activator_rail, 12, 0), DEF | DEL_OTHER_SHAPED_RECIPES, "RSR", "RTR", "RSR", 'R', OP.railGt.dat(MT.TungstenCarbide), 'S', OP.stick.dat(MT.WoodSealed), 'T', OD.craftingRedstoneTorch);
+			CR.shaped(ST.make(Blocks.ACTIVATOR_RAIL,  1, 0), DEF | DEL_OTHER_SHAPED_RECIPES, "RSR", "RTR", "RSR", 'R', OP.railGt.dat(MT.Al             ), 'S', OP.stick.dat(MT.WoodSealed), 'T', OD.craftingRedstoneTorch);
+			CR.shaped(ST.make(Blocks.ACTIVATOR_RAIL,  1, 0), DEF | DEL_OTHER_SHAPED_RECIPES, "RSR", "RTR", "RSR", 'R', OP.railGt.dat(MT.Bronze         ), 'S', OP.stick.dat(MT.WoodSealed), 'T', OD.craftingRedstoneTorch);
+			CR.shaped(ST.make(Blocks.ACTIVATOR_RAIL,  2, 0), DEF | DEL_OTHER_SHAPED_RECIPES, "RSR", "RTR", "RSR", 'R', OP.railGt.dat(ANY.Fe            ), 'S', OP.stick.dat(MT.WoodSealed), 'T', OD.craftingRedstoneTorch);
+			CR.shaped(ST.make(Blocks.ACTIVATOR_RAIL,  3, 0), DEF | DEL_OTHER_SHAPED_RECIPES, "RSR", "RTR", "RSR", 'R', OP.railGt.dat(ANY.Steel         ), 'S', OP.stick.dat(MT.WoodSealed), 'T', OD.craftingRedstoneTorch);
+			CR.shaped(ST.make(Blocks.ACTIVATOR_RAIL,  4, 0), DEF | DEL_OTHER_SHAPED_RECIPES, "RSR", "RTR", "RSR", 'R', OP.railGt.dat(MT.StainlessSteel ), 'S', OP.stick.dat(MT.WoodSealed), 'T', OD.craftingRedstoneTorch);
+			CR.shaped(ST.make(Blocks.ACTIVATOR_RAIL,  6, 0), DEF | DEL_OTHER_SHAPED_RECIPES, "RSR", "RTR", "RSR", 'R', OP.railGt.dat(MT.Ti             ), 'S', OP.stick.dat(MT.WoodSealed), 'T', OD.craftingRedstoneTorch);
+			CR.shaped(ST.make(Blocks.ACTIVATOR_RAIL,  6, 0), DEF | DEL_OTHER_SHAPED_RECIPES, "RSR", "RTR", "RSR", 'R', OP.railGt.dat(ANY.W             ), 'S', OP.stick.dat(MT.WoodSealed), 'T', OD.craftingRedstoneTorch);
+			CR.shaped(ST.make(Blocks.ACTIVATOR_RAIL, 12, 0), DEF | DEL_OTHER_SHAPED_RECIPES, "RSR", "RTR", "RSR", 'R', OP.railGt.dat(MT.TungstenSteel  ), 'S', OP.stick.dat(MT.WoodSealed), 'T', OD.craftingRedstoneTorch);
+			CR.shaped(ST.make(Blocks.ACTIVATOR_RAIL, 12, 0), DEF | DEL_OTHER_SHAPED_RECIPES, "RSR", "RTR", "RSR", 'R', OP.railGt.dat(MT.TungstenCarbide), 'S', OP.stick.dat(MT.WoodSealed), 'T', OD.craftingRedstoneTorch);
 		}
 
 		ItemStack tLignite = ST.make(MD.UB, "ligniteCoal", 1, 0);
 		if (ST.valid(tLignite)) CR.remove(tLignite, tLignite, tLignite, tLignite, tLignite, tLignite, tLignite, tLignite, tLignite);
 
-		Block tBlock = ST.block(MD.FR, "beehives", NB);
-		if (tBlock != NB) {tBlock.setHarvestLevel("scoop", 0); GT_Tool_Scoop.sBeeHiveMaterial = tBlock.getMaterial();}
+		//Block tBlock = ST.block(MD.FR, "beehives", NB);
+		//if (tBlock != NB) {tBlock.setHarvestLevel("scoop", 0); GT_Tool_Scoop.sBeeHiveMaterial = tBlock.getMaterial();}
 
 //      if (IL.FR_Tree_Sapling  .get(1) != null)    RecipeMap.sScannerFakeRecipes.addFakeRecipe(F, ST.array(IL.FR_Tree_Sapling  .getWildcard(1)}                                , ST.array(IL.FR_Tree_Sapling   .getWithName(1, "Scanned Sapling"       )}, null                                                    , FL.array(MT.Honey.liquid(U/20, T)}, null, 500, 2, 0);
 //      if (IL.FR_Butterfly     .get(1) != null)    RecipeMap.sScannerFakeRecipes.addFakeRecipe(F, ST.array(IL.FR_Butterfly     .getWildcard(1)}                                , ST.array(IL.FR_Butterfly      .getWithName(1, "Scanned Butterfly"     )}, null                                                    , FL.array(MT.Honey.liquid(U/20, T)}, null, 500, 2, 0);
@@ -416,8 +399,8 @@ public class GT6_Main extends Abstract_Mod {
 		RM.ScannerVisuals.addFakeRecipe(F, ST.array(IL.Paper_Printed_Pages_Many.get(1), IL.USB_Stick_1.get(1))                  , ST.array(IL.USB_Stick_1.getWithName(1, "Containing large scanned Book"            ), IL.Paper_Printed_Pages_Many.get(1)), null, null, ZL_FS, ZL_FS, 512, 16, 0);
 		for (ItemStack tStack : OreDictManager.getOres("gt:canvas", F))
 		RM.ScannerVisuals.addFakeRecipe(F, ST.array(tStack, IL.USB_Stick_1.get(1))                                              , ST.array(IL.USB_Stick_1.getWithName(1, "Containing scanned Block"                 ), tStack), null, null, ZL_FS, ZL_FS, 64, 16, 0);
-		RM.ScannerVisuals.addFakeRecipe(F, ST.array(ST.make(Blocks.crafting_table, 1, 0, "ANY BLOCK"), IL.USB_Stick_1.get(1))   , ST.array(IL.USB_Stick_1.getWithName(1, "Containing scanned Block"                 ), ST.make(Blocks.crafting_table, 1, 0, "ANY BLOCK")), null, null, ZL_FS, ZL_FS, 512, 16, 0);
-		RM.ScannerVisuals.addFakeRecipe(F, ST.array(ST.make(Items.filled_map, 1, W), IL.USB_Stick_1.get(1))                     , ST.array(IL.USB_Stick_1.getWithName(1, "Containing scanned Map"                   ), ST.make(Items.filled_map, 1, W)), null, null, ZL_FS, ZL_FS, 64, 16, 0);
+		RM.ScannerVisuals.addFakeRecipe(F, ST.array(ST.make(Blocks.CRAFTING_TABLE, 1, 0, "ANY BLOCK"), IL.USB_Stick_1.get(1))   , ST.array(IL.USB_Stick_1.getWithName(1, "Containing scanned Block"                 ), ST.make(Blocks.CRAFTING_TABLE, 1, 0, "ANY BLOCK")), null, null, ZL_FS, ZL_FS, 512, 16, 0);
+		RM.ScannerVisuals.addFakeRecipe(F, ST.array(ST.make(Items.FILLED_MAP, 1, W), IL.USB_Stick_1.get(1))                     , ST.array(IL.USB_Stick_1.getWithName(1, "Containing scanned Map"                   ), ST.make(Items.FILLED_MAP, 1, W)), null, null, ZL_FS, ZL_FS, 64, 16, 0);
 		RM.ScannerVisuals.addFakeRecipe(F, ST.array(IL.Paper_Blueprint_Used.get(1), IL.USB_Stick_1.get(1))                      , ST.array(IL.USB_Stick_1.getWithName(1, "Containing scanned Blueprint"             ), IL.Paper_Blueprint_Used.get(1)), null, null, ZL_FS, ZL_FS, 64, 16, 0);
 		if (IL.GC_Schematic_1.exists())
 		RM.ScannerVisuals.addFakeRecipe(F, ST.array(IL.GC_Schematic_1.wild(1), IL.USB_Stick_1.get(1))                           , ST.array(IL.USB_Stick_1.getWithName(1, "Containing scanned Schematics"            ), IL.GC_Schematic_1.wild(1)), null, null, ZL_FS, ZL_FS, 1024, 16, 0);
@@ -428,33 +411,33 @@ public class GT6_Main extends Abstract_Mod {
 		if (IL.IE_Blueprint_Projectiles_Common.exists())
 		RM.ScannerVisuals.addFakeRecipe(F, ST.array(IL.IE_Blueprint_Projectiles_Common.wild(1), IL.USB_Stick_1.get(1))          , ST.array(IL.USB_Stick_1.getWithName(1, "Containing scanned Engineer's Blueprint"  ), IL.IE_Blueprint_Projectiles_Common.wild(1)), null, null, ZL_FS, ZL_FS, 1024, 16, 0);
 		
-		RM.Printer.addRecipe1(T, 16, 256, ST.make(Items.book, 1, W), DYE_FLUIDS_CHEMICAL[DYE_INDEX_Black], NF, ST.book("Manual_Printer", ST.make(Items.written_book, 1, 0)));
+		RM.Printer.addRecipe1(T, 16, 256, ST.make(Items.BOOK, 1, W), DYE_FLUIDS_CHEMICAL[DYE_INDEX_Black], NF, ST.book("Manual_Printer", ST.make(Items.WRITABLE_BOOK, 1, 0)));
 		
 		for (ItemStack tStack : OreDictManager.getOres("gt:canvas", F))
 		RM.Printer.addFakeRecipe(F, ST.array(tStack                             , IL.USB_Stick_1.getWithName(0, "Containing scanned Block"               )), ST.array(tStack                                    ), null, null, FL.array(FL.mul(DYE_FLUIDS_CHEMICAL[DYE_INDEX_Yellow], 1, 9, T), FL.mul(DYE_FLUIDS_CHEMICAL[DYE_INDEX_Magenta], 1, 9, T), FL.mul(DYE_FLUIDS_CHEMICAL[DYE_INDEX_Cyan], 1, 9, T), FL.mul(DYE_FLUIDS_CHEMICAL[DYE_INDEX_Black], 1, 9, T)), ZL_FS,   64, 16, 0);
 //      RM.Printer.addFakeRecipe(F, ST.array(IL.Paper_Punch_Card_Empty.get(1)   , IL.USB_Stick_1.getWithName(0, "Containing scanned Punchcard"           )), ST.array(IL.Paper_Punch_Card_Encoded.get(1)        ), null, null, FL.array(                                                                                                                                                                       FL.mul(DYE_FLUIDS_CHEMICAL[DYE_INDEX_Black], 1, 9, T)), ZL_FS,   32, 16, 0);
 		RM.Printer.addFakeRecipe(F, ST.array(IL.Paper_Blueprint_Empty.get(1)    , IL.USB_Stick_1.getWithName(0, "Containing scanned Blueprint"           )), ST.array(IL.Paper_Blueprint_Used.get(1)            ), null, null, FL.array(                                                                                                                                                                       FL.mul(DYE_FLUIDS_CHEMICAL[DYE_INDEX_White], 1, 9, T)), ZL_FS,   32, 16, 0);
-		RM.Printer.addFakeRecipe(F, ST.array(ST.make(Items.paper, 1, W)         , IL.USB_Stick_1.getWithName(0, "Containing scanned Blueprint"           )), ST.array(IL.Paper_Blueprint_Used.get(1)            ), null, null, FL.array(                                                                                                                                                                       FL.mul(DYE_FLUIDS_CHEMICAL[DYE_INDEX_Blue ], 1, 1, T)), ZL_FS,  128, 16, 0);
-		RM.Printer.addFakeRecipe(F, ST.array(ST.make(Items.paper, 3, W)         , IL.USB_Stick_1.getWithName(0, "Containing scanned Book"                )), ST.array(IL.Paper_Printed_Pages.get(1)             ), null, null, FL.array(                                                                                                                                                                       FL.mul(DYE_FLUIDS_CHEMICAL[DYE_INDEX_Black], 1, 2, T)), ZL_FS,  512, 16, 0);
-		RM.Printer.addFakeRecipe(F, ST.array(ST.make(Items.paper, 6, W)         , IL.USB_Stick_1.getWithName(0, "Containing large scanned Book"          )), ST.array(IL.Paper_Printed_Pages_Many.get(1)        ), null, null, FL.array(                                                                                                                                                                       FL.mul(DYE_FLUIDS_CHEMICAL[DYE_INDEX_Black], 1, 1, T)), ZL_FS, 1024, 16, 0);
-		RM.Printer.addFakeRecipe(F, ST.array(ST.make(Items.map, 1, W)           , IL.USB_Stick_1.getWithName(0, "Containing scanned Map"                 )), ST.array(ST.make(Items.filled_map, 1, 0)           ), null, null, FL.array(FL.mul(DYE_FLUIDS_CHEMICAL[DYE_INDEX_Yellow], 1, 9, T), FL.mul(DYE_FLUIDS_CHEMICAL[DYE_INDEX_Magenta], 1, 9, T), FL.mul(DYE_FLUIDS_CHEMICAL[DYE_INDEX_Cyan], 1, 9, T), FL.mul(DYE_FLUIDS_CHEMICAL[DYE_INDEX_Black], 1, 9, T)), ZL_FS,   64, 16, 0);
+		RM.Printer.addFakeRecipe(F, ST.array(ST.make(Items.PAPER, 1, W)         , IL.USB_Stick_1.getWithName(0, "Containing scanned Blueprint"           )), ST.array(IL.Paper_Blueprint_Used.get(1)            ), null, null, FL.array(                                                                                                                                                                       FL.mul(DYE_FLUIDS_CHEMICAL[DYE_INDEX_Blue ], 1, 1, T)), ZL_FS,  128, 16, 0);
+		RM.Printer.addFakeRecipe(F, ST.array(ST.make(Items.PAPER, 3, W)         , IL.USB_Stick_1.getWithName(0, "Containing scanned Book"                )), ST.array(IL.Paper_Printed_Pages.get(1)             ), null, null, FL.array(                                                                                                                                                                       FL.mul(DYE_FLUIDS_CHEMICAL[DYE_INDEX_Black], 1, 2, T)), ZL_FS,  512, 16, 0);
+		RM.Printer.addFakeRecipe(F, ST.array(ST.make(Items.PAPER, 6, W)         , IL.USB_Stick_1.getWithName(0, "Containing large scanned Book"          )), ST.array(IL.Paper_Printed_Pages_Many.get(1)        ), null, null, FL.array(                                                                                                                                                                       FL.mul(DYE_FLUIDS_CHEMICAL[DYE_INDEX_Black], 1, 1, T)), ZL_FS, 1024, 16, 0);
+		RM.Printer.addFakeRecipe(F, ST.array(ST.make(Items.MAP, 1, W)           , IL.USB_Stick_1.getWithName(0, "Containing scanned Map"                 )), ST.array(ST.make(Items.FILLED_MAP, 1, 0)           ), null, null, FL.array(FL.mul(DYE_FLUIDS_CHEMICAL[DYE_INDEX_Yellow], 1, 9, T), FL.mul(DYE_FLUIDS_CHEMICAL[DYE_INDEX_Magenta], 1, 9, T), FL.mul(DYE_FLUIDS_CHEMICAL[DYE_INDEX_Cyan], 1, 9, T), FL.mul(DYE_FLUIDS_CHEMICAL[DYE_INDEX_Black], 1, 9, T)), ZL_FS,   64, 16, 0);
 		if (IL.GC_Schematic_1.exists())
-		RM.Printer.addFakeRecipe(F, ST.array(ST.make(Items.paper, 8, W)         , IL.USB_Stick_1.getWithName(0, "Containing scanned Schematics"          )), ST.array(IL.GC_Schematic_1.wild(1)                 ), null, null, FL.array(                                                                                                                                                                       FL.mul(DYE_FLUIDS_CHEMICAL[DYE_INDEX_Black], 4, 1, T)), ZL_FS, 2048, 16, 0);
+		RM.Printer.addFakeRecipe(F, ST.array(ST.make(Items.PAPER, 8, W)         , IL.USB_Stick_1.getWithName(0, "Containing scanned Schematics"          )), ST.array(IL.GC_Schematic_1.wild(1)                 ), null, null, FL.array(                                                                                                                                                                       FL.mul(DYE_FLUIDS_CHEMICAL[DYE_INDEX_Black], 4, 1, T)), ZL_FS, 2048, 16, 0);
 		if (IL.GC_Schematic_2.exists())
-		RM.Printer.addFakeRecipe(F, ST.array(ST.make(Items.paper, 8, W)         , IL.USB_Stick_1.getWithName(0, "Containing scanned Schematics"          )), ST.array(IL.GC_Schematic_2.wild(1)                 ), null, null, FL.array(                                                                                                                                                                       FL.mul(DYE_FLUIDS_CHEMICAL[DYE_INDEX_Black], 4, 1, T)), ZL_FS, 2048, 16, 0);
+		RM.Printer.addFakeRecipe(F, ST.array(ST.make(Items.PAPER, 8, W)         , IL.USB_Stick_1.getWithName(0, "Containing scanned Schematics"          )), ST.array(IL.GC_Schematic_2.wild(1)                 ), null, null, FL.array(                                                                                                                                                                       FL.mul(DYE_FLUIDS_CHEMICAL[DYE_INDEX_Black], 4, 1, T)), ZL_FS, 2048, 16, 0);
 		if (IL.GC_Schematic_3.exists())
-		RM.Printer.addFakeRecipe(F, ST.array(ST.make(Items.paper, 8, W)         , IL.USB_Stick_1.getWithName(0, "Containing scanned Schematics"          )), ST.array(IL.GC_Schematic_3.wild(1)                 ), null, null, FL.array(                                                                                                                                                                       FL.mul(DYE_FLUIDS_CHEMICAL[DYE_INDEX_Black], 4, 1, T)), ZL_FS, 2048, 16, 0);
+		RM.Printer.addFakeRecipe(F, ST.array(ST.make(Items.PAPER, 8, W)         , IL.USB_Stick_1.getWithName(0, "Containing scanned Schematics"          )), ST.array(IL.GC_Schematic_3.wild(1)                 ), null, null, FL.array(                                                                                                                                                                       FL.mul(DYE_FLUIDS_CHEMICAL[DYE_INDEX_Black], 4, 1, T)), ZL_FS, 2048, 16, 0);
 		if (IL.IE_Blueprint_Projectiles_Common.exists())
-		RM.Printer.addFakeRecipe(F, ST.array(ST.make(Items.paper, 3, W)         , IL.USB_Stick_1.getWithName(0, "Containing scanned Engineer's Blueprint")), ST.array(IL.IE_Blueprint_Projectiles_Common.wild(1)), null, null, FL.array(                                                                                                                                                                       FL.mul(DYE_FLUIDS_CHEMICAL[DYE_INDEX_Blue ], 3, 1, T)), ZL_FS, 2048, 16, 0);
+		RM.Printer.addFakeRecipe(F, ST.array(ST.make(Items.PAPER, 3, W)         , IL.USB_Stick_1.getWithName(0, "Containing scanned Engineer's Blueprint")), ST.array(IL.IE_Blueprint_Projectiles_Common.wild(1)), null, null, FL.array(                                                                                                                                                                       FL.mul(DYE_FLUIDS_CHEMICAL[DYE_INDEX_Blue ], 3, 1, T)), ZL_FS, 2048, 16, 0);
 		
-		if (IL.IE_Treated_Stairs.exists())  RM.Bath.addFakeRecipe(F, ST.array(ST.make(Blocks.oak_stairs , 1, W)), ST.array(IL.IE_Treated_Stairs.get(1                               )), null, null, FL.array(FL.Oil_Creosote.make( 75)), ZL_FS, 102, 0, 0);
-											RM.Bath.addFakeRecipe(F, ST.array(ST.make(Blocks.wooden_slab, 1, W)), ST.array(IL.IE_Treated_Slab  .get(1, IL.Treated_Planks_Slab.get(1))), null, null, FL.array(FL.Oil_Creosote.make( 50)), ZL_FS,  72, 0, 0);
+		if (IL.IE_Treated_Stairs.exists())  RM.Bath.addFakeRecipe(F, ST.array(ST.make(Blocks.OAK_STAIRS , 1, W)), ST.array(IL.IE_Treated_Stairs.get(1                               )), null, null, FL.array(FL.Oil_Creosote.make( 75)), ZL_FS, 102, 0, 0);
+											RM.Bath.addFakeRecipe(F, ST.array(ST.make(Blocks.OAK_SLAB, 1, W)), ST.array(IL.IE_Treated_Slab  .get(1, IL.Treated_Planks_Slab.get(1))), null, null, FL.array(FL.Oil_Creosote.make( 50)), ZL_FS,  72, 0, 0);
 											RM.Bath.addFakeRecipe(F, ST.array(IL.Plank_Slab             .get(1)), ST.array(IL.IE_Treated_Slab  .get(1, IL.Treated_Planks_Slab.get(1))), null, null, FL.array(FL.Oil_Creosote.make( 50)), ZL_FS,  72, 0, 0);
 		if (IL.ERE_White_Planks.exists())   RM.Bath.addFakeRecipe(F, ST.array(IL.Plank                  .get(1)), ST.array(IL.ERE_White_Planks .get(1                               )), null, null, FL.array(       DYE_FLUIDS_WATER[DYE_INDEX_White]          ), ZL_FS, 144, 0, 0);
 		if (IL.ERE_White_Slab.exists())     RM.Bath.addFakeRecipe(F, ST.array(IL.Plank_Slab             .get(1)), ST.array(IL.ERE_White_Slab   .get(1                               )), null, null, FL.array(FL.mul(DYE_FLUIDS_WATER[DYE_INDEX_White], 1, 2, T)), ZL_FS,  72, 0, 0);
-		if (IL.ERE_White_Planks.exists())   RM.Bath.addFakeRecipe(F, ST.array(ST.make(Blocks.planks     , 1, W)), ST.array(IL.ERE_White_Planks .get(1                               )), null, null, FL.array(       DYE_FLUIDS_WATER[DYE_INDEX_White]          ), ZL_FS, 144, 0, 0);
-		if (IL.ERE_White_Stairs.exists())   RM.Bath.addFakeRecipe(F, ST.array(ST.make(Blocks.oak_stairs , 1, W)), ST.array(IL.ERE_White_Stairs .get(1                               )), null, null, FL.array(FL.mul(DYE_FLUIDS_WATER[DYE_INDEX_White], 3, 4, T)), ZL_FS, 102, 0, 0);
-		if (IL.ERE_White_Slab.exists())     RM.Bath.addFakeRecipe(F, ST.array(ST.make(Blocks.wooden_slab, 1, W)), ST.array(IL.ERE_White_Slab   .get(1                               )), null, null, FL.array(FL.mul(DYE_FLUIDS_WATER[DYE_INDEX_White], 1, 2, T)), ZL_FS,  72, 0, 0);
+		if (IL.ERE_White_Planks.exists())   RM.Bath.addFakeRecipe(F, ST.array(ST.make(Blocks.OAK_PLANKS     , 1, W)), ST.array(IL.ERE_White_Planks .get(1                               )), null, null, FL.array(       DYE_FLUIDS_WATER[DYE_INDEX_White]          ), ZL_FS, 144, 0, 0);
+		if (IL.ERE_White_Stairs.exists())   RM.Bath.addFakeRecipe(F, ST.array(ST.make(Blocks.OAK_STAIRS , 1, W)), ST.array(IL.ERE_White_Stairs .get(1                               )), null, null, FL.array(FL.mul(DYE_FLUIDS_WATER[DYE_INDEX_White], 3, 4, T)), ZL_FS, 102, 0, 0);
+		if (IL.ERE_White_Slab.exists())     RM.Bath.addFakeRecipe(F, ST.array(ST.make(Blocks.OAK_SLAB, 1, W)), ST.array(IL.ERE_White_Slab   .get(1                               )), null, null, FL.array(FL.mul(DYE_FLUIDS_WATER[DYE_INDEX_White], 1, 2, T)), ZL_FS,  72, 0, 0);
 		
 		if (IL.LOOTBAGS_Bag_0.exists())     RM.Unboxinator.addFakeRecipe(F, ST.array(IL.LOOTBAGS_Bag_0.get(1)), ST.array(IL.LOOTBAGS_Bag_0.getWithName(1, "Random Drops depending on Config")), null, ZL_LONG, ZL_FS, ZL_FS, 16, 16, 0);
 		if (IL.LOOTBAGS_Bag_1.exists())     RM.Unboxinator.addFakeRecipe(F, ST.array(IL.LOOTBAGS_Bag_1.get(1)), ST.array(IL.LOOTBAGS_Bag_1.getWithName(1, "Random Drops depending on Config")), null, ZL_LONG, ZL_FS, ZL_FS, 16, 16, 0);
@@ -497,7 +480,7 @@ public class GT6_Main extends Abstract_Mod {
 
 	@Override
 	public void onModServerStarting2(FMLServerStartingEvent aEvent) {
-		for (FluidContainerData tData : FluidContainerRegistry.getRegisteredFluidContainerData()) if (tData.filledContainer.getItem() == Items.potionitem && ST.meta_(tData.filledContainer) == 0) {tData.fluid.amount = 0; break;}
+		//for (FluidContainerData tData : FluidContainerRegistry.getRegisteredFluidContainerData()) if (tData.filledContainer.getItem() == Items.potionitem && ST.meta_(tData.filledContainer) == 0) {tData.fluid.amount = 0; break;}
 
 		ORD.println("============================");
 		ORD.println("Outputting Unknown Materials");
@@ -552,7 +535,8 @@ public class GT6_Main extends Abstract_Mod {
 			}
 		});} catch(Throwable e) {/*Do nothing}
 		*/
-		if (MD.IC2.mLoaded && !MD.IC2C.mLoaded) try {if (mDisableIC2Ores) Ic2Items.tinOre = Ic2Items.leadOre = Ic2Items.copperOre = Ic2Items.uraniumOre = null;} catch (Throwable e) {e.printStackTrace(ERR);}
+		//TODO: IC2 Support
+		//if (MD.IC2.mLoaded && !MD.IC2C.mLoaded) try {if (mDisableIC2Ores) Ic2Items.tinOre = Ic2Items.leadOre = Ic2Items.copperOre = Ic2Items.uraniumOre = null;} catch (Throwable e) {e.printStackTrace(ERR);}
 		if (MD.TE.mLoaded) {
 			ItemStack tPyrotheum = OP.dust.mat(MT.Pyrotheum, 1);
 			for (ItemStackContainer tStack : OP.ore.mRegisteredItems) CR.remove(tStack.toStack(), tPyrotheum);
@@ -575,21 +559,21 @@ public class GT6_Main extends Abstract_Mod {
 			ORD.println("ItemRegistry:");
 			ORD.println("*"); ORD.println("*"); ORD.println("*");
 
-			Object[] tList = Item.itemRegistry.getKeys().toArray();
+			Object[] tList = ForgeRegistries.ITEMS.getKeys().toArray();
 
 			Arrays.sort(tList);
 			for (Object tItemName : tList) ORD.println(tItemName);
 
 			ORD.println("*");
-			ORD.println("OreDictionary:");
+			ORD.println("Tags:");
 			ORD.println("*"); ORD.println("*"); ORD.println("*");
 
-			tList = OreDictionary.getOreNames();
+			tList = ItemTags.getCollection().getTagMap().keySet().toArray();
 			Arrays.sort(tList);
-			for (Object tOreName : tList) {
-				int tAmount = OreDictionary.getOres(tOreName.toString()).size();
-				if (tAmount > 0) ORD.println((tAmount<10?" ":"") + tAmount + "x " + tOreName);
-			}
+			//for (Object tOreName : tList) {
+				//int tAmount = ItemTags..getOres(tOreName.toString()).size();
+				//if (tAmount > 0) ORD.println((tAmount<10?" ":"") + tAmount + "x " + tOreName);
+			//}
 
 			ORD.println("*");
 			ORD.println("Materials:");
@@ -614,7 +598,7 @@ public class GT6_Main extends Abstract_Mod {
 			ORD.println("Fluids:");
 			ORD.println("*"); ORD.println("*"); ORD.println("*");
 
-			tList = FluidRegistry.getRegisteredFluids().keySet().toArray(ZL_STRING);
+			tList = ForgeRegistries.FLUIDS.getKeys().stream().map(ResourceLocation::toString).collect(Collectors.toList()).toArray(ZL_STRING);
 			Arrays.sort(tList);
 			for (Object tFluidName : tList) ORD.println(tFluidName);
 
@@ -622,17 +606,14 @@ public class GT6_Main extends Abstract_Mod {
 			ORD.println("Biomes:");
 			ORD.println("*"); ORD.println("*"); ORD.println("*");
 
-			for (int i = 0; i < BiomeGenBase.getBiomeGenArray().length; i++) {
-				if (BiomeGenBase.getBiomeGenArray()[i] != null) ORD.println(BiomeGenBase.getBiomeGenArray()[i].biomeID + " = " + BiomeGenBase.getBiomeGenArray()[i].biomeName);
-			}
+			ForgeRegistries.BIOMES.getKeys().forEach(e -> ORD.println(e.toString()));
 
 			ORD.println("*"); ORD.println("*"); ORD.println("*");
 			ORD.println("Enchantments:");
 			ORD.println("*"); ORD.println("*"); ORD.println("*");
 
-			for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {
-				if (Enchantment.enchantmentsList[i] != null) ORD.println(i + " = " + Enchantment.enchantmentsList[i].getName());
-			}
+			ForgeRegistries.ENCHANTMENTS.getKeys().forEach(e -> ORD.println(e.toString()));
+
 
 			ORD.println("*"); ORD.println("*"); ORD.println("*");
 			ORD.println("END GregTech-Debug");
@@ -649,11 +630,10 @@ public class GT6_Main extends Abstract_Mod {
 	@Override public String getModNameForLog() {return "GT_Mod";}
 	@Override public Abstract_Proxy getProxy() {return gt_proxy;}
 
-	@Mod.EventHandler public void onPreLoad         (FMLPreInitializationEvent  aEvent) {onModPreInit(aEvent);}
-	@Mod.EventHandler public void onLoad            (FMLInitializationEvent     aEvent) {onModInit(aEvent);}
-	@Mod.EventHandler public void onPostLoad        (FMLPostInitializationEvent aEvent) {onModPostInit(aEvent);}
-	@Mod.EventHandler public void onServerStarting  (FMLServerStartingEvent     aEvent) {onModServerStarting(aEvent);}
-	@Mod.EventHandler public void onServerStarted   (FMLServerStartedEvent      aEvent) {onModServerStarted(aEvent);}
-	@Mod.EventHandler public void onServerStopping  (FMLServerStoppingEvent     aEvent) {onModServerStopping(aEvent);}
-	@Mod.EventHandler public void onServerStopped   (FMLServerStoppedEvent      aEvent) {onModServerStopped(aEvent);}
+	@SubscribeEvent public void onFMLCommonSetup  (FMLCommonSetupEvent  	  aEvent) {onModPreInit(aEvent);}
+	@SubscribeEvent public void onLoadComplete    (FMLLoadCompleteEvent 	  aEvent) {onModPostInit(aEvent);}
+	@SubscribeEvent public void onServerStarting  (FMLServerStartingEvent     aEvent) {onModServerStarting(aEvent);}
+	@SubscribeEvent public void onServerStarted   (FMLServerStartedEvent      aEvent) {onModServerStarted(aEvent);}
+	@SubscribeEvent public void onServerStopping  (FMLServerStoppingEvent     aEvent) {onModServerStopping(aEvent);}
+	@SubscribeEvent public void onServerStopped   (FMLServerStoppedEvent      aEvent) {onModServerStopped(aEvent);}
 }

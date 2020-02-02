@@ -23,25 +23,23 @@ import static gregapi.data.CS.*;
 
 import java.util.Collection;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
+import net.minecraft.client.renderer.entity.PlayerRenderer;
+import net.minecraft.potion.Effects;
 import org.lwjgl.opengl.GL11;
 
-import net.minecraft.client.entity.AbstractClientPlayer;
-import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.entity.RenderPlayer;
-import net.minecraft.potion.Potion;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 
-public class PlayerModelRenderer extends RenderPlayer {
+public class PlayerModelRenderer extends PlayerRenderer {
 	private final ResourceLocation[] mResources = new ResourceLocation[] {new ResourceLocation(RES_PATH + "model/BrainTech.png"), new ResourceLocation(RES_PATH + "model/Silver.png"), new ResourceLocation(RES_PATH + "model/MrBrain.png"), new ResourceLocation(RES_PATH + "model/Dev.png"), new ResourceLocation(RES_PATH + "model/Gold.png")};
 	private final Collection<String> mSupporterListSilver, mSupporterListGold;
-	
+
 	public PlayerModelRenderer(Collection<String> aSupporterListSilver, Collection<String> aSupporterListGold) {
+		super(Minecraft.getInstance().getRenderManager());
 		mSupporterListSilver = aSupporterListSilver;
 		mSupporterListGold = aSupporterListGold;
-		setRenderManager(RenderManager.instance);
 	}
 	
 	private ResourceLocation getResource(String aPlayer) {
@@ -56,15 +54,15 @@ public class PlayerModelRenderer extends RenderPlayer {
 		return null;
 	}
 	
-	public void receiveRenderSpecialsEvent(RenderPlayerEvent.Specials.Pre aEvent) {
-		AbstractClientPlayer aPlayer = (AbstractClientPlayer)aEvent.entityPlayer;
+	public void receiveRenderSpecialsEvent(RenderPlayerEvent.Pre aEvent) {
+		AbstractClientPlayerEntity aPlayer = (AbstractClientPlayerEntity)aEvent.getPlayer();
 //      if (UT.Entities.getFullInvisibility(aPlayer)) {aEvent.setCanceled(true); return;}
-		float aPartialTicks = aEvent.partialRenderTick;
+		float aPartialTicks = aEvent.getPartialRenderTick();
 		
-		if (aPlayer.isInvisible() || aPlayer.getActivePotionEffect(Potion.invisibility) != null) return;
+		if (aPlayer.isInvisible() || aPlayer.getActivePotionEffect(Effects.INVISIBILITY) != null) return;
 		
 		try {
-			ResourceLocation tResource = getResource(aPlayer.getCommandSenderName());
+			ResourceLocation tResource = getResource(aPlayer.getCommandSource().getName());
 			if (tResource == null) tResource = getResource(aPlayer.getUniqueID().toString());
 			
 			if (tResource != null && !aPlayer.getHideCape()) {

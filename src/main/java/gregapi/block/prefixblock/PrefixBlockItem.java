@@ -23,8 +23,6 @@ import static gregapi.data.CS.*;
 
 import java.util.List;
 
-import cpw.mods.fml.common.Optional;
-import gregapi.data.CS.BlocksGT;
 import gregapi.data.CS.ModIDs;
 import gregapi.data.LH;
 import gregapi.data.MD;
@@ -41,28 +39,18 @@ import gregapi.oredict.OreDictPrefix;
 import gregapi.util.ST;
 import gregapi.util.UT;
 import net.minecraft.block.Block;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import vazkii.botania.api.item.IFlowerPlaceable;
-import vazkii.botania.api.subtile.SubTileEntity;
 
 /**
  * @author Gregorius Techneticies
  */
-@Optional.InterfaceList(value = {
-  @Optional.Interface(iface = "vazkii.botania.api.item.IFlowerPlaceable", modid = ModIDs.BOTA)
-})
-public class PrefixBlockItem extends ItemBlock implements IItemUpdatable, IPrefixItem, IItemGT, IItemNoGTOverride, IFlowerPlaceable {
+public class PrefixBlockItem extends BlockItem implements IItemUpdatable, IPrefixItem, IItemGT, IItemNoGTOverride {
 	public final PrefixBlock mBlock;
 	
 	public PrefixBlockItem(Block aBlock) {
-		super(aBlock);
-		setMaxDamage(0);
-		setHasSubtypes(T);
+		super(aBlock, new Properties());
 		mBlock = (PrefixBlock)aBlock;
 		mBlock.mPrefix.mRegisteredPrefixItems.add(this);
 		
@@ -74,17 +62,6 @@ public class PrefixBlockItem extends ItemBlock implements IItemUpdatable, IPrefi
 			mBlock.setCreativeTab(CreativeTabs.tabBlock);
 			setCreativeTab(CreativeTabs.tabBlock);
 		}
-	}
-	
-	@Override
-	@SuppressWarnings("unchecked")
-	public void getSubItems(Item var1, CreativeTabs aCreativeTab, @SuppressWarnings("rawtypes") List aList) {
-		if ((SHOW_HIDDEN_PREFIXES || !mBlock.mPrefix.contains(TD.Creative.HIDDEN)) && (SHOW_ORE_BLOCK_PREFIXES || mBlock == BlocksGT.ore || !mBlock.mPrefix.contains(TD.Prefix.ORE))) for (int i = 0; i < mBlock.mMaterialList.length; i++) if (mBlock.mPrefix.isGeneratingItem(mBlock.mMaterialList[i])) if (SHOW_HIDDEN_MATERIALS || !mBlock.mMaterialList[i].mHidden) {
-			ItemStack tStack = ST.make(this, 1, i);
-			updateItemStack(tStack);
-			aList.add(tStack);
-		}
-		if (aList.isEmpty()) ST.hide(this);
 	}
 	
 	@Override

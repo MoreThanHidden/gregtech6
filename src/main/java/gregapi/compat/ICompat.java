@@ -21,26 +21,24 @@ package gregapi.compat;
 
 import java.util.Collection;
 
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLModIdMappingEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartedEvent;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.common.event.FMLServerStoppedEvent;
-import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import gregapi.code.ArrayListNoNulls;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLModIdMappingEvent;
+import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
+import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
+import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
+import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
 
 
 public interface ICompat {
-	public static final Collection<ICompat> COMPAT_CLASSES = new ArrayListNoNulls<>();
+	Collection<ICompat> COMPAT_CLASSES = new ArrayListNoNulls<>();
 	
-	public void onPreLoad           (FMLPreInitializationEvent aEvent);
-	public void onLoad              (FMLInitializationEvent aEvent);
-	public void onPostLoad          (FMLPostInitializationEvent aEvent);
-	public void onServerStarting    (FMLServerStartingEvent aEvent);
-	public void onServerStarted     (FMLServerStartedEvent aEvent);
-	public void onServerStopping    (FMLServerStoppingEvent aEvent);
-	public void onServerStopped     (FMLServerStoppedEvent aEvent);
-	public void onIDChanging        (FMLModIdMappingEvent aEvent);
+	default void onCommonSetup       (FMLCommonSetupEvent aEvent){}
+	default void onLoadComplete      (FMLLoadCompleteEvent aEvent){}
+	default void onServerStarting    (FMLServerStartingEvent aEvent){}
+	default void onServerStarted     (FMLServerStartedEvent aEvent){}
+	default void onServerStopping    (FMLServerStoppingEvent aEvent){}
+	default void onServerStopped     (FMLServerStoppedEvent aEvent){}
+	default void onIDChanging        (FMLModIdMappingEvent aEvent){}
 }

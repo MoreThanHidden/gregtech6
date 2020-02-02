@@ -23,13 +23,15 @@ import static gregapi.data.CS.*;
 
 import java.util.Date;
 
+import net.minecraft.block.Blocks;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextComponent;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import org.lwjgl.opengl.GL11;
 
-import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.Phase;
-import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import gregapi.GT_API;
 import gregapi.api.Abstract_Mod;
 import gregapi.config.ConfigCategories;
@@ -41,35 +43,26 @@ import gregapi.data.MD;
 import gregapi.render.BlockTextureDefault;
 import gregapi.render.IconContainerCopied;
 import gregapi.util.UT;
-import gregtech.entities.projectiles.EntityArrow_Material;
-import gregtech.entities.projectiles.EntityArrow_Potion;
-import gregtech.render.GT_Renderer_Entity_Arrow;
 import gregtech.render.PlayerModelRenderer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.event.ClickEvent;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderBlockOverlayEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 
 public class GT_Client extends GT_Proxy {
 	private final PlayerModelRenderer mPlayerRenderer = new PlayerModelRenderer(mSupporterListSilver, mSupporterListGold);
-	
-	public int addArmor(String aPrefix) {return RenderingRegistry.addNewArmourRendererPrefix(aPrefix);}
-	
+
 	public GT_Client() {super();}
 	
 	@Override
-	public void onProxyAfterPreInit(Abstract_Mod aMod, FMLPreInitializationEvent aEvent) {
-		super.onProxyAfterPreInit(aMod, aEvent);
-		new GT_Renderer_Entity_Arrow(EntityArrow_Material.class, "arrow");
-		new GT_Renderer_Entity_Arrow(EntityArrow_Potion.class, "arrow_potions");
+	public void onProxyAfterCommonSetup(Abstract_Mod aMod, FMLCommonSetupEvent aEvent) {
+		super.onProxyAfterCommonSetup(aMod, aEvent);
+		// TODO GT Arrow Render
+		// new GT_Renderer_Entity_Arrow(EntityArrow_Material.class, "arrow");
+		//new GT_Renderer_Entity_Arrow(EntityArrow_Potion.class, "arrow_potions");
 		
-		BooksGT.BOOK_TEXTURES_BACK[255] = BooksGT.BOOK_TEXTURES_SIDE[255] = BlockTextureDefault.get(new IconContainerCopied(Blocks.cobblestone, 0, 0));
+		BooksGT.BOOK_TEXTURES_BACK[255] = BooksGT.BOOK_TEXTURES_SIDE[255] = BlockTextureDefault.get(new IconContainerCopied(Blocks.COBBLESTONE, 0, 0));
 		
 		BooksGT.BOOK_TEXTURES_BACK[ 1] = BlockTextureDefault.get("books/BOOK_VANILLA_BACK");
 		BooksGT.BOOK_TEXTURES_BACK[ 2] = BlockTextureDefault.get("books/BOOK_ENCHANTED_BACK");
@@ -187,21 +180,20 @@ public class GT_Client extends GT_Proxy {
 	}
 	
 	private boolean FIRST_CLIENT_PLAYER_TICK = T;
-	
+
 	@SubscribeEvent
-	@SuppressWarnings("deprecation")
-	public void onPlayerTickEventClient(PlayerTickEvent aEvent) {
-		if (!aEvent.player.isDead && aEvent.phase == Phase.END && aEvent.side.isClient() && CLIENT_TIME > 20) {
+	public void onPlayerTickEventClient(TickEvent.PlayerTickEvent aEvent) {
+		if (aEvent.phase == TickEvent.Phase.END && aEvent.side.isClient() && CLIENT_TIME > 20) {
 			for (int i = 0; i < UT.Sounds.sPlayedSounds.size(); i++) if (UT.Sounds.sPlayedSounds.get(i).mTimer-- < 0) UT.Sounds.sPlayedSounds.remove(i--);
-			
-			if (aEvent.player == GT_API.api_proxy.getThePlayer()) {
+
+			if (aEvent.player.getUniqueID() == GT_API.api_proxy.getThePlayer().getUniqueID()) {
 				if (FIRST_CLIENT_PLAYER_TICK) {
 					FIRST_CLIENT_PLAYER_TICK = F;
-					ChatComponentText tLink;
+					TextComponent tLink;
 					if (mMessage.length() > 5 && ConfigsGT.CLIENT.get(ConfigCategories.news, mMessage, T)) {
-						aEvent.player.addChatComponentMessage(new ChatComponentText(mMessage));
-						aEvent.player.addChatComponentMessage(new ChatComponentText(LH.Chat.DGRAY + ""));
-						tLink = new ChatComponentText(LH.Chat.DGRAY + "disable message in the clientside GregTech.cfg");
+						aEvent.player.sendMessage(new StringTextComponent(mMessage));
+						aEvent.player.addChatComponentMessage(new StringTextComponent(LH.Chat.DGRAY + ""));
+						tLink = new StringTextComponent(LH.Chat.DGRAY + "disable message in the clientside GregTech.cfg");
 						tLink.getChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, ConfigsGT.CLIENT.mConfig.getConfigFile().getAbsolutePath()));
 						aEvent.player.addChatComponentMessage(tLink);
 					}
@@ -272,7 +264,7 @@ public class GT_Client extends GT_Proxy {
 	}
 	
 	@SubscribeEvent
-	public void receiveRenderSpecialsEvent(RenderPlayerEvent.Specials.Pre aEvent) {
+	public void receiveRenderSpecialsEvent(RenderPlayerEvent.Pre aEvent) {
 		mPlayerRenderer.receiveRenderSpecialsEvent(aEvent);
 	}
 	/*

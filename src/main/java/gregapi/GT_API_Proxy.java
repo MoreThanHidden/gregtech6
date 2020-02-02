@@ -29,20 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.FMLLog;
-import cpw.mods.fml.common.IFuelHandler;
-import cpw.mods.fml.common.IWorldGenerator;
-import cpw.mods.fml.common.event.FMLServerStartedEvent;
-import cpw.mods.fml.common.event.FMLServerStoppingEvent;
-import cpw.mods.fml.common.eventhandler.Event.Result;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.Phase;
-import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.WorldTickEvent;
-import cpw.mods.fml.common.network.IGuiHandler;
-import cpw.mods.fml.common.registry.GameRegistry;
+
 import gregapi.api.Abstract_Mod;
 import gregapi.api.Abstract_Proxy;
 import gregapi.block.IBlockOnHeadInside;
@@ -102,38 +89,24 @@ import gregapi.util.UT;
 import gregapi.util.WD;
 import gregapi.worldgen.GT6WorldGenerator;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockJukebox.TileEntityJukebox;
-import net.minecraft.block.BlockRailBase;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.RailBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.item.EntityXPOrb;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.EnumAction;
-import net.minecraft.item.ItemBow;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSettings;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.IChunkProvider;
-import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.item.ItemExpireEvent;
@@ -145,46 +118,45 @@ import net.minecraftforge.event.entity.player.ArrowNockEvent;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.entity.player.PlayerUseItemEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.ChunkWatchEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidContainerItem;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
+import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 /**
  * @author Gregorius Techneticies
  */
-public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler, IFuelHandler, IWorldGenerator {
+public abstract class GT_API_Proxy extends Abstract_Proxy {
 	public GT_API_Proxy() {
-		GameRegistry.registerFuelHandler(this);
-		GameRegistry.registerWorldGenerator(this, Integer.MAX_VALUE);
 		MinecraftForge.EVENT_BUS.register(this);
-		FMLCommonHandler.instance().bus().register(this);
+		FMLJavaModLoadingContext.get().getModEventBus().register(this);
 	}
 	
 	public int addArmor(String aPrefix) {
 		return 0;
 	}
 	
-	public EntityPlayer getThePlayer() {
+	public PlayerEntity getThePlayer() {
 		return null;
 	}
 	
-	public boolean sendUseItemPacket(EntityPlayer aPlayer, World aWorld, ItemStack aStack) {
+	public boolean sendUseItemPacket(PlayerEntity aPlayer, World aWorld, ItemStack aStack) {
 		return F;
 	}
 	
 	@Override
-	public Object getServerGuiElement(int aGUIID, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ) {
+	public Object getServerGuiElement(int aGUIID, PlayerEntity aPlayer, World aWorld, int aX, int aY, int aZ) {
 		TileEntity tTileEntity = WD.te(aWorld, aX, aY, aZ, T);
 		return tTileEntity instanceof ITileEntityGUI ? ((ITileEntityGUI)tTileEntity).getGUIServer(aGUIID, aPlayer) : null;
 	}
 	
 	@Override
-	public Object getClientGuiElement(int aGUIID, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ) {
+	public Object getClientGuiElement(int aGUIID, PlayerEntity aPlayer, World aWorld, int aX, int aY, int aZ) {
 		TileEntity tTileEntity = WD.te(aWorld, aX, aY, aZ, T);
 		return tTileEntity instanceof ITileEntityGUI ? ((ITileEntityGUI)tTileEntity).getGUIClient(aGUIID, aPlayer) : null;
 	}
@@ -234,27 +206,28 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 	
 	@SubscribeEvent
 	@SuppressWarnings("unchecked")
-	public void onServerTick(ServerTickEvent aEvent) {
+	public void onServerTick(TickEvent.ServerTickEvent aEvent) {
 		if (aEvent.side.isServer()) {
 			
 			// Making sure it is being free'd up in order to prevent exploits or Garbage Collection mishaps.
 			LAST_BROKEN_TILEENTITY.set(null);
 			
-			if (aEvent.phase == Phase.START) {
+			if (aEvent.phase == TickEvent.Phase.START) {
 				if (SERVER_TIME++ == 0) {
 					HashSetNoNulls<ItemStack> tStacks = new HashSetNoNulls<>(10000);
-					
+
+					//TODO: IC2 Integration
 					if (MD.IC2.mLoaded) try {
-					for (ic2.api.recipe.RecipeOutput tRecipe : ic2.api.recipe.Recipes.cannerBottle              .getRecipes().values()) for (ItemStack tStack : tRecipe.items) tStacks.add(tStack);
-					for (ic2.api.recipe.RecipeOutput tRecipe : ic2.api.recipe.Recipes.centrifuge                .getRecipes().values()) for (ItemStack tStack : tRecipe.items) tStacks.add(tStack);
-					for (ic2.api.recipe.RecipeOutput tRecipe : ic2.api.recipe.Recipes.compressor                .getRecipes().values()) for (ItemStack tStack : tRecipe.items) tStacks.add(tStack);
-					for (ic2.api.recipe.RecipeOutput tRecipe : ic2.api.recipe.Recipes.extractor                 .getRecipes().values()) for (ItemStack tStack : tRecipe.items) tStacks.add(tStack);
-					for (ic2.api.recipe.RecipeOutput tRecipe : ic2.api.recipe.Recipes.macerator                 .getRecipes().values()) for (ItemStack tStack : tRecipe.items) tStacks.add(tStack);
-					for (ic2.api.recipe.RecipeOutput tRecipe : ic2.api.recipe.Recipes.metalformerCutting        .getRecipes().values()) for (ItemStack tStack : tRecipe.items) tStacks.add(tStack);
-					for (ic2.api.recipe.RecipeOutput tRecipe : ic2.api.recipe.Recipes.metalformerExtruding      .getRecipes().values()) for (ItemStack tStack : tRecipe.items) tStacks.add(tStack);
-					for (ic2.api.recipe.RecipeOutput tRecipe : ic2.api.recipe.Recipes.metalformerRolling        .getRecipes().values()) for (ItemStack tStack : tRecipe.items) tStacks.add(tStack);
-					for (ic2.api.recipe.RecipeOutput tRecipe : ic2.api.recipe.Recipes.matterAmplifier           .getRecipes().values()) for (ItemStack tStack : tRecipe.items) tStacks.add(tStack);
-					for (ic2.api.recipe.RecipeOutput tRecipe : ic2.api.recipe.Recipes.oreWashing                .getRecipes().values()) for (ItemStack tStack : tRecipe.items) tStacks.add(tStack);
+					//for (ic2.api.recipe.RecipeOutput tRecipe : ic2.api.recipe.Recipes.cannerBottle              .getRecipes().values()) for (ItemStack tStack : tRecipe.items) tStacks.add(tStack);
+					//for (ic2.api.recipe.RecipeOutput tRecipe : ic2.api.recipe.Recipes.centrifuge                .getRecipes().values()) for (ItemStack tStack : tRecipe.items) tStacks.add(tStack);
+					//for (ic2.api.recipe.RecipeOutput tRecipe : ic2.api.recipe.Recipes.compressor                .getRecipes().values()) for (ItemStack tStack : tRecipe.items) tStacks.add(tStack);
+					//for (ic2.api.recipe.RecipeOutput tRecipe : ic2.api.recipe.Recipes.extractor                 .getRecipes().values()) for (ItemStack tStack : tRecipe.items) tStacks.add(tStack);
+					//for (ic2.api.recipe.RecipeOutput tRecipe : ic2.api.recipe.Recipes.macerator                 .getRecipes().values()) for (ItemStack tStack : tRecipe.items) tStacks.add(tStack);
+					//for (ic2.api.recipe.RecipeOutput tRecipe : ic2.api.recipe.Recipes.metalformerCutting        .getRecipes().values()) for (ItemStack tStack : tRecipe.items) tStacks.add(tStack);
+					//for (ic2.api.recipe.RecipeOutput tRecipe : ic2.api.recipe.Recipes.metalformerExtruding      .getRecipes().values()) for (ItemStack tStack : tRecipe.items) tStacks.add(tStack);
+					//for (ic2.api.recipe.RecipeOutput tRecipe : ic2.api.recipe.Recipes.metalformerRolling        .getRecipes().values()) for (ItemStack tStack : tRecipe.items) tStacks.add(tStack);
+					//for (ic2.api.recipe.RecipeOutput tRecipe : ic2.api.recipe.Recipes.matterAmplifier           .getRecipes().values()) for (ItemStack tStack : tRecipe.items) tStacks.add(tStack);
+					//for (ic2.api.recipe.RecipeOutput tRecipe : ic2.api.recipe.Recipes.oreWashing                .getRecipes().values()) for (ItemStack tStack : tRecipe.items) tStacks.add(tStack);
 					} catch(Throwable e) {e.printStackTrace(ERR);}
 					
 					if (MD.RC.mLoaded) {
@@ -263,17 +236,18 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 					try {for (Object  tRecipe : mods.railcraft.api.crafting.RailcraftCraftingManager.rockCrusher   .getRecipes   ()) for (Map.Entry<ItemStack, Float> tEntry : (List<Map.Entry<ItemStack, Float>>)UT.Reflection.getFieldContent(tRecipe, "outputs")) tStacks.add(tEntry.getKey());} catch(Throwable e) {e.printStackTrace(ERR);}
 					try {for (IRecipe tRecipe : mods.railcraft.api.crafting.RailcraftCraftingManager.rollingMachine.getRecipeList()) if (tRecipe != null) tStacks.add(tRecipe.getRecipeOutput());} catch(Throwable e) {e.printStackTrace(ERR);}
 					}
-					
-					for (WeightedRandomChestContent tContent : ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST            ).getItems(RNGSUS)) tStacks.add(tContent.theItemId);
-					for (WeightedRandomChestContent tContent : ChestGenHooks.getInfo(ChestGenHooks.BONUS_CHEST              ).getItems(RNGSUS)) tStacks.add(tContent.theItemId);
-					for (WeightedRandomChestContent tContent : ChestGenHooks.getInfo(ChestGenHooks.VILLAGE_BLACKSMITH       ).getItems(RNGSUS)) tStacks.add(tContent.theItemId);
-					for (WeightedRandomChestContent tContent : ChestGenHooks.getInfo(ChestGenHooks.STRONGHOLD_CROSSING      ).getItems(RNGSUS)) tStacks.add(tContent.theItemId);
-					for (WeightedRandomChestContent tContent : ChestGenHooks.getInfo(ChestGenHooks.STRONGHOLD_LIBRARY       ).getItems(RNGSUS)) tStacks.add(tContent.theItemId);
-					for (WeightedRandomChestContent tContent : ChestGenHooks.getInfo(ChestGenHooks.STRONGHOLD_CORRIDOR      ).getItems(RNGSUS)) tStacks.add(tContent.theItemId);
-					for (WeightedRandomChestContent tContent : ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_JUNGLE_DISPENSER ).getItems(RNGSUS)) tStacks.add(tContent.theItemId);
-					for (WeightedRandomChestContent tContent : ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_JUNGLE_CHEST     ).getItems(RNGSUS)) tStacks.add(tContent.theItemId);
-					for (WeightedRandomChestContent tContent : ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_DESERT_CHEST     ).getItems(RNGSUS)) tStacks.add(tContent.theItemId);
-					for (WeightedRandomChestContent tContent : ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR       ).getItems(RNGSUS)) tStacks.add(tContent.theItemId);
+
+					//TODO: Chest Content
+					//for (WeightedRandomChestContent tContent : ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST            ).getItems(RNGSUS)) tStacks.add(tContent.theItemId);
+					//for (WeightedRandomChestContent tContent : ChestGenHooks.getInfo(ChestGenHooks.BONUS_CHEST              ).getItems(RNGSUS)) tStacks.add(tContent.theItemId);
+					//for (WeightedRandomChestContent tContent : ChestGenHooks.getInfo(ChestGenHooks.VILLAGE_BLACKSMITH       ).getItems(RNGSUS)) tStacks.add(tContent.theItemId);
+					//for (WeightedRandomChestContent tContent : ChestGenHooks.getInfo(ChestGenHooks.STRONGHOLD_CROSSING      ).getItems(RNGSUS)) tStacks.add(tContent.theItemId);
+					//for (WeightedRandomChestContent tContent : ChestGenHooks.getInfo(ChestGenHooks.STRONGHOLD_LIBRARY       ).getItems(RNGSUS)) tStacks.add(tContent.theItemId);
+					//for (WeightedRandomChestContent tContent : ChestGenHooks.getInfo(ChestGenHooks.STRONGHOLD_CORRIDOR      ).getItems(RNGSUS)) tStacks.add(tContent.theItemId);
+					//for (WeightedRandomChestContent tContent : ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_JUNGLE_DISPENSER ).getItems(RNGSUS)) tStacks.add(tContent.theItemId);
+					//for (WeightedRandomChestContent tContent : ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_JUNGLE_CHEST     ).getItems(RNGSUS)) tStacks.add(tContent.theItemId);
+					//for (WeightedRandomChestContent tContent : ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_DESERT_CHEST     ).getItems(RNGSUS)) tStacks.add(tContent.theItemId);
+					//for (WeightedRandomChestContent tContent : ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR       ).getItems(RNGSUS)) tStacks.add(tContent.theItemId);
 					
 					for (Object tStack : FurnaceRecipes.smelting().getSmeltingList().values()) tStacks.add((ItemStack)tStack);
 					
@@ -394,14 +368,14 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 					SCHEDULED_TILEENTITY_UPDATES = tList;
 					
 					while (!mNewPlayers.isEmpty()) {
-						EntityPlayerMP tPlayer = mNewPlayers.remove(0);
+						PlayerEntity tPlayer = mNewPlayers.remove(0);
 						NW_API.sendToPlayer(new PacketConfig(), tPlayer);
 						for (OreDictPrefix tPrefix : OreDictPrefix.VALUES) if (!tPrefix.contains(TD.Prefix.PREFIX_UNUSED)) NW_API.sendToPlayer(new PacketPrefix(tPrefix), tPlayer);
 					}
 				}
 			}
 			
-			if (aEvent.phase == Phase.END) {
+			if (aEvent.phase == TickEvent.Phase.END) {
 				for (int i = 0; i < SERVER_TICK_POST.size(); i++) {
 					ITileEntityServerTickPost tTileEntity = SERVER_TICK_POST.get(i);
 					if (tTileEntity.isDead()) {
@@ -976,15 +950,15 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 				}
 				
 				if (tCanCollect) {
-					aDrops = aEvent.drops.iterator();
-					while (aDrops.hasNext()) if (UT.Inventories.addStackToPlayerInventory(aEvent.harvester, ST.update(aDrops.next(), aEvent.world, aEvent.x, aEvent.y, aEvent.z))) aDrops.remove();
+					aDrops = aEvent.getDrops().iterator();
+					while (aDrops.hasNext()) if (UT.Inventories.addStackToPlayerInventory(aEvent.getHarvester(), ST.update(aDrops.next(), aEvent.world, aEvent.x, aEvent.y, aEvent.z))) aDrops.remove();
 				}
 			}
-			UT.Inventories.removeNullStacksFromInventory(aEvent.harvester.inventory);
+			UT.Inventories.removeNullStacksFromInventory(aEvent.getHarvester().inventory);
 		}
 	}
 	
-	public static List<EntityPlayerMP> mNewPlayers = new ArrayListNoNulls<>();
+	public static List<PlayerEntity> mNewPlayers = new ArrayListNoNulls<>();
 	
 	@SubscribeEvent
 	public void onLivingDeath(LivingDeathEvent aEvent) {
@@ -1135,8 +1109,8 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 	public int getBurnTime(ItemStack aFuel) {
 		if (ST.invalid(aFuel) || FL.getFluid(aFuel, T) != null) return 0;
 		Block aBlock = ST.block(aFuel);
-		if (aBlock instanceof BlockRailBase) return 0;
-		if (aBlock == Blocks.red_mushroom_block || aBlock == Blocks.brown_mushroom_block) return (3 * TICKS_PER_SMELT) / 2;
+		if (aBlock instanceof RailBlock) return 0;
+		if (aBlock == Blocks.RED_MUSHROOM_BLOCK || aBlock == Blocks.BROWN_MUSHROOM_BLOCK) return (3 * TICKS_PER_SMELT) / 2;
 		if (aBlock == BlocksGT.BalesGrass) return (9 * TICKS_PER_SMELT) / ((ST.meta_(aFuel) & 3) == 1 ? 2 : 4);
 		if (aBlock instanceof BlockBaseBale) return (9 * TICKS_PER_SMELT) / 4;
 		if (aBlock instanceof BlockBasePlanks) return (3 * TICKS_PER_SMELT) / 2;
@@ -1150,7 +1124,7 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 			if (OM.is_(OD.logWood, aFuel)) return TICKS_PER_SMELT * 6;
 			if (IL.IC2_Resin.equal(aFuel, F, T)) return TICKS_PER_SMELT / 2;
 		}
-		NBTTagCompound tNBT = aFuel.getTagCompound();
+		CompoundNBT tNBT = aFuel.getTag();
 		if (tNBT != null) {
 			rFuelValue = Math.max(rFuelValue, tNBT.getLong(NBT_FUEL_VALUE));
 		}
