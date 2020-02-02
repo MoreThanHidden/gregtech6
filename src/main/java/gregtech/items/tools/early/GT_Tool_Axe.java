@@ -37,7 +37,7 @@ import gregapi.wooddict.WoodDictionary;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -98,7 +98,7 @@ public class GT_Tool_Axe extends ToolStats {
 	private static boolean LOCK = T;
 	
 	@Override
-	public int convertBlockDrops(List<ItemStack> aDrops, ItemStack aStack, EntityPlayer aPlayer, Block aBlock, long aAvailableDurability, int aX, int aY, int aZ, byte aMeta, int aFortune, boolean aSilkTouch, BlockEvent.HarvestDropsEvent aEvent) {
+	public int convertBlockDrops(List<ItemStack> aDrops, ItemStack aStack, PlayerEntity aPlayer, Block aBlock, long aAvailableDurability, int aX, int aY, int aZ, byte aMeta, int aFortune, boolean aSilkTouch, BlockEvent.HarvestDropsEvent aEvent) {
 		int rAmount = 0;
 		if (LOCK && !aPlayer.worldObj.isRemote && !aPlayer.isSneaking() && !aBlock.getClass().getName().startsWith("com.ferreusveritas.dynamictrees") && (aBlock.isWood(aPlayer.worldObj, aX, aY, aZ) || OP.log.contains(ST.make(aBlock, 1, aMeta)) || WoodDictionary.WOODS.containsKey(aBlock, aMeta, T))) {
 			try {
@@ -113,7 +113,7 @@ public class GT_Tool_Axe extends ToolStats {
 	}
 	
 	@Override
-	public float getMiningSpeed(Block aBlock, byte aMeta, float aDefault, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ) {
+	public float getMiningSpeed(Block aBlock, byte aMeta, float aDefault, PlayerEntity aPlayer, World aWorld, int aX, int aY, int aZ) {
 		if (aBlock instanceof BlockBaseBeam) return 2 * aDefault;
 		if (aBlock.getClass().getName().startsWith("com.ferreusveritas.dynamictrees")) return aDefault;
 		if (aBlock.isWood(aPlayer.worldObj, aX, aY, aZ) || OP.log.contains(ST.make(aBlock, 1, aMeta)) || WoodDictionary.WOODS.containsKey(aBlock, aMeta, T)) {
@@ -125,7 +125,7 @@ public class GT_Tool_Axe extends ToolStats {
 	}
 	
 	@Override
-	public void afterDealingDamage(float aNormalDamage, float aMagicDamage, int aFireAspect, boolean aCriticalHit, Entity aEntity, ItemStack aStack, EntityPlayer aPlayer) {
+	public void afterDealingDamage(float aNormalDamage, float aMagicDamage, int aFireAspect, boolean aCriticalHit, Entity aEntity, ItemStack aStack, PlayerEntity aPlayer) {
 		super.afterDealingDamage(aNormalDamage, aMagicDamage, aFireAspect, aCriticalHit, aEntity, aStack, aPlayer);
 		if (aEntity.worldObj.isRemote || aNormalDamage < 2) return;
 		if ("EntityEnt".equalsIgnoreCase(UT.Reflection.getLowercaseClass(aEntity))) ST.drop(aEntity, Blocks.log, UT.Code.bindStack((int)(aNormalDamage / 2)), 0);

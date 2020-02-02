@@ -33,7 +33,7 @@ import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntitySlime;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
@@ -59,7 +59,7 @@ public class BlockSpikeMetal extends BlockBaseSpike {
 	}
 	
 	@Override
-	public void addInformation(ItemStack aStack, int aMeta, EntityPlayer aPlayer, List<String> aList, boolean aF3_H) {
+	public void addInformation(ItemStack aStack, int aMeta, PlayerEntity aPlayer, List<String> aList, boolean aF3_H) {
 		if (aMeta < 8) {
 			aList.add(LH.Chat.ORANGE + "Deals huge Damage to any Slime touching it!");
 			aList.add(LH.Chat.ORANGE + "Does very low Damage to anything else!");

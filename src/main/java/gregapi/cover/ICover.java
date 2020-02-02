@@ -25,7 +25,7 @@ import java.util.List;
 
 import gregapi.render.ITexture;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
@@ -193,8 +193,8 @@ public interface ICover {
 	public ITexture getCoverTextureAttachment(byte aCoverSide, CoverData aData, byte aTextureSide);
 	public ITexture getCoverTextureHolder(byte aCoverSide, CoverData aData, byte aTextureSide);
 	
-	public Object getGUIServer(byte aCoverSide, CoverData aData, EntityPlayer aPlayer);
-	public Object getGUIClient(byte aCoverSide, CoverData aData, EntityPlayer aPlayer);
+	public Object getGUIServer(byte aCoverSide, CoverData aData, PlayerEntity aPlayer);
+	public Object getGUIClient(byte aCoverSide, CoverData aData, PlayerEntity aPlayer);
 	
 	public float[] getCoverBounds(byte aCoverSide, CoverData aData);
 	public float[] getHolderBounds(byte aCoverSide, CoverData aData);

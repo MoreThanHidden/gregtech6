@@ -51,7 +51,7 @@ import gregapi.util.WD;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemBlock;
@@ -440,10 +440,10 @@ public class BlockStones extends BlockMetaType implements IOreDictListenerEvent,
 			}
 		}
 		if (aTool.equals(TOOL_drill) && !aSneaking) {
-			if (mBlock == this && aPlayer instanceof EntityPlayer && aMeta == BRICK) {
-				for (int i = 0; i < ((EntityPlayer)aPlayer).inventory.mainInventory.length; i++) {
-					int tIndex = ((EntityPlayer)aPlayer).inventory.mainInventory.length-i-1;
-					ItemStack tStack = ((EntityPlayer)aPlayer).inventory.mainInventory[tIndex];
+			if (mBlock == this && aPlayer instanceof PlayerEntity && aMeta == BRICK) {
+				for (int i = 0; i < ((PlayerEntity)aPlayer).inventory.mainInventory.length; i++) {
+					int tIndex = ((PlayerEntity)aPlayer).inventory.mainInventory.length-i-1;
+					ItemStack tStack = ((PlayerEntity)aPlayer).inventory.mainInventory[tIndex];
 					if (OM.is("stickAnyIronOrSteel", tStack)) {
 						if (aWorld.setBlockMetadataWithNotify(aX, aY, aZ, RNFBR, 3)) {
 							ST.use(aPlayer, tIndex, tStack);

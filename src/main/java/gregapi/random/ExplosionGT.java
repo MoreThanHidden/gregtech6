@@ -38,8 +38,8 @@ import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.boss.EntityDragonPart;
 import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.item.EntityTNTPrimed;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerEntityMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.network.play.server.S27PacketExplosion;
 import net.minecraft.util.AxisAlignedBB;
@@ -67,9 +67,9 @@ public class ExplosionGT extends Explosion {
 			@SuppressWarnings("rawtypes")
 			Iterator tIterator = aWorld.playerEntities.iterator();
 			while (tIterator.hasNext()) {
-				EntityPlayer tPlayer = (EntityPlayer)tIterator.next();
+				PlayerEntity tPlayer = (PlayerEntity)tIterator.next();
 				if (tPlayer.getDistanceSq(aX, aY, aZ) < 4096) {
-					((EntityPlayerMP)tPlayer).playerNetServerHandler.sendPacket(new S27PacketExplosion(aX, aY, aZ, aPower, tExplosion.affectedBlockPositions, (Vec3)tExplosion.func_77277_b().get(tPlayer)));
+					((PlayerEntityMP)tPlayer).playerNetServerHandler.sendPacket(new S27PacketExplosion(aX, aY, aZ, aPower, tExplosion.affectedBlockPositions, (Vec3)tExplosion.func_77277_b().get(tPlayer)));
 				}
 			}
 		} else {
@@ -136,7 +136,7 @@ public class ExplosionGT extends Explosion {
 					tEntity.motionY += tKnockY * tBlastProtection;
 					tEntity.motionZ += tKnockZ * tBlastProtection;
 					
-					if (tEntity instanceof EntityPlayer) field_77288_k.put(tEntity, Vec3.createVectorHelper(tKnockX * tKnockback, tKnockY * tKnockback, tKnockZ * tKnockback));
+					if (tEntity instanceof PlayerEntity) field_77288_k.put(tEntity, Vec3.createVectorHelper(tKnockX * tKnockback, tKnockY * tKnockback, tKnockZ * tKnockback));
 				}
 			}
 		}

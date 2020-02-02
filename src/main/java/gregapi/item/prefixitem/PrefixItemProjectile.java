@@ -41,7 +41,7 @@ import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IProjectile;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -98,7 +98,7 @@ public class PrefixItemProjectile extends PrefixItem implements IItemProjectile 
 	}
 	
 	@Override
-	public boolean onLeftClickEntity(ItemStack aStack, EntityPlayer aPlayer, Entity aEntity) {
+	public boolean onLeftClickEntity(ItemStack aStack, PlayerEntity aPlayer, Entity aEntity) {
 		super.onLeftClickEntity(aStack, aPlayer, aEntity);
 		if (aEntity instanceof EntityLivingBase) {
 			if (mStabbing) {

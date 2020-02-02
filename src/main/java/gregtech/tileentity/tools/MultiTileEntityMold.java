@@ -68,7 +68,7 @@ import gregapi.util.UT;
 import gregapi.util.WD;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -267,7 +267,7 @@ public class MultiTileEntityMold extends TileEntityBase07Paintable implements IT
 	}
 	
 	@Override
-	public boolean onBlockActivated3(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onBlockActivated3(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (SIDES_TOP_HORIZONTAL[aSide]) {
 			if (isServerSide() && !pickUpItem(aPlayer, T) && SIDES_TOP[aSide]) {
 				byte tSide = UT.Code.getSideWrenching(aSide, aHitX, aHitY, aHitZ);
@@ -296,7 +296,7 @@ public class MultiTileEntityMold extends TileEntityBase07Paintable implements IT
 		return F;
 	}
 	
-	public boolean pickUpItem(EntityPlayer aPlayer, boolean aCauseDamage) {
+	public boolean pickUpItem(PlayerEntity aPlayer, boolean aCauseDamage) {
 		ItemStack tOutputStack = slot(0);
 		if (tOutputStack != null) {
 			OreDictItemData tData = OM.anyassociation(tOutputStack);
@@ -371,7 +371,7 @@ public class MultiTileEntityMold extends TileEntityBase07Paintable implements IT
 			return 1;
 		}
 		if (aTool.equals(TOOL_pincers)) {
-			if (aPlayer instanceof EntityPlayer && pickUpItem((EntityPlayer)aPlayer, F)) {
+			if (aPlayer instanceof PlayerEntity && pickUpItem((PlayerEntity)aPlayer, F)) {
 				return 1000;
 			}
 		}
@@ -410,7 +410,7 @@ public class MultiTileEntityMold extends TileEntityBase07Paintable implements IT
 	}
 	
 	@Override
-	public boolean onPlaced(ItemStack aStack, EntityPlayer aPlayer, MultiTileEntityContainer aMTEContainer, World aWorld, int aX, int aY, int aZ, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onPlaced(ItemStack aStack, PlayerEntity aPlayer, MultiTileEntityContainer aMTEContainer, World aWorld, int aX, int aY, int aZ, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		mTemperature = WD.envTemp(worldObj, xCoord, yCoord, zCoord);
 		return T;
 	}
@@ -599,7 +599,7 @@ public class MultiTileEntityMold extends TileEntityBase07Paintable implements IT
 	}
 	
 	@Override
-	public boolean checkObstruction(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean checkObstruction(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		return (SIDES_BOTTOM_HORIZONTAL[aSide] || getClass() != MultiTileEntityMold.class) && super.checkObstruction(aPlayer, aSide, aHitX, aHitY, aHitZ);
 	}
 	

@@ -28,7 +28,7 @@ import gregapi.data.LH;
 import gregapi.tileentity.ITileEntityInventoryGUI;
 import gregapi.util.ST;
 import gregapi.util.UT;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -51,7 +51,7 @@ public class Slot_Normal extends Slot {
 		mIndex = aIndex;
 	}
 	
-	public List<String> getTooltip(EntityPlayer aPlayer, boolean aF3_H) {
+	public List<String> getTooltip(PlayerEntity aPlayer, boolean aF3_H) {
 		ArrayListNoNulls<String> rList = new ArrayListNoNulls<>();
 		for (int i = 0; i < mToolTips.length; i++) {
 			if (mToolTipColors[i] == null) mToolTipColors[i] = LH.Chat.GRAY;
@@ -83,7 +83,7 @@ public class Slot_Normal extends Slot {
 	}
 	
 	@Override public boolean isItemValid(ItemStack aStack) {return mCanPut && mInventory.isItemValidForSlotGUI(mIndex, aStack);}
-	@Override public boolean canTakeStack(EntityPlayer aPlayer) {return mInventory.canTakeOutOfSlotGUI(mIndex) && (UT.Entities.isCreative(aPlayer) || (mCanTake && !ST.debug(getStack())));}
+	@Override public boolean canTakeStack(PlayerEntity aPlayer) {return mInventory.canTakeOutOfSlotGUI(mIndex) && (UT.Entities.isCreative(aPlayer) || (mCanTake && !ST.debug(getStack())));}
 	@Override public boolean isSlotInInventory(IInventory aInventory, int aIndex) {return aInventory == mInventory && aIndex == mIndex;}
 	@Override public int getSlotStackLimit() {return mInventory.getInventoryStackLimitGUI(mIndex);}
 	@Override public ItemStack getStack() {return mInventory.getStackInSlotGUI(mIndex);}
@@ -94,7 +94,7 @@ public class Slot_Normal extends Slot {
 	@Override public void onSlotChange(ItemStack aStack, ItemStack aStack2) {if (ST.equal(aStack, aStack2, T)) {int tDifference = aStack2.stackSize - aStack.stackSize; if (tDifference > 0) onCrafting(aStack, tDifference);}}
 	@Override protected void onCrafting(ItemStack aStack, int aDifference) {/**/}
 	@Override protected void onCrafting(ItemStack aStack) {/**/}
-	@Override public void onPickupFromSlot(EntityPlayer aPlayer, ItemStack aStack) {onSlotChanged();}
+	@Override public void onPickupFromSlot(PlayerEntity aPlayer, ItemStack aStack) {onSlotChanged();}
 	@Override public boolean getHasStack() {return getStack() != null;}
 	@Override public int getSlotIndex() {return mIndex;}
 }

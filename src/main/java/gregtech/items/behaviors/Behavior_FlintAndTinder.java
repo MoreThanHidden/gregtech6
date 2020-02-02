@@ -35,14 +35,14 @@ import gregapi.util.WD;
 import gregtech.GT6_Main;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityCreeper;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
 
 public class Behavior_FlintAndTinder extends AbstractBehaviorDefault {
 	@Override
-	public boolean onItemUseFirst(MultiItem aItem, ItemStack aStack, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onItemUseFirst(MultiItem aItem, ItemStack aStack, PlayerEntity aPlayer, World aWorld, int aX, int aY, int aZ, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (aPlayer != null && SIDES_VALID[aSide] && !(aPlayer instanceof FakePlayer) && WD.obstructed(aWorld, aX, aY, aZ, aSide)) return F;
 		List<String> tChatReturn = new ArrayListNoNulls<>();
 		long tDamage = 10000;
@@ -55,12 +55,12 @@ public class Behavior_FlintAndTinder extends AbstractBehaviorDefault {
 	}
 	
 	@Override
-	public boolean onItemUse(MultiItem aItem, ItemStack aStack, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ, byte aSide, float hitX, float hitY, float hitZ) {
+	public boolean onItemUse(MultiItem aItem, ItemStack aStack, PlayerEntity aPlayer, World aWorld, int aX, int aY, int aZ, byte aSide, float hitX, float hitY, float hitZ) {
 		return T;
 	}
 	
 	@Override
-	public boolean onLeftClickEntity(MultiItem aItem, ItemStack aStack, EntityPlayer aPlayer, Entity aEntity) {
+	public boolean onLeftClickEntity(MultiItem aItem, ItemStack aStack, PlayerEntity aPlayer, Entity aEntity) {
 		if (aPlayer.worldObj.isRemote) return F;
 		if (aEntity instanceof EntityCreeper) {
 			if (!UT.Entities.hasInfiniteItems(aPlayer)) ((MultiItemTool)aItem).doDamage(aStack, 100, aPlayer);

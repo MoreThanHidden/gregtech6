@@ -43,7 +43,7 @@ import gregapi.tileentity.delegate.DelegatorTileEntity;
 import gregapi.util.ST;
 import gregapi.util.UT;
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -105,7 +105,7 @@ public class MultiTileEntitySapBag extends TileEntityBase09FacingSingle implemen
 	}
 	
 	@Override
-	public boolean onBlockActivated3(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onBlockActivated3(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (isServerSide()) {
 			if (UT.Inventories.addStackToPlayerInventory(aPlayer, slot(0), T)) {
 				slotKill(0);
@@ -193,7 +193,7 @@ public class MultiTileEntitySapBag extends TileEntityBase09FacingSingle implemen
 	@Override public boolean allowCovers            (byte aSide) {return F;}
 	@Override public boolean attachCoversFirst      (byte aSide) {return F;}
 	@Override public boolean isObstructingBlockAt   (byte aSide) {return aSide == mFacing;}
-	@Override public boolean checkObstruction(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {return F;}
+	@Override public boolean checkObstruction(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {return F;}
 	@Override public boolean useSidePlacementRotation       () {return T;}
 	@Override public boolean useInversePlacementRotation    () {return T;}
 	@Override public int getLightOpacity() {return LIGHT_OPACITY_NONE;}

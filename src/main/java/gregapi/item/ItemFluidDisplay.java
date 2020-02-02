@@ -48,7 +48,7 @@ import gregapi.util.WD;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -78,14 +78,14 @@ public class ItemFluidDisplay extends Item implements IFluidContainerItem, IItem
 	}
 	
 	@Override
-	public boolean onItemUseFirst(ItemStack aStack, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ, int aSide, float hitX, float hitY, float hitZ) {
+	public boolean onItemUseFirst(ItemStack aStack, PlayerEntity aPlayer, World aWorld, int aX, int aY, int aZ, int aSide, float hitX, float hitY, float hitZ) {
 		for (byte tSide : ALL_SIDES_VALID) if (FL.fill(WD.te(aWorld, aX, aY, aZ, tSide, T), FL.make(FluidRegistry.getFluid(ST.meta_(aStack)), Integer.MAX_VALUE), T) > 0) return T;
 		return F;
 	}
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public void addInformation(ItemStack aStack, EntityPlayer aPlayer, @SuppressWarnings("rawtypes") List aList, boolean aF3_H) {
+	public void addInformation(ItemStack aStack, PlayerEntity aPlayer, @SuppressWarnings("rawtypes") List aList, boolean aF3_H) {
 		NBTTagCompound aNBT = aStack.getTagCompound();
 		Fluid aFluid = FluidRegistry.getFluid(ST.meta_(aStack));
 		if (aFluid == null) {
@@ -305,7 +305,7 @@ public class ItemFluidDisplay extends Item implements IFluidContainerItem, IItem
 	@Override public final String getUnlocalizedName() {return mName;}
 	
 	@Override
-	public boolean doesSneakBypassUse(World aWorld, int aX, int aY, int aZ, EntityPlayer aPlayer) {
+	public boolean doesSneakBypassUse(World aWorld, int aX, int aY, int aZ, PlayerEntity aPlayer) {
 		return T;
 	}
 	

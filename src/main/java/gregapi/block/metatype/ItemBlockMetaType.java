@@ -27,7 +27,7 @@ import gregapi.util.ST;
 import gregapi.util.UT;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
@@ -43,7 +43,7 @@ public class ItemBlockMetaType extends ItemBlockBase implements IItemUpdatable {
 	}
 	
 	@Override
-	public boolean placeBlockAt(ItemStack aStack, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ, int aSide, float aHitX, float aHitY, float aHitZ, int aMetaData) {
+	public boolean placeBlockAt(ItemStack aStack, PlayerEntity aPlayer, World aWorld, int aX, int aY, int aZ, int aSide, float aHitX, float aHitY, float aHitZ, int aMetaData) {
 		if (((BlockMetaType)mPlaceable).mBlock == mPlaceable) return aWorld.setBlock(aX, aY, aZ, field_150939_a, aMetaData, 3);
 		byte tSide = UT.Code.getSideWrenching((byte)aSide, aHitX, aHitY, aHitZ);
 		if (tSide == aSide || tSide == OPPOSITES[aSide]) tSide = OPPOSITES[tSide];
@@ -66,7 +66,7 @@ public class ItemBlockMetaType extends ItemBlockBase implements IItemUpdatable {
 	private boolean mInterrupt = false;
 	
 	@Override
-	public boolean onItemUseFirst(ItemStack aStack, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ, int aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onItemUseFirst(ItemStack aStack, PlayerEntity aPlayer, World aWorld, int aX, int aY, int aZ, int aSide, float aHitX, float aHitY, float aHitZ) {
 		if (aStack.stackSize > 0 && SIDES_VALID[mBlock.mSide]) {
 			switch(aSide) {
 			case 0: if (aHitY <= 0.01) aY--; break;
@@ -98,7 +98,7 @@ public class ItemBlockMetaType extends ItemBlockBase implements IItemUpdatable {
 	}
 	
 	@Override
-	public boolean onItemUse(ItemStack aStack, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ, int aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onItemUse(ItemStack aStack, PlayerEntity aPlayer, World aWorld, int aX, int aY, int aZ, int aSide, float aHitX, float aHitY, float aHitZ) {
 		if (mInterrupt) {
 			mInterrupt = false;
 			return false;

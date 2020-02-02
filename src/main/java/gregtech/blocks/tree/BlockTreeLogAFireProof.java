@@ -35,7 +35,7 @@ import gregapi.util.ST;
 import gregapi.util.UT;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -90,7 +90,7 @@ public class BlockTreeLogAFireProof extends BlockBaseLog implements IBlockToolab
 		if (aTool.equals(TOOL_axe) || aTool.equals(TOOL_saw) || aTool.equals(TOOL_knife)) {
 			if (aWorld.isRemote) return 0;
 			aWorld.setBlock(aX, aY, aZ, BlocksGT.BeamAFireProof, aWorld.getBlockMetadata(aX, aY, aZ), 3);
-			UT.Inventories.addStackToPlayerInventoryOrDrop(aPlayer instanceof EntityPlayer ? (EntityPlayer)aPlayer : null, OM.dust(MT.Bark), aWorld, aX+OFFSETS_X[aSide], aY+OFFSETS_Y[aSide], aZ+OFFSETS_Z[aSide]);
+			UT.Inventories.addStackToPlayerInventoryOrDrop(aPlayer instanceof PlayerEntity ? (PlayerEntity)aPlayer : null, OM.dust(MT.Bark), aWorld, aX+OFFSETS_X[aSide], aY+OFFSETS_Y[aSide], aZ+OFFSETS_Z[aSide]);
 			return aTool.equals(TOOL_axe) ? 500 : 1000;
 		}
 		return ToolCompat.onToolClick(this, aTool, aRemainingDurability, aQuality, aPlayer, aChatReturn, aPlayerInventory, aSneaking, aStack, aWorld, aSide, aX, aY, aZ, aHitX, aHitY, aHitZ);

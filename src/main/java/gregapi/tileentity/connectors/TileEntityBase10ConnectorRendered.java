@@ -40,7 +40,7 @@ import gregapi.tileentity.delegate.DelegatorTileEntity;
 import gregapi.util.UT;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -143,7 +143,7 @@ public abstract class TileEntityBase10ConnectorRendered extends TileEntityBase09
 	@Override public int getLightOpacity() {return mFoamDried ? LIGHT_OPACITY_MAX : mTransparent ? mDiameter >= 1.0F ? LIGHT_OPACITY_WATER : mDiameter > 0.5F ? LIGHT_OPACITY_LEAVES : LIGHT_OPACITY_NONE : mDiameter >= 1.0F ? LIGHT_OPACITY_MAX : mDiameter > 0.5F ? LIGHT_OPACITY_WATER : LIGHT_OPACITY_LEAVES;}
 	
 	@Override
-	public boolean onPlaced(ItemStack aStack, EntityPlayer aPlayer, MultiTileEntityContainer aMTEContainer, World aWorld, int aX, int aY, int aZ, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onPlaced(ItemStack aStack, PlayerEntity aPlayer, MultiTileEntityContainer aMTEContainer, World aWorld, int aX, int aY, int aZ, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (mOwnable && aPlayer != null) mOwner = aPlayer.getUniqueID();
 		return super.onPlaced(aStack, aPlayer, aMTEContainer, aWorld, aX, aY, aZ, aSide, aHitX, aHitY, aHitZ);
 	}

@@ -49,7 +49,7 @@ import gregapi.util.UT;
 import gregapi.util.WD;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -147,7 +147,7 @@ public class MultiTileEntityGeneratorFluidBed extends TileEntityBase09FacingSing
 	@Override public boolean attachCoversFirst(byte aSide) {return F;}
 	
 	@Override
-	public boolean onBlockActivated3(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onBlockActivated3(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (aSide != mFacing) return F;
 		if (isServerSide() && !mBurning) {
 			ItemStack aStack = aPlayer.getCurrentEquippedItem();

@@ -31,7 +31,7 @@ import gregapi.player.EntityFoodTracker;
 import gregapi.util.OM;
 import gregapi.util.ST;
 import gregapi.util.UT;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
@@ -102,32 +102,32 @@ public class FoodStat implements IFoodStat {
 	}
 	
 	@Override
-	public int getFoodLevel(Item aItem, ItemStack aStack, EntityPlayer aPlayer) {
+	public int getFoodLevel(Item aItem, ItemStack aStack, PlayerEntity aPlayer) {
 		return mFoodLevel;
 	}
 	
 	@Override
-	public float getSaturation(Item aItem, ItemStack aStack, EntityPlayer aPlayer) {
+	public float getSaturation(Item aItem, ItemStack aStack, PlayerEntity aPlayer) {
 		return mSaturation;
 	}
 	
 	@Override
-	public float getHydration(Item aItem, ItemStack aStack, EntityPlayer aPlayer) {
+	public float getHydration(Item aItem, ItemStack aStack, PlayerEntity aPlayer) {
 		return mHydration;
 	}
 	
 	@Override
-	public float getTemperature(Item aItem, ItemStack aStack, EntityPlayer aPlayer) {
+	public float getTemperature(Item aItem, ItemStack aStack, PlayerEntity aPlayer) {
 		return mTemperature;
 	}
 	
 	@Override
-	public float getTemperatureEffect(Item aItem, ItemStack aStack, EntityPlayer aPlayer) {
+	public float getTemperatureEffect(Item aItem, ItemStack aStack, PlayerEntity aPlayer) {
 		return mTemperatureEffect;
 	}
 	
 	@Override
-	public void onEaten(Item aItem, ItemStack aStack, EntityPlayer aPlayer, boolean aConsumeItem) {
+	public void onEaten(Item aItem, ItemStack aStack, PlayerEntity aPlayer, boolean aConsumeItem) {
 		if (aConsumeItem && !UT.Entities.hasInfiniteItems(aPlayer)) {
 			aStack.stackSize--;
 			ItemStack tStack = OM.get(ST.copy(mEmptyContainer));
@@ -176,17 +176,17 @@ public class FoodStat implements IFoodStat {
 	}
 	
 	@Override
-	public boolean alwaysEdible(Item aItem, ItemStack aStack, EntityPlayer aPlayer) {
+	public boolean alwaysEdible(Item aItem, ItemStack aStack, PlayerEntity aPlayer) {
 		return mAlwaysEdible;
 	}
 	
 	@Override
-	public boolean isRotten(Item aItem, ItemStack aStack, EntityPlayer aPlayer) {
+	public boolean isRotten(Item aItem, ItemStack aStack, PlayerEntity aPlayer) {
 		return mIsRotten;
 	}
 	
 	@Override
-	public boolean useAppleCoreFunctionality(Item aItem, ItemStack aStack, EntityPlayer aPlayer) {
+	public boolean useAppleCoreFunctionality(Item aItem, ItemStack aStack, PlayerEntity aPlayer) {
 		return mUseAPC;
 	}
 	

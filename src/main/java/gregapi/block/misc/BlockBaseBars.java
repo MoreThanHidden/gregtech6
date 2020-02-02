@@ -45,7 +45,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -85,7 +85,7 @@ public abstract class BlockBaseBars extends BlockBaseSealable implements IRender
 	}
 	
 	@Override
-	public boolean onItemUseFirst(ItemBlockBase aItem, ItemStack aStack, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ, int aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onItemUseFirst(ItemBlockBase aItem, ItemStack aStack, PlayerEntity aPlayer, World aWorld, int aX, int aY, int aZ, int aSide, float aHitX, float aHitY, float aHitZ) {
 		if (aStack.stackSize == 0 || aWorld.isRemote) return F;
 		if (!aPlayer.isSneaking()) {
 			for (int i = 0; i < 2; i++) {
@@ -128,7 +128,7 @@ public abstract class BlockBaseBars extends BlockBaseSealable implements IRender
 		return F;
 	}
 	
-	@Override public boolean onItemUse(ItemBlockBase aItem, ItemStack aStack, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ, int aSide, float aHitX, float aHitY, float aHitZ) {return F;}
+	@Override public boolean onItemUse(ItemBlockBase aItem, ItemStack aStack, PlayerEntity aPlayer, World aWorld, int aX, int aY, int aZ, int aSide, float aHitX, float aHitY, float aHitZ) {return F;}
 	@Override public String getHarvestTool(int aMeta) {return getMaterial() == Material.wood ? TOOL_axe : TOOL_pickaxe;}
 	@Override public int getHarvestLevel(int aMeta) {return mMat.mToolQuality;}
 	@Override public int getLightOpacity() {return LIGHT_OPACITY_NONE;}
@@ -145,14 +145,14 @@ public abstract class BlockBaseBars extends BlockBaseSealable implements IRender
 	@Override public boolean shouldSideBeRendered(IBlockAccess aWorld, int aX, int aY, int aZ, int aSide) {return T;}
 	@SuppressWarnings("unchecked") @Override public void getSubBlocks(Item aItem, CreativeTabs aTab, @SuppressWarnings("rawtypes") List aList) {aList.add(ST.make(aItem, 1, 0));}
 	
-	@Override public ItemStack getPickBlock(MovingObjectPosition aTarget, World aWorld, int aX, int aY, int aZ, EntityPlayer aPlayer) {return ST.make(this, 1, 0);}
+	@Override public ItemStack getPickBlock(MovingObjectPosition aTarget, World aWorld, int aX, int aY, int aZ, PlayerEntity aPlayer) {return ST.make(this, 1, 0);}
 	
 	@Override public AxisAlignedBB getCollisionBoundingBoxFromPool(World aWorld, int aX, int aY, int aZ) {return null;}
 	
 	@Override
 	public AxisAlignedBB getSelectedBoundingBoxFromPool(World aWorld, int aX, int aY, int aZ) {
-		for (Object tEntity : aWorld.loadedEntityList) if (tEntity instanceof EntityPlayer) {
-			if (ST.equal(((EntityPlayer)tEntity).getCurrentEquippedItem(), this) && ((EntityPlayer)tEntity).getDistanceSq(aX, aY, aZ) <= 25) {
+		for (Object tEntity : aWorld.loadedEntityList) if (tEntity instanceof PlayerEntity) {
+			if (ST.equal(((PlayerEntity)tEntity).getCurrentEquippedItem(), this) && ((PlayerEntity)tEntity).getDistanceSq(aX, aY, aZ) <= 25) {
 				return  AxisAlignedBB.getBoundingBox(aX         , aY, aZ         , aX+1       , aY+1, aZ+1       );
 			}
 		}
@@ -167,8 +167,8 @@ public abstract class BlockBaseBars extends BlockBaseSealable implements IRender
 	
 	@Override
 	public void setBlockBoundsBasedOnState(IBlockAccess aWorld, int aX, int aY, int aZ) {
-		if (aWorld instanceof World) for (Object tEntity : ((World)aWorld).loadedEntityList) if (tEntity instanceof EntityPlayer) {
-			if (ST.equal(((EntityPlayer)tEntity).getCurrentEquippedItem(), this) && ((EntityPlayer)tEntity).getDistanceSq(aX, aY, aZ) <= 25) {
+		if (aWorld instanceof World) for (Object tEntity : ((World)aWorld).loadedEntityList) if (tEntity instanceof PlayerEntity) {
+			if (ST.equal(((PlayerEntity)tEntity).getCurrentEquippedItem(), this) && ((PlayerEntity)tEntity).getDistanceSq(aX, aY, aZ) <= 25) {
 				setBlockBounds(0, 0, 0, 1, 1, 1);
 				return;
 			}

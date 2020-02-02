@@ -37,7 +37,7 @@ import gregapi.render.IIconContainer;
 import gregapi.render.ITexture;
 import gregapi.tileentity.notick.TileEntityBase05Paintable;
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -67,7 +67,7 @@ public class MultiTileEntityBunkerBlock extends TileEntityBase05Paintable implem
 	}
 	
 	@Override
-	public boolean onPlaced(ItemStack aStack, EntityPlayer aPlayer, MultiTileEntityContainer aMTEContainer, World aWorld, int aX, int aY, int aZ, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onPlaced(ItemStack aStack, PlayerEntity aPlayer, MultiTileEntityContainer aMTEContainer, World aWorld, int aX, int aY, int aZ, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (aPlayer != null) mOwner = aPlayer.getUniqueID();
 		return T;
 	}

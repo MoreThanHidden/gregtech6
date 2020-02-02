@@ -51,7 +51,7 @@ import gregapi.util.UT;
 import gregapi.util.WD;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -309,7 +309,7 @@ public class MultiTileEntityLargeBoiler extends TileEntityBase10MultiBlockBase i
 	}
 	
 	@Override
-	public boolean removedByPlayer(World aWorld, EntityPlayer aPlayer, boolean aWillHarvest) {
+	public boolean removedByPlayer(World aWorld, PlayerEntity aPlayer, boolean aWillHarvest) {
 		if (isServerSide() && !UT.Entities.isCreative(aPlayer) && mBarometer > 4) explode();
 		return worldObj.setBlockToAir(xCoord, yCoord, zCoord);
 	}

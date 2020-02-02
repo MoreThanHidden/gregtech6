@@ -22,7 +22,7 @@ package gregapi.oredict.listeners;
 import gregapi.oredict.OreDictMaterial;
 import gregapi.oredict.OreDictPrefix;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
@@ -31,8 +31,8 @@ import net.minecraft.item.ItemStack;
  */
 public interface IOreDictListenerItem {
 	public ItemStack onTickWorld        (OreDictPrefix aPrefix, OreDictMaterial aMaterial, ItemStack aStack, EntityItem aItem);
-	public ItemStack onClickRight       (OreDictPrefix aPrefix, OreDictMaterial aMaterial, ItemStack aStack, EntityPlayer aPlayer);
-	public void onTickPlayer            (OreDictPrefix aPrefix, OreDictMaterial aMaterial, ItemStack aStack, EntityPlayer aPlayer, int aIndex);
+	public ItemStack onClickRight       (OreDictPrefix aPrefix, OreDictMaterial aMaterial, ItemStack aStack, PlayerEntity aPlayer);
+	public void onTickPlayer            (OreDictPrefix aPrefix, OreDictMaterial aMaterial, ItemStack aStack, PlayerEntity aPlayer, int aIndex);
 	public void onTickInventory         (OreDictPrefix aPrefix, OreDictMaterial aMaterial, ItemStack aStack, IInventory aInventory, int aIndex);
 	
 	/** Returns null if it doesn't provide a ToolTip for this Behaviour. */
@@ -46,12 +46,12 @@ public interface IOreDictListenerItem {
 		}
 		
 		@Override
-		public ItemStack onClickRight(OreDictPrefix aPrefix, OreDictMaterial aMaterial, ItemStack aStack, EntityPlayer aPlayer) {
+		public ItemStack onClickRight(OreDictPrefix aPrefix, OreDictMaterial aMaterial, ItemStack aStack, PlayerEntity aPlayer) {
 			return aStack;
 		}
 		
 		@Override
-		public void onTickPlayer(OreDictPrefix aPrefix, OreDictMaterial aMaterial, ItemStack aStack, EntityPlayer aPlayer, int aIndex) {
+		public void onTickPlayer(OreDictPrefix aPrefix, OreDictMaterial aMaterial, ItemStack aStack, PlayerEntity aPlayer, int aIndex) {
 			//
 		}
 		

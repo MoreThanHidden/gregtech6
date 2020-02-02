@@ -63,7 +63,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockFire;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -150,8 +150,8 @@ public abstract class TileEntityBase01Root extends TileEntity implements ITileEn
 	@Override public ChunkCoordinates getOffsetN(byte aSide, int aMultiplier) {return new ChunkCoordinates(getOffsetXN(aSide, aMultiplier), getOffsetYN(aSide, aMultiplier), getOffsetZN(aSide, aMultiplier));}
 	@Override public boolean isServerSide() {return worldObj == null ? cpw.mods.fml.common.FMLCommonHandler.instance().getEffectiveSide().isServer() : !worldObj.isRemote;}
 	@Override public boolean isClientSide() {return worldObj == null ? cpw.mods.fml.common.FMLCommonHandler.instance().getEffectiveSide().isClient() :  worldObj.isRemote;}
-	@Override public boolean openGUI(EntityPlayer aPlayer) {return openGUI(aPlayer, 0);}
-	@Override public boolean openGUI(EntityPlayer aPlayer, int aID) {if (aPlayer == null) return F; aPlayer.openGui(GAPI, aID, worldObj, xCoord, yCoord, zCoord); return T;}
+	@Override public boolean openGUI(PlayerEntity aPlayer) {return openGUI(aPlayer, 0);}
+	@Override public boolean openGUI(PlayerEntity aPlayer, int aID) {if (aPlayer == null) return F; aPlayer.openGui(GAPI, aID, worldObj, xCoord, yCoord, zCoord); return T;}
 	@Override public int getRandomNumber(int aRange) {return RNGSUS.nextInt(aRange);}
 	@Override public int rng(int aRange) {return RNGSUS.nextInt(aRange);}
 	@Override public BiomeGenBase getBiome(ChunkCoordinates aCoords) {return worldObj==null?BiomeGenBase.plains:worldObj.getBiomeGenForCoords(aCoords.posX, aCoords.posZ);}
@@ -484,14 +484,14 @@ public abstract class TileEntityBase01Root extends TileEntity implements ITileEn
 	public float getExplosionResistance2() {return 0;}
 	
 	@SideOnly(Side.CLIENT)
-	@Override public Object getGUIClient(int aGUIID, EntityPlayer aPlayer) {return null;}
-	@Override public Object getGUIServer(int aGUIID, EntityPlayer aPlayer) {return null;}
+	@Override public Object getGUIClient(int aGUIID, PlayerEntity aPlayer) {return null;}
+	@Override public Object getGUIServer(int aGUIID, PlayerEntity aPlayer) {return null;}
 	
-	public boolean interceptClick(int aGUIID, Slot_Normal aSlot, int aSlotIndex, int aInvSlot, EntityPlayer aPlayer, boolean aShiftclick, boolean aRightclick, int aMouse, int aShift) {return F;}
-	public ItemStack slotClick(int aGUIID, Slot_Normal aSlot, int aSlotIndex, int aInvSlot, EntityPlayer aPlayer, boolean aShiftclick, boolean aRightclick, int aMouse, int aShift) {return null;}
-	public void killGUIs() {for (Object tPlayer : worldObj.playerEntities) if (tPlayer instanceof EntityPlayer && ((EntityPlayer)tPlayer).openContainer instanceof ContainerCommon && ((ContainerCommon)((EntityPlayer)tPlayer).openContainer).mTileEntity == this) ((EntityPlayer)tPlayer).closeScreen();}
-	public void rebootGUIs(int aGUIID) {for (Object tPlayer : worldObj.playerEntities) if (tPlayer instanceof EntityPlayer && ((EntityPlayer)tPlayer).openContainer instanceof ContainerCommon && ((ContainerCommon)((EntityPlayer)tPlayer).openContainer).mTileEntity == this) {((EntityPlayer)tPlayer).closeScreen(); openGUI((EntityPlayer)tPlayer, aGUIID);}}
-	public long getOpenGUIs() {long rGUIs = 0; for (Object tPlayer : worldObj.playerEntities) if (tPlayer instanceof EntityPlayer && ((EntityPlayer)tPlayer).openContainer instanceof ContainerCommon && ((ContainerCommon)((EntityPlayer)tPlayer).openContainer).mTileEntity == this) rGUIs++; return rGUIs;}
+	public boolean interceptClick(int aGUIID, Slot_Normal aSlot, int aSlotIndex, int aInvSlot, PlayerEntity aPlayer, boolean aShiftclick, boolean aRightclick, int aMouse, int aShift) {return F;}
+	public ItemStack slotClick(int aGUIID, Slot_Normal aSlot, int aSlotIndex, int aInvSlot, PlayerEntity aPlayer, boolean aShiftclick, boolean aRightclick, int aMouse, int aShift) {return null;}
+	public void killGUIs() {for (Object tPlayer : worldObj.playerEntities) if (tPlayer instanceof PlayerEntity && ((PlayerEntity)tPlayer).openContainer instanceof ContainerCommon && ((ContainerCommon)((PlayerEntity)tPlayer).openContainer).mTileEntity == this) ((PlayerEntity)tPlayer).closeScreen();}
+	public void rebootGUIs(int aGUIID) {for (Object tPlayer : worldObj.playerEntities) if (tPlayer instanceof PlayerEntity && ((PlayerEntity)tPlayer).openContainer instanceof ContainerCommon && ((ContainerCommon)((PlayerEntity)tPlayer).openContainer).mTileEntity == this) {((PlayerEntity)tPlayer).closeScreen(); openGUI((PlayerEntity)tPlayer, aGUIID);}}
+	public long getOpenGUIs() {long rGUIs = 0; for (Object tPlayer : worldObj.playerEntities) if (tPlayer instanceof PlayerEntity && ((PlayerEntity)tPlayer).openContainer instanceof ContainerCommon && ((ContainerCommon)((PlayerEntity)tPlayer).openContainer).mTileEntity == this) rGUIs++; return rGUIs;}
 	
 	public boolean shouldSideBeRendered(byte aSide) {
 		TileEntity tTileEntity = getTileEntityAtSideAndDistance(aSide, 1);
@@ -869,7 +869,7 @@ public abstract class TileEntityBase01Root extends TileEntity implements ITileEn
 	@Override
 	public boolean allowInteraction(Entity aEntity) {return T;}
 	public boolean allowRightclick(Entity aEntity) {return allowInteraction(aEntity);}
-	public float getPlayerRelativeBlockHardness(EntityPlayer aPlayer, float aOriginal) {return allowInteraction(aPlayer) ? Math.max(aOriginal, 0.0001F) : 0;}
+	public float getPlayerRelativeBlockHardness(PlayerEntity aPlayer, float aOriginal) {return allowInteraction(aPlayer) ? Math.max(aOriginal, 0.0001F) : 0;}
 	
 	// Regarding Multiblocks. If true it will always send a machineblock update whenever something relevant changes, such as facing or connectivity.
 	

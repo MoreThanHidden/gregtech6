@@ -21,7 +21,7 @@ package gregapi.block;
 
 import java.util.ArrayList;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 
 /**
  * @author Gregorius Techneticies
@@ -41,5 +41,5 @@ public interface IBlockDebugable {
 	 * 3 = Debug ONLY
 	 * @return a String-Array containing the DebugInfo, every Index is a separate line (0 = first Line)
 	 */
-	public ArrayList<String> getDebugInfo(EntityPlayer aPlayer, int aX, int aY, int aZ, int aScanLevel);
+	public ArrayList<String> getDebugInfo(PlayerEntity aPlayer, int aX, int aY, int aZ, int aScanLevel);
 }

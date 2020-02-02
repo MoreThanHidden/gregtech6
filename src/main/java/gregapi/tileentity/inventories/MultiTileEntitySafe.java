@@ -31,7 +31,7 @@ import gregapi.gui.ContainerCommonDefault;
 import gregapi.tileentity.base.TileEntityBase09FacingSingle;
 import gregapi.util.UT;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -72,7 +72,7 @@ public abstract class MultiTileEntitySafe extends TileEntityBase09FacingSingle i
 	}
 	
 	@Override
-	public boolean onBlockActivated3(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onBlockActivated3(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (aSide != mFacing) return F;
 		if (isServerSide() && isUseableByPlayerGUI(aPlayer)) {
 			generateDungeonLoot();
@@ -97,7 +97,7 @@ public abstract class MultiTileEntitySafe extends TileEntityBase09FacingSingle i
 	}
 	
 	@Override
-	public boolean onPlaced(ItemStack aStack, EntityPlayer aPlayer, MultiTileEntityContainer aMTEContainer, World aWorld, int aX, int aY, int aZ, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onPlaced(ItemStack aStack, PlayerEntity aPlayer, MultiTileEntityContainer aMTEContainer, World aWorld, int aX, int aY, int aZ, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		super.onPlaced(aStack, aPlayer, aMTEContainer, aWorld, aX, aY, aZ, aSide, aHitX, aHitY, aHitZ);
 		aWorld.playSoundEffect(aX+0.5, aY+0.5, aZ+0.5, Blocks.anvil.stepSound.func_150496_b(), (Blocks.anvil.stepSound.getVolume()+1)/2, Blocks.anvil.stepSound.getPitch()*0.8F);
 		return F;
@@ -113,6 +113,6 @@ public abstract class MultiTileEntitySafe extends TileEntityBase09FacingSingle i
 	@Override public boolean canExtractItem2(int aSlot, ItemStack aStack, byte aSide) {return F;}
 	@Override public void onExploded(Explosion aExplosion) {worldObj.setBlockToAir(xCoord, yCoord, zCoord);}
 	
-	@Override public Object getGUIClient2(int aGUIID, EntityPlayer aPlayer) {return new ContainerClientDefault(aPlayer.inventory, this, aGUIID);}
-	@Override public Object getGUIServer2(int aGUIID, EntityPlayer aPlayer) {return new ContainerCommonDefault(aPlayer.inventory, this, aGUIID);}
+	@Override public Object getGUIClient2(int aGUIID, PlayerEntity aPlayer) {return new ContainerClientDefault(aPlayer.inventory, this, aGUIID);}
+	@Override public Object getGUIServer2(int aGUIID, PlayerEntity aPlayer) {return new ContainerCommonDefault(aPlayer.inventory, this, aGUIID);}
 }

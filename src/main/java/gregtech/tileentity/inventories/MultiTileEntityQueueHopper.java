@@ -46,7 +46,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -96,13 +96,13 @@ public class MultiTileEntityQueueHopper extends TileEntityBase09FacingSingle imp
 	}
 	
 	@Override
-	public boolean onBlockActivated3(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onBlockActivated3(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (isServerSide() && isUseableByPlayerGUI(aPlayer)) openGUI(aPlayer);
 		return T;
 	}
 	
 	@Override
-	public boolean onPlaced(ItemStack aStack, EntityPlayer aPlayer, MultiTileEntityContainer aMTEContainer, World aWorld, int aX, int aY, int aZ, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onPlaced(ItemStack aStack, PlayerEntity aPlayer, MultiTileEntityContainer aMTEContainer, World aWorld, int aX, int aY, int aZ, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		super.onPlaced(aStack, aPlayer, aMTEContainer, aWorld, aX, aY, aZ, aSide, aHitX, aHitY, aHitZ);
 		if (isServerSide() && SIDES_BOTTOM_HORIZONTAL[mFacing]) {
 			DelegatorTileEntity<TileEntity> tDelegator = getAdjacentTileEntity(mFacing);
@@ -265,6 +265,6 @@ public class MultiTileEntityQueueHopper extends TileEntityBase09FacingSingle imp
 	
 	@Override public int getLightOpacity() {return LIGHT_OPACITY_WATER;}
 	
-	@Override public Object getGUIClient2(int aGUIID, EntityPlayer aPlayer) {return new ContainerClientDefault(aPlayer.inventory, this, aGUIID);}
-	@Override public Object getGUIServer2(int aGUIID, EntityPlayer aPlayer) {return new ContainerCommonDefault(aPlayer.inventory, this, aGUIID);}
+	@Override public Object getGUIClient2(int aGUIID, PlayerEntity aPlayer) {return new ContainerClientDefault(aPlayer.inventory, this, aGUIID);}
+	@Override public Object getGUIServer2(int aGUIID, PlayerEntity aPlayer) {return new ContainerCommonDefault(aPlayer.inventory, this, aGUIID);}
 }

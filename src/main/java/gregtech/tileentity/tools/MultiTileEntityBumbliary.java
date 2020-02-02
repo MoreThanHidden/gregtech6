@@ -47,7 +47,7 @@ import gregapi.util.WD;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -272,7 +272,7 @@ public class MultiTileEntityBumbliary extends TileEntityBase07Paintable implemen
 	}
 	
 	@Override
-	public boolean onBlockActivated3(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onBlockActivated3(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (SIDES_TOP[aSide]) {
 			if (aPlayer != null && isServerSide()) {
 				if (UT.Entities.isCreative(aPlayer)) {
@@ -299,7 +299,7 @@ public class MultiTileEntityBumbliary extends TileEntityBase07Paintable implemen
 			if (SIDES_TOP[aSide]) {
 				mBreedingCountDown = 1200;
 				if (aPlayer instanceof EntityLivingBase) attackEntity((EntityLivingBase)aPlayer);
-				if (aPlayer instanceof EntityPlayer) openGUI((EntityPlayer)aPlayer, 1);
+				if (aPlayer instanceof PlayerEntity) openGUI((PlayerEntity)aPlayer, 1);
 				return 10000;
 			}
 			return 0;
@@ -320,8 +320,8 @@ public class MultiTileEntityBumbliary extends TileEntityBase07Paintable implemen
 	@Override public ITexture getTexture2(Block aBlock, int aRenderPass, byte aSide, boolean[] aShouldSideBeRendered) {return aShouldSideBeRendered[aSide] ? BlockTextureMulti.get(BlockTextureDefault.get(sColoreds[FACES_TBS[aSide]], mRGBa), BlockTextureDefault.get(sOverlays[FACES_TBS[aSide]])) : null;}
 	
 	@SideOnly(Side.CLIENT)
-	@Override public Object getGUIClient2(int aGUIID, EntityPlayer aPlayer) {return aGUIID == 1 ? new MultiTileEntityGUIClientBumbliaryScoop(aPlayer.inventory, this, aGUIID) : new MultiTileEntityGUIClientBumbliary(aPlayer.inventory, this, aGUIID);}
-	@Override public Object getGUIServer2(int aGUIID, EntityPlayer aPlayer) {return aGUIID == 1 ? new MultiTileEntityGUICommonBumbliaryScoop(aPlayer.inventory, this, aGUIID) : new MultiTileEntityGUICommonBumbliary(aPlayer.inventory, this, aGUIID);}
+	@Override public Object getGUIClient2(int aGUIID, PlayerEntity aPlayer) {return aGUIID == 1 ? new MultiTileEntityGUIClientBumbliaryScoop(aPlayer.inventory, this, aGUIID) : new MultiTileEntityGUIClientBumbliary(aPlayer.inventory, this, aGUIID);}
+	@Override public Object getGUIServer2(int aGUIID, PlayerEntity aPlayer) {return aGUIID == 1 ? new MultiTileEntityGUICommonBumbliaryScoop(aPlayer.inventory, this, aGUIID) : new MultiTileEntityGUICommonBumbliary(aPlayer.inventory, this, aGUIID);}
 	
 	public static final int SLOT_ROYAL = 13, SLOT_DRONE = 22
 	, SLOTS_COMBS[] = {0, 1, 2, 6, 7, 8, 9, 10, 11, 15, 16, 17, 18, 19, 20, 24, 25, 26}

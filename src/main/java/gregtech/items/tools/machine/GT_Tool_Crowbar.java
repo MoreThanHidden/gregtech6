@@ -35,7 +35,7 @@ import gregapi.util.UT;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
@@ -110,7 +110,7 @@ public class GT_Tool_Crowbar extends ToolStats {
 	}
 	
 	@Override
-	public float getMiningSpeed(Block aBlock, byte aMetaData, float aDefault, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ) {
+	public float getMiningSpeed(Block aBlock, byte aMetaData, float aDefault, PlayerEntity aPlayer, World aWorld, int aX, int aY, int aZ) {
 		return IL.TG_Ore_Cluster_1.equal(aBlock) || IL.TG_Ore_Cluster_2.equal(aBlock) ? Float.MAX_VALUE : super.getMiningSpeed(aBlock, aMetaData, aDefault, aPlayer, aWorld, aX, aY, aZ);
 	}
 	

@@ -32,7 +32,7 @@ import gregapi.item.multiitem.behaviors.IBehavior.AbstractBehaviorDefault;
 import gregapi.tileentity.ITileEntityRemoteActivateable;
 import gregapi.util.UT;
 import gregapi.util.WD;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -43,7 +43,7 @@ public class Behavior_Remote extends AbstractBehaviorDefault {
 	public static final IBehavior<MultiItem> INSTANCE = new Behavior_Remote();
 	
 	@Override
-	public boolean onItemUseFirst(MultiItem aItem, ItemStack aStack, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onItemUseFirst(MultiItem aItem, ItemStack aStack, PlayerEntity aPlayer, World aWorld, int aX, int aY, int aZ, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (aWorld.isRemote || aPlayer == null || !aPlayer.isSneaking() || !aPlayer.canPlayerEdit(aX, aY, aZ, aSide, aStack)) return F;
 		if (!aStack.hasTagCompound()) aStack.setTagCompound(UT.NBT.make());
 		ArrayListNoNulls<ChunkCoordinates> tList = getCoordinateList(aStack.getTagCompound(), aWorld.provider.dimensionId);
@@ -70,7 +70,7 @@ public class Behavior_Remote extends AbstractBehaviorDefault {
 	}
 	
 	@Override
-	public ItemStack onItemRightClick(MultiItem aItem, ItemStack aStack, World aWorld, EntityPlayer aPlayer) {
+	public ItemStack onItemRightClick(MultiItem aItem, ItemStack aStack, World aWorld, PlayerEntity aPlayer) {
 		if (aWorld.isRemote || aPlayer.isSneaking() || !aStack.hasTagCompound()) return aStack;
 		ArrayListNoNulls<ChunkCoordinates> tToBeKept = new ArrayListNoNulls<>();
 		for (ChunkCoordinates tCoords : getCoordinateList(aStack.getTagCompound(), aWorld.provider.dimensionId)) {

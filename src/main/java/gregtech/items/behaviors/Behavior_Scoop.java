@@ -33,7 +33,7 @@ import gregapi.item.multiitem.MultiItemTool;
 import gregapi.item.multiitem.behaviors.IBehavior.AbstractBehaviorDefault;
 import gregapi.util.UT;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 
 public class Behavior_Scoop extends AbstractBehaviorDefault {
@@ -44,7 +44,7 @@ public class Behavior_Scoop extends AbstractBehaviorDefault {
 	}
 	
 	@Override
-	public boolean onLeftClickEntity(MultiItem aItem, ItemStack aStack, EntityPlayer aPlayer, Entity aEntity) {
+	public boolean onLeftClickEntity(MultiItem aItem, ItemStack aStack, PlayerEntity aPlayer, Entity aEntity) {
 		if (aEntity instanceof IEntityButterfly) {
 			if (aPlayer.worldObj.isRemote) return T;
 			if (UT.Entities.hasInfiniteItems(aPlayer) || ((MultiItemTool)aItem).doDamage(aStack, mCosts, aPlayer)) {
@@ -59,7 +59,7 @@ public class Behavior_Scoop extends AbstractBehaviorDefault {
 	}
 	
 	@Override
-	public boolean onRightClickEntity(MultiItem aItem, ItemStack aStack, EntityPlayer aPlayer, Entity aEntity) {
+	public boolean onRightClickEntity(MultiItem aItem, ItemStack aStack, PlayerEntity aPlayer, Entity aEntity) {
 		return onLeftClickEntity(aItem, aStack, aPlayer, aEntity);
 	}
 	

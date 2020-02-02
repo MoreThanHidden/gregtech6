@@ -21,6 +21,7 @@ package gregtech.entities;
 
 import static gregapi.data.CS.*;
 
+import java.util.Collection;
 import java.util.List;
 
 import gregapi.data.IL;
@@ -30,22 +31,19 @@ import gregapi.data.OP;
 import gregapi.util.OM;
 import gregapi.util.ST;
 import gregapi.util.UT;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.monster.EntityPigZombie;
-import net.minecraft.entity.monster.EntitySkeleton;
-import net.minecraft.entity.monster.EntitySpider;
-import net.minecraft.entity.monster.EntityZombie;
-import net.minecraft.entity.passive.EntityHorse;
-import net.minecraft.entity.passive.EntitySheep;
-import net.minecraft.entity.passive.EntityWolf;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.monster.*;
+import net.minecraft.entity.passive.SheepEntity;
+import net.minecraft.entity.passive.WolfEntity;
+import net.minecraft.entity.passive.horse.HorseEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.DamageSource;
 
 public class Override_Drops {
-	public static void handleDrops(EntityLivingBase aDead, String aClass, List<EntityItem> aDrops, int aLooting, boolean aBurn, boolean aPlayerKill) {
+	public static void handleDrops(LivingEntity aDead, String aClass, Collection<ItemEntity> aDrops, int aLooting, boolean aBurn, boolean aPlayerKill) {
 		if (UT.Code.stringInvalid(aClass) || "EntityTFLichMinion".equalsIgnoreCase(aClass) || "EntitySkeletonBoss".equalsIgnoreCase(aClass)) return;
 		final boolean aSpace = aClass.startsWith("entityevolved") || aClass.startsWith("entityalien");
 		boolean tReplaceIron = aClass.startsWith("entitygaia");
@@ -59,7 +57,7 @@ public class Override_Drops {
 			ItemStack tGrass = UT.Code.select(IL.Grass, IL.Grass, IL.Grass_Dry, IL.Grass_Moldy, IL.Grass_Rotten).get(1);
 			
 			if (RNGSUS.nextInt( 2) == 0) aDrops.add(ST.entity(aDead, RNGSUS.nextBoolean()?ST.copy(tGrass):OP.rockGt.mat(MT.Stone, 1)));
-			if (RNGSUS.nextInt( 3) == 0) aDrops.add(ST.entity(aDead, RNGSUS.nextBoolean()?ST.copy(tGrass):ST.make(Items.stick, 1, 0)));
+			if (RNGSUS.nextInt( 3) == 0) aDrops.add(ST.entity(aDead, RNGSUS.nextBoolean()?ST.copy(tGrass):ST.make(Items.STICK, 1, 0)));
 			if (RNGSUS.nextInt( 5) == 0) aDrops.add(ST.entity(aDead, RNGSUS.nextBoolean()?ST.copy(tGrass):IL.Mud_Ball.get(1)));
 			if (RNGSUS.nextInt(10) == 0) aDrops.add(ST.entity(aDead, RNGSUS.nextBoolean()?ST.copy(tGrass):IL.Tool_Matches.get(1)));
 			
@@ -86,8 +84,8 @@ public class Override_Drops {
 			tReplaceIron = T;
 			
 			if (aPlayerKill) {
-			if (RNGSUS.nextInt( 2) == 0) aDrops.add(ST.entity(aDead, RNGSUS.nextBoolean()?OP.rockGt.mat(MT.Stone, 1):ST.make(Items.flint, 1, 0)));
-			if (RNGSUS.nextInt( 3) == 0) aDrops.add(ST.entity(aDead, ST.make(Items.stick, 1, 0)));
+			if (RNGSUS.nextInt( 2) == 0) aDrops.add(ST.entity(aDead, RNGSUS.nextBoolean()?OP.rockGt.mat(MT.Stone, 1):ST.make(Items.FLINT, 1, 0)));
+			if (RNGSUS.nextInt( 3) == 0) aDrops.add(ST.entity(aDead, ST.make(Items.STICK, 1, 0)));
 			if (RNGSUS.nextInt( 5) == 0) aDrops.add(ST.entity(aDead, OP.rockGt.mat(RNGSUS.nextBoolean()?MT.Ag:MT.Au, 1)));
 			if (RNGSUS.nextInt(10) == 0) aDrops.add(ST.entity(aDead, IL.Tool_Matches.get(1)));
 			
@@ -116,14 +114,14 @@ public class Override_Drops {
 			tReplaceIron = T;
 			
 			if (aPlayerKill) {
-			if (RNGSUS.nextInt( 2) == 0) aDrops.add(ST.entity(aDead, ST.make(Items.flint, 1, 0)));
-			if (RNGSUS.nextInt( 3) == 0) aDrops.add(ST.entity(aDead, ST.make(Items.stick, 1, 0)));
+			if (RNGSUS.nextInt( 2) == 0) aDrops.add(ST.entity(aDead, ST.make(Items.FLINT, 1, 0)));
+			if (RNGSUS.nextInt( 3) == 0) aDrops.add(ST.entity(aDead, ST.make(Items.STICK, 1, 0)));
 			if (RNGSUS.nextInt( 5) == 0) aDrops.add(ST.entity(aDead, IL.Mud_Ball.get(1)));
 			if (RNGSUS.nextInt(10) == 0) aDrops.add(ST.entity(aDead, IL.Tool_Matches.get(1)));
 			if (RNGSUS.nextInt(10) == 0) aDrops.add(ST.entity(aDead, OP.bulletGtSmall.mat(MT.Steel, 1+RNGSUS.nextInt(2))));
 			
 			if (tRandomNumber == 0) {
-			aDrops.add(ST.entity(aDead, UT.Code.select(ST.make(Items.name_tag, 1, 0)
+			aDrops.add(ST.entity(aDead, UT.Code.select(ST.make(Items.NAME_TAG, 1, 0)
 			, IL.KEYS_CHEAP[RNGSUS.nextInt(IL.KEYS_CHEAP.length)].getWithName(1, "Random Useless Key")
 			, IL.Tool_MatchBox_Full.get(1)
 			, IL.Tool_MatchBox_Full.get(1)
@@ -152,17 +150,17 @@ public class Override_Drops {
 			
 			if (aPlayerKill) {
 			@SuppressWarnings("rawtypes")
-			List tList = aDead.worldObj.getEntitiesWithinAABBExcludingEntity(aDead, aDead.boundingBox.expand(32, 32, 32));
-			for (int i = 0; i < tList.size(); i++) if (tList.get(i) instanceof EntityPlayer) {for (int j = 0; j < tList.size(); j++) if (tList.get(j) instanceof EntityPigZombie) ((EntityPigZombie)tList.get(j)).attackEntityFrom(DamageSource.causePlayerDamage((EntityPlayer)tList.get(i)), 0); break;}
+			List tList = aDead.world.getEntitiesWithinAABBExcludingEntity(aDead, aDead.getBoundingBox().expand(32, 32, 32));
+			for (int i = 0; i < tList.size(); i++) if (tList.get(i) instanceof PlayerEntity) {for (int j = 0; j < tList.size(); j++) if (tList.get(j) instanceof ZombiePigmanEntity) ((ZombiePigmanEntity)tList.get(j)).attackEntityFrom(DamageSource.causePlayerDamage((PlayerEntity)tList.get(i)), 0); break;}
 			
-			if (RNGSUS.nextInt( 2) == 0) aDrops.add(ST.entity(aDead, RNGSUS.nextBoolean()?OP.rockGt.mat(MT.Netherrack, 1):ST.make(Items.flint, 1, 0)));
-			if (RNGSUS.nextInt( 3) == 0) aDrops.add(ST.entity(aDead, Items.bone, 1, 0));
+			if (RNGSUS.nextInt( 2) == 0) aDrops.add(ST.entity(aDead, RNGSUS.nextBoolean()?OP.rockGt.mat(MT.Netherrack, 1):ST.make(Items.FLINT, 1, 0)));
+			if (RNGSUS.nextInt( 3) == 0) aDrops.add(ST.entity(aDead, Items.BONE, 1, 0));
 			if (RNGSUS.nextInt( 5) == 0) aDrops.add(ST.entity(aDead, OP.rockGt.mat(MT.Au, 1)));
 			if (RNGSUS.nextInt(10) == 0) aDrops.add(ST.entity(aDead, IL.Tool_Matches.get(1)));
 			if (RNGSUS.nextInt(10) == 0) aDrops.add(ST.entity(aDead, OP.bulletGtMedium.mat(MT.Steel, 1+RNGSUS.nextInt(2))));
 			
 			if (tRandomNumber == 0) {
-			aDrops.add(ST.entity(aDead, UT.Code.select(ST.make(Items.name_tag, 1, 0)
+			aDrops.add(ST.entity(aDead, UT.Code.select(ST.make(Items.NAME_TAG, 1, 0)
 			, IL.KEYS_CHEAP[RNGSUS.nextInt(IL.KEYS_CHEAP.length)].getWithName(1, "Random Useless Key")
 			, IL.Tool_MatchBox_Full.get(1)
 			, IL.Tool_MatchBox_Full.get(1)
@@ -190,12 +188,12 @@ public class Override_Drops {
 			tReplaceIron = T;
 			
 			if (aPlayerKill) {
-			if (RNGSUS.nextInt( 3) == 0) aDrops.add(ST.entity(aDead, Items.bone, 1, 0));
+			if (RNGSUS.nextInt( 3) == 0) aDrops.add(ST.entity(aDead, Items.BONE, 1, 0));
 			if (RNGSUS.nextInt(20) == 0) aDrops.add(ST.entity(aDead, IL.Tool_Matches.get(1)));
 			if (RNGSUS.nextInt(10) == 0) aDrops.add(ST.entity(aDead, OP.bulletGtSmall.mat(MT.Steel, 1+RNGSUS.nextInt(2))));
 			
 			if (tRandomNumber == 0) {
-			aDrops.add(ST.entity(aDead, UT.Code.select(ST.make(Items.name_tag, 1, 0)
+			aDrops.add(ST.entity(aDead, UT.Code.select(ST.make(Items.NAME_TAG, 1, 0)
 			, IL.KEYS_CHEAP[RNGSUS.nextInt(IL.KEYS_CHEAP.length)].getWithName(1, "Random Useless Key")
 			, IL.Tool_MatchBox_Full.get(1)
 			, IL.Tool_MatchBox_Full.get(1)
@@ -223,13 +221,13 @@ public class Override_Drops {
 			tReplaceIron = T;
 			
 			if (aPlayerKill) {
-			if (RNGSUS.nextInt( 2) == 0) aDrops.add(ST.entity(aDead, ST.make(Items.flint, 1, 0)));
-			if (RNGSUS.nextInt( 3) == 0) aDrops.add(ST.entity(aDead, ST.make(Items.stick, 1, 0)));
+			if (RNGSUS.nextInt( 2) == 0) aDrops.add(ST.entity(aDead, ST.make(Items.FLINT, 1, 0)));
+			if (RNGSUS.nextInt( 3) == 0) aDrops.add(ST.entity(aDead, ST.make(Items.STICK, 1, 0)));
 			if (RNGSUS.nextInt(20) == 0) aDrops.add(ST.entity(aDead, IL.Tool_Matches.get(1)));
 			if (RNGSUS.nextInt(10) == 0) aDrops.add(ST.entity(aDead, OP.bulletGtSmall.mat(MT.Steel, 1+RNGSUS.nextInt(2))));
 			
 			if (tRandomNumber == 0) {
-			aDrops.add(ST.entity(aDead, UT.Code.select(ST.make(Items.name_tag, 1, 0)
+			aDrops.add(ST.entity(aDead, UT.Code.select(ST.make(Items.NAME_TAG, 1, 0)
 			, IL.KEYS_CHEAP[RNGSUS.nextInt(IL.KEYS_CHEAP.length)].getWithName(1, "Random Useless Key")
 			, IL.Tool_MatchBox_Full.get(1)
 			, IL.Tool_MatchBox_Full.get(1)
@@ -259,7 +257,7 @@ public class Override_Drops {
 			if (RNGSUS.nextInt(10) == 0) aDrops.add(ST.entity(aDead, OP.bulletGtMedium.mat(MT.Steel, 1+RNGSUS.nextInt(2))));
 			
 			if (tRandomNumber == 0) {
-			aDrops.add(ST.entity(aDead, UT.Code.select(ST.make(Items.name_tag, 1, 0)
+			aDrops.add(ST.entity(aDead, UT.Code.select(ST.make(Items.NAME_TAG, 1, 0)
 			, IL.KEYS_CHEAP[RNGSUS.nextInt(IL.KEYS_CHEAP.length)].getWithName(1, "Random Useless Key")
 			, IL.Tool_MatchBox_Full.get(1)
 			, IL.Tool_MatchBox_Full.get(1)
@@ -289,7 +287,7 @@ public class Override_Drops {
 			if (RNGSUS.nextInt(10) == 0) aDrops.add(ST.entity(aDead, OP.bulletGtLarge.mat(MT.Steel, 1)));
 			
 			if (tRandomNumber == 0) {
-			aDrops.add(ST.entity(aDead, UT.Code.select(ST.make(Items.name_tag, 1, 0)
+			aDrops.add(ST.entity(aDead, UT.Code.select(ST.make(Items.NAME_TAG, 1, 0)
 			, IL.KEYS_CHEAP[RNGSUS.nextInt(IL.KEYS_CHEAP.length)].getWithName(1, "Random Useless Key")
 			, IL.Tool_Lighter_Plastic_Full.get(1)
 			, IL.Tool_Lighter_Plastic_Full.get(1)
@@ -322,13 +320,13 @@ public class Override_Drops {
 			tReplaceIron = T;
 			
 			if (aPlayerKill) {
-			if (RNGSUS.nextInt( 2) == 0) aDrops.add(ST.entity(aDead, ST.make(Items.flint, 1, 0)));
-			if (RNGSUS.nextInt( 3) == 0) aDrops.add(ST.entity(aDead, ST.make(Items.stick, 1, 0)));
+			if (RNGSUS.nextInt( 2) == 0) aDrops.add(ST.entity(aDead, ST.make(Items.FLINT, 1, 0)));
+			if (RNGSUS.nextInt( 3) == 0) aDrops.add(ST.entity(aDead, ST.make(Items.STICK, 1, 0)));
 			if (RNGSUS.nextInt( 5) == 0) aDrops.add(ST.entity(aDead, IL.Tool_Matches.get(1+RNGSUS.nextInt(4))));
 			if (RNGSUS.nextInt(10) == 0) aDrops.add(ST.entity(aDead, IL.Dynamite.get(1+RNGSUS.nextInt(4))));
 			
 			if (tRandomNumber == 0) {
-			aDrops.add(ST.entity(aDead, UT.Code.select(ST.make(Items.name_tag, 1, 0)
+			aDrops.add(ST.entity(aDead, UT.Code.select(ST.make(Items.NAME_TAG, 1, 0)
 			, IL.KEYS_CHEAP[RNGSUS.nextInt(IL.KEYS_CHEAP.length)].getWithName(1, "Random Useless Key")
 			, IL.Tool_Lighter_Plastic_Full.get(1)
 			, IL.Tool_Remote_Activator.get(1)
@@ -350,21 +348,21 @@ public class Override_Drops {
 			tReplaceIron = T;
 		} else if ("SuperMutantElite".equalsIgnoreCase(aClass)) {// TODO
 			tReplaceIron = T;
-		} else if (aDead instanceof EntityPigZombie) {
+		} else if (aDead instanceof ZombiePigmanEntity) {
 			tReplaceIron = T;
 			
 			if (aPlayerKill) {
-			if (RNGSUS.nextInt( 2) == 0) aDrops.add(ST.entity(aDead, RNGSUS.nextBoolean()?OP.rockGt.mat(MT.Netherrack, 1):ST.make(Items.flint, 1, 0)));
-			if (RNGSUS.nextInt( 5) == 0) aDrops.add(ST.entity(aDead, Items.bone, 1, 0));
+			if (RNGSUS.nextInt( 2) == 0) aDrops.add(ST.entity(aDead, RNGSUS.nextBoolean()?OP.rockGt.mat(MT.Netherrack, 1):ST.make(Items.FLINT, 1, 0)));
+			if (RNGSUS.nextInt( 5) == 0) aDrops.add(ST.entity(aDead, Items.BONE, 1, 0));
 			if (RNGSUS.nextInt(10) == 0) aDrops.add(ST.entity(aDead, OP.rockGt.mat(MT.Au, 1)));
 			if (RNGSUS.nextInt(20) == 0) aDrops.add(ST.entity(aDead, IL.Tool_Matches.get(1)));
 			}
-		} else if (aDead instanceof EntityZombie) {
+		} else if (aDead instanceof ZombieEntity) {
 			tReplaceIron = T;
 			
 			if (aPlayerKill) {
-			if (RNGSUS.nextInt( 2) == 0) aDrops.add(ST.entity(aDead, RNGSUS.nextBoolean()?OP.rockGt.mat(aSpace?MT.SpaceRock:MT.Stone, 1):aSpace?OP.rockGt.mat(MT.MeteoricIron, 1):ST.make(Items.flint, 1, 0)));
-			if (RNGSUS.nextInt( 5) == 0) aDrops.add(ST.entity(aDead, aSpace?OP.scrapGt.mat(MT.Plastic, 1):ST.make(Items.stick, 1, 0)));
+			if (RNGSUS.nextInt( 2) == 0) aDrops.add(ST.entity(aDead, RNGSUS.nextBoolean()?OP.rockGt.mat(aSpace?MT.SpaceRock:MT.Stone, 1):aSpace?OP.rockGt.mat(MT.MeteoricIron, 1):ST.make(Items.FLINT, 1, 0)));
+			if (RNGSUS.nextInt( 5) == 0) aDrops.add(ST.entity(aDead, aSpace?OP.scrapGt.mat(MT.Plastic, 1):ST.make(Items.STICK, 1, 0)));
 			if (RNGSUS.nextInt(10) == 0) aDrops.add(ST.entity(aDead, aSpace?OP.stick.mat(MT.Plastic, 1):IL.Mud_Ball.get(1)));
 			if (RNGSUS.nextInt(20) == 0) aDrops.add(ST.entity(aDead, aSpace?OP.nugget.mat(MT.MeteoricIron, 1):IL.Tool_Matches.get(1)));
 			
@@ -378,7 +376,7 @@ public class Override_Drops {
 			).get(1)));
 			}
 			
-			if (((EntityZombie)aDead).isVillager()) for (int i = 0, j = 1+RNGSUS.nextInt(3); i < j; i++) switch(RNGSUS.nextInt(20)) {
+			if (aDead instanceof ZombieVillagerEntity) for (int i = 0, j = 1+RNGSUS.nextInt(3); i < j; i++) switch(RNGSUS.nextInt(20)) {
 			case  0: aDrops.add(ST.entity(aDead, ST.book("Manual_Hunting_Creeper")));   break;
 			case  1: aDrops.add(ST.entity(aDead, ST.book("Manual_Hunting_Skeleton")));  break;
 			case  2: aDrops.add(ST.entity(aDead, ST.book("Manual_Hunting_Zombie")));    break;
@@ -396,7 +394,7 @@ public class Override_Drops {
 			default: aDrops.add(ST.entity(aDead, ST.book(UT.Books.MATERIAL_DICTIONARIES.get(RNGSUS.nextInt(UT.Books.MATERIAL_DICTIONARIES.size()))))); break;
 			}
 			}
-		} else if (aDead instanceof EntitySpider) {
+		} else if (aDead instanceof SpiderEntity) {
 			tReplaceIron = T;
 			
 			if (aPlayerKill) {
@@ -409,7 +407,7 @@ public class Override_Drops {
 			}
 			
 			}
-		} else if (aDead instanceof EntitySkeleton) {
+		} else if (aDead instanceof SkeletonEntity) {
 			tReplaceIron = T;
 			
 			if (aPlayerKill) {
@@ -434,7 +432,7 @@ public class Override_Drops {
 			tReplaceIron = T;
 			int tAmount = 1+RNGSUS.nextInt(3);
 			if (aLooting > 0) tAmount += RNGSUS.nextInt(aLooting + 1);
-			while (tAmount-->0) aDrops.add(ST.entity(aDead, aBurn?Items.cooked_porkchop:Items.porkchop, 1, 0));
+			while (tAmount-->0) aDrops.add(ST.entity(aDead, aBurn?Items.COOKED_PORKCHOP:Items.PORKCHOP, 1, 0));
 		} else if (aClass.equalsIgnoreCase("MoCEntityDeer")) {
 			tReplaceIron = T;
 			ItemStack tRaw      = IL.TF_Venison_Raw     .get(1, ST.make(MD.HaC, "venisonrawItem"    , 1, 0));
@@ -448,7 +446,7 @@ public class Override_Drops {
 			tReplaceIron = T;
 			int tAmount = 1+RNGSUS.nextInt(3);
 			if (aLooting > 0) tAmount += RNGSUS.nextInt(aLooting + 1);
-			while (tAmount-->0) aDrops.add(ST.entity(aDead, Items.feather, 1, 0));
+			while (tAmount-->0) aDrops.add(ST.entity(aDead, Items.FEATHER, 1, 0));
 		} else if (aClass.equalsIgnoreCase("MoCEntityHorse")) {
 			tReplaceIron = T;
 			int tAmount = 2+RNGSUS.nextInt(3);
@@ -464,20 +462,20 @@ public class Override_Drops {
 			int tAmount = 1+RNGSUS.nextInt(4);
 			if (aLooting > 0) tAmount += RNGSUS.nextInt(aLooting + 1);
 			while (tAmount-->0) aDrops.add(ST.entity(aDead, aBurn?IL.Food_DogMeat_Cooked.get(1):IL.Food_DogMeat_Raw.get(1)));
-		} else if (aDead instanceof EntityHorse && !((EntityHorse)aDead).isChild()) {
+		} else if (aDead instanceof HorseEntity && !aDead.isChild()) {
 			tReplaceIron = T;
 			int tAmount = 1+RNGSUS.nextInt(3);
 			if (aLooting > 0) tAmount += RNGSUS.nextInt(aLooting + 1);
-			if (RNGSUS.nextInt(Math.max(1, 10-(int)(((EntityHorse)aDead).getHorseJumpStrength()*10.0))) == 0) tAmount += 1+RNGSUS.nextInt(aLooting + 1)/2;
-			if (RNGSUS.nextInt(Math.max(1, 30-(int)(((EntityHorse)aDead).getMaxHealth()))) == 0) tAmount += 1+RNGSUS.nextInt(aLooting + 1)/2;
-			switch(((EntityHorse)aDead).getHorseType()) {
+			if (RNGSUS.nextInt(Math.max(1, 10-(int)(((HorseEntity)aDead).getHorseJumpStrength()*10.0))) == 0) tAmount += 1+RNGSUS.nextInt(aLooting + 1)/2;
+			if (RNGSUS.nextInt(Math.max(1, 30-(int)(aDead.getMaxHealth()))) == 0) tAmount += 1+RNGSUS.nextInt(aLooting + 1)/2;
+			switch(((HorseEntity)aDead).type) {
 			case 0: while (tAmount-->0) aDrops.add(ST.entity(aDead, aBurn?IL.Food_Horse_Cooked.get(1):IL.Food_Horse_Raw.get(1))); break;
 			case 1: while (tAmount-->0) aDrops.add(ST.entity(aDead, aBurn?IL.Food_Donkey_Cooked.get(1):IL.Food_Donkey_Raw.get(1))); break;
 			case 2: while (tAmount-->0) aDrops.add(ST.entity(aDead, aBurn?IL.Food_Mule_Cooked.get(1):IL.Food_Mule_Raw.get(1))); break;
-			case 3: while (tAmount-->0) aDrops.add(ST.entity(aDead, ST.make(Items.rotten_flesh, 1, 0))); break;
-			case 4: while (tAmount-->0) aDrops.add(ST.entity(aDead, ST.make(Items.bone, 1, 0))); break;
+			case 3: while (tAmount-->0) aDrops.add(ST.entity(aDead, ST.make(Items.ROTTEN_FLESH, 1, 0))); break;
+			case 4: while (tAmount-->0) aDrops.add(ST.entity(aDead, ST.make(Items.BONE, 1, 0))); break;
 			}
-		} else if (aDead instanceof EntityWolf && !((EntityWolf)aDead).isChild()) {
+		} else if (aDead instanceof WolfEntity && !aDead.isChild()) {
 			tReplaceIron = T;
 			int tAmount = RNGSUS.nextInt(3);
 			if (aLooting > 0) tAmount += RNGSUS.nextInt(aLooting + 1);
@@ -489,7 +487,7 @@ public class Override_Drops {
 			int tAmount = RNGSUS.nextInt(3);
 			if (aLooting > 0) tAmount += RNGSUS.nextInt(aLooting + 1);
 			while (tAmount-->0) aDrops.add(ST.entity(aDead, aBurn?IL.Food_Mutton_Cooked.get(1):IL.Food_Mutton_Raw.get(1)));
-		} else if (aDead instanceof EntitySheep && !((EntitySheep)aDead).isChild()) {
+		} else if (aDead instanceof SheepEntity && !aDead.isChild()) {
 			tReplaceIron = T;
 			if (!MD.EtFu.mLoaded && !MD.GaSu.mLoaded) {
 			int tAmount = RNGSUS.nextInt(3);
@@ -499,7 +497,7 @@ public class Override_Drops {
 			}
 		}
 		
-		for (EntityItem tEntity : aDrops) {ItemStack tStack = tEntity.getEntityItem(); if (ST.valid(tStack)) {
+		for (ItemEntity tEntity : aDrops) {ItemStack tStack = tEntity.getItem(); if (ST.valid(tStack)) {
 			if (tReplaceIron) {
 				if (OM.is("ingotIron", tStack)) {
 					ST.set(tStack, OP.ingot.mat(MT.Pb, 1), F, F);
@@ -514,16 +512,16 @@ public class Override_Drops {
 			
 			if (!OM.is("listAllmeatsubstitute", tStack)) {
 				if (RNGSUS.nextInt(3) == 0 && (OM.is("listAllmeatraw", tStack) || OM.is("listAllmeatcooked", tStack))) tIntestinesAmount++;
-				if (tStack.getItem() == Items.porkchop) {
+				if (tStack.getItem() == Items.PORKCHOP) {
 					switch(tRandomNumber%3) {
 					case 0: ST.set(tStack, (aBurn?IL.Food_Ham_Cooked:IL.Food_Ham_Raw).get(1), F, F); break;
-					case 1: ST.set(tStack, (aBurn?IL.Food_Bacon_Cooked:IL.Food_Bacon_Raw).get(UT.Code.bindStack(tStack.stackSize * (3+RNGSUS.nextInt(3)))), T, F); break;
+					case 1: ST.set(tStack, (aBurn?IL.Food_Bacon_Cooked:IL.Food_Bacon_Raw).get(UT.Code.bindStack(tStack.getCount() * (3+RNGSUS.nextInt(3)))), T, F); break;
 					}
 				} else
-				if (tStack.getItem() == Items.cooked_porkchop) {
+				if (tStack.getItem() == Items.COOKED_PORKCHOP) {
 					switch(tRandomNumber%3) {
 					case 0: ST.set(tStack, IL.Food_Ham_Cooked.get(1), F, F); break;
-					case 1: ST.set(tStack, IL.Food_Bacon_Cooked.get(UT.Code.bindStack(tStack.stackSize * (3+RNGSUS.nextInt(3)))), T, F); break;
+					case 1: ST.set(tStack, IL.Food_Bacon_Cooked.get(UT.Code.bindStack(tStack.getCount() * (3+RNGSUS.nextInt(3)))), T, F); break;
 					}
 				} else
 				if (OM.is("listAllbeefraw", tStack)) {
@@ -550,7 +548,7 @@ public class Override_Drops {
 				}
 			}
 			
-			tEntity.setEntityItemStack(tStack);
+			tEntity.setItem(tStack);
 			tRandomNumber++;
 		}}
 		

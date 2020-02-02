@@ -27,7 +27,7 @@ import gregapi.item.multiitem.MultiItem;
 import gregapi.item.multiitem.behaviors.IBehavior.AbstractBehaviorDefault;
 import gregapi.util.WD;
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
@@ -39,7 +39,7 @@ public class Behavior_Bucket_Container extends AbstractBehaviorDefault {
 	public static final IBehavior<MultiItem> INSTANCE = new Behavior_Bucket_Container();
 	
 	@Override
-	public ItemStack onItemRightClick(MultiItem aItem, ItemStack aStack, World aWorld, EntityPlayer aPlayer) {
+	public ItemStack onItemRightClick(MultiItem aItem, ItemStack aStack, World aWorld, PlayerEntity aPlayer) {
 		MovingObjectPosition tPosition = WD.getMOP(aWorld, aPlayer, T);
 		if (tPosition == null || tPosition.typeOfHit != MovingObjectPosition.MovingObjectType.BLOCK) return aStack;
 		if (!aWorld.canMineBlock(aPlayer, tPosition.blockX, tPosition.blockY, tPosition.blockZ)) return aStack;

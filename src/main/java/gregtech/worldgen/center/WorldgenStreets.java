@@ -35,7 +35,7 @@ import gregapi.worldgen.WorldgenObject;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
@@ -493,7 +493,7 @@ public class WorldgenStreets extends WorldgenObject {
 		}
 		
 		// Kill every living thing close by except Players.
-		for (EntityLivingBase tEntity : (List<EntityLivingBase>)aWorld.getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getBoundingBox(-16, mHeight, aMinZ, +16, mHeight+8, aMinZ+16))) if (!(tEntity instanceof EntityPlayer)) tEntity.setDead();
+		for (EntityLivingBase tEntity : (List<EntityLivingBase>)aWorld.getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getBoundingBox(-16, mHeight, aMinZ, +16, mHeight+8, aMinZ+16))) if (!(tEntity instanceof PlayerEntity)) tEntity.setDead();
 		return T;
 	}
 	
@@ -734,7 +734,7 @@ public class WorldgenStreets extends WorldgenObject {
 		}
 		
 		// Kill every living thing close by except Players.
-		for (EntityLivingBase tEntity : (List<EntityLivingBase>)aWorld.getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getBoundingBox(aMinX, mHeight, -16, aMinX+16, mHeight+8, +16))) if (!(tEntity instanceof EntityPlayer)) tEntity.setDead();
+		for (EntityLivingBase tEntity : (List<EntityLivingBase>)aWorld.getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getBoundingBox(aMinX, mHeight, -16, aMinX+16, mHeight+8, +16))) if (!(tEntity instanceof PlayerEntity)) tEntity.setDead();
 		return T;
 	}
 }

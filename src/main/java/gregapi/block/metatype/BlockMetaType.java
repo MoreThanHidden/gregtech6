@@ -37,7 +37,7 @@ import gregapi.util.UT;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -120,7 +120,7 @@ public class BlockMetaType extends BlockBaseMeta {
 	}
 	
 	@Override
-	public boolean onBlockActivated(World aWorld, int aX, int aY, int aZ, EntityPlayer aPlayer, int aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onBlockActivated(World aWorld, int aX, int aY, int aZ, PlayerEntity aPlayer, int aSide, float aHitX, float aHitY, float aHitZ) {
 		if (mBlock == this || aSide != OPPOSITES[mSide] || (mBlock.getCollisionBoundingBoxFromPool(aWorld, aX, aY, aZ) != null && !aWorld.checkNoEntityCollision(mBlock.getCollisionBoundingBoxFromPool(aWorld, aX, aY, aZ)))) return F;
 		ItemStack aStack = aPlayer.getCurrentEquippedItem();
 		byte aMetaData = (byte)aWorld.getBlockMetadata(aX, aY, aZ);

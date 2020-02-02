@@ -51,7 +51,7 @@ import gregapi.util.OM;
 import gregapi.util.ST;
 import gregapi.util.UT;
 import gregtech.items.behaviors.*;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -401,7 +401,7 @@ public class MultiItemRandomTools extends MultiItemRandom implements IItemRottab
 	@Override
 	public IIcon getIcon(ItemStack aStack, int aRenderPass) {
 		if (aRenderPass == 0) return getIconIndex(aStack);
-		EntityPlayer aPlayer = GT_API.api_proxy.getThePlayer();
+		PlayerEntity aPlayer = GT_API.api_proxy.getThePlayer();
 		if (aPlayer == null) return getIconIndex(aStack);
 		ChunkCoordinates aTarget;
 		switch(ST.meta_(aStack)) {
@@ -418,7 +418,7 @@ public class MultiItemRandomTools extends MultiItemRandom implements IItemRottab
 	@Override
 	public IIcon getIconFromDamageForRenderPass(int aMetaData, int aRenderPass) {
 		if (aRenderPass == 0) return getIconFromDamage(aMetaData);
-		EntityPlayer aPlayer = GT_API.api_proxy.getThePlayer();
+		PlayerEntity aPlayer = GT_API.api_proxy.getThePlayer();
 		if (aPlayer == null) return getIconFromDamage(aMetaData);
 		ChunkCoordinates aTarget;
 		switch(aMetaData) {

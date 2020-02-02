@@ -50,7 +50,7 @@ import gregapi.util.UT;
 import gregtech.tileentity.misc.MultiTileEntityCoin;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -112,7 +112,7 @@ public class MultiTileEntityMoldCoinage extends TileEntityBase07Paintable implem
 	@Override public boolean attachCoversFirst(byte aSide) {return F;}
 	
 	@Override
-	public boolean onBlockActivated3(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onBlockActivated3(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (isServerSide() && SIDES_TOP_HORIZONTAL[aSide]) {
 			ItemStack tOutputStack = slot(0);
 			ItemStack aStack = aPlayer.getCurrentEquippedItem();

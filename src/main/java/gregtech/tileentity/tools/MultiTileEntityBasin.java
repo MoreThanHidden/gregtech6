@@ -36,7 +36,7 @@ import gregapi.util.UT;
 import gregapi.util.WD;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -107,7 +107,7 @@ public class MultiTileEntityBasin extends MultiTileEntityMold {
 	}
 	
 	@Override
-	public boolean onBlockActivated3(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onBlockActivated3(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (SIDES_TOP[aSide]) {
 			if (isServerSide()) pickUpItem(aPlayer, T);
 			return T;
@@ -120,7 +120,7 @@ public class MultiTileEntityBasin extends MultiTileEntityMold {
 		if (isClientSide()) return super.onToolClick2(aTool, aRemainingDurability, aQuality, aPlayer, aChatReturn, aPlayerInventory, aSneaking, aStack, aSide, aHitX, aHitY, aHitZ);
 		if (aTool.equals(TOOL_thermometer)) {if (aChatReturn != null) aChatReturn.add("Temperature: " + mTemperature + "K"); return 10000;}
 		if (aTool.equals(TOOL_pincers)) {
-			if (aPlayer instanceof EntityPlayer && SIDES_TOP[aSide] && pickUpItem((EntityPlayer)aPlayer, F)) {
+			if (aPlayer instanceof PlayerEntity && SIDES_TOP[aSide] && pickUpItem((PlayerEntity)aPlayer, F)) {
 				return 2000;
 			}
 		}

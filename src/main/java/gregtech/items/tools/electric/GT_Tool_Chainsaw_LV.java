@@ -39,7 +39,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityCreeper;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.AchievementList;
 import net.minecraft.util.DamageSource;
@@ -76,18 +76,18 @@ public class GT_Tool_Chainsaw_LV extends GT_Tool_Axe {
 	
 	@Override
 	public DamageSource getDamageSource(EntityLivingBase aPlayer, Entity aEntity) {
-		if (MD.IC2.mLoaded && aPlayer instanceof EntityPlayer && aEntity instanceof EntityCreeper) try {
-		((EntityPlayer)aPlayer).triggerAchievement(AchievementList.openInventory);
-		((EntityPlayer)aPlayer).triggerAchievement(AchievementList.mineWood);
-		((EntityPlayer)aPlayer).triggerAchievement(AchievementList.buildWorkBench);
-		((EntityPlayer)aPlayer).triggerAchievement(AchievementList.buildPickaxe);
-		((EntityPlayer)aPlayer).triggerAchievement(AchievementList.buildFurnace);
-		((EntityPlayer)aPlayer).triggerAchievement(AchievementList.acquireIron);
-		ic2.core.IC2.achievements.issueAchievement((EntityPlayer)aPlayer, "buildCable");
-		ic2.core.IC2.achievements.issueAchievement((EntityPlayer)aPlayer, "buildGenerator");
-		ic2.core.IC2.achievements.issueAchievement((EntityPlayer)aPlayer, "buildBatBox");
-		ic2.core.IC2.achievements.issueAchievement((EntityPlayer)aPlayer, "buildChainsaw");
-		ic2.core.IC2.achievements.issueAchievement((EntityPlayer)aPlayer, "killCreeperChainsaw");
+		if (MD.IC2.mLoaded && aPlayer instanceof PlayerEntity && aEntity instanceof EntityCreeper) try {
+		((PlayerEntity)aPlayer).triggerAchievement(AchievementList.openInventory);
+		((PlayerEntity)aPlayer).triggerAchievement(AchievementList.mineWood);
+		((PlayerEntity)aPlayer).triggerAchievement(AchievementList.buildWorkBench);
+		((PlayerEntity)aPlayer).triggerAchievement(AchievementList.buildPickaxe);
+		((PlayerEntity)aPlayer).triggerAchievement(AchievementList.buildFurnace);
+		((PlayerEntity)aPlayer).triggerAchievement(AchievementList.acquireIron);
+		ic2.core.IC2.achievements.issueAchievement((PlayerEntity)aPlayer, "buildCable");
+		ic2.core.IC2.achievements.issueAchievement((PlayerEntity)aPlayer, "buildGenerator");
+		ic2.core.IC2.achievements.issueAchievement((PlayerEntity)aPlayer, "buildBatBox");
+		ic2.core.IC2.achievements.issueAchievement((PlayerEntity)aPlayer, "buildChainsaw");
+		ic2.core.IC2.achievements.issueAchievement((PlayerEntity)aPlayer, "killCreeperChainsaw");
 		} catch(Throwable e) {e.printStackTrace(ERR);}
 		return super.getDamageSource(aPlayer, aEntity);
 	}
@@ -134,7 +134,7 @@ public class GT_Tool_Chainsaw_LV extends GT_Tool_Axe {
 	}
 	
 	@Override
-	public int convertBlockDrops(List<ItemStack> aDrops, ItemStack aStack, EntityPlayer aPlayer, Block aBlock, long aAvailableDurability, int aX, int aY, int aZ, byte aMetaData, int aFortune, boolean aSilkTouch, BlockEvent.HarvestDropsEvent aEvent) {
+	public int convertBlockDrops(List<ItemStack> aDrops, ItemStack aStack, PlayerEntity aPlayer, Block aBlock, long aAvailableDurability, int aX, int aY, int aZ, byte aMetaData, int aFortune, boolean aSilkTouch, BlockEvent.HarvestDropsEvent aEvent) {
 		if (aBlock.getMaterial() == Material.leaves && aBlock instanceof IShearable) {
 			aPlayer.worldObj.setBlock(aX, aY, aZ, aBlock, aMetaData, 0);
 			if (((IShearable)aBlock).isShearable(aStack, aPlayer.worldObj, aX, aY, aZ)) {
@@ -156,7 +156,7 @@ public class GT_Tool_Chainsaw_LV extends GT_Tool_Axe {
 	}
 	
 	@Override
-	public float getMiningSpeed(Block aBlock, byte aMetaData, float aDefault, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ) {
+	public float getMiningSpeed(Block aBlock, byte aMetaData, float aDefault, PlayerEntity aPlayer, World aWorld, int aX, int aY, int aZ) {
 		return aBlock.getMaterial() == Material.leaves || aBlock.getMaterial() == Material.vine || aBlock.getMaterial() == Material.plants || aBlock.getMaterial() == Material.gourd ? aDefault : super.getMiningSpeed(aBlock, aMetaData, aDefault, aPlayer, aWorld, aX, aY, aZ);
 	}
 	
@@ -171,7 +171,7 @@ public class GT_Tool_Chainsaw_LV extends GT_Tool_Axe {
 	}
 	
 	@Override
-	public void onToolCrafted(ItemStack aStack, EntityPlayer aPlayer) {
+	public void onToolCrafted(ItemStack aStack, PlayerEntity aPlayer) {
 		super.onToolCrafted(aStack, aPlayer);
 		if (MD.IC2.mLoaded) try {
 		aPlayer.triggerAchievement(AchievementList.buildPickaxe);

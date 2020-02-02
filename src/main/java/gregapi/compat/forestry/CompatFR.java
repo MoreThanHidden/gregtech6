@@ -33,7 +33,7 @@ import gregapi.code.ItemStackContainer;
 import gregapi.code.ItemStackSet;
 import gregapi.compat.CompatBase;
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
@@ -72,7 +72,7 @@ public class CompatFR extends CompatBase implements ICompatFR, IFarmable {
 	}
 	
 	@Override
-	public boolean plantSaplingAt(EntityPlayer aPlayer, ItemStack aSeed, World aWorld, int aX, int aY, int aZ) {
+	public boolean plantSaplingAt(PlayerEntity aPlayer, ItemStack aSeed, World aWorld, int aX, int aY, int aZ) {
 		return aSeed.copy().tryPlaceItemIntoWorld(aPlayer, aWorld, aX, aY - 1, aZ, SIDE_UP, 0, 0, 0);
 	}
 }

@@ -37,7 +37,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityCaveSpider;
 import net.minecraft.entity.monster.EntitySpider;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 
 public class GT_Tool_Screwdriver extends ToolStats {
@@ -51,7 +51,7 @@ public class GT_Tool_Screwdriver extends ToolStats {
 	);
 	
 	@Override
-	public float getNormalDamageAgainstEntity(float aOriginalDamage, Entity aEntity, ItemStack aStack, EntityPlayer aPlayer) {
+	public float getNormalDamageAgainstEntity(float aOriginalDamage, Entity aEntity, ItemStack aStack, PlayerEntity aPlayer) {
 		String tName = aEntity.getClass().getName();
 		tName = tName.substring(tName.lastIndexOf(".")+1);
 		return mEffectiveList.contains(tName)?aOriginalDamage*2:aOriginalDamage;

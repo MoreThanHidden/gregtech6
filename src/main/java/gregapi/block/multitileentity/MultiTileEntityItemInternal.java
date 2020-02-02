@@ -66,7 +66,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.EnumAction;
@@ -108,7 +108,7 @@ public class MultiTileEntityItemInternal extends ItemBlock implements squeek.app
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public void addInformation(ItemStack aStack, EntityPlayer aPlayer, @SuppressWarnings("rawtypes") List aList, boolean aF3_H) {
+	public void addInformation(ItemStack aStack, PlayerEntity aPlayer, @SuppressWarnings("rawtypes") List aList, boolean aF3_H) {
 		MultiTileEntityContainer tTileEntityContainer = mBlock.mMultiTileEntityRegistry.getNewTileEntityContainer(aStack);
 		if (tTileEntityContainer == null) {aList.add("INVALID ITEM! THIS IS A BUG IF ACQUIRED IN A LEGIT WAY!"); return;}
 		if (tTileEntityContainer.mTileEntity instanceof IMTE_AddToolTips) try {((IMTE_AddToolTips)tTileEntityContainer.mTileEntity).addToolTips(aList, aStack, aF3_H);} catch(Throwable e) {e.printStackTrace(ERR);}
@@ -162,7 +162,7 @@ public class MultiTileEntityItemInternal extends ItemBlock implements squeek.app
 	}
 	
 	@Override
-	public boolean onItemUse(ItemStack aStack, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ, int aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onItemUse(ItemStack aStack, PlayerEntity aPlayer, World aWorld, int aX, int aY, int aZ, int aSide, float aHitX, float aHitY, float aHitZ) {
 		if (aY < 0 || aY > aWorld.getHeight()) return F;
 		
 		try {
@@ -251,7 +251,7 @@ public class MultiTileEntityItemInternal extends ItemBlock implements squeek.app
 	}
 	
 	@Override
-	public void onCreated(ItemStack aStack, World aWorld, EntityPlayer aPlayer) {
+	public void onCreated(ItemStack aStack, World aWorld, PlayerEntity aPlayer) {
 		MultiTileEntityContainer tTileEntityContainer = mBlock.mMultiTileEntityRegistry.getNewTileEntityContainer(aStack);
 		if (tTileEntityContainer != null && tTileEntityContainer.mTileEntity instanceof IMTE_OnCrafted) {
 			updateItemStack(aStack);
@@ -368,7 +368,7 @@ public class MultiTileEntityItemInternal extends ItemBlock implements squeek.app
 	}
 	
 	@Override
-	public boolean onItemUseFirst(ItemStack aStack, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ, int aSide, float hitX, float hitY, float hitZ) {
+	public boolean onItemUseFirst(ItemStack aStack, PlayerEntity aPlayer, World aWorld, int aX, int aY, int aZ, int aSide, float hitX, float hitY, float hitZ) {
 		MultiTileEntityContainer tTileEntityContainer = mBlock.mMultiTileEntityRegistry.getNewTileEntityContainer(aStack);
 		if (tTileEntityContainer != null && tTileEntityContainer.mTileEntity instanceof IMTE_OnItemUseFirst) {
 			boolean rReturn = ((IMTE_OnItemUseFirst)tTileEntityContainer.mTileEntity).onItemUseFirst(this, aStack, aPlayer, aWorld, aX, aY, aZ, (byte)aSide, hitX, hitY, hitZ);
@@ -379,7 +379,7 @@ public class MultiTileEntityItemInternal extends ItemBlock implements squeek.app
 	}
 	
 	@Override
-	public ItemStack onItemRightClick(ItemStack aStack, World aWorld, EntityPlayer aPlayer) {
+	public ItemStack onItemRightClick(ItemStack aStack, World aWorld, PlayerEntity aPlayer) {
 		MultiTileEntityContainer tTileEntityContainer = mBlock.mMultiTileEntityRegistry.getNewTileEntityContainer(aStack);
 		if (tTileEntityContainer != null && tTileEntityContainer.mTileEntity instanceof IMTE_OnItemRightClick) {
 			ItemStack rStack = ((IMTE_OnItemRightClick)tTileEntityContainer.mTileEntity).onItemRightClick(this, aStack, aWorld, aPlayer);
@@ -413,7 +413,7 @@ public class MultiTileEntityItemInternal extends ItemBlock implements squeek.app
 	}
 	
 	@Override
-	public ItemStack onEaten(ItemStack aStack, World aWorld, EntityPlayer aPlayer) {
+	public ItemStack onEaten(ItemStack aStack, World aWorld, PlayerEntity aPlayer) {
 		MultiTileEntityContainer tTileEntityContainer = mBlock.mMultiTileEntityRegistry.getNewTileEntityContainer(aStack);
 		if (tTileEntityContainer != null && tTileEntityContainer.mTileEntity instanceof IMTE_OnEaten) {
 			ItemStack rStack = ((IMTE_OnEaten)tTileEntityContainer.mTileEntity).onEaten(this, aStack, aWorld, aPlayer);

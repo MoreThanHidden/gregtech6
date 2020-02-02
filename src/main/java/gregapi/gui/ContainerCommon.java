@@ -26,7 +26,7 @@ import java.util.List;
 import gregapi.tileentity.ITileEntityInventoryGUI;
 import gregapi.util.ST;
 import gregapi.util.UT;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
@@ -322,7 +322,7 @@ public class ContainerCommon extends Container {
 	 */
 	public boolean doesBindPlayerInventory() {return T;}
 	
-	@Override public boolean canInteractWith(EntityPlayer aPlayer) {return mTileEntity.isUseableByPlayerGUI(aPlayer);}
+	@Override public boolean canInteractWith(PlayerEntity aPlayer) {return mTileEntity.isUseableByPlayerGUI(aPlayer);}
 	
 	protected void bindPlayerInventory(InventoryPlayer aInventoryPlayer, int aOffset) {
 		for (int i = 0; i < 3; i++) for (int j = 0; j < 9; j++) {
@@ -334,7 +334,7 @@ public class ContainerCommon extends Container {
 	}
 	
 	@Override
-	public ItemStack slotClick(int aIndex, int aMouse, int aShift, EntityPlayer aPlayer) {
+	public ItemStack slotClick(int aIndex, int aMouse, int aShift, PlayerEntity aPlayer) {
 		mTileEntity.markDirtyGUI();
 		Slot aSlot = (aIndex >= 0 && aIndex < inventorySlots.size()) ? (Slot)inventorySlots.get(aIndex) : null;
 		
@@ -493,7 +493,7 @@ public class ContainerCommon extends Container {
 	}
 	
 	@Override
-	public ItemStack transferStackInSlot(EntityPlayer aPlayer, int aIndex) {
+	public ItemStack transferStackInSlot(PlayerEntity aPlayer, int aIndex) {
 		ItemStack rStack = null;
 		Slot tSlot = (Slot)inventorySlots.get(aIndex);
 		
@@ -627,7 +627,7 @@ public class ContainerCommon extends Container {
 	}
 	
 	@Override
-	public boolean enchantItem(EntityPlayer par1EntityPlayer, int par2) {
+	public boolean enchantItem(PlayerEntity par1PlayerEntity, int par2) {
 		return F;
 	}
 	
@@ -660,7 +660,7 @@ public class ContainerCommon extends Container {
 	}
 	
 	@Override
-	protected void retrySlotClick(int aIndex, int aMouse, boolean aUnknown, EntityPlayer aPlayer) {
+	protected void retrySlotClick(int aIndex, int aMouse, boolean aUnknown, PlayerEntity aPlayer) {
 		try {
 			slotClick(aIndex, aMouse, 1, aPlayer);
 		} catch(Throwable e) {
@@ -669,7 +669,7 @@ public class ContainerCommon extends Container {
 	}
 	
 	@Override
-	public void onContainerClosed(EntityPlayer aPlayer) {
+	public void onContainerClosed(PlayerEntity aPlayer) {
 		try {
 			mTileEntity.closeInventoryGUI();
 			InventoryPlayer tPlayerInventory = aPlayer.inventory;
@@ -716,12 +716,12 @@ public class ContainerCommon extends Container {
 	}
 	
 	@Override
-	public boolean isPlayerNotUsingContainer(EntityPlayer aPlayer) {
+	public boolean isPlayerNotUsingContainer(PlayerEntity aPlayer) {
 		return super.isPlayerNotUsingContainer(aPlayer);
 	}
 	
 	@Override
-	public void setPlayerIsPresent(EntityPlayer aPlayer, boolean aPresent) {
+	public void setPlayerIsPresent(PlayerEntity aPlayer, boolean aPresent) {
 		super.setPlayerIsPresent(aPlayer, aPresent);
 	}
 	

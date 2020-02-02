@@ -58,7 +58,7 @@ import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -127,7 +127,7 @@ public class MultiTileEntityChest extends TileEntityBase05Inventories implements
 	}
 	
 	@Override
-	public boolean onPlaced(ItemStack aStack, EntityPlayer aPlayer, MultiTileEntityContainer aMTEContainer, World aWorld, int aX, int aY, int aZ, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onPlaced(ItemStack aStack, PlayerEntity aPlayer, MultiTileEntityContainer aMTEContainer, World aWorld, int aX, int aY, int aZ, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		mFacing = UT.Code.getSideForPlayerPlacing(aPlayer, mFacing, SIDES_HORIZONTAL);
 		return T;
 	}
@@ -163,7 +163,7 @@ public class MultiTileEntityChest extends TileEntityBase05Inventories implements
 	}
 	
 	@Override
-	public boolean onBlockActivated2(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onBlockActivated2(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (isServerSide() && !worldObj.isSideSolid(xCoord, yCoord + 1, zCoord, FORGE_DIR[SIDE_BOTTOM]) && isUseableByPlayerGUI(aPlayer)) {
 			generateDungeonLoot();
 			openGUI(aPlayer);
@@ -241,8 +241,8 @@ public class MultiTileEntityChest extends TileEntityBase05Inventories implements
 	@Override public boolean isSurfaceSolid         (byte aSide) {return F;}
 	@Override public boolean isSurfaceOpaque        (byte aSide) {return F;}
 	
-	@Override public Object getGUIClient(int aGUIID, EntityPlayer aPlayer) {return new ContainerClientChest(aPlayer.inventory, this, aGUIID);}
-	@Override public Object getGUIServer(int aGUIID, EntityPlayer aPlayer) {return new ContainerCommonChest(aPlayer.inventory, this, aGUIID);}
+	@Override public Object getGUIClient(int aGUIID, PlayerEntity aPlayer) {return new ContainerClientChest(aPlayer.inventory, this, aGUIID);}
+	@Override public Object getGUIServer(int aGUIID, PlayerEntity aPlayer) {return new ContainerCommonChest(aPlayer.inventory, this, aGUIID);}
 	
 	@Override
 	public boolean renderItem(Block aBlock, RenderBlocks aRenderer) {

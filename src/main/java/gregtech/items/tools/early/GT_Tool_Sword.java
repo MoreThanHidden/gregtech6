@@ -32,7 +32,7 @@ import gregapi.old.Textures;
 import gregapi.render.IIconContainer;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.AchievementList;
 import net.minecraftforge.event.world.BlockEvent;
@@ -89,7 +89,7 @@ public class GT_Tool_Sword extends ToolStats {
 	}
 	
 	@Override
-	public int convertBlockDrops(List<ItemStack> aDrops, ItemStack aStack, EntityPlayer aPlayer, Block aBlock, long aAvailableDurability, int aX, int aY, int aZ, byte aMetaData, int aFortune, boolean aSilkTouch, BlockEvent.HarvestDropsEvent aEvent) {
+	public int convertBlockDrops(List<ItemStack> aDrops, ItemStack aStack, PlayerEntity aPlayer, Block aBlock, long aAvailableDurability, int aX, int aY, int aZ, byte aMetaData, int aFortune, boolean aSilkTouch, BlockEvent.HarvestDropsEvent aEvent) {
 		if (!harvestGrass(aDrops, aStack, aPlayer, aBlock, aAvailableDurability, aX, aY, aZ, aMetaData, aFortune, aSilkTouch, aEvent)) {
 			harvestStick(aDrops, aStack, aPlayer, aBlock, aAvailableDurability, aX, aY, aZ, aMetaData, aFortune, aSilkTouch, aEvent);
 		}
@@ -113,7 +113,7 @@ public class GT_Tool_Sword extends ToolStats {
 	}
 	
 	@Override
-	public void onToolCrafted(ItemStack aStack, EntityPlayer aPlayer) {
+	public void onToolCrafted(ItemStack aStack, PlayerEntity aPlayer) {
 		super.onToolCrafted(aStack, aPlayer);
 		aPlayer.triggerAchievement(AchievementList.buildSword);
 	}

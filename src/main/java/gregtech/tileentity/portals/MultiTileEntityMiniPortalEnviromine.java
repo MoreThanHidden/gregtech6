@@ -33,7 +33,7 @@ import gregapi.util.OM;
 import gregapi.util.ST;
 import gregapi.util.UT;
 import gregapi.util.WD;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 
@@ -114,7 +114,7 @@ public class MultiTileEntityMiniPortalEnviromine extends MultiTileEntityMiniPort
 	}
 	
 	@Override
-	public boolean onBlockActivated2(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onBlockActivated2(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (isServerSide()) {
 			ItemStack aStack = aPlayer.inventory.getCurrentItem();
 			if (ST.valid(aStack) && aStack.stackSize > 0 && OM.is_("gemExquisiteAnyDiamond", aStack)) {

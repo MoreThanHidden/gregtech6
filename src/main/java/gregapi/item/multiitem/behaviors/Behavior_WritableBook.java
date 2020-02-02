@@ -28,7 +28,7 @@ import gregapi.item.multiitem.MultiItem;
 import gregapi.item.multiitem.behaviors.IBehavior.AbstractBehaviorDefault;
 import gregapi.util.ST;
 import gregapi.util.UT;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -38,7 +38,7 @@ public class Behavior_WritableBook extends AbstractBehaviorDefault {
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public ItemStack onItemRightClick(MultiItem aItem, ItemStack aStack, World aWorld, EntityPlayer aPlayer) {
+	public ItemStack onItemRightClick(MultiItem aItem, ItemStack aStack, World aWorld, PlayerEntity aPlayer) {
 		aPlayer.displayGUIBook(ST.make(Items.writable_book, 1, 0, aStack.getTagCompound()));
 		return super.onItemRightClick(aItem, aStack, aWorld, aPlayer);
 	}

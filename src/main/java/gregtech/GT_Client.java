@@ -23,12 +23,17 @@ import static gregapi.data.CS.*;
 
 import java.util.Date;
 
+import gregtech.render.GT_Renderer_Entity_Arrow;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextComponent;
+import net.minecraft.util.text.event.ClickEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import org.lwjgl.opengl.GL11;
 
@@ -58,9 +63,9 @@ public class GT_Client extends GT_Proxy {
 	@Override
 	public void onProxyAfterCommonSetup(Abstract_Mod aMod, FMLCommonSetupEvent aEvent) {
 		super.onProxyAfterCommonSetup(aMod, aEvent);
-		// TODO GT Arrow Render
-		// new GT_Renderer_Entity_Arrow(EntityArrow_Material.class, "arrow");
-		//new GT_Renderer_Entity_Arrow(EntityArrow_Potion.class, "arrow_potions");
+
+		new GT_Renderer_Entity_Arrow(EntityType.ARROW, "arrow");
+		new GT_Renderer_Entity_Arrow(EntityType.POTION, "arrow_potions");
 		
 		BooksGT.BOOK_TEXTURES_BACK[255] = BooksGT.BOOK_TEXTURES_SIDE[255] = BlockTextureDefault.get(new IconContainerCopied(Blocks.COBBLESTONE, 0, 0));
 		
@@ -190,43 +195,46 @@ public class GT_Client extends GT_Proxy {
 				if (FIRST_CLIENT_PLAYER_TICK) {
 					FIRST_CLIENT_PLAYER_TICK = F;
 					TextComponent tLink;
-					if (mMessage.length() > 5 && ConfigsGT.CLIENT.get(ConfigCategories.news, mMessage, T)) {
+					if (mMessage.length() > 5 ) { //&& ConfigsGT.CLIENT.get(ConfigCategories.news, mMessage, T)
 						aEvent.player.sendMessage(new StringTextComponent(mMessage));
-						aEvent.player.addChatComponentMessage(new StringTextComponent(LH.Chat.DGRAY + ""));
+						aEvent.player.sendMessage(new StringTextComponent(LH.Chat.DGRAY + ""));
 						tLink = new StringTextComponent(LH.Chat.DGRAY + "disable message in the clientside GregTech.cfg");
-						tLink.getChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, ConfigsGT.CLIENT.mConfig.getConfigFile().getAbsolutePath()));
-						aEvent.player.addChatComponentMessage(tLink);
+						//TODO: Config and Click Event
+						//tLink.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, ConfigsGT.CLIENT.mConfig.getConfigFile().getAbsolutePath()));
+						aEvent.player.sendMessage(tLink);
 					}
 					if (mVersionOutdated) {
-						aEvent.player.addChatComponentMessage(new ChatComponentText("Major GT6 Update released, for details visit"));
-						tLink = new ChatComponentText(LH.Chat.BLUE + "https://gregtech.mechaenetia.com/1.7.10");
-						tLink.getChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://gregtech.mechaenetia.com/1.7.10"));
-						aEvent.player.addChatComponentMessage(tLink);
-						tLink = new ChatComponentText(LH.Chat.DGRAY + "disable checker in the clientside GregTech.cfg");
-						tLink.getChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, ConfigsGT.CLIENT.mConfig.getConfigFile().getAbsolutePath()));
-						aEvent.player.addChatComponentMessage(tLink);
+						aEvent.player.sendMessage(new StringTextComponent("Major GT6 Update released, for details visit"));
+						tLink = new StringTextComponent(LH.Chat.BLUE + "https://gregtech.mechaenetia.com/1.7.10");
+						tLink.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://gregtech.mechaenetia.com/1.7.10"));
+						aEvent.player.sendMessage(tLink);
+						tLink = new StringTextComponent(LH.Chat.DGRAY + "disable checker in the clientside GregTech.cfg");
+						//TODO: Config and Click Event
+						//tLink.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, ConfigsGT.CLIENT.mConfig.getConfigFile().getAbsolutePath()));
+						aEvent.player.sendMessage(tLink);
 					}
 					if (MD.IC2.mLoaded && !MD.IC2C.mLoaded) {
 						try {
 							int tVersion = Integer.parseInt(((String)Class.forName("ic2.core.IC2").getField("VERSION").get(null)).substring(4, 7));
 							if (tVersion < 827) {
-								aEvent.player.addChatComponentMessage(new ChatComponentText(LH.Chat.RED + "Please update IndustrialCraft!"));
+								aEvent.player.sendMessage(new StringTextComponent(LH.Chat.RED + "Please update IndustrialCraft!"));
 								// IC2 Site doesn't support https.
-								tLink = new ChatComponentText(LH.Chat.BLUE + "http://ic2api.player.to:8080/job/IC2_experimental/827/");
-								tLink.getChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "http://ic2api.player.to:8080/job/IC2_experimental/827/"));
-								aEvent.player.addChatComponentMessage(tLink);
+								tLink = new StringTextComponent(LH.Chat.BLUE + "http://ic2api.player.to:8080/job/IC2_experimental/827/");
+								tLink.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "http://ic2api.player.to:8080/job/IC2_experimental/827/"));
+								aEvent.player.sendMessage(tLink);
 							}
 						} catch(Throwable e) {/**/}
 					}
-					if (MD.COG.mLoaded && !MD.PFAA.mLoaded && ConfigsGT.CLIENT.get(ConfigCategories.general, "warnings_customoregen", T)) {
-						aEvent.player.addChatComponentMessage(new ChatComponentText(LH.Chat.RED + "Warning! CustomOreGen will screw up all GregTech Worldgen with its Default Configs!"));
-						aEvent.player.addChatComponentMessage(new ChatComponentText(LH.Chat.ORANGE + "If you don't even use CustomOreGen, I would highly recommend you to remove it!"));
-						tLink = new ChatComponentText(LH.Chat.DGRAY + "disable warning in the clientside GregTech.cfg");
-						tLink.getChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, ConfigsGT.CLIENT.mConfig.getConfigFile().getAbsolutePath()));
-						aEvent.player.addChatComponentMessage(tLink);
+					if (MD.COG.mLoaded && !MD.PFAA.mLoaded ) { // ConfigsGT.CLIENT.get(ConfigCategories.general, "warnings_customoregen", T)
+						aEvent.player.sendMessage(new StringTextComponent(LH.Chat.RED + "Warning! CustomOreGen will screw up all GregTech Worldgen with its Default Configs!"));
+						aEvent.player.sendMessage(new StringTextComponent(LH.Chat.ORANGE + "If you don't even use CustomOreGen, I would highly recommend you to remove it!"));
+						tLink = new StringTextComponent(LH.Chat.DGRAY + "disable warning in the clientside GregTech.cfg");
+						//TODO: Config and Click Event
+						//tLink.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, ConfigsGT.CLIENT.mConfig.getConfigFile().getAbsolutePath()));
+						aEvent.player.sendMessage(tLink);
 					}
 					if (new Date().getMonth() == 3 && new Date().getDate() <= 3) {
-						aEvent.player.addChatComponentMessage(new ChatComponentText(CHAT_GREG + " Watch your Calendar!"));
+						aEvent.player.sendMessage(new StringTextComponent(CHAT_GREG + " Watch your Calendar!"));
 					}
 				}
 			}
@@ -237,19 +245,20 @@ public class GT_Client extends GT_Proxy {
 	
 	@SubscribeEvent
 	public void receiveRenderEvent(RenderBlockOverlayEvent aEvent) {
-		if (aEvent.blockForOverlay == BlocksGT.Swamp) {
-			EntityPlayer aPlayer = GT_API.api_proxy.getThePlayer();
-			Minecraft.getMinecraft().getTextureManager().bindTexture(WATER_OVERLAY);
-			Tessellator tessellator = Tessellator.instance;
-			GL11.glColor4f(0, aPlayer.getBrightness(aEvent.renderPartialTicks)/2, 0, 0.75F);
+		if (aEvent.getBlockForOverlay().getBlock() == BlocksGT.Swamp) {
+			PlayerEntity aPlayer = GT_API.api_proxy.getThePlayer();
+			Minecraft.getInstance().getTextureManager().bindTexture(WATER_OVERLAY);
+			Tessellator tessellator = Tessellator.getInstance();
+			BufferBuilder bufferBuilder = tessellator.getBuffer();
+			GL11.glColor4f(0, aPlayer.getBrightness()/2, 0, 0.75F);
 			GL11.glEnable(GL11.GL_BLEND);
-			OpenGlHelper.glBlendFunc(770, 771, 1, 0);
+			//glBlendFunc(770, 771, 1, 0);
 			GL11.glPushMatrix();
-			tessellator.startDrawingQuads();
-			tessellator.addVertexWithUV(-1, -1, -0.5F, 4-aPlayer.rotationYaw/64, 4+aPlayer.rotationPitch/64);
-			tessellator.addVertexWithUV( 1, -1, -0.5F,  -aPlayer.rotationYaw/64, 4+aPlayer.rotationPitch/64);
-			tessellator.addVertexWithUV( 1,  1, -0.5F,  -aPlayer.rotationYaw/64,   aPlayer.rotationPitch/64);
-			tessellator.addVertexWithUV(-1,  1, -0.5F, 4-aPlayer.rotationYaw/64,   aPlayer.rotationPitch/64);
+			bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
+			bufferBuilder.pos(-1, -1, -0.5F).tex( 4-aPlayer.rotationYaw/64, 4+aPlayer.rotationPitch/64);
+			bufferBuilder.pos( 1, -1, -0.5F).tex(  -aPlayer.rotationYaw/64, 4+aPlayer.rotationPitch/64);
+			bufferBuilder.pos( 1,  1, -0.5F).tex(  -aPlayer.rotationYaw/64,   aPlayer.rotationPitch/64);
+			bufferBuilder.pos(-1,  1, -0.5F).tex( 4-aPlayer.rotationYaw/64,   aPlayer.rotationPitch/64);
 			tessellator.draw();
 			GL11.glPopMatrix();
 			GL11.glColor4f(1, 1, 1, 1);

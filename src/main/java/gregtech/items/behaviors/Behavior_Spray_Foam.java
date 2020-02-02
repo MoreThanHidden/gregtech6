@@ -38,7 +38,7 @@ import gregapi.util.WD;
 import gregtech.blocks.BlockCFoamFresh;
 import gregtech.tileentity.misc.MultiTileEntityCFoam;
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -61,13 +61,13 @@ public class Behavior_Spray_Foam extends AbstractBehaviorDefault {
 	}
 	
 	@Override
-	public ItemStack onItemRightClick(MultiItem aItem, ItemStack aStack, World aWorld, EntityPlayer aPlayer) {
+	public ItemStack onItemRightClick(MultiItem aItem, ItemStack aStack, World aWorld, PlayerEntity aPlayer) {
 		if (aPlayer.isSneaking()) switchMode(aStack, aPlayer);
 		return super.onItemRightClick(aItem, aStack, aWorld, aPlayer);
 	}
 	
 	@Override
-	public boolean onItemUseFirst(MultiItem aItem, ItemStack aStack, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ, byte aSide, float hitX, float hitY, float hitZ) {
+	public boolean onItemUseFirst(MultiItem aItem, ItemStack aStack, PlayerEntity aPlayer, World aWorld, int aX, int aY, int aZ, byte aSide, float hitX, float hitY, float hitZ) {
 		if (aWorld.isRemote || aStack.stackSize != 1 || aPlayer.isSneaking() || !aPlayer.canPlayerEdit(aX, aY, aZ, aSide, aStack)) return F;
 		
 		boolean rOutput = F;
@@ -107,7 +107,7 @@ public class Behavior_Spray_Foam extends AbstractBehaviorDefault {
 		return rOutput;
 	}
 	
-	public long foam(World aWorld, int aX, int aY, int aZ, byte aSide, long aUses, EntityPlayer aPlayer, ItemStack aStack) {
+	public long foam(World aWorld, int aX, int aY, int aZ, byte aSide, long aUses, PlayerEntity aPlayer, ItemStack aStack) {
 		if (aUses < 1) return 0;
 		long rUses = 0;
 		
@@ -188,7 +188,7 @@ public class Behavior_Spray_Foam extends AbstractBehaviorDefault {
 		return UT.NBT.getNBT(aStack).getLong(NBT_MODE);
 	}
 	
-	public void switchMode(ItemStack aStack, EntityPlayer aPlayer) {
+	public void switchMode(ItemStack aStack, PlayerEntity aPlayer) {
 		setMode(aStack, (getMode(aStack) + 1) % (mOwned?3:5));
 		switch ((int)getMode(aStack)) {
 		case 0: UT.Entities.sendchat(aPlayer, "Single Block Mode"); break;

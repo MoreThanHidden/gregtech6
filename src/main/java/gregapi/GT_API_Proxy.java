@@ -475,7 +475,7 @@ public abstract class GT_API_Proxy extends Abstract_Proxy {
 						}
 					}
 				} else if (aEntity instanceof EntityLivingBase) {
-					if (ENTITY_CRAMMING > 0 && SERVER_TIME % 50 == 0 && !(aEntity instanceof EntityPlayer) && ((EntityLivingBase)aEntity).canBePushed() && ((EntityLivingBase)aEntity).getHealth() > 0) {
+					if (ENTITY_CRAMMING > 0 && SERVER_TIME % 50 == 0 && !(aEntity instanceof PlayerEntity) && ((EntityLivingBase)aEntity).canBePushed() && ((EntityLivingBase)aEntity).getHealth() > 0) {
 						List<?> tList = aEntity.worldObj.getEntitiesWithinAABBExcludingEntity(aEntity, aEntity.boundingBox.expand(0.2, 0.0, 0.2));
 						Class<? extends Entity> tClass = aEntity.getClass();
 						int aEntityCount = 1;
@@ -604,7 +604,7 @@ public abstract class GT_API_Proxy extends Abstract_Proxy {
 							BEAR_INVENTORY_COOL_DOWN = 100;
 							UT.Sounds.send(SFX.MC_HMM, aEvent.player);
 							for (int i = 0; i < aEvent.player.worldObj.playerEntities.size(); i++) {
-								EntityPlayer tPlayer = (EntityPlayer)aEvent.player.worldObj.playerEntities.get(i);
+								PlayerEntity tPlayer = (PlayerEntity)aEvent.player.worldObj.playerEntities.get(i);
 								if (tPlayer == null) continue;
 								if ("Bear989Sr".equalsIgnoreCase(tPlayer.getCommandSenderName())) {
 									if (tPlayer.posY < 20) {
@@ -962,7 +962,7 @@ public abstract class GT_API_Proxy extends Abstract_Proxy {
 	
 	@SubscribeEvent
 	public void onLivingDeath(LivingDeathEvent aEvent) {
-		if (aEvent.entityLiving instanceof EntityPlayerMP) NW_API.sendToPlayer(new PacketDeathPoint(UT.Code.roundDown(aEvent.entityLiving.posX), UT.Code.roundDown(aEvent.entityLiving.posY), UT.Code.roundDown(aEvent.entityLiving.posZ)), (EntityPlayerMP)aEvent.entityLiving);
+		if (aEvent.entityLiving instanceof PlayerEntityMP) NW_API.sendToPlayer(new PacketDeathPoint(UT.Code.roundDown(aEvent.entityLiving.posX), UT.Code.roundDown(aEvent.entityLiving.posY), UT.Code.roundDown(aEvent.entityLiving.posZ)), (PlayerEntityMP)aEvent.entityLiving);
 	}
 	
 	@SubscribeEvent
@@ -974,7 +974,7 @@ public abstract class GT_API_Proxy extends Abstract_Proxy {
 		if (DISABLE_ALL_IC2_CENTRIFUGE_RECIPES  ) ic2.api.recipe.Recipes.centrifuge.getRecipes().clear();
 		
 		if (aEvent.player.worldObj.isRemote) return;
-		if (aEvent.player instanceof EntityPlayerMP) mNewPlayers.add((EntityPlayerMP)aEvent.player);
+		if (aEvent.player instanceof PlayerEntityMP) mNewPlayers.add((PlayerEntityMP)aEvent.player);
 	}
 	
 	@Override
@@ -1057,7 +1057,7 @@ public abstract class GT_API_Proxy extends Abstract_Proxy {
 	
 	@SubscribeEvent
 	public void onEntityConstructingEvent(EntityConstructing aEvent) {
-		if (Abstract_Mod.sFinalized >= Abstract_Mod.sModCountUsingGTAPI && aEvent.entity instanceof EntityPlayer) EntityFoodTracker.add((EntityPlayer)aEvent.entity);
+		if (Abstract_Mod.sFinalized >= Abstract_Mod.sModCountUsingGTAPI && aEvent.entity instanceof PlayerEntity) EntityFoodTracker.add((PlayerEntity)aEvent.entity);
 	}
 	
 	@SubscribeEvent

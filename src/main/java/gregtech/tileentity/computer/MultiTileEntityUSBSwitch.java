@@ -36,7 +36,7 @@ import gregapi.tileentity.computer.TileEntityBase08DataSwitch;
 import gregapi.util.OM;
 import gregapi.util.UT;
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -102,6 +102,6 @@ public class MultiTileEntityUSBSwitch extends TileEntityBase08DataSwitch {
 	@Override public ItemStack[] getDefaultInventory(NBTTagCompound aNBT) {return new ItemStack[16];}
 	@Override public boolean canInsertItem2(int aSlot, ItemStack aStack, byte aSide) {return OM.is(OD_USB_STICKS[0], aStack);}
 	
-	@Override public Object getGUIClient2(int aGUIID, EntityPlayer aPlayer) {return new ContainerClientDefault(aPlayer.inventory, this, aGUIID, RES_PATH_GUI + "machines/USBSwitch.png");}
-	@Override public Object getGUIServer2(int aGUIID, EntityPlayer aPlayer) {return new ContainerCommonDefault(aPlayer.inventory, this, aGUIID);}
+	@Override public Object getGUIClient2(int aGUIID, PlayerEntity aPlayer) {return new ContainerClientDefault(aPlayer.inventory, this, aGUIID, RES_PATH_GUI + "machines/USBSwitch.png");}
+	@Override public Object getGUIServer2(int aGUIID, PlayerEntity aPlayer) {return new ContainerCommonDefault(aPlayer.inventory, this, aGUIID);}
 }

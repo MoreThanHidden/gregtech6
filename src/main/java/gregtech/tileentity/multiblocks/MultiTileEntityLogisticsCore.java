@@ -53,7 +53,7 @@ import gregapi.tileentity.multiblocks.TileEntityBase10MultiBlockBase;
 import gregapi.util.ST;
 import gregapi.util.UT;
 import gregapi.util.WD;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -664,7 +664,7 @@ public class MultiTileEntityLogisticsCore extends TileEntityBase10MultiBlockBase
 	}
 	
 	@Override
-	public boolean onBlockActivated3(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onBlockActivated3(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (isServerSide() && aPlayer != null && checkStructure(F)) {
 			List<String> tChat = new ArrayListNoNulls<>();
 			tChat.add("Power: " + mEnergy + " EU");

@@ -35,7 +35,7 @@ import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
@@ -95,7 +95,7 @@ public class RenderHelper {
 		glEnable(GL_CULL_FACE);
 	}
 	
-	public static void drawWrenchOverlay(EntityPlayer aPlayer, int aX, int aY, int aZ, byte aConnections, byte aSide, float aPartialTicks) {
+	public static void drawWrenchOverlay(PlayerEntity aPlayer, int aX, int aY, int aZ, byte aConnections, byte aSide, float aPartialTicks) {
 		try {Class.forName("codechicken.lib.vec.Rotation");} catch (ClassNotFoundException e) {return;}
 		
 //      GL11.glDepthFunc(GL11.GL_ALWAYS);

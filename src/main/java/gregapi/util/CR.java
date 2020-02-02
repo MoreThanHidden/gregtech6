@@ -44,7 +44,7 @@ import gregapi.recipes.AdvancedCraftingTool;
 import gregapi.recipes.ICraftingRecipeGT;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
@@ -578,7 +578,7 @@ public class CR {
 	}
 	
 	public static InventoryCrafting crafting(ItemStack... aRecipe) {
-		InventoryCrafting rCrafting = new InventoryCrafting(new Container() {@Override public boolean canInteractWith(EntityPlayer var1) {return F;}}, 3, 3);
+		InventoryCrafting rCrafting = new InventoryCrafting(new Container() {@Override public boolean canInteractWith(PlayerEntity var1) {return F;}}, 3, 3);
 		for (int i = 0; i < 9 && i < aRecipe.length; i++) rCrafting.setInventorySlotContents(i, aRecipe[i]);
 		return rCrafting;
 	}

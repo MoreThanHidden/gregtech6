@@ -29,7 +29,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.boss.EntityWither;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -56,7 +56,7 @@ public class BlockSpikeSuper extends BlockBaseSpike {
 	}
 	
 	@Override
-	public void addInformation(ItemStack aStack, int aMeta, EntityPlayer aPlayer, List<String> aList, boolean aF3_H) {
+	public void addInformation(ItemStack aStack, int aMeta, PlayerEntity aPlayer, List<String> aList, boolean aF3_H) {
 		if (aMeta < 8) {
 			aList.add(LH.Chat.ORANGE + "Deals huge Damage to anything touching it!");
 		} else {

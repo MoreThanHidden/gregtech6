@@ -35,7 +35,7 @@ import gregapi.tileentity.machines.ITileEntityCrucible;
 import gregapi.tileentity.machines.ITileEntityMold;
 import gregapi.util.UT;
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 
@@ -108,7 +108,7 @@ public class MultiTileEntityCrossing extends TileEntityBase07Paintable implement
 	@Override public boolean allowCovers            (byte aSide) {return F;}
 	@Override public boolean attachCoversFirst      (byte aSide) {return F;}
 	@Override public boolean isObstructingBlockAt   (byte aSide) {return F;}
-	@Override public boolean checkObstruction(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {return F;}
+	@Override public boolean checkObstruction(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {return F;}
 	@Override public int getLightOpacity() {return LIGHT_OPACITY_NONE;}
 	
 	@Override public boolean canDrop(int aInventorySlot) {return T;}

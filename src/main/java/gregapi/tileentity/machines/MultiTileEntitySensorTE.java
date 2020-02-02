@@ -31,7 +31,7 @@ import gregapi.tileentity.ITileEntityServerTickPost;
 import gregapi.tileentity.delegate.DelegatorTileEntity;
 import gregapi.util.UT;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -146,7 +146,7 @@ public abstract class MultiTileEntitySensorTE extends MultiTileEntitySensor impl
 	}
 	
 	@Override
-	public boolean onBlockActivated3(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onBlockActivated3(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (aSide == mFacing) {
 			if (isServerSide()) {
 				if ((mMode & 127) != MODE_DISPLAY && (mMode & 127) != MODE_PERCENT && (mMode & 127) != MODE_FULL && (mMode & 127) != MODE_NOT_FULL) {

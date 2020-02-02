@@ -52,7 +52,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockCauldron;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.EnumAction;
@@ -144,7 +144,7 @@ public abstract class TileEntityBase08FluidContainer extends TileEntityBase07Pai
 	}
 	
 	@Override
-	public boolean onBlockActivated3(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onBlockActivated3(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (isClientSide()) return T;
 		
 		ItemStack aStack = aPlayer.getCurrentEquippedItem(), tStack = ST.container(ST.amount(1, aStack), T);
@@ -205,7 +205,7 @@ public abstract class TileEntityBase08FluidContainer extends TileEntityBase07Pai
 	}
 	
 	@Override
-	public boolean onItemUseFirst(MultiTileEntityItemInternal aItem, ItemStack aStack, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ, byte aSide, float hitX, float hitY, float hitZ) {
+	public boolean onItemUseFirst(MultiTileEntityItemInternal aItem, ItemStack aStack, PlayerEntity aPlayer, World aWorld, int aX, int aY, int aZ, byte aSide, float hitX, float hitY, float hitZ) {
 		if (aWorld.isRemote || aPlayer == null || !aPlayer.canPlayerEdit(aX, aY, aZ, aSide, aStack) || aStack.stackSize != 1) return F;
 		if (canWaterCrops()) {
 			FluidStack mFluid = aItem.getFluid(aStack);
@@ -268,7 +268,7 @@ public abstract class TileEntityBase08FluidContainer extends TileEntityBase07Pai
 	}
 	
 	@Override
-	public ItemStack onItemRightClick(MultiTileEntityItemInternal aItem, ItemStack aStack, World aWorld, EntityPlayer aPlayer) {
+	public ItemStack onItemRightClick(MultiTileEntityItemInternal aItem, ItemStack aStack, World aWorld, PlayerEntity aPlayer) {
 		if (canPickUpFluids() && aStack.stackSize == 1) {
 			MovingObjectPosition tTarget = WD.getMOP(aWorld, aPlayer, T);
 			if (tTarget != null && tTarget.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK && aWorld.canMineBlock(aPlayer, tTarget.blockX, tTarget.blockY, tTarget.blockZ)) {
@@ -346,7 +346,7 @@ public abstract class TileEntityBase08FluidContainer extends TileEntityBase07Pai
 		return isDrinkable() && aStack.stackSize == 1 ? FoodStatFluid.INSTANCE.getFoodAction(aStack.getItem(), aStack) : EnumAction.none;
 	}
 	
-	public ItemStack onEaten(MultiTileEntityItemInternal aItem, ItemStack aStack, World aWorld, EntityPlayer aPlayer) {
+	public ItemStack onEaten(MultiTileEntityItemInternal aItem, ItemStack aStack, World aWorld, PlayerEntity aPlayer) {
 		if (!isDrinkable() || aStack.stackSize != 1) return aStack;
 		
 		int tFoodLevel = FoodStatFluid.INSTANCE.getFoodLevel(aStack.getItem(), aStack, aPlayer);

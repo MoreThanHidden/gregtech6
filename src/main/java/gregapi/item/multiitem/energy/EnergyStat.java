@@ -30,7 +30,7 @@ import gregapi.item.IItemEnergy;
 import gregapi.util.ST;
 import gregapi.util.UT;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -98,15 +98,15 @@ public class EnergyStat implements IItemEnergy {
 			if (tArmor == aStack || ST.invalid(tArmor) || !COMPAT_EU_ITEM.is(tArmor) || VMAX[COMPAT_EU_ITEM.tier(tArmor)] < tMinInput || !COMPAT_EU_ITEM.provider(tArmor)) continue;
 			setEnergyStored(aEnergyType, aStack, tContent+COMPAT_EU_ITEM.decharge(tArmor, tCapacity-tContent, T));
 		}} catch(Throwable e) {e.printStackTrace(ERR);}
-		if (aPlayer instanceof EntityPlayer) {
-			if (((EntityPlayer)aPlayer).openContainer != null) ((EntityPlayer)aPlayer).openContainer.detectAndSendChanges();
+		if (aPlayer instanceof PlayerEntity) {
+			if (((PlayerEntity)aPlayer).openContainer != null) ((PlayerEntity)aPlayer).openContainer.detectAndSendChanges();
 		}
 		return aStack;
 	}
 	
 	@Override
 	public boolean useEnergy(TagData aEnergyType, ItemStack aStack, long aEnergyAmount, EntityLivingBase aPlayer, IInventory aInventory, World aWorld, int aX, int aY, int aZ, boolean aDoUse) {
-		if (aPlayer instanceof EntityPlayer && ((EntityPlayer)aPlayer).capabilities.isCreativeMode) return T;
+		if (aPlayer instanceof PlayerEntity && ((PlayerEntity)aPlayer).capabilities.isCreativeMode) return T;
 		if (aEnergyType != mType && aEnergyType != null) return F;
 		rechargeFromPlayer(mType, aStack, aPlayer, aInventory, aWorld, aX, aY, aZ);
 		long tStored = getEnergyStored(mType, aStack);

@@ -34,8 +34,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntitySnowman;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerEntityMP;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.world.BlockEvent;
 
@@ -48,7 +48,7 @@ public class GT_Tool_Plow extends ToolStats {
 	}
 	
 	@Override
-	public float getNormalDamageAgainstEntity(float aOriginalDamage, Entity aEntity, ItemStack aStack, EntityPlayer aPlayer) {
+	public float getNormalDamageAgainstEntity(float aOriginalDamage, Entity aEntity, ItemStack aStack, PlayerEntity aPlayer) {
 		return aEntity instanceof EntitySnowman ? aOriginalDamage*4 : aOriginalDamage;
 	}
 	
@@ -66,11 +66,11 @@ public class GT_Tool_Plow extends ToolStats {
 	}
 	
 	@Override
-	public int convertBlockDrops(List<ItemStack> aDrops, ItemStack aStack, EntityPlayer aPlayer, Block aBlock, long aAvailableDurability, int aX, int aY, int aZ, byte aMetaData, int aFortune, boolean aSilkTouch, BlockEvent.HarvestDropsEvent aEvent) {
+	public int convertBlockDrops(List<ItemStack> aDrops, ItemStack aStack, PlayerEntity aPlayer, Block aBlock, long aAvailableDurability, int aX, int aY, int aZ, byte aMetaData, int aFortune, boolean aSilkTouch, BlockEvent.HarvestDropsEvent aEvent) {
 		int rConversions = 0;
-		if (sIsHarvestingRightNow.get() == null && aPlayer instanceof EntityPlayerMP) {
+		if (sIsHarvestingRightNow.get() == null && aPlayer instanceof PlayerEntityMP) {
 			sIsHarvestingRightNow.set(this);
-			for (int i = -1; i < 2; i++) for (int j = -1; j < 2; j++) for (int k = -1; k < 2; k++) if (i != 0 || j != 0 || k != 0) if (aStack.getItem().getDigSpeed(aStack, aPlayer.worldObj.getBlock(aX+i, aY+j, aZ+k), aPlayer.worldObj.getBlockMetadata(aX+i, aY+j, aZ+k)) > 0) if (((EntityPlayerMP)aPlayer).theItemInWorldManager.tryHarvestBlock(aX+i, aY+j, aZ+k)) rConversions++;
+			for (int i = -1; i < 2; i++) for (int j = -1; j < 2; j++) for (int k = -1; k < 2; k++) if (i != 0 || j != 0 || k != 0) if (aStack.getItem().getDigSpeed(aStack, aPlayer.worldObj.getBlock(aX+i, aY+j, aZ+k), aPlayer.worldObj.getBlockMetadata(aX+i, aY+j, aZ+k)) > 0) if (((PlayerEntityMP)aPlayer).theItemInWorldManager.tryHarvestBlock(aX+i, aY+j, aZ+k)) rConversions++;
 			sIsHarvestingRightNow.set(null);
 		}
 		return rConversions;

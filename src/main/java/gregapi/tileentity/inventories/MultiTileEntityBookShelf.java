@@ -46,8 +46,8 @@ import gregapi.util.ST;
 import gregapi.util.UT;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerEntityMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
@@ -157,7 +157,7 @@ public class MultiTileEntityBookShelf extends TileEntityBase09FacingSingle imple
 	public void onTick2(long aTimer, boolean aIsServerSide) {
 		super.onTick2(aTimer, aIsServerSide);
 		if (aIsServerSide) {
-			if (aTimer % 300 == 0 && (UT.Code.stringValid(mDungeonLootNameFront) || UT.Code.stringValid(mDungeonLootNameBack)) && !worldObj.getEntitiesWithinAABB(EntityPlayer.class, box(-32, -32, -32, +33, +33, +33)).isEmpty()) generateDungeonLoot();
+			if (aTimer % 300 == 0 && (UT.Code.stringValid(mDungeonLootNameFront) || UT.Code.stringValid(mDungeonLootNameBack)) && !worldObj.getEntitiesWithinAABB(PlayerEntity.class, box(-32, -32, -32, +33, +33, +33)).isEmpty()) generateDungeonLoot();
 			
 			if (mRedstoneDelay > 0) if (--mRedstoneDelay == 0) causeBlockUpdate();
 			
@@ -176,14 +176,14 @@ public class MultiTileEntityBookShelf extends TileEntityBase09FacingSingle imple
 	public long onToolClick2(String aTool, long aRemainingDurability, long aQuality, Entity aPlayer, List<String> aChatReturn, IInventory aPlayerInventory, boolean aSneaking, ItemStack aStack, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		long rReturn = super.onToolClick2(aTool, aRemainingDurability, aQuality, aPlayer, aChatReturn, aPlayerInventory, aSneaking, aStack, aSide, aHitX, aHitY, aHitZ);
 		if (rReturn > 0 || isClientSide()) return rReturn;
-		if (aTool.equals(TOOL_magnifyingglass) && aPlayer instanceof EntityPlayerMP) {
+		if (aTool.equals(TOOL_magnifyingglass) && aPlayer instanceof PlayerEntityMP) {
 			float[] tCoords = UT.Code.getFacingCoordsClicked(aSide, aHitX, aHitY, aHitZ);
 			if (tCoords[0] >= PX_P[1] && tCoords[0] <= PX_N[1] && tCoords[1] >= PX_P[1] && tCoords[1] <= PX_N[1]) {
 				int tIndex = -1;
 				if (aSide == mFacing            ) tIndex = (tCoords[1] < PX_P[8]? 6:13)-(int)UT.Code.bind_(0, 6, (long)(8*(tCoords[0]-PX_P[1])));
 				if (aSide == OPPOSITES[mFacing] ) tIndex = (tCoords[1] < PX_P[8]?20:27)-(int)UT.Code.bind_(0, 6, (long)(8*(tCoords[0]-PX_P[1])));
 				if (tIndex >= 0 && slotHas(tIndex)) {
-					NW_API.sendToPlayer(new PacketItemStackChat(slot(tIndex)), (EntityPlayerMP)aPlayer);
+					NW_API.sendToPlayer(new PacketItemStackChat(slot(tIndex)), (PlayerEntityMP)aPlayer);
 					return 1;
 				}
 			}
@@ -192,7 +192,7 @@ public class MultiTileEntityBookShelf extends TileEntityBase09FacingSingle imple
 	}
 	
 	@Override
-	public boolean onBlockActivated3(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onBlockActivated3(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (isServerSide() && isUseableByPlayerGUI(aPlayer)) generateDungeonLoot();
 		float[] tCoords = UT.Code.getFacingCoordsClicked(aSide, aHitX, aHitY, aHitZ);
 		if (tCoords[0] >= PX_P[1] && tCoords[0] <= PX_N[1] && tCoords[1] >= PX_P[1] && tCoords[1] <= PX_N[1]) {
@@ -208,7 +208,7 @@ public class MultiTileEntityBookShelf extends TileEntityBase09FacingSingle imple
 		return F;
 	}
 	
-	private boolean switchBooks(EntityPlayer aPlayer, int aSlot) {
+	private boolean switchBooks(PlayerEntity aPlayer, int aSlot) {
 		if (slotHas(aSlot)) {
 			if (!aPlayer.isSneaking()) {
 				if (ST.equal(slot(aSlot), Blocks.stone_button) || ST.equal(slot(aSlot), Blocks.wooden_button)) {

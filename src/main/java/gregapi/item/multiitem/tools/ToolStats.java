@@ -41,7 +41,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -93,13 +93,13 @@ public abstract class ToolStats implements IToolStats {
 	}
 	
 	@Override
-	public float getMiningSpeed(Block aBlock, byte aMetaData, float aDefault, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ) {
+	public float getMiningSpeed(Block aBlock, byte aMetaData, float aDefault, PlayerEntity aPlayer, World aWorld, int aX, int aY, int aZ) {
 		return aDefault;
 	}
 	
 	@Override
 	public DamageSource getDamageSource(EntityLivingBase aPlayer, Entity aEntity) {
-		return DamageSources.getCombatDamage(aPlayer instanceof EntityPlayer ? "player" : "mob", aPlayer, aEntity instanceof EntityLivingBase ? getDeathMessage(aPlayer, (EntityLivingBase)aEntity) : null);
+		return DamageSources.getCombatDamage(aPlayer instanceof PlayerEntity ? "player" : "mob", aPlayer, aEntity instanceof EntityLivingBase ? getDeathMessage(aPlayer, (EntityLivingBase)aEntity) : null);
 	}
 	
 	public IChatComponent getDeathMessage(EntityLivingBase aPlayer, EntityLivingBase aEntity) {
@@ -118,7 +118,7 @@ public abstract class ToolStats implements IToolStats {
 	
 	public IChatComponent getDeathMessage(EntityLivingBase aPlayer, EntityLivingBase aEntity, String aNamePlayer, String aNameEntity) {
 		String rMessage = getDeathMessage();
-		if (UT.Code.stringInvalid(rMessage)) return new EntityDamageSource(aPlayer instanceof EntityPlayer ? "player" : "mob", aPlayer).func_151519_b(aEntity);
+		if (UT.Code.stringInvalid(rMessage)) return new EntityDamageSource(aPlayer instanceof PlayerEntity ? "player" : "mob", aPlayer).func_151519_b(aEntity);
 		return new ChatComponentText(rMessage.replace("[KILLER]", EnumChatFormatting.GREEN+aNamePlayer+EnumChatFormatting.WHITE).replace("[VICTIM]", EnumChatFormatting.RED+aNameEntity+EnumChatFormatting.WHITE));
 	}
 	
@@ -127,11 +127,11 @@ public abstract class ToolStats implements IToolStats {
 	}
 	
 	@Override
-	public int convertBlockDrops(List<ItemStack> aDrops, ItemStack aStack, EntityPlayer aPlayer, Block aBlock, long aAvailableDurability, int aX, int aY, int aZ, byte aMetaData, int aFortune, boolean aSilkTouch, BlockEvent.HarvestDropsEvent aEvent) {
+	public int convertBlockDrops(List<ItemStack> aDrops, ItemStack aStack, PlayerEntity aPlayer, Block aBlock, long aAvailableDurability, int aX, int aY, int aZ, byte aMetaData, int aFortune, boolean aSilkTouch, BlockEvent.HarvestDropsEvent aEvent) {
 		return 0;
 	}
 	
-	public boolean harvestGrass(List<ItemStack> aDrops, ItemStack aStack, EntityPlayer aPlayer, Block aBlock, long aAvailableDurability, int aX, int aY, int aZ, byte aMetaData, int aFortune, boolean aSilkTouch, BlockEvent.HarvestDropsEvent aEvent) {
+	public boolean harvestGrass(List<ItemStack> aDrops, ItemStack aStack, PlayerEntity aPlayer, Block aBlock, long aAvailableDurability, int aX, int aY, int aZ, byte aMetaData, int aFortune, boolean aSilkTouch, BlockEvent.HarvestDropsEvent aEvent) {
 		if (aBlock == Blocks.tallgrass) {
 			switch(aMetaData) {
 			case 1: case 2: aDrops.add(IL.Grass.get(1+RNGSUS.nextInt(1+aFortune))); return T;
@@ -168,7 +168,7 @@ public abstract class ToolStats implements IToolStats {
 		return F;
 	}
 	
-	public boolean harvestStick(List<ItemStack> aDrops, ItemStack aStack, EntityPlayer aPlayer, Block aBlock, long aAvailableDurability, int aX, int aY, int aZ, byte aMetaData, int aFortune, boolean aSilkTouch, BlockEvent.HarvestDropsEvent aEvent) {
+	public boolean harvestStick(List<ItemStack> aDrops, ItemStack aStack, PlayerEntity aPlayer, Block aBlock, long aAvailableDurability, int aX, int aY, int aZ, byte aMetaData, int aFortune, boolean aSilkTouch, BlockEvent.HarvestDropsEvent aEvent) {
 		if (aBlock == Blocks.tallgrass) {
 			switch(aMetaData) {
 			case 0: aDrops.add(ST.make(Items.stick, 1+RNGSUS.nextInt(2+aFortune), 0)); return T;
@@ -221,7 +221,7 @@ public abstract class ToolStats implements IToolStats {
 	}
 	
 	@Override
-	public void onToolCrafted(ItemStack aStack, EntityPlayer aPlayer) {
+	public void onToolCrafted(ItemStack aStack, PlayerEntity aPlayer) {
 		aPlayer.triggerAchievement(AchievementList.openInventory);
 		aPlayer.triggerAchievement(AchievementList.mineWood);
 		aPlayer.triggerAchievement(AchievementList.buildWorkBench);
@@ -233,17 +233,17 @@ public abstract class ToolStats implements IToolStats {
 	}
 	
 	@Override
-	public float getNormalDamageAgainstEntity(float aOriginalDamage, Entity aEntity, ItemStack aStack, EntityPlayer aPlayer) {
+	public float getNormalDamageAgainstEntity(float aOriginalDamage, Entity aEntity, ItemStack aStack, PlayerEntity aPlayer) {
 		return aOriginalDamage;
 	}
 	
 	@Override
-	public float getMagicDamageAgainstEntity(float aOriginalDamage, Entity aEntity, ItemStack aStack, EntityPlayer aPlayer) {
+	public float getMagicDamageAgainstEntity(float aOriginalDamage, Entity aEntity, ItemStack aStack, PlayerEntity aPlayer) {
 		return aOriginalDamage;
 	}
 	
 	@Override
-	public void afterDealingDamage(float aNormalDamage, float aMagicDamage, int aFireAspect, boolean aCriticalHit, Entity aEntity, ItemStack aStack, EntityPlayer aPlayer) {
+	public void afterDealingDamage(float aNormalDamage, float aMagicDamage, int aFireAspect, boolean aCriticalHit, Entity aEntity, ItemStack aStack, PlayerEntity aPlayer) {
 		if (aEntity instanceof EntityLivingBase && aFireAspect > 0) aEntity.setFire(aFireAspect * 4);
 		int tKnockback = (aPlayer.isSprinting()?1:0) + (aEntity instanceof EntityLivingBase?EnchantmentHelper.getKnockbackModifier(aPlayer, (EntityLivingBase)aEntity):0);
 		if (tKnockback > 0) {

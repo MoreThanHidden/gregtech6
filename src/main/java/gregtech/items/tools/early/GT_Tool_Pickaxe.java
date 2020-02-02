@@ -29,7 +29,7 @@ import gregapi.item.multiitem.tools.ToolStats;
 import gregapi.render.IIconContainer;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.AchievementList;
@@ -62,7 +62,7 @@ public class GT_Tool_Pickaxe extends ToolStats {
 	}
 	
 	@Override
-	public void onToolCrafted(ItemStack aStack, EntityPlayer aPlayer) {
+	public void onToolCrafted(ItemStack aStack, PlayerEntity aPlayer) {
 		super.onToolCrafted(aStack, aPlayer);
 		aPlayer.triggerAchievement(AchievementList.buildPickaxe);
 		aPlayer.triggerAchievement(AchievementList.buildBetterPickaxe);

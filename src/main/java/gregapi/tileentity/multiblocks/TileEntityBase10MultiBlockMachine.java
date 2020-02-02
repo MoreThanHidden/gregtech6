@@ -29,7 +29,7 @@ import gregapi.tileentity.delegate.DelegatorTileEntity;
 import gregapi.tileentity.machines.MultiTileEntityBasicMachine;
 import gregapi.util.UT;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -143,7 +143,7 @@ public abstract class TileEntityBase10MultiBlockMachine extends MultiTileEntityB
 	@Override public boolean hasCustomInventoryName         (MultiTileEntityMultiBlockPart aPart) {return hasCustomInventoryName();}
 	@Override public int getInventoryStackLimit             (MultiTileEntityMultiBlockPart aPart) {return getInventoryStackLimit();}
 	@Override public void markDirty                         (MultiTileEntityMultiBlockPart aPart) {markDirty();}
-	@Override public boolean isUseableByPlayer              (MultiTileEntityMultiBlockPart aPart, EntityPlayer aPlayer) {return isUseableByPlayer(aPlayer);}
+	@Override public boolean isUseableByPlayer              (MultiTileEntityMultiBlockPart aPart, PlayerEntity aPlayer) {return isUseableByPlayer(aPlayer);}
 	@Override public void openInventory                     (MultiTileEntityMultiBlockPart aPart) {openInventory();}
 	@Override public void closeInventory                    (MultiTileEntityMultiBlockPart aPart) {closeInventory();}
 	@Override public boolean isItemValidForSlot             (MultiTileEntityMultiBlockPart aPart, int aSlot, ItemStack aStack) {return isItemValidForSlot(aSlot, aStack);}

@@ -46,7 +46,7 @@ import micdoodle8.mods.galacticraft.core.energy.EnergyConfigHandler;
 import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -143,7 +143,7 @@ public abstract class MultiItem extends ItemBase implements IItemEnergy {
 	}
 	
 	@Override
-	public boolean itemInteractionForEntity(ItemStack aStack, EntityPlayer aPlayer, EntityLivingBase aEntity) {
+	public boolean itemInteractionForEntity(ItemStack aStack, PlayerEntity aPlayer, EntityLivingBase aEntity) {
 		useEnergy(TD.Energy.EU, aStack, 0, aPlayer, null, null, 0, 0, 0, T);
 		isItemStackUsable(aStack);
 		ArrayList<IBehavior<MultiItem>> tList = mItemBehaviors.get((short)getDamage(aStack));
@@ -163,7 +163,7 @@ public abstract class MultiItem extends ItemBase implements IItemEnergy {
 	}
 	
 	@Override
-	public boolean onLeftClickEntity(ItemStack aStack, EntityPlayer aPlayer, Entity aEntity) {
+	public boolean onLeftClickEntity(ItemStack aStack, PlayerEntity aPlayer, Entity aEntity) {
 		useEnergy(TD.Energy.EU, aStack, 0, aPlayer, null, null, 0, 0, 0, T);
 		isItemStackUsable(aStack);
 		ArrayList<IBehavior<MultiItem>> tList = mItemBehaviors.get((short)getDamage(aStack));
@@ -183,7 +183,7 @@ public abstract class MultiItem extends ItemBase implements IItemEnergy {
 	}
 	
 	@Override
-	public boolean onItemUse(ItemStack aStack, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ, int aSide, float hitX, float hitY, float hitZ) {
+	public boolean onItemUse(ItemStack aStack, PlayerEntity aPlayer, World aWorld, int aX, int aY, int aZ, int aSide, float hitX, float hitY, float hitZ) {
 		if (ST.ownedBy(MD.BbLC, aWorld, aX, aY, aZ)) return F;
 		useEnergy(TD.Energy.EU, aStack, 0, aPlayer, null, null, 0, 0, 0, T);
 		isItemStackUsable(aStack);
@@ -204,7 +204,7 @@ public abstract class MultiItem extends ItemBase implements IItemEnergy {
 	}
 	
 	@Override
-	public boolean onItemUseFirst(ItemStack aStack, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ, int aSide, float hitX, float hitY, float hitZ) {
+	public boolean onItemUseFirst(ItemStack aStack, PlayerEntity aPlayer, World aWorld, int aX, int aY, int aZ, int aSide, float hitX, float hitY, float hitZ) {
 		if (ST.ownedBy(MD.BbLC, aWorld, aX, aY, aZ)) return F;
 		useEnergy(TD.Energy.EU, aStack, 0, aPlayer, null, null, 0, 0, 0, T);
 		isItemStackUsable(aStack);
@@ -225,7 +225,7 @@ public abstract class MultiItem extends ItemBase implements IItemEnergy {
 	}
 	
 	@Override
-	public ItemStack onItemRightClick(ItemStack aStack, World aWorld, EntityPlayer aPlayer) {
+	public ItemStack onItemRightClick(ItemStack aStack, World aWorld, PlayerEntity aPlayer) {
 		useEnergy(TD.Energy.EU, aStack, 0, aPlayer, null, null, 0, 0, 0, T);
 		isItemStackUsable(aStack);
 		ArrayList<IBehavior<MultiItem>> tList = mItemBehaviors.get((short)getDamage(aStack));
@@ -239,7 +239,7 @@ public abstract class MultiItem extends ItemBase implements IItemEnergy {
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public final void addInformation(ItemStack aStack, EntityPlayer aPlayer, @SuppressWarnings("rawtypes") List aList, boolean aF3_H) {
+	public final void addInformation(ItemStack aStack, PlayerEntity aPlayer, @SuppressWarnings("rawtypes") List aList, boolean aF3_H) {
 		isItemStackUsable(aStack);
 		
 		String tKey = getUnlocalizedName(aStack) + ".tooltip", tString = LanguageHandler.translate(tKey, tKey);

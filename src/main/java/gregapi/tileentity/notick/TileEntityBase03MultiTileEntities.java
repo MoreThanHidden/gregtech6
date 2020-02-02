@@ -50,8 +50,8 @@ import gregapi.render.IRenderedBlockObject;
 import gregapi.render.IRenderedBlockObjectSideCheck;
 import gregapi.util.UT;
 import gregapi.util.WD;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerEntityMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MovingObjectPosition;
@@ -62,7 +62,7 @@ import net.minecraftforge.common.util.FakePlayer;
  */
 public abstract class TileEntityBase03MultiTileEntities extends TileEntityBase02Sync implements IRenderedBlockObjectSideCheck, IRenderedBlockObject, IMTE_OnPainting, IMTE_GetPickBlock, IMTE_GetStackFromBlock, IMTE_OnRegistrationFirst, IMTE_RecolourBlock, IMTE_GetDrops, IMTE_OnBlockActivated, IMTE_ShouldSideBeRendered {
 	@Override
-	public void sendClientData(boolean aSendAll, EntityPlayerMP aPlayer) {
+	public void sendClientData(boolean aSendAll, PlayerEntityMP aPlayer) {
 		super.sendClientData(aSendAll, aPlayer);
 		if (aSendAll && UT.Code.stringValid(mCustomName)) {
 			if (aPlayer == null) {
@@ -155,16 +155,16 @@ public abstract class TileEntityBase03MultiTileEntities extends TileEntityBase02
 	}
 	
 	@Override
-	public final boolean onBlockActivated(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public final boolean onBlockActivated(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		worldObj.markTileEntityChunkModified(xCoord, yCoord, zCoord, this);
 		return allowRightclick(aPlayer) && (checkObstruction(aPlayer, aSide, aHitX, aHitY, aHitZ) || onBlockActivated2(aPlayer, aSide, aHitX, aHitY, aHitZ));
 	}
 	
-	public boolean onBlockActivated2(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onBlockActivated2(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		return F;
 	}
 	
-	public boolean checkObstruction(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean checkObstruction(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		return !(aPlayer == null || aPlayer instanceof FakePlayer || SIDES_INVALID[aSide] || !WD.obstructed(worldObj, xCoord, yCoord, zCoord, aSide));
 	}
 	

@@ -40,7 +40,7 @@ import gregapi.util.UT;
 import gregapi.util.WD;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -132,7 +132,7 @@ public class MultiTileEntityFaucet extends TileEntityBase10Attachment implements
 	}
 	
 	@Override
-	public boolean onBlockActivated3(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onBlockActivated3(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (isServerSide()) {
 			DelegatorTileEntity<TileEntity> tDelegator = getAdjacentTileEntity(mFacing);
 			if (tDelegator.mTileEntity instanceof ITileEntityCrucible) ((ITileEntityCrucible)tDelegator.mTileEntity).fillMoldAtSide(this, tDelegator.mSideOfTileEntity, mFacing);

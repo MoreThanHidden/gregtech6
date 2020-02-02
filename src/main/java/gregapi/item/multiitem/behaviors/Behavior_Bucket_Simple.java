@@ -33,7 +33,7 @@ import net.minecraft.block.BlockCauldron;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.passive.EntityMooshroom;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -52,7 +52,7 @@ public class Behavior_Bucket_Simple extends AbstractBehaviorDefault {
 	}
 	
 	@Override
-	public ItemStack onItemRightClick(MultiItem aItem, ItemStack aStack, World aWorld, EntityPlayer aPlayer) {
+	public ItemStack onItemRightClick(MultiItem aItem, ItemStack aStack, World aWorld, PlayerEntity aPlayer) {
 		FluidStack mFluid = FL.getFluid(aStack, T);
 		MovingObjectPosition tTarget = WD.getMOP(aWorld, aPlayer, mFluid == null);
 		if (tTarget == null || tTarget.typeOfHit != MovingObjectPosition.MovingObjectType.BLOCK) return aStack;
@@ -97,7 +97,7 @@ public class Behavior_Bucket_Simple extends AbstractBehaviorDefault {
 	}
 	
 	@Override
-	public boolean onRightClickEntity(MultiItem aItem, ItemStack aStack, EntityPlayer aPlayer, Entity aEntity) {
+	public boolean onRightClickEntity(MultiItem aItem, ItemStack aStack, PlayerEntity aPlayer, Entity aEntity) {
 		if (FL.getFluid(aStack, T) == null && (aEntity.getClass() == EntityCow.class || aEntity.getClass() == EntityMooshroom.class) && !((EntityCow)aEntity).isChild()) {
 			if (!aPlayer.worldObj.isRemote || UT.Entities.hasInfiniteItems(aPlayer)) ST.set(aStack, FL.fill(FL.Milk.make(Integer.MAX_VALUE), aStack, F, T, T, T));
 			return T;
@@ -106,7 +106,7 @@ public class Behavior_Bucket_Simple extends AbstractBehaviorDefault {
 	}
 	
 	@Override
-	public boolean onItemUseFirst(MultiItem aItem, ItemStack aStack, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ, byte aSide, float hitX, float hitY, float hitZ) {
+	public boolean onItemUseFirst(MultiItem aItem, ItemStack aStack, PlayerEntity aPlayer, World aWorld, int aX, int aY, int aZ, byte aSide, float hitX, float hitY, float hitZ) {
 		if (aPlayer.worldObj.isRemote) return F;
 		FluidStack mFluid = FL.getFluid(aStack, T);
 		if (mFluid == null) return F;

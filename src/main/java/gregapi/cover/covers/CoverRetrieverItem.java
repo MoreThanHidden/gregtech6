@@ -39,7 +39,7 @@ import gregapi.tileentity.delegate.DelegatorTileEntity;
 import gregapi.util.ST;
 import gregapi.util.UT;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -122,9 +122,9 @@ public class CoverRetrieverItem extends AbstractCoverAttachment {
 	
 	@Override
 	public boolean onCoverClickedRight(byte aCoverSide, CoverData aData, Entity aPlayer, byte aSideClicked, float aHitX, float aHitY, float aHitZ) {
-		if (aPlayer instanceof EntityPlayer && aData.mTileEntity.isServerSide()) {
+		if (aPlayer instanceof PlayerEntity && aData.mTileEntity.isServerSide()) {
 			if (aData.mNBTs[aCoverSide] == null || !aData.mNBTs[aCoverSide].hasKey("gt.filter.item")) {
-				ItemStack tStack = ST.make(((EntityPlayer)aPlayer).getCurrentEquippedItem(), null, null);
+				ItemStack tStack = ST.make(((PlayerEntity)aPlayer).getCurrentEquippedItem(), null, null);
 				if (ST.valid(tStack)) {
 					aData.mNBTs[aCoverSide] = ST.save(null, "gt.filter.item", tStack);
 					UT.Sounds.send(aData.mTileEntity.getWorld(), SFX.MC_CLICK, 1, 1, aData.mTileEntity.getCoords());

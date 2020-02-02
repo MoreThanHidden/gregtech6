@@ -48,7 +48,7 @@ import gregapi.tileentity.energy.ITileEntityEnergyDataCapacitor;
 import gregapi.util.UT;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -195,7 +195,7 @@ public class MultiTileEntityBoilerTank extends TileEntityBase09FacingSingle impl
 	}
 	
 	@Override
-	public boolean removedByPlayer(World aWorld, EntityPlayer aPlayer, boolean aWillHarvest) {
+	public boolean removedByPlayer(World aWorld, PlayerEntity aPlayer, boolean aWillHarvest) {
 		if (isServerSide() && !UT.Entities.isCreative(aPlayer) && mBarometer > 4) explode();
 		return worldObj.setBlockToAir(xCoord, yCoord, zCoord);
 	}

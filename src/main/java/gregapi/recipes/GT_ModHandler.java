@@ -28,7 +28,7 @@ import gregapi.util.ST;
 import gregapi.util.UT;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
@@ -50,7 +50,7 @@ public class GT_ModHandler {
 	@Deprecated public static int chargeElectricItem(ItemStack aStack, int aCharge, int aTier, boolean aIgnoreLimit, boolean aSimulate) {return COMPAT_EU_ITEM != null && ST.valid(aStack) && COMPAT_EU_ITEM.is(aStack) ? UT.Code.bindInt(COMPAT_EU_ITEM.charge(aStack, aCharge, !aSimulate)) : 0;}
 	@Deprecated public static int dischargeElectricItem(ItemStack aStack, int aCharge, int aTier, boolean aIgnoreLimit, boolean aSimulate, boolean aIgnoreDischargability) {return COMPAT_EU_ITEM != null && ST.valid(aStack) && COMPAT_EU_ITEM.is(aStack) ? UT.Code.bindInt(COMPAT_EU_ITEM.decharge(aStack, aCharge, !aSimulate)) : 0;}
 	@Deprecated public static boolean canUseElectricItem(ItemStack aStack, int aCharge) {return F;}
-	@Deprecated public static boolean useElectricItem(ItemStack aStack, int aCharge, EntityPlayer aPlayer) {return COMPAT_EU_ITEM != null && ST.valid(aStack) && COMPAT_EU_ITEM.is(aStack) && COMPAT_EU_ITEM.decharge(aStack, aCharge, T) > 0;}
+	@Deprecated public static boolean useElectricItem(ItemStack aStack, int aCharge, PlayerEntity aPlayer) {return COMPAT_EU_ITEM != null && ST.valid(aStack) && COMPAT_EU_ITEM.is(aStack) && COMPAT_EU_ITEM.decharge(aStack, aCharge, T) > 0;}
 	@Deprecated public static boolean isChargerItem(ItemStack aStack) {return COMPAT_EU_ITEM != null && ST.valid(aStack) && COMPAT_EU_ITEM.is(aStack) && COMPAT_EU_ITEM.provider(aStack);}
 	@Deprecated public static boolean isElectricItem(ItemStack aStack) {return COMPAT_EU_ITEM != null && ST.valid(aStack) && COMPAT_EU_ITEM.is(aStack);}
 	@Deprecated public static boolean isElectricItem(ItemStack aStack, byte aTier) {return COMPAT_EU_ITEM != null && ST.valid(aStack) && COMPAT_EU_ITEM.is(aStack) && COMPAT_EU_ITEM.tier(aStack) == aTier;}

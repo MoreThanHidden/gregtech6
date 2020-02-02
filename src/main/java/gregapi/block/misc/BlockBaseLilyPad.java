@@ -40,7 +40,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityBoat;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -86,7 +86,7 @@ public class BlockBaseLilyPad extends BlockBaseMeta implements IPlantable, IRend
 	}
 	
 	@Override
-	public ItemStack onItemRightClick(ItemStack aStack, World aWorld, EntityPlayer aPlayer) {
+	public ItemStack onItemRightClick(ItemStack aStack, World aWorld, PlayerEntity aPlayer) {
 		MovingObjectPosition tPos = WD.getMOP(aWorld, aPlayer, T);
 		if (tPos == null || tPos.typeOfHit != MovingObjectPosition.MovingObjectType.BLOCK) return aStack;
 		int aX = tPos.blockX, aY = tPos.blockY, aZ = tPos.blockZ;

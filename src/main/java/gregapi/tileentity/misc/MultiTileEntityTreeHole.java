@@ -33,7 +33,7 @@ import gregapi.tileentity.base.TileEntityBase09FacingSingle;
 import gregapi.util.ST;
 import gregapi.util.UT;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -75,7 +75,7 @@ public abstract class MultiTileEntityTreeHole extends TileEntityBase09FacingSing
 	}
 	
 	@Override
-	public boolean onBlockActivated3(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onBlockActivated3(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (aSide != mFacing) return F;
 		ItemStack aStack = aPlayer.getCurrentEquippedItem();
 		if (aStack != null && aStack.getItem() instanceof ItemBlock) return F;

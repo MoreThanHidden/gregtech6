@@ -27,7 +27,7 @@ import gregapi.item.multiitem.MultiItemTool;
 import gregapi.render.IIconContainer;
 import gregapi.util.WD;
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
@@ -45,7 +45,7 @@ public class GT_Tool_PickaxeConstruction extends GT_Tool_Pickaxe {
 	}
 	
 	@Override
-	public float getMiningSpeed(Block aBlock, byte aMetaData, float aDefault, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ) {
+	public float getMiningSpeed(Block aBlock, byte aMetaData, float aDefault, PlayerEntity aPlayer, World aWorld, int aX, int aY, int aZ) {
 		if (WD.ore_stone(aBlock, aMetaData)) return aDefault / 4;
 		return aDefault;
 	}

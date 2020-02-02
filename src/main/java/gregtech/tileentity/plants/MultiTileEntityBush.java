@@ -50,7 +50,7 @@ import gregapi.util.UT;
 import gregapi.util.WD;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -164,7 +164,7 @@ public class MultiTileEntityBush extends TileEntityBase09FacingSingle implements
 	}
 	
 	@Override
-	public boolean onBlockActivated3(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onBlockActivated3(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (isClientSide()) return T;
 		if (ST.valid(mBerry)) {
 			if (mStage < 3) return F;
@@ -182,7 +182,7 @@ public class MultiTileEntityBush extends TileEntityBase09FacingSingle implements
 	}
 	
 	@Override
-	public boolean canPlace(ItemStack aStack, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean canPlace(ItemStack aStack, PlayerEntity aPlayer, World aWorld, int aX, int aY, int aZ, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		TileEntity tTileEntity = aWorld.getTileEntity(aX-OFFSETS_X[aSide], aY-OFFSETS_Y[aSide], aZ-OFFSETS_Z[aSide]);
 		if (tTileEntity instanceof MultiTileEntityBush && SIDES_INVALID[((MultiTileEntityBush)tTileEntity).mFacing] && (ST.invalid(mBerry) || ST.equal(((MultiTileEntityBush)tTileEntity).mBerry, mBerry, F))) {
 			mFacing = OPPOSITES[aSide];
@@ -200,7 +200,7 @@ public class MultiTileEntityBush extends TileEntityBase09FacingSingle implements
 	}
 	
 	@Override
-	public boolean onPlaced(ItemStack aStack, EntityPlayer aPlayer, MultiTileEntityContainer aMTEContainer, World aWorld, int aX, int aY, int aZ, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onPlaced(ItemStack aStack, PlayerEntity aPlayer, MultiTileEntityContainer aMTEContainer, World aWorld, int aX, int aY, int aZ, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		return T;
 	}
 	
@@ -327,7 +327,7 @@ public class MultiTileEntityBush extends TileEntityBase09FacingSingle implements
 	@Override public boolean allowCovers            (byte aSide) {return F;}
 	@Override public boolean attachCoversFirst      (byte aSide) {return F;}
 	@Override public boolean isObstructingBlockAt   (byte aSide) {return SIDES_INVALID[mFacing];}
-	@Override public boolean checkObstruction(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {return F;}
+	@Override public boolean checkObstruction(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {return F;}
 	@Override public boolean isLeaves() {return T;}
 	
 	@Override public int getLightOpacity() {return SIDES_INVALID[mFacing] ? LIGHT_OPACITY_LEAVES : LIGHT_OPACITY_NONE;}

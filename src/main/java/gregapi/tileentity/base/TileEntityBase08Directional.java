@@ -27,7 +27,7 @@ import gregapi.data.CS.ToolsGT;
 import gregapi.network.INetworkHandler;
 import gregapi.network.IPacket;
 import gregapi.util.UT;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -56,7 +56,7 @@ public abstract class TileEntityBase08Directional extends TileEntityBase07Painta
 	public String getFacingTool() {return "";}
 	
 	@Override public boolean isUsingWrenchingOverlay(ItemStack aStack, byte aSide) {return super.isUsingWrenchingOverlay(aStack, aSide) || (getFacingTool() != null && ToolsGT.contains(getFacingTool(), aStack));}
-	@Override public boolean wrenchCanRemove(EntityPlayer aPlayer) {return F;}
+	@Override public boolean wrenchCanRemove(PlayerEntity aPlayer) {return F;}
 	@Override public float getWrenchDropRate() {return 1.0F;}
-	@Override public ItemStack getWrenchDrop(EntityPlayer aPlayer) {return null;}
+	@Override public ItemStack getWrenchDrop(PlayerEntity aPlayer) {return null;}
 }

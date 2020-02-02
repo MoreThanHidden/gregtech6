@@ -37,7 +37,7 @@ import gregapi.util.UT;
 import gregapi.util.WD;
 import gregtech.blocks.BlockCFoamFresh;
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -55,7 +55,7 @@ public class Behavior_Spray_Foam_Remover extends AbstractBehaviorDefault {
 	}
 	
 	@Override
-	public boolean onItemUseFirst(MultiItem aItem, ItemStack aStack, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ, byte aSide, float hitX, float hitY, float hitZ) {
+	public boolean onItemUseFirst(MultiItem aItem, ItemStack aStack, PlayerEntity aPlayer, World aWorld, int aX, int aY, int aZ, byte aSide, float hitX, float hitY, float hitZ) {
 		if (aWorld.isRemote || aStack.stackSize != 1 || !aPlayer.canPlayerEdit(aX, aY, aZ, aSide, aStack)) return F;
 		
 		boolean rOutput = F;
@@ -92,7 +92,7 @@ public class Behavior_Spray_Foam_Remover extends AbstractBehaviorDefault {
 		return rOutput;
 	}
 	
-	public long remove(World aWorld, int aX, int aY, int aZ, byte aSide, long aUses, EntityPlayer aPlayer, ItemStack aStack) {
+	public long remove(World aWorld, int aX, int aY, int aZ, byte aSide, long aUses, PlayerEntity aPlayer, ItemStack aStack) {
 		if (aUses < 1) return 0;
 		
 		DelegatorTileEntity<TileEntity> aTileEntity = WD.te(aWorld, aX, aY, aZ, aSide, T);

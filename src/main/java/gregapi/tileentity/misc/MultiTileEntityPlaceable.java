@@ -45,7 +45,7 @@ import gregapi.util.UT;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.boss.EntityDragon;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -81,7 +81,7 @@ public abstract class MultiTileEntityPlaceable extends TileEntityBase03MultiTile
 	}
 	
 	@Override
-	public boolean onBlockActivated2(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onBlockActivated2(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (isClientSide()) return T;
 		ItemStack aStack = aPlayer.getCurrentEquippedItem();
 		if (ST.invalid(mStack) || mStack.stackSize <= 0) return setToAir();
@@ -129,7 +129,7 @@ public abstract class MultiTileEntityPlaceable extends TileEntityBase03MultiTile
 	@Override public boolean isSurfaceOpaque        (byte aSide) {return F;}
 	@Override public boolean isSideSolid            (byte aSide) {return F;}
 	@Override public boolean isObstructingBlockAt   (byte aSide) {return F;}
-	@Override public boolean checkObstruction(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {return F;}
+	@Override public boolean checkObstruction(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {return F;}
 	@Override public boolean canEntityDestroy(Entity aEntity) {return !(aEntity instanceof EntityDragon);}
 	
 	@Override public int getLightOpacity() {return LIGHT_OPACITY_LEAVES;}

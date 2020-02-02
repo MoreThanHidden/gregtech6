@@ -43,7 +43,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityMinecartCommandBlock;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
@@ -87,7 +87,7 @@ public class BlockBaseRail extends RailBlock implements IBlockBase, IBlockSealab
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public void addInformation(ItemStack aStack, int aMeta, EntityPlayer aPlayer, @SuppressWarnings("rawtypes") List aList, boolean aF3_H) {
+	public void addInformation(ItemStack aStack, int aMeta, PlayerEntity aPlayer, @SuppressWarnings("rawtypes") List aList, boolean aF3_H) {
 		aList.add(LH.Chat.CYAN + LH.get(LH.TOOLTIP_RAILSPEED) + LH.Chat.GREEN + (mSpeed/0.4F) + "x");
 	}
 	
@@ -127,7 +127,7 @@ public class BlockBaseRail extends RailBlock implements IBlockBase, IBlockSealab
 	@Override public boolean useGravity(int aMeta) {return F;}
 	@Override public boolean doesWalkSpeed(short aMeta) {return F;}
 	@Override public boolean doesPistonPush(short aMeta) {return T;}
-	@Override public ItemStack onItemRightClick(ItemStack aStack, World aWorld, EntityPlayer aPlayer) {return aStack;}
+	@Override public ItemStack onItemRightClick(ItemStack aStack, World aWorld, PlayerEntity aPlayer) {return aStack;}
 	
 	protected boolean func_150058_a(World aWorld, int aX, int aY, int aZ, int p_150058_5_, boolean p_150058_6_, int p_150058_7_) {
 		if (p_150058_7_ >= 8) return F;
@@ -281,10 +281,10 @@ public class BlockBaseRail extends RailBlock implements IBlockBase, IBlockSealab
 		}
 	}
 	
-	@Override public boolean onItemUseFirst(ItemBlockBase aItem, ItemStack aStack, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ, int aSide, float aHitX, float aHitY, float aHitZ) {return F;}
+	@Override public boolean onItemUseFirst(ItemBlockBase aItem, ItemStack aStack, PlayerEntity aPlayer, World aWorld, int aX, int aY, int aZ, int aSide, float aHitX, float aHitY, float aHitZ) {return F;}
 	
 	@Override
-	public boolean onItemUse(ItemBlockBase aItem, ItemStack aStack, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ, int aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onItemUse(ItemBlockBase aItem, ItemStack aStack, PlayerEntity aPlayer, World aWorld, int aX, int aY, int aZ, int aSide, float aHitX, float aHitY, float aHitZ) {
 		if (aStack.stackSize == 0) return F;
 		
 		Block tBlock = aWorld.getBlock(aX, aY, aZ);

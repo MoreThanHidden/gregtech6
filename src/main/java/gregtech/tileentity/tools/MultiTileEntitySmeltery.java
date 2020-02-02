@@ -77,7 +77,7 @@ import net.minecraft.entity.monster.EntitySpider;
 import net.minecraft.entity.monster.EntityWitch;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.*;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -378,7 +378,7 @@ public class MultiTileEntitySmeltery extends TileEntityBase07Paintable implement
 	@Override public boolean attachCoversFirst(byte aSide) {return F;}
 	
 	@Override
-	public boolean onBlockActivated3(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onBlockActivated3(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (SIDES_TOP[aSide]) {
 			if (isServerSide() && aPlayer != null) {
 				ItemStack aStack = aPlayer.getCurrentEquippedItem();
@@ -479,23 +479,23 @@ public class MultiTileEntitySmeltery extends TileEntityBase07Paintable implement
 	public long onToolClick2(String aTool, long aRemainingDurability, long aQuality, Entity aPlayer, List<String> aChatReturn, IInventory aPlayerInventory, boolean aSneaking, ItemStack aStack, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (isClientSide()) return super.onToolClick2(aTool, aRemainingDurability, aQuality, aPlayer, aChatReturn, aPlayerInventory, aSneaking, aStack, aSide, aHitX, aHitY, aHitZ);
 		if (aTool.equals(TOOL_thermometer)) {if (aChatReturn != null) aChatReturn.add("Temperature: " + mTemperature + "K"); return 10000;}
-		if (aTool.equals(TOOL_shovel) && SIDES_TOP[aSide] && aPlayer instanceof EntityPlayer) {
+		if (aTool.equals(TOOL_shovel) && SIDES_TOP[aSide] && aPlayer instanceof PlayerEntity) {
 			OreDictMaterialStack tLightest = null;
 			for (OreDictMaterialStack tMaterial : mContent) if (tLightest == null || tMaterial.mMaterial.mGramPerCubicCentimeter < tLightest.mMaterial.mGramPerCubicCentimeter) tLightest = tMaterial;
 			if (tLightest != null && mTemperature < tLightest.mMaterial.mMeltingPoint) {
 				if (tLightest.mAmount < OP.scrapGt.mAmount) {
 					tLightest.mAmount = 0;
-					((EntityPlayer)aPlayer).addExhaustion(0.1F);
+					((PlayerEntity)aPlayer).addExhaustion(0.1F);
 					return 500;
 				}
 				ItemStack tOutputStack = OP.scrapGt.mat(tLightest.mMaterial, UT.Code.bindStack(tLightest.mAmount / OP.scrapGt.mAmount));
 				if (tOutputStack == null) {
 					tLightest.mAmount = 0;
-					((EntityPlayer)aPlayer).addExhaustion(0.1F);
+					((PlayerEntity)aPlayer).addExhaustion(0.1F);
 					return 500;
 				}
-				if (UT.Inventories.addStackToPlayerInventory((EntityPlayer)aPlayer, tOutputStack)) {
-					((EntityPlayer)aPlayer).addExhaustion(0.1F * tOutputStack.stackSize);
+				if (UT.Inventories.addStackToPlayerInventory((PlayerEntity)aPlayer, tOutputStack)) {
+					((PlayerEntity)aPlayer).addExhaustion(0.1F * tOutputStack.stackSize);
 					tLightest.mAmount -= OP.scrapGt.mAmount * tOutputStack.stackSize;
 					return 1000 * tOutputStack.stackSize;
 				}
@@ -506,7 +506,7 @@ public class MultiTileEntitySmeltery extends TileEntityBase07Paintable implement
 	}
 	
 	@Override
-	public boolean onPlaced(ItemStack aStack, EntityPlayer aPlayer, MultiTileEntityContainer aMTEContainer, World aWorld, int aX, int aY, int aZ, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onPlaced(ItemStack aStack, PlayerEntity aPlayer, MultiTileEntityContainer aMTEContainer, World aWorld, int aX, int aY, int aZ, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		mTemperature = WD.envTemp(worldObj, xCoord, yCoord, zCoord);
 		return T;
 	}
@@ -608,7 +608,7 @@ public class MultiTileEntitySmeltery extends TileEntityBase07Paintable implement
 					addMaterialStacks(new ArrayListNoNulls<>(F, OM.stack(1*U, MT.Gunpowder)), C+20);
 				} else if (aEntity instanceof EntityEnderman) {
 					addMaterialStacks(new ArrayListNoNulls<>(F, OM.stack(1*U, MT.EnderPearl)), C+20);
-				} else if (aEntity instanceof EntityPlayer) {
+				} else if (aEntity instanceof PlayerEntity) {
 					if ("GregoriusT".equalsIgnoreCase(aEntity.getCommandSenderName())) for (int i = 0; i < 16; i++) addMaterialStacks(new ArrayListNoNulls<>(F, OM.stack(1*U, MT.Tc)), C+20);
 				}
 			}
@@ -628,7 +628,7 @@ public class MultiTileEntitySmeltery extends TileEntityBase07Paintable implement
 	}
 	
 	@Override
-	public boolean checkObstruction(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean checkObstruction(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		return SIDES_BOTTOM_HORIZONTAL[aSide] && super.checkObstruction(aPlayer, aSide, aHitX, aHitY, aHitZ);
 	}
 	

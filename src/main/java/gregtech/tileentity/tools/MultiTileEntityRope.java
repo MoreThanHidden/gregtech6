@@ -42,7 +42,7 @@ import gregapi.util.UT;
 import gregapi.util.WD;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -68,7 +68,7 @@ public class MultiTileEntityRope extends TileEntityBase09FacingSingle implements
 	}
 	
 	@Override
-	public boolean onBlockActivated3(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onBlockActivated3(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		ItemStack aStack = aPlayer.getCurrentEquippedItem();
 		MultiTileEntityRegistry tRegistry = MultiTileEntityRegistry.getRegistry(getMultiTileEntityRegistryID());
 		if (tRegistry != null && ST.equal(aStack, toStack(), F)) {
@@ -93,7 +93,7 @@ public class MultiTileEntityRope extends TileEntityBase09FacingSingle implements
 	}
 	
 	@Override
-	public void onBlockHarvested(int aMetaData, EntityPlayer aPlayer) {
+	public void onBlockHarvested(int aMetaData, PlayerEntity aPlayer) {
 		if (isServerSide() && aPlayer != null) {
 			TileEntity tTileEntity = getTileEntityAtSideAndDistance(SIDE_UP, 1);
 			if (!(tTileEntity instanceof MultiTileEntityRope)) for (int tY = yCoord-1; tY >= 0; tY--) {
@@ -191,7 +191,7 @@ public class MultiTileEntityRope extends TileEntityBase09FacingSingle implements
 	@Override public boolean allowCovers            (byte aSide) {return F;}
 	@Override public boolean attachCoversFirst      (byte aSide) {return F;}
 	@Override public boolean isObstructingBlockAt   (byte aSide) {return F;}
-	@Override public boolean checkObstruction(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {return F;}
+	@Override public boolean checkObstruction(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {return F;}
 	@Override public boolean isLadder(EntityLivingBase aEntity) {return T;}
 	@Override public boolean useSidePlacementRotation       () {return T;}
 	@Override public boolean useInversePlacementRotation    () {return T;}

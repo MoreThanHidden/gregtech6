@@ -40,7 +40,7 @@ import gregapi.tileentity.base.TileEntityBase07Paintable;
 import gregapi.util.UT;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -78,7 +78,7 @@ public class MultiTileEntityCFoam extends TileEntityBase07Paintable implements I
 	public static MultiTileEntityRegistry MTE_REGISTRY = null;
 	public static MultiTileEntityCFoam INSTANCE;
 	
-	public static boolean setBlock(World aWorld, int aX, int aY, int aZ, byte aSide, EntityPlayer aPlayer, ItemStack aStack, short[] aRGB, boolean aOwned) {
+	public static boolean setBlock(World aWorld, int aX, int aY, int aZ, byte aSide, PlayerEntity aPlayer, ItemStack aStack, short[] aRGB, boolean aOwned) {
 		return MTE_REGISTRY.mBlock.placeBlock(aWorld, aX, aY, aZ, aSide, INSTANCE.getMultiTileEntityID(), UT.NBT.make(NBT_COLOR, UT.Code.getRGBInt(aRGB), NBT_PAINTED, T, NBT_OWNABLE, aOwned, NBT_OWNER, aOwned && aPlayer != null ? aPlayer.getUniqueID().toString() : null), T, F);
 	}
 	
@@ -104,7 +104,7 @@ public class MultiTileEntityCFoam extends TileEntityBase07Paintable implements I
 	}
 	
 	@Override
-	public boolean onPlaced(ItemStack aStack, EntityPlayer aPlayer, MultiTileEntityContainer aMTEContainer, World aWorld, int aX, int aY, int aZ, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onPlaced(ItemStack aStack, PlayerEntity aPlayer, MultiTileEntityContainer aMTEContainer, World aWorld, int aX, int aY, int aZ, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (mOwnable && aPlayer != null) mOwner = aPlayer.getUniqueID();
 		return T;
 	}

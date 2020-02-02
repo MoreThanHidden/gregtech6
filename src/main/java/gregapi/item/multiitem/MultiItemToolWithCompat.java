@@ -33,7 +33,7 @@ import ic2.api.item.ISpecialElectricItem;
 import micdoodle8.mods.galacticraft.api.item.IItemElectric;
 import mods.railcraft.api.core.items.IToolCrowbar;
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
@@ -60,13 +60,13 @@ public class MultiItemToolWithCompat extends MultiItemTool implements IToolGraft
 	public MultiItemToolWithCompat(String aModID, String aUnlocalized) {super(aModID, aUnlocalized);}
 	
 	@Override
-	public float getSaplingModifier(ItemStack aStack, World aWorld, EntityPlayer aPlayer, int aX, int aY, int aZ) {
+	public float getSaplingModifier(ItemStack aStack, World aWorld, PlayerEntity aPlayer, int aX, int aY, int aZ) {
 		IToolStats tStats = getToolStats(aStack);
 		return tStats != null && tStats.isGrafter() ? Math.min(100.0F, (1+getHarvestLevel(aStack, "")) * 20.0F) : 0.0F;
 	}
 	
 	@Override
-	public boolean canWrench(EntityPlayer aPlayer, int aX, int aY, int aZ) {
+	public boolean canWrench(PlayerEntity aPlayer, int aX, int aY, int aZ) {
 		ItemStack aStack = aPlayer.getCurrentEquippedItem();
 		if (!isItemStackUsable(aStack)) return F;
 		IToolStats tStats = getToolStats(aStack);
@@ -74,47 +74,47 @@ public class MultiItemToolWithCompat extends MultiItemTool implements IToolGraft
 	}
 	
 	@Override
-	public void wrenchUsed(EntityPlayer aPlayer, int aX, int aY, int aZ) {
+	public void wrenchUsed(PlayerEntity aPlayer, int aX, int aY, int aZ) {
 		ItemStack aStack = aPlayer.getCurrentEquippedItem();
 		IToolStats tStats = getToolStats(aStack);
 		if (tStats != null && !UT.Entities.hasInfiniteItems(aPlayer)) doDamage(aStack, 100, aPlayer);
 	}
 	
 	@Override
-	public boolean canWhack(EntityPlayer aPlayer, ItemStack aStack, int aX, int aY, int aZ) {
+	public boolean canWhack(PlayerEntity aPlayer, ItemStack aStack, int aX, int aY, int aZ) {
 		if (!isItemStackUsable(aStack)) return F;
 		IToolStats tStats = getToolStats(aStack);
 		return tStats != null && tStats.isCrowbar();
 	}
 	
 	@Override
-	public void onWhack(EntityPlayer aPlayer, ItemStack aStack, int aX, int aY, int aZ) {
+	public void onWhack(PlayerEntity aPlayer, ItemStack aStack, int aX, int aY, int aZ) {
 		IToolStats tStats = getToolStats(aStack);
 		if (tStats != null && !UT.Entities.hasInfiniteItems(aPlayer)) doDamage(aStack, 100, aPlayer);
 	}
 	
 	@Override
-	public boolean canLink(EntityPlayer aPlayer, ItemStack aStack, EntityMinecart cart) {
+	public boolean canLink(PlayerEntity aPlayer, ItemStack aStack, EntityMinecart cart) {
 		if (!isItemStackUsable(aStack)) return F;
 		IToolStats tStats = getToolStats(aStack);
 		return tStats != null && tStats.isCrowbar();
 	}
 	
 	@Override
-	public void onLink(EntityPlayer aPlayer, ItemStack aStack, EntityMinecart cart) {
+	public void onLink(PlayerEntity aPlayer, ItemStack aStack, EntityMinecart cart) {
 		IToolStats tStats = getToolStats(aStack);
 		if (tStats != null && !UT.Entities.hasInfiniteItems(aPlayer)) doDamage(aStack, tStats.getToolDamagePerEntityAttack(), aPlayer);
 	}
 	
 	@Override
-	public boolean canBoost(EntityPlayer aPlayer, ItemStack aStack, EntityMinecart cart) {
+	public boolean canBoost(PlayerEntity aPlayer, ItemStack aStack, EntityMinecart cart) {
 		if (!isItemStackUsable(aStack)) return F;
 		IToolStats tStats = getToolStats(aStack);
 		return tStats != null && tStats.isCrowbar();
 	}
 	
 	@Override
-	public void onBoost(EntityPlayer aPlayer, ItemStack aStack, EntityMinecart cart) {
+	public void onBoost(PlayerEntity aPlayer, ItemStack aStack, EntityMinecart cart) {
 		IToolStats tStats = getToolStats(aStack);
 		if (tStats != null && !UT.Entities.hasInfiniteItems(aPlayer)) doDamage(aStack, tStats.getToolDamagePerEntityAttack(), aPlayer);
 	}

@@ -20,7 +20,7 @@
 package gregtech.api.interfaces.tileentity;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -87,6 +87,6 @@ public interface IHasWorldObjectAndCoords {
 	public long getTimer();
 	public void setLightValue(byte aLightValue);
 	public boolean isInvalidTileEntity();
-	public boolean openGUI(EntityPlayer aPlayer, int aID);
-	public boolean openGUI(EntityPlayer aPlayer);
+	public boolean openGUI(PlayerEntity aPlayer, int aID);
+	public boolean openGUI(PlayerEntity aPlayer);
 }

@@ -40,7 +40,7 @@ import gregapi.tileentity.machines.ITileEntitySwitchableMode;
 import gregapi.tileentity.machines.ITileEntitySwitchableOnOff;
 import gregapi.util.ST;
 import gregapi.util.UT;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -96,7 +96,7 @@ public abstract class TileEntityBase10EnergyBatBox extends TileEntityBase09Facin
 	}
 	
 	@Override
-	public boolean onBlockActivated3(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onBlockActivated3(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (isServerSide() && isUseableByPlayerGUI(aPlayer)) openGUI(aPlayer);
 		return T;
 	}
@@ -176,8 +176,8 @@ public abstract class TileEntityBase10EnergyBatBox extends TileEntityBase09Facin
 		return tConsumed;
 	}
 	
-	@Override public Object getGUIClient2(int aGUIID, EntityPlayer aPlayer) {return new ContainerClientDefault(aPlayer.inventory, this, aGUIID);}
-	@Override public Object getGUIServer2(int aGUIID, EntityPlayer aPlayer) {return new ContainerCommonDefault(aPlayer.inventory, this, aGUIID);}
+	@Override public Object getGUIClient2(int aGUIID, PlayerEntity aPlayer) {return new ContainerClientDefault(aPlayer.inventory, this, aGUIID);}
+	@Override public Object getGUIServer2(int aGUIID, PlayerEntity aPlayer) {return new ContainerCommonDefault(aPlayer.inventory, this, aGUIID);}
 	
 	@Override public int[] getAccessibleSlotsFromSide2(byte aSide) {return UT.Code.getAscendingArray(getSizeInventory());}
 	@Override public boolean canInsertItem2 (int aSlot, ItemStack aStack, byte aSide) {return aStack != null && aStack.getItem() instanceof IItemEnergy && (((IItemEnergy)aStack.getItem()).isEnergyType(mEnergyType, aStack, F) || ((IItemEnergy)aStack.getItem()).isEnergyType(mEnergyType, aStack, T));}

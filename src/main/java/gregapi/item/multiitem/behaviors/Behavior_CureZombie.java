@@ -29,7 +29,7 @@ import gregapi.item.multiitem.behaviors.IBehavior.AbstractBehaviorDefault;
 import gregapi.util.UT;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityZombie;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
@@ -45,7 +45,7 @@ public class Behavior_CureZombie extends AbstractBehaviorDefault {
 	}
 	
 	@Override
-	public boolean onRightClickEntity(MultiItem aItem, ItemStack aStack, EntityPlayer aPlayer, Entity aEntity) {
+	public boolean onRightClickEntity(MultiItem aItem, ItemStack aStack, PlayerEntity aPlayer, Entity aEntity) {
 		if (aEntity instanceof EntityZombie && ((EntityZombie)aEntity).isVillager()) {
 			if (!mNeedsWeakness || ((EntityZombie)aEntity).isPotionActive(Potion.weakness)) {
 				UT.Entities.consumeCurrentItem(aPlayer);

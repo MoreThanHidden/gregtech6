@@ -32,7 +32,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.passive.EntityTameable;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -41,7 +41,7 @@ public class Behavior_FeedChocolate extends AbstractBehaviorDefault {
 	public static final Behavior_FeedChocolate INSTANCE = new Behavior_FeedChocolate();
 	
 	@Override
-	public boolean onRightClickEntity(MultiItem aItem, ItemStack aStack, EntityPlayer aPlayer, Entity aEntity) {
+	public boolean onRightClickEntity(MultiItem aItem, ItemStack aStack, PlayerEntity aPlayer, Entity aEntity) {
 		if (aEntity instanceof EntityTameable && ((EntityTameable)aEntity).isTamed()) {
 			((EntityLivingBase)aEntity).addPotionEffect(new PotionEffect(Potion.poison.id, 120, 0));
 			UT.Entities.consumeCurrentItem(aPlayer);

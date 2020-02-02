@@ -30,14 +30,14 @@ import gregapi.util.UT;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityPig;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 
 public class Behavior_FeedPig extends AbstractBehaviorDefault {
 	public static final Behavior_FeedPig INSTANCE = new Behavior_FeedPig();
 	
 	@Override
-	public boolean onRightClickEntity(MultiItem aItem, ItemStack aStack, EntityPlayer aPlayer, Entity aEntity) {
+	public boolean onRightClickEntity(MultiItem aItem, ItemStack aStack, PlayerEntity aPlayer, Entity aEntity) {
 		if (aEntity instanceof EntityPig) {
 			if (((EntityAnimal)aEntity).getGrowingAge() == 0 && !((EntityAnimal)aEntity).isInLove()) {
 				UT.Entities.consumeCurrentItem(aPlayer);

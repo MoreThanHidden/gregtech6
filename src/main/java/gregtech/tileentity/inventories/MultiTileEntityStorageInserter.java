@@ -35,7 +35,7 @@ import gregapi.util.UT;
 import gregapi.util.WD;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntity;
 
 /**
@@ -43,7 +43,7 @@ import net.minecraft.tileentity.TileEntity;
  */
 public class MultiTileEntityStorageInserter extends TileEntityBase07Paintable implements ITileEntityConnectedInventory {
 	@Override
-	public boolean onBlockActivated3(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onBlockActivated3(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (!UT.Entities.isPlayer(aPlayer)) return T;
 		ArrayListNoNulls<MultiTileEntityMassStorage> tList = new ArrayListNoNulls<>();
 		int tX = getOffsetX(aSide), tY = getOffsetY(aSide), tZ = getOffsetZ(aSide);
@@ -67,7 +67,7 @@ public class MultiTileEntityStorageInserter extends TileEntityBase07Paintable im
 		return T;
 	}
 	
-	public boolean checkColumn(EntityPlayer aPlayer, int aX, int aY, int aZ, ArrayListNoNulls<MultiTileEntityMassStorage> aList, boolean aOnlyHand) {
+	public boolean checkColumn(PlayerEntity aPlayer, int aX, int aY, int aZ, ArrayListNoNulls<MultiTileEntityMassStorage> aList, boolean aOnlyHand) {
 		if (!WD.floor(worldObj, aX, aY, aZ)) return T;
 		boolean temp = T;
 		for (int i = 1; i < 8; i++) {
@@ -93,7 +93,7 @@ public class MultiTileEntityStorageInserter extends TileEntityBase07Paintable im
 		return temp;
 	}
 	
-	public void tryInsert(EntityPlayer aPlayer, MultiTileEntityMassStorage aStorage, boolean aOnlyHand) {
+	public void tryInsert(PlayerEntity aPlayer, MultiTileEntityMassStorage aStorage, boolean aOnlyHand) {
 		if (aPlayer.inventory.getCurrentItem() != null) aPlayer.inventory.mainInventory[aPlayer.inventory.currentItem] = aStorage.insertItems(aPlayer.inventory.mainInventory[aPlayer.inventory.currentItem], T);
 		if (!aOnlyHand) for (int i = 9; i < aPlayer.inventory.mainInventory.length; i++) {
 			if (aPlayer.inventory.mainInventory[i] != null && !ST.nonautoinsert(aPlayer.inventory.mainInventory[i]) && (aStorage.slotHas(1) || aPlayer.inventory.mainInventory[i].getMaxStackSize() > 1)) {

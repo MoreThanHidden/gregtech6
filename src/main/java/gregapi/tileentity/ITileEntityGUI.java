@@ -21,7 +21,7 @@ package gregapi.tileentity;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 
 /**
  * @author Gregorius Techneticies
@@ -29,12 +29,12 @@ import net.minecraft.entity.player.EntityPlayer;
 public interface ITileEntityGUI extends ITileEntityUnloadable {
 	/** Gets the GUI Elements. Negative GUIIDs are internal Usage. For example -1, -2, -3, -4, -5 and -6 are the Covers on the Side -GUIID-1 */
 	@SideOnly(Side.CLIENT)
-	public Object getGUIClient(int aGUIID, EntityPlayer aPlayer);
+	public Object getGUIClient(int aGUIID, PlayerEntity aPlayer);
 	/** Gets the GUI Elements. Negative GUIIDs are internal Usage. For example -1, -2, -3, -4, -5 and -6 are the Covers on the Side -GUIID-1 */
-	public Object getGUIServer(int aGUIID, EntityPlayer aPlayer);
+	public Object getGUIServer(int aGUIID, PlayerEntity aPlayer);
 	
 	/** Opens the GUI with this ID of this TileEntity */
-	public boolean openGUI(EntityPlayer aPlayer, int aID);
+	public boolean openGUI(PlayerEntity aPlayer, int aID);
 	/** Opens the GUI with the ID = 0 of this TileEntity */
-	public boolean openGUI(EntityPlayer aPlayer);
+	public boolean openGUI(PlayerEntity aPlayer);
 }

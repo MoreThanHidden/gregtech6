@@ -38,7 +38,9 @@ import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
@@ -69,10 +71,10 @@ public class EntityArrow_Material extends EntityProjectile {
 		super(aWorld, aEntity, aSpeed);
 	}
 	
-	public EntityArrow_Material(EntityArrow aArrow, ItemStack aStack) {
-		super(aArrow.worldObj);
+	public EntityArrow_Material(ArrowEntity aArrow, ItemStack aStack) {
+		super(aArrow.world);
 		shootingEntity = aArrow.shootingEntity;
-		NBTTagCompound tNBT = UT.NBT.make();
+		CompoundNBT tNBT = UT.NBT.make();
 		aArrow.writeToNBT(tNBT);
 		readFromNBT(tNBT);
 		setProjectileStack(aStack);
@@ -151,8 +153,8 @@ public class EntityArrow_Material extends EntityProjectile {
 			
 			if (tHitEntity != null) tVector = new MovingObjectPosition(tHitEntity);
 			
-			if (tVector != null && tHitEntity != null && tHitEntity instanceof EntityPlayer) {
-				if (((EntityPlayer)tHitEntity).capabilities.disableDamage || (tShootingEntity instanceof EntityPlayer && !((EntityPlayer)tShootingEntity).canAttackPlayer((EntityPlayer)tHitEntity))) tVector = null;
+			if (tVector != null && tHitEntity != null && tHitEntity instanceof PlayerEntity) {
+				if (((PlayerEntity)tHitEntity).capabilities.disableDamage || (tShootingEntity instanceof PlayerEntity && !((PlayerEntity)tShootingEntity).canAttackPlayer((PlayerEntity)tHitEntity))) tVector = null;
 			}
 			
 			if (tVector != null) {
@@ -181,8 +183,8 @@ public class EntityArrow_Material extends EntityProjectile {
 						
 						if (tFireDamage > 0 && !(tHitEntity instanceof EntityEnderman)) tHitEntity.setFire(tFireDamage);
 						
-						if (!(tHitEntity instanceof EntityPlayer) && EnchantmentHelper.getEnchantmentLevel(Enchantment.looting.effectId, mArrow) > 0) {
-							EntityPlayer tPlayer = null;
+						if (!(tHitEntity instanceof PlayerEntity) && EnchantmentHelper.getEnchantmentLevel(Enchantment.looting.effectId, mArrow) > 0) {
+							PlayerEntity tPlayer = null;
 							if (worldObj instanceof WorldServer) tPlayer = FakePlayerFactory.get((WorldServer)worldObj, new GameProfile(new UUID(0, 0), tShootingEntity instanceof EntityLivingBase?((EntityLivingBase)tShootingEntity).getCommandSenderName():"Arrow"));
 							if (tPlayer != null) {
 								tPlayer.inventory.currentItem = 0;
@@ -212,12 +214,12 @@ public class EntityArrow_Material extends EntityProjectile {
 								Enchantments.applyBullshitA(tHitLivingEntity                                                                    , tShootingEntity==null?this:tShootingEntity    , mArrow);
 								Enchantments.applyBullshitB(tShootingEntity instanceof EntityLivingBase?(EntityLivingBase)tShootingEntity:null  , tHitLivingEntity                              , mArrow);
 								
-								if (tShootingEntity != null && tHitLivingEntity != tShootingEntity && tHitLivingEntity instanceof EntityPlayer && tShootingEntity instanceof EntityPlayerMP) {
-									((EntityPlayerMP)tShootingEntity).playerNetServerHandler.sendPacket(new S2BPacketChangeGameState(6, 0.0F));
+								if (tShootingEntity != null && tHitLivingEntity != tShootingEntity && tHitLivingEntity instanceof PlayerEntity && tShootingEntity instanceof PlayerEntityMP) {
+									((PlayerEntityMP)tShootingEntity).playerNetServerHandler.sendPacket(new S2BPacketChangeGameState(6, 0.0F));
 								}
 							}
 							
-							if (tShootingEntity instanceof EntityPlayer && tMagicDamage > 0.0F) ((EntityPlayer)tShootingEntity).onEnchantmentCritical(tHitEntity);
+							if (tShootingEntity instanceof PlayerEntity && tMagicDamage > 0.0F) ((PlayerEntity)tShootingEntity).onEnchantmentCritical(tHitEntity);
 							
 							if (!(tHitEntity instanceof EntityEnderman) || ((EntityEnderman)tHitEntity).getActivePotionEffect(Potion.weakness) != null) {
 								if (tFireDamage > 0) tHitEntity.setFire(tFireDamage);
@@ -324,7 +326,7 @@ public class EntityArrow_Material extends EntityProjectile {
 	}
 	
 	@Override
-	public void onCollideWithPlayer(EntityPlayer aPlayer) {
+	public void onCollideWithPlayer(PlayerEntity aPlayer) {
 		if (!worldObj.isRemote && inGround && arrowShake <= 0 && canBePickedUp == 1 && aPlayer.inventory.addItemStackToInventory(getArrowItem())) {
 			playSound("random.pop", 0.2F, ((rand.nextFloat() - rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
 			aPlayer.onItemPickup(this, 1);

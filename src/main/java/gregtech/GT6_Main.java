@@ -518,7 +518,7 @@ public class GT6_Main extends Abstract_Mod {
 			@Override public boolean canCommandSenderUseCommand(ICommandSender aSender) {return T;}
 			@Override public void processCommand(ICommandSender aSender, String[] aParameters) {
 				if (aParameters.length >= 3) {
-					EntityPlayerMP aPlayer = getCommandSenderAsPlayer(aSender);
+					PlayerEntityMP aPlayer = getCommandSenderAsPlayer(aSender);
 					if (aPlayer != null && (aPlayer.username.equals("GregoriusT") || aPlayer.username.equals("Player"))) {
 						try {
 							if (aPlayer.ridingEntity != null) aPlayer.mountEntity(null);

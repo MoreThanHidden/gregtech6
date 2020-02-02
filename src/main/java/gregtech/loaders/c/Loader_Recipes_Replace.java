@@ -44,7 +44,7 @@ import gregapi.util.CR;
 import gregapi.util.OM;
 import gregapi.util.ST;
 import gregapi.util.UT;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.Container;
@@ -264,7 +264,7 @@ public class Loader_Recipes_Replace implements Runnable {
 	public static ItemStack getRecipeOutput(IRecipe aRecipe, ItemStack... aStacks) {
 		if (aRecipe == null || aStacks == null) return null;
 		for (byte i = 0; i < aStacks.length; i++) if (aStacks[i] != null) {
-			InventoryCrafting aCrafting = new InventoryCrafting(new Container() {@Override public boolean canInteractWith(EntityPlayer aPlayer) {return F;}}, 3, 3);
+			InventoryCrafting aCrafting = new InventoryCrafting(new Container() {@Override public boolean canInteractWith(PlayerEntity aPlayer) {return F;}}, 3, 3);
 			for (int j = 0; j < 9 && j < aStacks.length; j++) aCrafting.setInventorySlotContents(j, aStacks[j]);
 			if (!aRecipe.matches(aCrafting, DW)) return null;
 			ItemStack rOutput = aRecipe.getCraftingResult(aCrafting);

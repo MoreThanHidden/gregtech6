@@ -25,6 +25,8 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
@@ -57,26 +59,26 @@ public interface IBlockToolable {
 	 * @param aHitZ The exact Coordinate of the clicked Block itself (from 0.0F to 1.0F)
 	 * @return the Damage to be dealt to the Tool. 10000 equals 1 vanilla Damage Point, that way, lower percentages are also possible.
 	 */
-	public long onToolClick(String aTool, long aRemainingDurability, long aQuality, Entity aPlayer, List<String> aChatReturn, IInventory aPlayerInventory, boolean aSneaking, ItemStack aStack, World aWorld, byte aSide, int aX, int aY, int aZ, float aHitX, float aHitY, float aHitZ);
+	public long onToolClick(String aTool, long aRemainingDurability, long aQuality, Entity aPlayer, List<String> aChatReturn, IInventory aPlayerInventory, boolean aSneaking, ItemStack aStack, World aWorld, Direction aSide, BlockPos aPos, float aHitX, float aHitY, float aHitZ);
 	
 	/** Utility for calling the onToolClick Function properly. Also has some default Hooks inside the ToolCompat Class. */
 	public static class Util {
 		@Deprecated
-		public static long onToolClick(String aTool, long aRemainingDurability, long aQuality, Entity aPlayer, IInventory aPlayerInventory, boolean aSneaking, ItemStack aStack, World aWorld, byte aSide, int aX, int aY, int aZ, float aHitX, float aHitY, float aHitZ) {
-			return onToolClick(aTool, aRemainingDurability, aQuality, aPlayer, null, aPlayerInventory, aSneaking, aStack, aWorld, aSide, aX, aY, aZ, aHitX, aHitY, aHitZ);
+		public static long onToolClick(String aTool, long aRemainingDurability, long aQuality, Entity aPlayer, IInventory aPlayerInventory, boolean aSneaking, ItemStack aStack, World aWorld, Direction aSide, BlockPos aPos, float aHitX, float aHitY, float aHitZ) {
+			return onToolClick(aTool, aRemainingDurability, aQuality, aPlayer, null, aPlayerInventory, aSneaking, aStack, aWorld, aSide, aPos, aHitX, aHitY, aHitZ);
 		}
 		@Deprecated
-		public static long onToolClick(Block aBlock, String aTool, long aRemainingDurability, long aQuality, Entity aPlayer, IInventory aPlayerInventory, boolean aSneaking, ItemStack aStack, World aWorld, byte aSide, int aX, int aY, int aZ, float aHitX, float aHitY, float aHitZ) {
-			return onToolClick(aBlock, aTool, aRemainingDurability, aQuality, aPlayer, null, aPlayerInventory, aSneaking, aStack, aWorld, aSide, aX, aY, aZ, aHitX, aHitY, aHitZ);
+		public static long onToolClick(Block aBlock, String aTool, long aRemainingDurability, long aQuality, Entity aPlayer, IInventory aPlayerInventory, boolean aSneaking, ItemStack aStack, World aWorld, Direction aSide, BlockPos aPos, float aHitX, float aHitY, float aHitZ) {
+			return onToolClick(aBlock, aTool, aRemainingDurability, aQuality, aPlayer, null, aPlayerInventory, aSneaking, aStack, aWorld, aSide, aPos, aHitX, aHitY, aHitZ);
 		}
 		
-		public static long onToolClick(String aTool, long aRemainingDurability, long aQuality, Entity aPlayer, List<String> aChatReturn, IInventory aPlayerInventory, boolean aSneaking, ItemStack aStack, World aWorld, byte aSide, int aX, int aY, int aZ, float aHitX, float aHitY, float aHitZ) {
-			return onToolClick(aWorld.getBlock(aX, aY, aZ), aTool.toLowerCase(), aRemainingDurability, aQuality, aPlayer, aChatReturn, aPlayerInventory, aSneaking, aStack, aWorld, aSide, aX, aY, aZ, aHitX, aHitY, aHitZ);
+		public static long onToolClick(String aTool, long aRemainingDurability, long aQuality, Entity aPlayer, List<String> aChatReturn, IInventory aPlayerInventory, boolean aSneaking, ItemStack aStack, World aWorld, Direction aSide, BlockPos aPos, float aHitX, float aHitY, float aHitZ) {
+			return onToolClick(aWorld.getBlockState(aPos).getBlock(), aTool.toLowerCase(), aRemainingDurability, aQuality, aPlayer, aChatReturn, aPlayerInventory, aSneaking, aStack, aWorld, aSide, aPos, aHitX, aHitY, aHitZ);
 		}
 		
-		public static long onToolClick(Block aBlock, String aTool, long aRemainingDurability, long aQuality, Entity aPlayer, List<String> aChatReturn, IInventory aPlayerInventory, boolean aSneaking, ItemStack aStack, World aWorld, byte aSide, int aX, int aY, int aZ, float aHitX, float aHitY, float aHitZ) {
-			if (aBlock instanceof IBlockToolable) return ((IBlockToolable)aBlock).onToolClick(aTool.toLowerCase(), aRemainingDurability, aQuality, aPlayer, aChatReturn, aPlayerInventory, aSneaking, aStack, aWorld, aSide, aX, aY, aZ, aHitX, aHitY, aHitZ);
-			return ToolCompat.onToolClick(aBlock, aTool.toLowerCase(), aRemainingDurability, aQuality, aPlayer, aChatReturn, aPlayerInventory, aSneaking, aStack, aWorld, aSide, aX, aY, aZ, aHitX, aHitY, aHitZ);
+		public static long onToolClick(Block aBlock, String aTool, long aRemainingDurability, long aQuality, Entity aPlayer, List<String> aChatReturn, IInventory aPlayerInventory, boolean aSneaking, ItemStack aStack, World aWorld, Direction aSide, BlockPos aPos, float aHitX, float aHitY, float aHitZ) {
+			if (aBlock instanceof IBlockToolable) return ((IBlockToolable)aBlock).onToolClick(aTool.toLowerCase(), aRemainingDurability, aQuality, aPlayer, aChatReturn, aPlayerInventory, aSneaking, aStack, aWorld, aSide, aPos, aHitX, aHitY, aHitZ);
+			return ToolCompat.onToolClick(aBlock, aTool.toLowerCase(), aRemainingDurability, aQuality, aPlayer, aChatReturn, aPlayerInventory, aSneaking, aStack, aWorld, aSide, aPos, aHitX, aHitY, aHitZ);
 		}
 	}
 }

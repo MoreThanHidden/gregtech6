@@ -35,7 +35,7 @@ import gregapi.util.UT;
 import gregapi.util.WD;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityBlaze;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -55,7 +55,7 @@ public class Behavior_Spray_Extinguisher extends AbstractBehaviorDefault {
 	}
 	
 	@Override
-	public boolean onItemUseFirst(MultiItem aItem, ItemStack aStack, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onItemUseFirst(MultiItem aItem, ItemStack aStack, PlayerEntity aPlayer, World aWorld, int aX, int aY, int aZ, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (aWorld.isRemote || aStack.stackSize != 1 || !aPlayer.canPlayerEdit(aX, aY, aZ, aSide, aStack)) return F;
 		
 		boolean rOutput = F;
@@ -93,7 +93,7 @@ public class Behavior_Spray_Extinguisher extends AbstractBehaviorDefault {
 		return rOutput;
 	}
 	
-	public long extinguish(World aWorld, int aX, int aY, int aZ, byte aSide, long aUses, EntityPlayer aPlayer, ItemStack aStack, float aHitX, float aHitY, float aHitZ) {
+	public long extinguish(World aWorld, int aX, int aY, int aZ, byte aSide, long aUses, PlayerEntity aPlayer, ItemStack aStack, float aHitX, float aHitY, float aHitZ) {
 		if (aPlayer == null || SIDES_INVALID[aSide] || aPlayer instanceof FakePlayer || !WD.obstructed(aWorld, aX, aY, aZ, aSide)) {
 			List<String> tChatReturn = new ArrayListNoNulls<>();
 			long tDamage = IBlockToolable.Util.onToolClick(TOOL_extinguisher, aUses*1000, 1, aPlayer, tChatReturn, aPlayer==null?null:aPlayer.inventory, aPlayer!=null&&aPlayer.isSneaking(), aStack, aWorld, aSide, aX, aY, aZ, aHitX, aHitY, aHitZ);

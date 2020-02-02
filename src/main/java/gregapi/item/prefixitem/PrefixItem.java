@@ -48,7 +48,7 @@ import gregapi.util.ST;
 import gregapi.util.UT;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
@@ -137,7 +137,7 @@ public class PrefixItem extends Item implements Runnable, IItemUpdatable, IPrefi
 	@Override public IIcon getIconIndex(ItemStack aStack) {return getIconFromDamageForRenderPass(ST.meta_(aStack), 0);}
 	@Override public IIcon getIconFromDamage(int aMetaData) {return getIconFromDamageForRenderPass(aMetaData, 0);}
 	@Override public IIcon getIcon(ItemStack aStack, int aRenderPass) {return getIconFromDamageForRenderPass(ST.meta_(aStack), aRenderPass);}
-	@Override public IIcon getIcon(ItemStack aStack, int aRenderPass, EntityPlayer aPlayer, ItemStack aUsedStack, int aUseRemaining) {return getIconFromDamageForRenderPass(ST.meta_(aStack), aRenderPass);}
+	@Override public IIcon getIcon(ItemStack aStack, int aRenderPass, PlayerEntity aPlayer, ItemStack aUsedStack, int aUseRemaining) {return getIconFromDamageForRenderPass(ST.meta_(aStack), aRenderPass);}
 	
 	@Override
 	public IIcon getIconFromDamageForRenderPass(int aMetaData, int aRenderPass) {
@@ -200,9 +200,9 @@ public class PrefixItem extends Item implements Runnable, IItemUpdatable, IPrefi
 	@Override public String toString() {return mNameInternal;}
 	@Override public final String getUnlocalizedName() {return mNameInternal;}
 	@Override public final Item setUnlocalizedName(String aName) {return this;}
-	@Override public void addInformation(ItemStack aStack, EntityPlayer aPlayer, @SuppressWarnings("rawtypes") List aList, boolean aF3_H) {/**/}
+	@Override public void addInformation(ItemStack aStack, PlayerEntity aPlayer, @SuppressWarnings("rawtypes") List aList, boolean aF3_H) {/**/}
 	@Override public final boolean hasContainerItem(ItemStack aStack) {return getContainerItem(aStack) != null;}
-	@Override public void onCreated(ItemStack aStack, World aWorld, EntityPlayer aPlayer) {updateItemStack(aStack);}
+	@Override public void onCreated(ItemStack aStack, World aWorld, PlayerEntity aPlayer) {updateItemStack(aStack);}
 	@Override public boolean isBookEnchantable(ItemStack aStack, ItemStack aBook) {return F;}
 	@Override public boolean getIsRepairable(ItemStack aStack, ItemStack aMaterial) {return F;}
 	@Override public int getItemEnchantability() {return 0;}

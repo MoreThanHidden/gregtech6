@@ -42,7 +42,7 @@ import gregapi.util.CR;
 import gregapi.util.OM;
 import gregapi.util.ST;
 import gregapi.util.UT;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
@@ -81,7 +81,7 @@ public class RecipeMapAutocrafting extends RecipeMap {
 			}
 		}
 		
-		InventoryCrafting tCraftInv = new InventoryCrafting(new Container() {@Override public boolean canInteractWith(EntityPlayer var1) {return F;}}, 3, 3);
+		InventoryCrafting tCraftInv = new InventoryCrafting(new Container() {@Override public boolean canInteractWith(PlayerEntity var1) {return F;}}, 3, 3);
 		for (int i = 0; i < 9; i++) tCraftInv.setInventorySlotContents(i, tBlueprint[i]);
 		
 		IRecipe tIRecipe = null;

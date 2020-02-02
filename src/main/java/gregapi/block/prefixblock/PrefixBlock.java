@@ -382,7 +382,7 @@ public class PrefixBlock extends Block implements Runnable, ITileEntityProvider,
 	}
 	
 	@Override
-	public ItemStack getPickBlock(MovingObjectPosition aTarget, World aWorld, int aX, int aY, int aZ, EntityPlayer aPlayer) {
+	public ItemStack getPickBlock(MovingObjectPosition aTarget, World aWorld, int aX, int aY, int aZ, PlayerEntity aPlayer) {
 		return getItemStackFromBlock(aWorld, aX, aY, aZ, SIDE_UNKNOWN);
 	}
 	
@@ -603,7 +603,7 @@ public class PrefixBlock extends Block implements Runnable, ITileEntityProvider,
 	}
 	
 	@Override
-	public void harvestBlock(World aWorld, EntityPlayer aPlayer, int aX, int aY, int aZ, int aMeta) {
+	public void harvestBlock(World aWorld, PlayerEntity aPlayer, int aX, int aY, int aZ, int aMeta) {
 		aPlayer.addStat(StatList.mineBlockStatArray[getIdFromBlock(this)], 1);
 		aPlayer.addExhaustion(0.025F);
 		boolean aSilkTouch = EnchantmentHelper.getSilkTouchModifier(aPlayer);

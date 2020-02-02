@@ -34,7 +34,7 @@ import gregapi.tileentity.machines.ITileEntityRunningSuccessfully;
 import gregapi.util.ST;
 import gregapi.util.UT;
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -53,7 +53,7 @@ public class MultiTileEntityLocker extends TileEntityBase09FacingSingle implemen
 	}
 	
 	@Override
-	public boolean onBlockActivated3(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onBlockActivated3(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (aSide != mFacing) return F;
 		if (UT.Entities.isPlayer(aPlayer) && isServerSide()) {
 			boolean temp = F;

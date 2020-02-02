@@ -31,7 +31,7 @@ import gregapi.util.UT;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.IShearable;
 
@@ -43,7 +43,7 @@ public class Behavior_Shears extends AbstractBehaviorDefault {
 	}
 	
 	@Override
-	public boolean onLeftClickEntity(MultiItem aItem, ItemStack aStack, EntityPlayer aPlayer, Entity aEntity) {
+	public boolean onLeftClickEntity(MultiItem aItem, ItemStack aStack, PlayerEntity aPlayer, Entity aEntity) {
 		if (aEntity instanceof IShearable) {
 			if (aPlayer.worldObj.isRemote) return T;
 			if (((IShearable)aEntity).isShearable(aStack, aPlayer.worldObj, (int)aEntity.posX, (int)aEntity.posY, (int)aEntity.posZ) && (UT.Entities.hasInfiniteItems(aPlayer) || ((MultiItemTool)aItem).doDamage(aStack, mCosts, aPlayer))) {
@@ -57,7 +57,7 @@ public class Behavior_Shears extends AbstractBehaviorDefault {
 	}
 	
 	@Override
-	public boolean onRightClickEntity(MultiItem aItem, ItemStack aStack, EntityPlayer aPlayer, Entity aEntity) {
+	public boolean onRightClickEntity(MultiItem aItem, ItemStack aStack, PlayerEntity aPlayer, Entity aEntity) {
 		return onLeftClickEntity(aItem, aStack, aPlayer, aEntity);
 	}
 	

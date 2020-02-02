@@ -32,7 +32,7 @@ import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.dispenser.IPosition;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -42,11 +42,11 @@ import net.minecraft.world.World;
  * @author Gregorius Techneticies
  */
 public interface IBehavior<E extends Item> {
-	public boolean onLeftClickEntity(E aItem, ItemStack aStack, EntityPlayer aPlayer, Entity aEntity);
-	public boolean onRightClickEntity(E aItem, ItemStack aStack, EntityPlayer aPlayer, Entity aEntity);
-	public boolean onItemUse(E aItem, ItemStack aStack, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ, byte aSide, float hitX, float hitY, float hitZ);
-	public boolean onItemUseFirst(E aItem, ItemStack aStack, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ, byte aSide, float hitX, float hitY, float hitZ);
-	public ItemStack onItemRightClick(E aItem, ItemStack aStack, World aWorld, EntityPlayer aPlayer);
+	public boolean onLeftClickEntity(E aItem, ItemStack aStack, PlayerEntity aPlayer, Entity aEntity);
+	public boolean onRightClickEntity(E aItem, ItemStack aStack, PlayerEntity aPlayer, Entity aEntity);
+	public boolean onItemUse(E aItem, ItemStack aStack, PlayerEntity aPlayer, World aWorld, int aX, int aY, int aZ, byte aSide, float hitX, float hitY, float hitZ);
+	public boolean onItemUseFirst(E aItem, ItemStack aStack, PlayerEntity aPlayer, World aWorld, int aX, int aY, int aZ, byte aSide, float hitX, float hitY, float hitZ);
+	public ItemStack onItemRightClick(E aItem, ItemStack aStack, World aWorld, PlayerEntity aPlayer);
 	public List<String> getAdditionalToolTips(E aItem, List<String> aList, ItemStack aStack);
 	public void onUpdate(E aItem, ItemStack aStack, World aWorld, Entity aPlayer, int aTimer, boolean aIsInHand);
 	public boolean isItemStackUsable(E aItem, ItemStack aStack);
@@ -57,11 +57,11 @@ public interface IBehavior<E extends Item> {
 	public EntityProjectile getProjectile(E aItem, TagData aProjectileType, ItemStack aStack, World aWorld, EntityLivingBase aEntity, float aSpeed);
 	
 	public abstract class AbstractBehaviorDefault implements IBehavior<MultiItem> {
-		@Override public boolean onLeftClickEntity(MultiItem aItem, ItemStack aStack, EntityPlayer aPlayer, Entity aEntity) {return F;}
-		@Override public boolean onRightClickEntity(MultiItem aItem, ItemStack aStack, EntityPlayer aPlayer, Entity aEntity) {return F;}
-		@Override public boolean onItemUse(MultiItem aItem, ItemStack aStack, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ, byte aSide, float hitX, float hitY, float hitZ) {return F;}
-		@Override public boolean onItemUseFirst(MultiItem aItem, ItemStack aStack, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ, byte aSide, float hitX, float hitY, float hitZ) {return F;}
-		@Override public ItemStack onItemRightClick(MultiItem aItem, ItemStack aStack, World aWorld, EntityPlayer aPlayer) {return aStack;}
+		@Override public boolean onLeftClickEntity(MultiItem aItem, ItemStack aStack, PlayerEntity aPlayer, Entity aEntity) {return F;}
+		@Override public boolean onRightClickEntity(MultiItem aItem, ItemStack aStack, PlayerEntity aPlayer, Entity aEntity) {return F;}
+		@Override public boolean onItemUse(MultiItem aItem, ItemStack aStack, PlayerEntity aPlayer, World aWorld, int aX, int aY, int aZ, byte aSide, float hitX, float hitY, float hitZ) {return F;}
+		@Override public boolean onItemUseFirst(MultiItem aItem, ItemStack aStack, PlayerEntity aPlayer, World aWorld, int aX, int aY, int aZ, byte aSide, float hitX, float hitY, float hitZ) {return F;}
+		@Override public ItemStack onItemRightClick(MultiItem aItem, ItemStack aStack, World aWorld, PlayerEntity aPlayer) {return aStack;}
 		@Override public List<String> getAdditionalToolTips(MultiItem aItem, List<String> aList, ItemStack aStack) {return aList;}
 		@Override public void onUpdate(MultiItem aItem, ItemStack aStack, World aWorld, Entity aPlayer, int aTimer, boolean aIsInHand) {/**/}
 		@Override public boolean isItemStackUsable(MultiItem aItem, ItemStack aStack) {return T;}

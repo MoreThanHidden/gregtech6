@@ -39,7 +39,7 @@ import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.dispenser.IPosition;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IProjectile;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -70,7 +70,7 @@ public class ItemBase extends Item implements IItemProjectile, IItemUpdatable, I
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public void addInformation(ItemStack aStack, EntityPlayer aPlayer, @SuppressWarnings("rawtypes") List aList, boolean aF3_H) {
+	public void addInformation(ItemStack aStack, PlayerEntity aPlayer, @SuppressWarnings("rawtypes") List aList, boolean aF3_H) {
 		if (getMaxDamage() > 0 && !getHasSubtypes()) aList.add((aStack.getMaxDamage() - getDamage(aStack)) + " / " + aStack.getMaxDamage());
 		if (mTooltip != null) aList.add(LanguageHandler.translate(mTooltip, mTooltip));
 		addAdditionalToolTips(aList, aStack, aF3_H);
@@ -110,12 +110,12 @@ public class ItemBase extends Item implements IItemProjectile, IItemUpdatable, I
 	@Override public final boolean getShareTag() {return T;} // just to be sure.
 	@Override @SideOnly(Side.CLIENT) public void registerIcons(IIconRegister aIconRegister) {mIcon = aIconRegister.registerIcon(mModID + ":" + mName);}
 	@Override public IIcon getIconFromDamage(int aMeta) {return mIcon;}
-	@Override public void onCreated(ItemStack aStack, World aWorld, EntityPlayer aPlayer) {isItemStackUsable(aStack);}
+	@Override public void onCreated(ItemStack aStack, World aWorld, PlayerEntity aPlayer) {isItemStackUsable(aStack);}
 	@Override public ItemStack getContainerItem(ItemStack aStack) {return null;}
 	@Override public boolean hasContainerItem(ItemStack aStack) {return getContainerItem(aStack) != null;}
 	@Override public void updateItemStack(ItemStack aStack) {isItemStackUsable(aStack);}
 	@Override public void updateItemStack(ItemStack aStack, World aWorld, int aX, int aY, int aZ) {updateItemStack(aStack);}
-	@Override public boolean doesSneakBypassUse(World aWorld, int aX, int aY, int aZ, EntityPlayer aPlayer) {return T;}
+	@Override public boolean doesSneakBypassUse(World aWorld, int aX, int aY, int aZ, PlayerEntity aPlayer) {return T;}
 	public boolean isItemStackUsable(ItemStack aStack) {return T;}
 	public ItemStack make(long aMetaData) {return ST.make(this, 1, aMetaData);}
 	public ItemStack make(long aAmount, long aMetaData) {return ST.make(this, aAmount, aMetaData);}

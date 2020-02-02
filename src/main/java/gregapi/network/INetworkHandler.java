@@ -24,7 +24,7 @@ import java.util.UUID;
 import cpw.mods.fml.common.network.FMLEmbeddedChannel;
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import cpw.mods.fml.relauncher.Side;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntityMP;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 
@@ -35,7 +35,7 @@ public interface INetworkHandler {
 	/** It sends a Packet from Client to Server. */
 	public void sendToServer(IPacket aPacket);
 	/** It sends a Packet to the Player, who is mentioned inside the Parameter. */
-	public void sendToPlayer(IPacket aPacket, EntityPlayerMP aPlayer);
+	public void sendToPlayer(IPacket aPacket, PlayerEntityMP aPlayer);
 	/** It sends a Packet to all Players, who are in the specified Range. */
 	public void sendToAllAround(IPacket aPacket, TargetPoint aPosition);
 	/** It sends a Packet to all Players, who watch the Chunk on these X/Z Coordinates. */

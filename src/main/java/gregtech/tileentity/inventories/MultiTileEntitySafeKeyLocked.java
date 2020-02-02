@@ -38,7 +38,7 @@ import gregapi.tileentity.inventories.MultiTileEntitySafe;
 import gregapi.util.UT;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -75,7 +75,7 @@ public class MultiTileEntitySafeKeyLocked extends MultiTileEntitySafe implements
 	}
 	
 	@Override
-	public boolean useKey(EntityPlayer aPlayer, byte aSide, float hitX, float hitY, float hitZ, long... aKeys) {
+	public boolean useKey(PlayerEntity aPlayer, byte aSide, float hitX, float hitY, float hitZ, long... aKeys) {
 		if (aKeys.length <= 0 || !isServerSide()) return F;
 		for (long tID : aKeys) {
 			if (mID == 0) mID = tID;

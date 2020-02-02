@@ -47,7 +47,7 @@ import gregapi.tileentity.machines.ITileEntitySwitchableMode;
 import gregapi.tileentity.machines.ITileEntitySwitchableOnOff;
 import gregapi.util.UT;
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -441,7 +441,7 @@ public class MultiTileEntityExtender extends TileEntityBase10FacingDouble implem
 	
 	public byte getExtenderTargetSide(byte aSide) {return aSide == mFacing ? mSecondFacing : mFacing;}
 	
-	@Override public boolean isUseableByPlayer(EntityPlayer aPlayer) {return aPlayer.getDistanceSq(xCoord+0.5, yCoord+0.5, zCoord+0.5) <= 64;}
+	@Override public boolean isUseableByPlayer(PlayerEntity aPlayer) {return aPlayer.getDistanceSq(xCoord+0.5, yCoord+0.5, zCoord+0.5) <= 64;}
 	@Override public void openInventory() {/**/}
 	@Override public void closeInventory() {/**/}
 	@Override public boolean canDrop(int aInventorySlot) {return F;}

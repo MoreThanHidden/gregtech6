@@ -22,7 +22,7 @@ package gregapi.item.multiitem.food;
 import java.util.List;
 
 import gregapi.data.CS.DrinksGT;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -46,37 +46,37 @@ public class FoodStatLink implements IFoodStat {
 	}
 	
 	@Override
-	public int getFoodLevel(Item aItem, ItemStack aStack, EntityPlayer aPlayer) {
+	public int getFoodLevel(Item aItem, ItemStack aStack, PlayerEntity aPlayer) {
 		return mStats.getFoodLevel(aItem, aStack, aPlayer);
 	}
 	
 	@Override
-	public float getSaturation(Item aItem, ItemStack aStack, EntityPlayer aPlayer) {
+	public float getSaturation(Item aItem, ItemStack aStack, PlayerEntity aPlayer) {
 		return mStats.getSaturation(aItem, aStack, aPlayer);
 	}
 	
 	@Override
-	public float getHydration(Item aItem, ItemStack aStack, EntityPlayer aPlayer) {
+	public float getHydration(Item aItem, ItemStack aStack, PlayerEntity aPlayer) {
 		return mStats.getHydration(aItem, aStack, aPlayer);
 	}
 	
 	@Override
-	public float getTemperature(Item aItem, ItemStack aStack, EntityPlayer aPlayer) {
+	public float getTemperature(Item aItem, ItemStack aStack, PlayerEntity aPlayer) {
 		return mStats.getTemperature(aItem, aStack, aPlayer);
 	}
 	
 	@Override
-	public float getTemperatureEffect(Item aItem, ItemStack aStack, EntityPlayer aPlayer) {
+	public float getTemperatureEffect(Item aItem, ItemStack aStack, PlayerEntity aPlayer) {
 		return mStats.getTemperatureEffect(aItem, aStack, aPlayer);
 	}
 	
 	@Override
-	public boolean alwaysEdible(Item aItem, ItemStack aStack, EntityPlayer aPlayer) {
+	public boolean alwaysEdible(Item aItem, ItemStack aStack, PlayerEntity aPlayer) {
 		return mStats.alwaysEdible(aItem, aStack, aPlayer);
 	}
 	
 	@Override
-	public boolean isRotten(Item aItem, ItemStack aStack, EntityPlayer aPlayer) {
+	public boolean isRotten(Item aItem, ItemStack aStack, PlayerEntity aPlayer) {
 		return mStats.isRotten(aItem, aStack, aPlayer);
 	}
 	
@@ -86,12 +86,12 @@ public class FoodStatLink implements IFoodStat {
 	}
 	
 	@Override
-	public boolean useAppleCoreFunctionality(Item aItem, ItemStack aStack, EntityPlayer aPlayer) {
+	public boolean useAppleCoreFunctionality(Item aItem, ItemStack aStack, PlayerEntity aPlayer) {
 		return mStats.useAppleCoreFunctionality(aItem, aStack, aPlayer);
 	}
 	
 	@Override
-	public void onEaten(Item aItem, ItemStack aStack, EntityPlayer aPlayer, boolean aConsumeItem) {
+	public void onEaten(Item aItem, ItemStack aStack, PlayerEntity aPlayer, boolean aConsumeItem) {
 		mStats.onEaten(aItem, aStack, aPlayer, aConsumeItem);
 	}
 	

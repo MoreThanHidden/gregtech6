@@ -46,7 +46,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.boss.EntityDragon;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -89,8 +89,8 @@ public class MultiTileEntityRock extends TileEntityBase03MultiTileEntities imple
 	@Override
 	public long onToolClick(String aTool, long aRemainingDurability, long aQuality, Entity aPlayer, List<String> aChatReturn, IInventory aPlayerInventory, boolean aSneaking, ItemStack aStack, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (isServerSide() && aTool.equals(TOOL_magnifyingglass)) {
-			if (aPlayer instanceof EntityPlayer && aSneaking) {
-				UT.Inventories.addStackToPlayerInventoryOrDrop((EntityPlayer)aPlayer, mRock == null ? getDefaultRock(1) : ST.amount(1, mRock), T, worldObj, xCoord+0.5, yCoord+0.5, zCoord+0.5);
+			if (aPlayer instanceof PlayerEntity && aSneaking) {
+				UT.Inventories.addStackToPlayerInventoryOrDrop((PlayerEntity)aPlayer, mRock == null ? getDefaultRock(1) : ST.amount(1, mRock), T, worldObj, xCoord+0.5, yCoord+0.5, zCoord+0.5);
 				playCollect();
 				setToAir();
 				return 0;
@@ -139,7 +139,7 @@ public class MultiTileEntityRock extends TileEntityBase03MultiTileEntities imple
 	}
 	
 	@Override
-	public boolean onBlockActivated2(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onBlockActivated2(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (isClientSide()) return T;
 		UT.Inventories.addStackToPlayerInventoryOrDrop(aPlayer, mRock == null ? getDefaultRock(1) : ST.amount(1, mRock), T, worldObj, xCoord+0.5, yCoord+0.5, zCoord+0.5);
 		playCollect();
@@ -231,7 +231,7 @@ public class MultiTileEntityRock extends TileEntityBase03MultiTileEntities imple
 	@Override public boolean isSurfaceOpaque        (byte aSide) {return F;}
 	@Override public boolean isSideSolid            (byte aSide) {return F;}
 	@Override public boolean isObstructingBlockAt   (byte aSide) {return F;}
-	@Override public boolean checkObstruction(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {return F;}
+	@Override public boolean checkObstruction(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {return F;}
 	@Override public boolean canEntityDestroy(Entity aEntity) {return !(aEntity instanceof EntityDragon);}
 	
 	@Override public int getLightOpacity() {return LIGHT_OPACITY_NONE;}

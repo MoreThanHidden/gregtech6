@@ -36,7 +36,7 @@ import gregapi.tileentity.delegate.DelegatorTileEntity;
 import gregapi.util.UT;
 import gregapi.util.WD;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -79,7 +79,7 @@ public abstract class TileEntityBase09Connector extends TileEntityBase08Directio
 	}
 	
 	@Override
-	public boolean onPlaced(ItemStack aStack, EntityPlayer aPlayer, MultiTileEntityContainer aMTEContainer, World aWorld, int aX, int aY, int aZ, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onPlaced(ItemStack aStack, PlayerEntity aPlayer, MultiTileEntityContainer aMTEContainer, World aWorld, int aX, int aY, int aZ, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (isServerSide()) {
 			aSide = OPPOSITES[aSide];
 			DelegatorTileEntity<TileEntity> tDelegator = getAdjacentTileEntity(aSide);
@@ -99,7 +99,7 @@ public abstract class TileEntityBase09Connector extends TileEntityBase08Directio
 	@Override public void setDirectionData(byte aData) {mConnections = (byte)(aData & 63);}
 	@Override public short getFacing() {return 0;}
 	@Override public void setFacing(short aSide) {/**/}
-	@Override public boolean wrenchCanSetFacing(EntityPlayer aPlayer, int aSide) {return F;}
+	@Override public boolean wrenchCanSetFacing(PlayerEntity aPlayer, int aSide) {return F;}
 	@Override public boolean isConnectedWrenchingOverlay(ItemStack aStack, byte aSide) {return connected(aSide);}
 	
 	@Override

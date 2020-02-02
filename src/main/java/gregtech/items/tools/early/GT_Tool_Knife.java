@@ -26,7 +26,7 @@ import gregapi.item.multiitem.MultiItemTool;
 import gregapi.item.multiitem.behaviors.Behavior_Tool;
 import gregapi.old.Textures;
 import gregapi.render.IIconContainer;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.AchievementList;
 
@@ -84,7 +84,7 @@ public class GT_Tool_Knife extends GT_Tool_Sword {
 	}
 	
 	@Override
-	public void onToolCrafted(ItemStack aStack, EntityPlayer aPlayer) {
+	public void onToolCrafted(ItemStack aStack, PlayerEntity aPlayer) {
 		super.onToolCrafted(aStack, aPlayer);
 		aPlayer.triggerAchievement(AchievementList.buildSword);
 	}

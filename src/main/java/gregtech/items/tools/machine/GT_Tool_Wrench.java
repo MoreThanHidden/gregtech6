@@ -35,7 +35,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityIronGolem;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 
@@ -45,7 +45,7 @@ public class GT_Tool_Wrench extends ToolStats {
 	);
 	
 	@Override
-	public float getNormalDamageAgainstEntity(float aOriginalDamage, Entity aEntity, ItemStack aStack, EntityPlayer aPlayer) {
+	public float getNormalDamageAgainstEntity(float aOriginalDamage, Entity aEntity, ItemStack aStack, PlayerEntity aPlayer) {
 		String tName = aEntity.getClass().getName();
 		tName = tName.substring(tName.lastIndexOf(".")+1);
 		return aEntity instanceof EntityIronGolem || mEffectiveList.contains(tName) || tName.contains("Golem") ? aOriginalDamage*2 : aOriginalDamage;

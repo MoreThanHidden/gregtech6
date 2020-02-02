@@ -35,7 +35,7 @@ import net.minecraft.dispenser.IPosition;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -63,7 +63,7 @@ public class Behavior_Arrow extends AbstractBehaviorDefault {
 	}
 	
 	@Override
-	public boolean onLeftClickEntity(MultiItem aItem, ItemStack aStack, EntityPlayer aPlayer, Entity aEntity) {
+	public boolean onLeftClickEntity(MultiItem aItem, ItemStack aStack, PlayerEntity aPlayer, Entity aEntity) {
 		if (aEntity instanceof EntityLivingBase) {
 			Enchantments.applyBullshitA((EntityLivingBase)aEntity, aPlayer, aStack);
 			Enchantments.applyBullshitB(aPlayer, aEntity, aStack);

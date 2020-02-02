@@ -27,7 +27,7 @@ import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.IIcon;
@@ -45,7 +45,7 @@ public interface IToolStats {
 	/**
 	 * Called when aPlayer crafts this Tool
 	 */
-	public void onToolCrafted(ItemStack aStack, EntityPlayer aPlayer);
+	public void onToolCrafted(ItemStack aStack, PlayerEntity aPlayer);
 	
 	/**
 	 * Called when this gets added to a Tool Item
@@ -169,13 +169,13 @@ public interface IToolStats {
 	/**
 	 * @return Mining Speed for this Block from this Tool. Return aDefault if you don't want to override this.
 	 */
-	public float getMiningSpeed(Block aBlock, byte aMetaData, float aDefault, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ);
+	public float getMiningSpeed(Block aBlock, byte aMetaData, float aDefault, PlayerEntity aPlayer, World aWorld, int aX, int aY, int aZ);
 	
 	/**
 	 * This lets you modify the Drop List, when this type of Tool has been used.
 	 * @return the Amount of modified Items.
 	 */
-	public int convertBlockDrops(List<ItemStack> aDrops, ItemStack aStack, EntityPlayer aPlayer, Block aBlock, long aAvailableConversions, int aX, int aY, int aZ, byte aMetaData, int aFortune, boolean aSilkTouch, BlockEvent.HarvestDropsEvent aEvent);
+	public int convertBlockDrops(List<ItemStack> aDrops, ItemStack aStack, PlayerEntity aPlayer, Block aBlock, long aAvailableConversions, int aX, int aY, int aZ, byte aMetaData, int aFortune, boolean aSilkTouch, BlockEvent.HarvestDropsEvent aEvent);
 	
 	/**
 	 * @return Returns a broken Version of the Item.
@@ -185,17 +185,17 @@ public interface IToolStats {
 	/**
 	 * @return the Damage actually done to the Mob.
 	 */
-	public float getNormalDamageAgainstEntity(float aOriginalDamage, Entity aEntity, ItemStack aStack, EntityPlayer aPlayer);
+	public float getNormalDamageAgainstEntity(float aOriginalDamage, Entity aEntity, ItemStack aStack, PlayerEntity aPlayer);
 	
 	/**
 	 * @return the Damage actually done to the Mob.
 	 */
-	public float getMagicDamageAgainstEntity(float aOriginalDamage, Entity aEntity, ItemStack aStack, EntityPlayer aPlayer);
+	public float getMagicDamageAgainstEntity(float aOriginalDamage, Entity aEntity, ItemStack aStack, PlayerEntity aPlayer);
 	
 	/**
 	 * Gets called after successfully dealing Damage to a Mob.
 	 */
-	public void afterDealingDamage(float aNormalDamage, float aMagicDamage, int aFireAspect, boolean aCriticalHit, Entity aEntity, ItemStack aStack, EntityPlayer aPlayer);
+	public void afterDealingDamage(float aNormalDamage, float aMagicDamage, int aFireAspect, boolean aCriticalHit, Entity aEntity, ItemStack aStack, PlayerEntity aPlayer);
 	
 	public int getRenderPasses();
 	public IIcon getIcon(ItemStack aStack, int aRenderPass);

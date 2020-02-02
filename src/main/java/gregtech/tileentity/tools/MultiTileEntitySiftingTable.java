@@ -55,7 +55,7 @@ import gregapi.util.OM;
 import gregapi.util.ST;
 import gregapi.util.UT;
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -229,7 +229,7 @@ public class MultiTileEntitySiftingTable extends TileEntityBase07Paintable imple
 
 			if (aTimer % 5 == 0 && (mState & B[2]) != 0) {
 				mState &= ~B[2];
-				for (Entry<EntityPlayer, ChunkCoordinates> tEntry : PLAYER_LAST_CLICKED.entrySet()) {
+				for (Entry<PlayerEntity, ChunkCoordinates> tEntry : PLAYER_LAST_CLICKED.entrySet()) {
 					if (getCoords().equals(tEntry.getValue()) && tEntry.getKey().getDistanceSq(xCoord+0.5, yCoord+0.5, zCoord+0.5) <= 64) {
 						mState |= B[2];
 
@@ -266,7 +266,7 @@ public class MultiTileEntitySiftingTable extends TileEntityBase07Paintable imple
 	@Override public boolean attachCoversFirst(byte aSide) {return F;}
 
 	@Override
-	public boolean onBlockActivated3(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onBlockActivated3(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (isServerSide()) {
 			if (SIDES_TOP[aSide]) {
 				float[] tCoords = UT.Code.getFacingCoordsClicked(aSide, aHitX, aHitY, aHitZ);

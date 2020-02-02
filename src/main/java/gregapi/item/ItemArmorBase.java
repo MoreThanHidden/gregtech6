@@ -48,7 +48,7 @@ import net.minecraft.dispenser.IPosition;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IProjectile;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
@@ -102,7 +102,7 @@ public class ItemArmorBase extends ItemArmor implements IItemUpdatable, IItemGT,
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public void addInformation(ItemStack aStack, EntityPlayer aPlayer, @SuppressWarnings("rawtypes") List aList, boolean aF3_H) {
+	public void addInformation(ItemStack aStack, PlayerEntity aPlayer, @SuppressWarnings("rawtypes") List aList, boolean aF3_H) {
 		if (getMaxDamage() > 0 && !getHasSubtypes()) aList.add((aStack.getMaxDamage() - getDamage(aStack)) + " / " + aStack.getMaxDamage());
 		if (mTooltip != null) aList.add(LanguageHandler.translate(mTooltip, mTooltip));
 		addAdditionalToolTips(aList, aStack, aF3_H);
@@ -134,11 +134,11 @@ public class ItemArmorBase extends ItemArmor implements IItemUpdatable, IItemGT,
 	
 	@Override public String getArmorTexture(ItemStack aStack, Entity aEntity, int aSlot, String aType) {return mArmorTexture;}
 	@Override public ArmorProperties getProperties(EntityLivingBase aPlayer, ItemStack aStack, DamageSource aSource, double aDamage, int aSlot) {return aSource.isUnblockable() ? new ArmorProperties(0, 0, 0) : new ArmorProperties(0, damageReduceAmount / 25.0, getMaxDamage() + 1 - aStack.getItemDamage());}
-	@Override public int getArmorDisplay(EntityPlayer aPlayer, ItemStack aStack, int aSlot) {return getArmorMaterial().getDamageReductionAmount(aSlot);}
+	@Override public int getArmorDisplay(PlayerEntity aPlayer, ItemStack aStack, int aSlot) {return getArmorMaterial().getDamageReductionAmount(aSlot);}
 	@Override public void damageArmor(EntityLivingBase aEntity, ItemStack aStack, DamageSource aSource, int aDamage, int aSlot) {aStack.damageItem(aDamage, aEntity);}
-	@Override public boolean isMetalArmor(ItemStack aStack, EntityPlayer aPlayer) {return mMetalArmor;}
+	@Override public boolean isMetalArmor(ItemStack aStack, PlayerEntity aPlayer) {return mMetalArmor;}
 	@Override public boolean protectEntity(EntityLivingBase aPlayer, ItemStack aArmor, String aCause, boolean doProtect) {return mBeeArmor;}
-	@Override @SuppressWarnings("deprecation") public boolean protectPlayer(EntityPlayer aPlayer, ItemStack aArmor, String aCause, boolean doProtect) {return mBeeArmor;}
+	@Override @SuppressWarnings("deprecation") public boolean protectPlayer(PlayerEntity aPlayer, ItemStack aArmor, String aCause, boolean doProtect) {return mBeeArmor;}
 	@Override public int getColorFromItemStack(ItemStack aStack, int aRenderpass) {return UNCOLORED;}
 	@Override public boolean requiresMultipleRenderPasses() {return F;}
 	@Override public boolean hasColor(ItemStack aStack) {return F;}
@@ -155,12 +155,12 @@ public class ItemArmorBase extends ItemArmor implements IItemUpdatable, IItemGT,
 	@Override @SideOnly(Side.CLIENT) public void registerIcons(IIconRegister aIconRegister) {mIcon = aIconRegister.registerIcon(mModID + ":" + "armor/" + mArmorName + "/" + armorType);}
 	@Override public IIcon getIconFromDamage(int aMeta) {return mIcon;}
 	@Override public IIcon getIconFromDamageForRenderPass(int aMeta, int aRenderpass) {return mIcon;}
-	@Override public void onCreated(ItemStack aStack, World aWorld, EntityPlayer aPlayer) {isItemStackUsable(aStack);}
+	@Override public void onCreated(ItemStack aStack, World aWorld, PlayerEntity aPlayer) {isItemStackUsable(aStack);}
 	@Override public ItemStack getContainerItem(ItemStack aStack) {return null;}
 	@Override public boolean hasContainerItem(ItemStack aStack) {return getContainerItem(aStack) != null;}
 	@Override public void updateItemStack(ItemStack aStack) {isItemStackUsable(aStack);}
 	@Override public void updateItemStack(ItemStack aStack, World aWorld, int aX, int aY, int aZ) {updateItemStack(aStack);}
-	@Override public boolean doesSneakBypassUse(World aWorld, int aX, int aY, int aZ, EntityPlayer aPlayer) {return T;}
+	@Override public boolean doesSneakBypassUse(World aWorld, int aX, int aY, int aZ, PlayerEntity aPlayer) {return T;}
 	public boolean isItemStackUsable(ItemStack aStack) {return T;}
 	public ItemStack make(long aMetaData) {return ST.make(this, 1, aMetaData);}
 	public ItemStack make(long aAmount, long aMetaData) {return ST.make(this, aAmount, aMetaData);}

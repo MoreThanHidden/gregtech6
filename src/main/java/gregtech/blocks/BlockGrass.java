@@ -35,7 +35,7 @@ import gregapi.util.CR;
 import gregapi.util.ST;
 import gregapi.util.WD;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
@@ -84,7 +84,7 @@ public class BlockGrass extends BlockBaseMeta {
 	}
 	
 	@Override
-	public void addInformation(ItemStack aStack, int aMeta, EntityPlayer aPlayer, List<String> aList, boolean aF3_H) {
+	public void addInformation(ItemStack aStack, int aMeta, PlayerEntity aPlayer, List<String> aList, boolean aF3_H) {
 		aList.add(LH.Chat.CYAN + LH.get("gt.grass.tooltip"));
 	}
 	

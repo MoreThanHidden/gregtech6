@@ -62,7 +62,7 @@ import gregapi.util.WD;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -687,7 +687,7 @@ public class MultiTileEntityMultiBlockPart extends TileEntityBase05Paintable imp
 	}
 	
 	// Useless Garbage :P
-	@Override public boolean isUseableByPlayer(EntityPlayer aPlayer) {return aPlayer.getDistanceSq(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D) <= 64D;}
+	@Override public boolean isUseableByPlayer(PlayerEntity aPlayer) {return aPlayer.getDistanceSq(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D) <= 64D;}
 	@Override public void openInventory() {/**/}
 	@Override public void closeInventory() {/**/}
 }

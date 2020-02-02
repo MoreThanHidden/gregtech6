@@ -32,8 +32,8 @@ import ic2.api.crops.CropCard;
 import ic2.api.crops.Crops;
 import ic2.api.crops.ICropTile;
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerEntityMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
@@ -145,9 +145,9 @@ public class GT_BaseCrop extends CropCard {
 	}
 	
 	@Override
-	public boolean rightclick(ICropTile aCrop, EntityPlayer aPlayer) {
+	public boolean rightclick(ICropTile aCrop, PlayerEntity aPlayer) {
 		if (!canBeHarvested(aCrop)) return false;
-		return aCrop.harvest(aPlayer==null?false:aPlayer instanceof EntityPlayerMP);
+		return aCrop.harvest(aPlayer==null?false:aPlayer instanceof PlayerEntityMP);
 	}
 	
 	@Override

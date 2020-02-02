@@ -42,7 +42,7 @@ import gregapi.util.OM;
 import gregapi.util.ST;
 import gregapi.util.UT;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -98,8 +98,8 @@ public class MultiTileEntityFilterPrefix extends MultiTileEntityExtender impleme
 		}
 	}
 	
-	@Override public Object getGUIClient2(int aGUIID, EntityPlayer aPlayer) {return new MultiTileEntityGUIClientFilterPrefix(aPlayer.inventory, this, aGUIID);}
-	@Override public Object getGUIServer2(int aGUIID, EntityPlayer aPlayer) {return new MultiTileEntityGUICommonFilterPrefix(aPlayer.inventory, this, aGUIID);}
+	@Override public Object getGUIClient2(int aGUIID, PlayerEntity aPlayer) {return new MultiTileEntityGUIClientFilterPrefix(aPlayer.inventory, this, aGUIID);}
+	@Override public Object getGUIServer2(int aGUIID, PlayerEntity aPlayer) {return new MultiTileEntityGUICommonFilterPrefix(aPlayer.inventory, this, aGUIID);}
 	@Override public int getSizeInventoryGUI() {return 1;}
 	@Override public ItemStack getStackInSlotGUI(int aSlot) {return mCycle;}
 	@Override public ItemStack decrStackSizeGUI(int aSlot, int aDecrement) {return null;}
@@ -146,7 +146,7 @@ public class MultiTileEntityFilterPrefix extends MultiTileEntityExtender impleme
 	}
 	
 	@Override
-	public boolean onBlockActivated3(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onBlockActivated3(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (isServerSide() && isUseableByPlayerGUI(aPlayer)) openGUI(aPlayer);
 		return T;
 	}
@@ -246,7 +246,7 @@ public class MultiTileEntityFilterPrefix extends MultiTileEntityExtender impleme
 		}
 		
 		@Override
-		public ItemStack slotClick(int aSlotIndex, int aMouseclick, int aShifthold, EntityPlayer aPlayer) {
+		public ItemStack slotClick(int aSlotIndex, int aMouseclick, int aShifthold, PlayerEntity aPlayer) {
 			if (aSlotIndex < 0 || aSlotIndex >= mTileEntity.getSizeInventoryGUI()) return super.slotClick(aSlotIndex, aMouseclick, aShifthold, aPlayer);
 			
 			ItemStack tStack = aPlayer.inventory.getItemStack();

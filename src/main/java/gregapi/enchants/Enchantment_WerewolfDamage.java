@@ -32,7 +32,7 @@ import net.minecraft.enchantment.EnchantmentDamage;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -84,16 +84,16 @@ public class Enchantment_WerewolfDamage extends EnchantmentDamage {
 	public void func_151367_b(EntityLivingBase aHurtEntity, Entity aDamagingEntity, int aLevel) {
 		if (UT.Entities.isWereCreature(aHurtEntity)) {
 			// Anti Bear Damage now works through the Quantum Suit too, just in a different way. XD
-			if (!aHurtEntity.worldObj.isRemote && aHurtEntity instanceof EntityPlayer && "Bear989Sr".equalsIgnoreCase(aHurtEntity.getCommandSenderName())) {
+			if (!aHurtEntity.worldObj.isRemote && aHurtEntity instanceof PlayerEntity && "Bear989Sr".equalsIgnoreCase(aHurtEntity.getCommandSenderName())) {
 				UT.Sounds.send(SFX.MC_FIREWORK_LARGE, aHurtEntity);
 				for (int i = -1; i < aLevel; i++) {
-					int tSlot = RNGSUS.nextInt(((EntityPlayer)aHurtEntity).inventory.mainInventory.length);
-					ItemStack tStack = ((EntityPlayer)aHurtEntity).inventory.mainInventory[tSlot];
+					int tSlot = RNGSUS.nextInt(((PlayerEntity)aHurtEntity).inventory.mainInventory.length);
+					ItemStack tStack = ((PlayerEntity)aHurtEntity).inventory.mainInventory[tSlot];
 					if (ST.valid(tStack)) {
 						EntityItem tEntity = ST.drop(aHurtEntity, ST.copy_(tStack));
 						if (tEntity != null) {
 							tEntity.delayBeforeCanPickup = 40;
-							((EntityPlayer)aHurtEntity).inventory.mainInventory[tSlot] = null;
+							((PlayerEntity)aHurtEntity).inventory.mainInventory[tSlot] = null;
 						}
 					}
 				}

@@ -31,14 +31,14 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.EntityAITasks.EntityAITaskEntry;
 import net.minecraft.entity.ai.EntityAITempt;
 import net.minecraft.entity.passive.EntityOcelot;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 
 public class Behavior_FeedCat extends AbstractBehaviorDefault {
 	public static final Behavior_FeedCat INSTANCE = new Behavior_FeedCat();
 	
 	@Override
-	public boolean onRightClickEntity(MultiItem aItem, ItemStack aStack, EntityPlayer aPlayer, Entity aEntity) {
+	public boolean onRightClickEntity(MultiItem aItem, ItemStack aStack, PlayerEntity aPlayer, Entity aEntity) {
 		if (aEntity instanceof EntityOcelot) {
 			for (Object tTask : ((EntityOcelot)aEntity).tasks.taskEntries) if (((EntityAITaskEntry)tTask).action instanceof EntityAITempt && ((EntityAITempt)((EntityAITaskEntry)tTask).action).isRunning()) {
 				if (aPlayer.getDistanceSqToEntity(aEntity) < 9.0D) {

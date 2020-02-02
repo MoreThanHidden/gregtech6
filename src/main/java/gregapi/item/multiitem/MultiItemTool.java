@@ -58,7 +58,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
@@ -182,7 +182,7 @@ public class MultiItemTool extends MultiItem implements IItemGTHandTool, IItemGT
 	/**
 	 * Called by the Block Harvesting Event within the GT_Proxy
 	 */
-	public void onHarvestBlockEvent(ArrayList<ItemStack> aDrops, ItemStack aStack, EntityPlayer aPlayer, Block aBlock, int aX, int aY, int aZ, byte aMetaData, int aFortune, boolean aSilkTouch, BlockEvent.HarvestDropsEvent aEvent) {
+	public void onHarvestBlockEvent(ArrayList<ItemStack> aDrops, ItemStack aStack, PlayerEntity aPlayer, Block aBlock, int aX, int aY, int aZ, byte aMetaData, int aFortune, boolean aSilkTouch, BlockEvent.HarvestDropsEvent aEvent) {
 		if (aBlock instanceof BlockTorch || IL.GC_Torch_Glowstone.equal(aBlock) || IL.AETHER_Torch_Ambrosium.equal(aBlock) || (aMetaData == 1 && IL.TC_Block_Air.equal(aBlock))) return;
 		IToolStats tStats = getToolStats(aStack);
 		if (isItemStackUsable(aStack) && getDigSpeed(aStack, aBlock, aMetaData) > 0) {
@@ -198,14 +198,14 @@ public class MultiItemTool extends MultiItem implements IItemGTHandTool, IItemGT
 		return (tStats.canCollect() || getPrimaryMaterial(aStack).contains(TD.Properties.MAGNETIC_ACTIVE)) && isItemStackUsable(aStack) && getDigSpeed(aStack, aBlock, aMetaData) > 0;
 	}
 	
-	public float onBlockBreakSpeedEvent(float aDefault, ItemStack aStack, EntityPlayer aPlayer, Block aBlock, int aX, int aY, int aZ, byte aMetaData, PlayerEvent.BreakSpeed aEvent) {
+	public float onBlockBreakSpeedEvent(float aDefault, ItemStack aStack, PlayerEntity aPlayer, Block aBlock, int aX, int aY, int aZ, byte aMetaData, PlayerEvent.BreakSpeed aEvent) {
 		if (aBlock instanceof BlockTorch || IL.GC_Torch_Glowstone.equal(aBlock) || IL.AETHER_Torch_Ambrosium.equal(aBlock) || (aMetaData == 1 && IL.TC_Block_Air.equal(aBlock))) return Float.MAX_VALUE;
 		IToolStats tStats = getToolStats(aStack);
 		return tStats == null ? aDefault : tStats.getMiningSpeed(aBlock, aMetaData, aDefault, aPlayer, aPlayer.worldObj, aX, aY, aZ);
 	}
 	
 	@Override
-	public boolean onLeftClickEntity(ItemStack aStack, EntityPlayer aPlayer, Entity aEntity) {
+	public boolean onLeftClickEntity(ItemStack aStack, PlayerEntity aPlayer, Entity aEntity) {
 		IToolStats tStats = getToolStats(aStack);
 		if (tStats == null || !isItemStackUsable(aStack)) return T;
 		if (TOOL_SOUNDS) UT.Sounds.play(tStats.getEntityHitSound(), 20, 1, aEntity);
@@ -249,7 +249,7 @@ public class MultiItemTool extends MultiItem implements IItemGTHandTool, IItemGT
 	}
 	
 	@Override
-	public ItemStack onItemRightClick(ItemStack aStack, World aWorld, EntityPlayer aPlayer) {
+	public ItemStack onItemRightClick(ItemStack aStack, World aWorld, PlayerEntity aPlayer) {
 		IToolStats tStats = getToolStats(aStack);
 		if (tStats != null && tStats.canBlock()) aPlayer.setItemInUse(aStack, 72000);
 		return super.onItemRightClick(aStack, aWorld, aPlayer);
@@ -407,9 +407,9 @@ public class MultiItemTool extends MultiItem implements IItemGTHandTool, IItemGT
 					ItemStack tBroken = tStats.getBrokenItem(aStack);
 					if (ST.invalid(tBroken) || tBroken.stackSize <= 0) {
 						aStack.stackSize = 0;
-					} else if (aPlayer instanceof EntityPlayer) {
+					} else if (aPlayer instanceof PlayerEntity) {
 						if (tBroken.stackSize > 64) tBroken.stackSize = 64;
-						if (!aPlayer.worldObj.isRemote) UT.Inventories.addStackToPlayerInventoryOrDrop((EntityPlayer)aPlayer, tBroken, F);
+						if (!aPlayer.worldObj.isRemote) UT.Inventories.addStackToPlayerInventoryOrDrop((PlayerEntity)aPlayer, tBroken, F);
 						aStack.stackSize = 0;
 					} else {
 						if (tBroken.stackSize > 64) tBroken.stackSize = 64;
@@ -495,7 +495,7 @@ public class MultiItemTool extends MultiItem implements IItemGTHandTool, IItemGT
 	}
 	
 	@Override
-	public void onCreated(ItemStack aStack, World aWorld, EntityPlayer aPlayer) {
+	public void onCreated(ItemStack aStack, World aWorld, PlayerEntity aPlayer) {
 		IToolStats tStats = getToolStats(aStack);
 		if (tStats != null && aPlayer != null) tStats.onToolCrafted(aStack, aPlayer);
 		super.onCreated(aStack, aWorld, aPlayer);
@@ -628,7 +628,7 @@ public class MultiItemTool extends MultiItem implements IItemGTHandTool, IItemGT
 	}
 	
 	@Override
-	public IIcon getIcon(ItemStack aStack, int aRenderPass, EntityPlayer aPlayer, ItemStack aUsedStack, int aUseRemaining) {
+	public IIcon getIcon(ItemStack aStack, int aRenderPass, PlayerEntity aPlayer, ItemStack aUsedStack, int aUseRemaining) {
 		IToolStats tStats = getToolStatsInternal(aStack);
 		if (tStats == null) return Textures.ItemIcons.VOID.getIcon(0);
 		if (aRenderPass < tStats.getRenderPasses()) {

@@ -33,8 +33,8 @@ import gregapi.item.multiitem.MultiItem;
 import gregapi.item.multiitem.behaviors.IBehavior.AbstractBehaviorDefault;
 import gregapi.util.UT;
 import gregapi.util.WD;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerEntityMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -43,8 +43,8 @@ public class Behavior_Cropnalyzer extends AbstractBehaviorDefault {
 	public static final Behavior_Cropnalyzer INSTANCE = new Behavior_Cropnalyzer();
 	
 	@Override
-	public boolean onItemUseFirst(MultiItem aItem, ItemStack aStack, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ, byte aSide, float hitX, float hitY, float hitZ) {
-		if (aPlayer instanceof EntityPlayerMP) {
+	public boolean onItemUseFirst(MultiItem aItem, ItemStack aStack, PlayerEntity aPlayer, World aWorld, int aX, int aY, int aZ, byte aSide, float hitX, float hitY, float hitZ) {
+		if (aPlayer instanceof PlayerEntityMP) {
 			ArrayList<String> tList = new ArrayListNoNulls<>();
 			long tUsedEnergy = getCropScan(tList, aWorld, aX, aY, aZ);
 			if (tUsedEnergy <= 0) return F;
@@ -52,7 +52,7 @@ public class Behavior_Cropnalyzer extends AbstractBehaviorDefault {
 			return T;
 		}
 		UT.Sounds.play(SFX.IC_SCANNER, 20, 1.0F, aX, aY, aZ);
-		return aPlayer instanceof EntityPlayerMP;
+		return aPlayer instanceof PlayerEntityMP;
 	}
 	
 	static {

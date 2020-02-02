@@ -45,8 +45,8 @@ import net.minecraft.block.BlockTorch;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerEntityMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
@@ -126,7 +126,7 @@ public class Behavior_Gun extends AbstractBehaviorDefault {
 		return null;
 	}
 	
-	public boolean shoot(ItemStack aGun, ItemStack aBullet, EntityPlayer aPlayer) {
+	public boolean shoot(ItemStack aGun, ItemStack aBullet, PlayerEntity aPlayer) {
 		
 		//MovingObjectPosition tTargetBlock = trace(aPlayer.worldObj, aPosA, aPosB, F);
 		
@@ -145,8 +145,8 @@ public class Behavior_Gun extends AbstractBehaviorDefault {
 	}
 	
 	@Override
-	public ItemStack onItemRightClick(MultiItem aItem, ItemStack aStack, World aWorld, EntityPlayer aPlayer) {
-		if (aPlayer instanceof EntityPlayerMP) {
+	public ItemStack onItemRightClick(MultiItem aItem, ItemStack aStack, World aWorld, PlayerEntity aPlayer) {
+		if (aPlayer instanceof PlayerEntityMP) {
 			if (aPlayer.isSneaking()) {
 				// TODO: Open GUI for reloading Gun
 			} else {
@@ -157,8 +157,8 @@ public class Behavior_Gun extends AbstractBehaviorDefault {
 	}
 	
 	@Override
-	public boolean onRightClickEntity(MultiItem aItem, ItemStack aStack, EntityPlayer aPlayer, Entity aEntity) {
-		if (aPlayer instanceof EntityPlayerMP) {
+	public boolean onRightClickEntity(MultiItem aItem, ItemStack aStack, PlayerEntity aPlayer, Entity aEntity) {
+		if (aPlayer instanceof PlayerEntityMP) {
 			if (aPlayer.isSneaking()) {
 				// TODO: Open GUI for reloading Gun
 			} else {

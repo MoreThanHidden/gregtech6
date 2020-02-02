@@ -30,7 +30,7 @@ import gregapi.tileentity.base.TileEntityBase07Paintable;
 import gregapi.tileentity.delegate.DelegatorTileEntity;
 import gregapi.tileentity.machines.ITileEntitySwitchableMode;
 import gregapi.util.OM;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -71,7 +71,7 @@ public abstract class TileEntityBase08DataSwitch extends TileEntityBase07Paintab
 	}
 	
 	@Override
-	public boolean onBlockActivated3(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onBlockActivated3(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (isServerSide() && isUseableByPlayerGUI(aPlayer)) {
 			ItemStack aHeldItem = aPlayer.inventory.getCurrentItem();
 			if (OM.is(OD_USB_STICKS[0], aHeldItem)) {

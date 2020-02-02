@@ -54,7 +54,7 @@ import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -152,7 +152,7 @@ public class MultiTileEntityCoin extends TileEntityBase04MultiTileEntities imple
 	}
 	
 	@Override
-	public boolean onBlockActivated2(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onBlockActivated2(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (isServerSide() && SIDES_TOP[aSide]) {
 			ItemStack aStack = aPlayer.getCurrentEquippedItem(), tStack = getCoin(1, MultiTileEntityRegistry.getRegistry(getMultiTileEntityRegistryID()), getMultiTileEntityID());
 			int tIndex = (int)(Math.min(0.99F, Math.max(0, aHitX))*4)*4+(int)(Math.min(0.99F, Math.max(0, aHitZ))*4);
@@ -179,7 +179,7 @@ public class MultiTileEntityCoin extends TileEntityBase04MultiTileEntities imple
 	}
 	
 	@Override
-	public boolean checkObstruction(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean checkObstruction(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		return F;
 	}
 	
@@ -248,7 +248,7 @@ public class MultiTileEntityCoin extends TileEntityBase04MultiTileEntities imple
 	}
 	
 	@Override
-	public boolean onPlaced(ItemStack aStack, EntityPlayer aPlayer, MultiTileEntityContainer aMTEContainer, World aWorld, int aX, int aY, int aZ, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onPlaced(ItemStack aStack, PlayerEntity aPlayer, MultiTileEntityContainer aMTEContainer, World aWorld, int aX, int aY, int aZ, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		for (byte i = 0; i < mCoinStackSizes.length; i++) if (mCoinStackSizes[i] > 0) return T;
 		mCoinStackSizes[(int)(Math.min(0.99F, Math.max(0, aHitX))*4)*4+(int)(Math.min(0.99F, Math.max(0, aHitZ))*4)] = 1;
 		return T;

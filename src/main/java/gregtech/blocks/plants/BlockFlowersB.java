@@ -33,7 +33,7 @@ import gregapi.util.CR;
 import gregapi.util.OM;
 import gregapi.util.ST;
 import gregapi.util.WD;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -63,7 +63,7 @@ public class BlockFlowersB extends BlockBaseFlower implements Runnable {
 	}
 	
 	@Override
-	public void addInformation(ItemStack aStack, int aMeta, EntityPlayer aPlayer, List<String> aList, boolean aF3_H) {
+	public void addInformation(ItemStack aStack, int aMeta, PlayerEntity aPlayer, List<String> aList, boolean aF3_H) {
 		switch(aMeta) {
 		case  0: aList.add("Indicates presence of an Arsenic Deposit nearby"); break;
 		case  1: aList.add("Indicates presence of an Antimony Deposit nearby"); break;

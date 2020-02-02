@@ -33,7 +33,7 @@ import gregapi.util.ST;
 import gregapi.util.UT;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityCreeper;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -59,7 +59,7 @@ public class Behavior_Lighter extends AbstractBehaviorDefault {
 	}
 	
 	@Override
-	public boolean onLeftClickEntity(MultiItem aItem, ItemStack aStack, EntityPlayer aPlayer, Entity aEntity) {
+	public boolean onLeftClickEntity(MultiItem aItem, ItemStack aStack, PlayerEntity aPlayer, Entity aEntity) {
 		if (aPlayer.worldObj.isRemote || (aStack.stackSize != 1 && (mFuelAmount != 1 || mEmptyLighter != null))) return F;
 		
 		boolean rOutput = F;
@@ -80,7 +80,7 @@ public class Behavior_Lighter extends AbstractBehaviorDefault {
 	}
 	
 	@Override
-	public boolean onItemUseFirst(MultiItem aItem, ItemStack aStack, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onItemUseFirst(MultiItem aItem, ItemStack aStack, PlayerEntity aPlayer, World aWorld, int aX, int aY, int aZ, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (aWorld.isRemote || (aStack.stackSize != 1 && (mFuelAmount != 1 || mEmptyLighter != null))) return F;
 		
 		prepare(aStack);

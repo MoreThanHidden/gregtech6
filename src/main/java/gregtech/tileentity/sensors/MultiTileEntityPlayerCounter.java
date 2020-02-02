@@ -33,7 +33,7 @@ import net.minecraft.world.WorldServer;
 /**
  * @author Gregorius Techneticies
  */
-public class MultiTileEntityPlayerCounter extends MultiTileEntitySensorTE {
+public class MultiTilePlayerEntityCounter extends MultiTileEntitySensorTE {
 	static {LH.add("gt.tooltip.sensor.playercounter", "Measures Player Count of the whole Server");}
 	@Override public String getSensorDescription() {return LH.get("gt.tooltip.sensor.playercounter");}
 	

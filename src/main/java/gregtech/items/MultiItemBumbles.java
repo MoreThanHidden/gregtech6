@@ -57,7 +57,7 @@ import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntitySnowman;
 import net.minecraft.entity.passive.EntityHorse;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -390,7 +390,7 @@ public class MultiItemBumbles extends MultiItemRandom implements IItemBumbleBee 
 		  tSkeleton = (aAttacked instanceof EntitySkeleton || (aAttacked instanceof EntityHorse && ((EntityHorse)aAttacked).getHorseType() == 4))
 		, tSnowGolem = (aAttacked.getClass() == EntitySnowman.class)
 		, tIronGolem = (aAttacked instanceof EntityIronGolem)
-		, tPlayer = (aAttacked instanceof EntityPlayer)
+		, tPlayer = (aAttacked instanceof PlayerEntity)
 		;
 		switch(aMetaData / 100) {
 		default: return !tSkeleton && !tSnowGolem && !tIronGolem && aAttacked.attackEntityFrom(DamageSources.getBumbleDamage(), (1+((aMetaData / 10) % 10))  );
@@ -594,7 +594,7 @@ public class MultiItemBumbles extends MultiItemRandom implements IItemBumbleBee 
 
 	@Override public IIcon getIconIndex(ItemStack aStack) {return mIconList[(ST.meta_(aStack)/10)*10][0];}
 	@Override public IIcon getIconFromDamage(int aMetaData) {aMetaData /= 10; aMetaData *= 10; return UT.Code.exists(aMetaData, mIconList) ? mIconList[aMetaData][0] : Textures.ItemIcons.RENDERING_ERROR.getIcon(0);}
-	@Override public IIcon getIcon(ItemStack aStack, int aRenderPass, EntityPlayer aPlayer, ItemStack aUsedStack, int aUseRemaining) {return getIcon(aStack, aRenderPass);}
+	@Override public IIcon getIcon(ItemStack aStack, int aRenderPass, PlayerEntity aPlayer, ItemStack aUsedStack, int aUseRemaining) {return getIcon(aStack, aRenderPass);}
 	@Override public IIcon getIcon(ItemStack aStack, int aRenderPass) {return getIconFromDamageForRenderPass(ST.meta_(aStack), aRenderPass);}
 
 	@Override public boolean requiresMultipleRenderPasses() {return T;}

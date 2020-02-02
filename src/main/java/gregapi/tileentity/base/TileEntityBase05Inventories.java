@@ -29,7 +29,7 @@ import gregapi.tileentity.ITileEntityInventoryGUI;
 import gregapi.util.OM;
 import gregapi.util.ST;
 import gregapi.util.UT;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -89,7 +89,7 @@ public abstract class TileEntityBase05Inventories extends TileEntityBase04MultiT
 	@Override public final NBTTagCompound slotNBT(int aIndex) {return mInventory[aIndex] != null ? mInventory[aIndex].getTagCompound() : null;}
 	
 	@Override public void updateInventory() {mInventoryChanged = T;}
-	@Override public boolean isUseableByPlayer(EntityPlayer aPlayer) {return !isDead() && allowInteraction(aPlayer) && aPlayer.getDistanceSq(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D) <= 64D;}
+	@Override public boolean isUseableByPlayer(PlayerEntity aPlayer) {return !isDead() && allowInteraction(aPlayer) && aPlayer.getDistanceSq(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D) <= 64D;}
 	@Override public void openInventory () {/**/}
 	@Override public void closeInventory() {/**/}
 	@Override public int getInventoryStackLimit() {return 64;}
@@ -123,7 +123,7 @@ public abstract class TileEntityBase05Inventories extends TileEntityBase04MultiT
 	@Override public boolean hasCustomInventoryNameGUI() {return getCustomName() != null;}
 	@Override public int getInventoryStackLimitGUI(int aSlot) {return getInventoryStackLimit();}
 	@Override public void markDirtyGUI() {markDirty();}
-	@Override public boolean isUseableByPlayerGUI(EntityPlayer aPlayer) {return !isDead() && allowInteraction(aPlayer) && aPlayer.getDistanceSq(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D) <= 64D;}
+	@Override public boolean isUseableByPlayerGUI(PlayerEntity aPlayer) {return !isDead() && allowInteraction(aPlayer) && aPlayer.getDistanceSq(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D) <= 64D;}
 	@Override public void openInventoryGUI() {openInventory();}
 	@Override public void closeInventoryGUI() {closeInventory();}
 	@Override public boolean isItemValidForSlotGUI(int aSlot, ItemStack aStack) {return isItemValidForSlot(aSlot, aStack);}

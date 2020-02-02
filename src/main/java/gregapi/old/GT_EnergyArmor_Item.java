@@ -29,7 +29,7 @@ import gregapi.data.LH;
 import gregapi.util.UT;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
@@ -65,7 +65,7 @@ public class GT_EnergyArmor_Item extends ItemArmor /*implements ISpecialArmor*/ 
 	}
 	
 	@Override
-	public ItemStack onItemRightClick(ItemStack aStack, World aWorld, EntityPlayer aPlayer) {
+	public ItemStack onItemRightClick(ItemStack aStack, World aWorld, PlayerEntity aPlayer) {
 		ItemStack tStack = aPlayer.inventory.armorInventory[3-armorType];
 		if (tStack != null) {
 			for (int i = 0; i < 9; i++) {
@@ -87,7 +87,7 @@ public class GT_EnergyArmor_Item extends ItemArmor /*implements ISpecialArmor*/ 
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public void addInformation(ItemStack aStack, EntityPlayer aPlayer, @SuppressWarnings("rawtypes") List aList, boolean aF3_H) {
+	public void addInformation(ItemStack aStack, PlayerEntity aPlayer, @SuppressWarnings("rawtypes") List aList, boolean aF3_H) {
 		aList.add("Tier: " + mTier);
 		if ((mSpecials &    1) != 0) aList.add("Rebreather");
 		if ((mSpecials &    2) != 0) aList.add("Inertia Damper");
@@ -110,7 +110,7 @@ public class GT_EnergyArmor_Item extends ItemArmor /*implements ISpecialArmor*/ 
 	}
 	
 	@Override
-	public void onArmorTick(World aWorld, EntityPlayer aPlayer, ItemStack aStack) {/*
+	public void onArmorTick(World aWorld, PlayerEntity aPlayer, ItemStack aStack) {/*
 		if (mSpecials == 0) return;
 		
 		if (!aPlayer.worldObj.isRemote && (mSpecials & 1) != 0) {
@@ -291,8 +291,8 @@ public class GT_EnergyArmor_Item extends ItemArmor /*implements ISpecialArmor*/ 
 	
 	// @ForgeSubscribe
 	public void onEntityLivingFallEvent(LivingFallEvent var1) {/*
-		if (!var1.entity.worldObj.isRemote && var1.entity instanceof EntityPlayer) {
-			EntityPlayer var2 = (EntityPlayer)var1.entity;
+		if (!var1.entity.worldObj.isRemote && var1.entity instanceof PlayerEntity) {
+			PlayerEntity var2 = (PlayerEntity)var1.entity;
 			for (int i = 0; i < 4; i++) {
 				ItemStack var3 = var2.inventory.armorInventory[i];
 				if (var3 != null && var3.getItem() == this && (mSpecials & 2) != 0) {
@@ -314,7 +314,7 @@ public class GT_EnergyArmor_Item extends ItemArmor /*implements ISpecialArmor*/ 
 	}
 	
 	@Override
-	public int getArmorDisplay(EntityPlayer var1, ItemStack var2, int var3) {
+	public int getArmorDisplay(PlayerEntity var1, ItemStack var2, int var3) {
 		return (int)Math.round(20.0D * getBaseAbsorptionRatio() * mArmorAbsorbtionPercentage);
 	}
 	

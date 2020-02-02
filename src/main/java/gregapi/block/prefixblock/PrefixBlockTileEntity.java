@@ -34,8 +34,8 @@ import gregapi.tileentity.base.TileEntityBase01Root;
 import gregapi.util.WD;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerEntityMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.world.IBlockAccess;
@@ -68,7 +68,7 @@ public class PrefixBlockTileEntity extends TileEntityBase01Root implements IRend
 	}
 	
 	@Override
-	public void sendUpdateToPlayer(EntityPlayerMP aPlayer) {
+	public void sendUpdateToPlayer(PlayerEntityMP aPlayer) {
 		if (!(mBlocked = WD.visOcc(worldObj, xCoord, yCoord, zCoord, T, T))) {
 			NW_API.sendToPlayer(new PacketSyncDataShort(getCoords(), mMetaData), aPlayer);
 			if (mItemNBT != null && mItemNBT.hasKey("display")) NW_API.sendToPlayer(new PacketSyncDataName(getCoords(), mItemNBT.getCompoundTag("display").getString("Name")), aPlayer);
@@ -92,6 +92,6 @@ public class PrefixBlockTileEntity extends TileEntityBase01Root implements IRend
 	@Override public void writeToNBT(NBTTagCompound aNBT) {super.writeToNBT(aNBT); aNBT.setShort("m", mMetaData); if (mItemNBT != null && !mItemNBT.hasNoTags()) aNBT.setTag("gt.nbt.drop", mItemNBT);}
 	@Override public void processPacket(INetworkHandler aNetworkHandler) {/**/}
 	@Override public Packet getDescriptionPacket() {return null;}
-	@Override public Object getGUIClient(int aGUIID, EntityPlayer aPlayer) {return null;}
-	@Override public Object getGUIServer(int aGUIID, EntityPlayer aPlayer) {return null;}
+	@Override public Object getGUIClient(int aGUIID, PlayerEntity aPlayer) {return null;}
+	@Override public Object getGUIServer(int aGUIID, PlayerEntity aPlayer) {return null;}
 }

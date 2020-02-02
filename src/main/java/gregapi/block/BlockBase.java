@@ -38,7 +38,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.item.EntityFallingBlock;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -107,10 +107,10 @@ public abstract class BlockBase extends Block implements IBlockBase {
 	@Override public boolean doesPistonPush(short aMeta) {return F;}
 	@Override public boolean canCreatureSpawn(int aMeta) {return F;}
 	@Override public boolean isSealable(int aMeta, byte aSide) {return isSideSolid(aMeta, aSide);}
-	@Override public void addInformation(ItemStack aStack, int aMeta, EntityPlayer aPlayer, List<String> aList, boolean aF3_H) {/**/}
+	@Override public void addInformation(ItemStack aStack, int aMeta, PlayerEntity aPlayer, List<String> aList, boolean aF3_H) {/**/}
 	@Override public float getExplosionResistance(int aMeta) {return 10.0F;}
 	@Override public int getItemStackLimit(ItemStack aStack) {return UT.Code.bindStack(OP.block.mDefaultStackSize);}
-	@Override public ItemStack onItemRightClick(ItemStack aStack, World aWorld, EntityPlayer aPlayer) {return aStack;}
+	@Override public ItemStack onItemRightClick(ItemStack aStack, World aWorld, PlayerEntity aPlayer) {return aStack;}
 	
 	public boolean isSideSolid(int aMeta, byte aSide) {return T;}
 	public void updateTick2(World aWorld, int aX, int aY, int aZ, Random aRandom) {/**/}
@@ -138,10 +138,10 @@ public abstract class BlockBase extends Block implements IBlockBase {
 		return F;
 	}
 	
-	@Override public boolean onItemUseFirst(ItemBlockBase aItem, ItemStack aStack, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ, int aSide, float aHitX, float aHitY, float aHitZ) {return F;}
+	@Override public boolean onItemUseFirst(ItemBlockBase aItem, ItemStack aStack, PlayerEntity aPlayer, World aWorld, int aX, int aY, int aZ, int aSide, float aHitX, float aHitY, float aHitZ) {return F;}
 	
 	@Override
-	public boolean onItemUse(ItemBlockBase aItem, ItemStack aStack, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ, int aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onItemUse(ItemBlockBase aItem, ItemStack aStack, PlayerEntity aPlayer, World aWorld, int aX, int aY, int aZ, int aSide, float aHitX, float aHitY, float aHitZ) {
 		if (aStack.stackSize == 0) return F;
 		
 		Block tBlock = aWorld.getBlock(aX, aY, aZ);

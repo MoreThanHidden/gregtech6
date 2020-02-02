@@ -32,7 +32,7 @@ import gregapi.render.IIconContainer;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.AchievementList;
@@ -55,7 +55,7 @@ public class GT_Tool_Club extends GT_Tool_HardHammer {
 	@Override public boolean isMiningTool()                                                 {return F;}
 	
 	@Override
-	public int convertBlockDrops(List<ItemStack> aDrops, ItemStack aStack, EntityPlayer aPlayer, Block aBlock, long aAvailableDurability, int aX, int aY, int aZ, byte aMetaData, int aFortune, boolean aSilkTouch, BlockEvent.HarvestDropsEvent aEvent) {
+	public int convertBlockDrops(List<ItemStack> aDrops, ItemStack aStack, PlayerEntity aPlayer, Block aBlock, long aAvailableDurability, int aX, int aY, int aZ, byte aMetaData, int aFortune, boolean aSilkTouch, BlockEvent.HarvestDropsEvent aEvent) {
 		if (aBlock == Blocks.stone || aBlock == Blocks.cobblestone || aBlock == Blocks.mossy_cobblestone || aBlock == Blocks.stonebrick || aBlock == Blocks.stone_brick_stairs || aBlock == Blocks.cobblestone_wall || aBlock == Blocks.stone_button || aBlock == Blocks.stone_pressure_plate) {
 			aDrops.clear();
 			aDrops.add(OP.rockGt.mat(MT.Stone, 1+RNGSUS.nextInt(4)));
@@ -90,7 +90,7 @@ public class GT_Tool_Club extends GT_Tool_HardHammer {
 	}
 	
 	@Override
-	public void onToolCrafted(ItemStack aStack, EntityPlayer aPlayer) {
+	public void onToolCrafted(ItemStack aStack, PlayerEntity aPlayer) {
 		super.onToolCrafted(aStack, aPlayer);
 		aPlayer.triggerAchievement(AchievementList.buildSword);
 	}

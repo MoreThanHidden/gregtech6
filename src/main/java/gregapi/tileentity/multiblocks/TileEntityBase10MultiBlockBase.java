@@ -36,7 +36,7 @@ import gregapi.tileentity.base.TileEntityBase09FacingSingle;
 import gregapi.util.UT;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -201,7 +201,7 @@ public abstract class TileEntityBase10MultiBlockBase extends TileEntityBase09Fac
 	public boolean hasCustomInventoryName                   (MultiTileEntityMultiBlockPart aPart) {return hasCustomInventoryName();}
 	public int getInventoryStackLimit                       (MultiTileEntityMultiBlockPart aPart) {return getInventoryStackLimit();}
 	public void markDirty                                   (MultiTileEntityMultiBlockPart aPart) {markDirty();}
-	public boolean isUseableByPlayer                        (MultiTileEntityMultiBlockPart aPart, EntityPlayer aPlayer) {return isUseableByPlayer(aPlayer);}
+	public boolean isUseableByPlayer                        (MultiTileEntityMultiBlockPart aPart, PlayerEntity aPlayer) {return isUseableByPlayer(aPlayer);}
 	public void openInventory                               (MultiTileEntityMultiBlockPart aPart) {openInventory();}
 	public void closeInventory                              (MultiTileEntityMultiBlockPart aPart) {closeInventory();}
 	public boolean isItemValidForSlot                       (MultiTileEntityMultiBlockPart aPart, int aSlot, ItemStack aStack) {return isItemValidForSlot(aSlot, aStack);}

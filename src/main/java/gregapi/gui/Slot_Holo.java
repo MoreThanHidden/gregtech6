@@ -22,7 +22,7 @@ package gregapi.gui;
 import static gregapi.data.CS.*;
 
 import gregapi.tileentity.ITileEntityInventoryGUI;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -61,7 +61,7 @@ public class Slot_Holo extends Slot_Normal {
 	}
 	
 	@Override
-	public boolean canTakeStack(EntityPlayer par1EntityPlayer) {
+	public boolean canTakeStack(PlayerEntity par1PlayerEntity) {
 		return F;
 	}
 }

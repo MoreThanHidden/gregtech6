@@ -41,7 +41,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumCreatureType;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -102,7 +102,7 @@ public abstract class BlockBaseFlower extends BlockFlower implements IBlockBase,
 	@Override public void onOxygenAdded(World aWorld, int aX, int aY, int aZ) {/**/}
 	@Override public void onOxygenRemoved(World aWorld, int aX, int aY, int aZ) {if (!aWorld.isRemote && !WD.oxygen(aWorld, aX, aY, aZ)) {aWorld.setBlock(aX, aY, aZ, NB, 0, 3); return;}}
 	
-	@Override public void addInformation(ItemStack aStack, int aMeta, EntityPlayer aPlayer, List<String> aList, boolean aF3_H) {/**/}
+	@Override public void addInformation(ItemStack aStack, int aMeta, PlayerEntity aPlayer, List<String> aList, boolean aF3_H) {/**/}
 	@Override public float getExplosionResistance(int aMeta) {return 0;}
 	@Override public boolean useGravity(int aMeta) {return F;}
 	@Override public boolean doesWalkSpeed(short aMeta) {return F;}
@@ -110,7 +110,7 @@ public abstract class BlockBaseFlower extends BlockFlower implements IBlockBase,
 	@Override public boolean canCreatureSpawn(int aMeta) {return F;}
 	@Override public boolean isSealable(int aMeta, byte aSide) {return F;}
 	@Override public int getItemStackLimit(ItemStack aStack) {return 64;}
-	@Override public ItemStack onItemRightClick(ItemStack aStack, World aWorld, EntityPlayer aPlayer) {return aStack;}
+	@Override public ItemStack onItemRightClick(ItemStack aStack, World aWorld, PlayerEntity aPlayer) {return aStack;}
 	
 	@Override public EnumPlantType getPlantType(IBlockAccess aWorld, int aX, int aY, int aZ) {return EnumPlantType.Plains;}
 	@Override public Block getPlant(IBlockAccess aWorld, int aX, int aY, int aZ) {return this;}
@@ -124,10 +124,10 @@ public abstract class BlockBaseFlower extends BlockFlower implements IBlockBase,
 		aWorld.setBlock(aX, aY, aZ, NB, 0, 2);
 	}
 	
-	@Override public boolean onItemUseFirst(ItemBlockBase aItem, ItemStack aStack, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ, int aSide, float aHitX, float aHitY, float aHitZ) {return F;}
+	@Override public boolean onItemUseFirst(ItemBlockBase aItem, ItemStack aStack, PlayerEntity aPlayer, World aWorld, int aX, int aY, int aZ, int aSide, float aHitX, float aHitY, float aHitZ) {return F;}
 	
 	@Override
-	public boolean onItemUse(ItemBlockBase aItem, ItemStack aStack, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ, int aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onItemUse(ItemBlockBase aItem, ItemStack aStack, PlayerEntity aPlayer, World aWorld, int aX, int aY, int aZ, int aSide, float aHitX, float aHitY, float aHitZ) {
 		if (aStack.stackSize == 0) return F;
 		
 		Block tBlock = aWorld.getBlock(aX, aY, aZ);

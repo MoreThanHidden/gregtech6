@@ -40,7 +40,7 @@ import gregapi.tileentity.base.TileEntityBase10FacingDouble;
 import gregapi.util.UT;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -257,6 +257,6 @@ public abstract class MultiTileEntitySensor extends TileEntityBase10FacingDouble
 	@Override public boolean isSideSolid2           (byte aSide) {return aSide==OPPOSITES[mFacing];}
 	@Override public boolean allowCovers            (byte aSide) {return F;}
 	@Override public boolean isObstructingBlockAt   (byte aSide) {return aSide==OPPOSITES[mFacing];}
-	@Override public boolean checkObstruction(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {return aSide==OPPOSITES[mFacing];}
+	@Override public boolean checkObstruction(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {return aSide==OPPOSITES[mFacing];}
 	@Override public boolean[] getValidSecondSides() {return SIDES_ANY_BUT[mFacing];}
 }

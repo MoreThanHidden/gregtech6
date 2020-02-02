@@ -20,7 +20,7 @@
 package gregapi.tileentity;
 
 import gregapi.gui.Slot_Normal;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 
 
@@ -79,17 +79,17 @@ public interface ITileEntityInventoryGUI extends ITileEntityUnloadable {
 	/**
 	 * @return true to intercept the regular Click Behaviour.
 	 */
-	public boolean interceptClick(int aGUIID, Slot_Normal aSlot, int aSlotIndex, int aInvSlot, EntityPlayer aPlayer, boolean aShiftclick, boolean aRightclick, int aMouse, int aShift);
+	public boolean interceptClick(int aGUIID, Slot_Normal aSlot, int aSlotIndex, int aInvSlot, PlayerEntity aPlayer, boolean aShiftclick, boolean aRightclick, int aMouse, int aShift);
 	
 	/**
 	 * only called when interceptClick returns true
 	 */
-	public ItemStack slotClick(int aGUIID, Slot_Normal aSlot, int aSlotIndex, int aInvSlot, EntityPlayer aPlayer, boolean aShiftclick, boolean aRightclick, int aMouse, int aShift);
+	public ItemStack slotClick(int aGUIID, Slot_Normal aSlot, int aSlotIndex, int aInvSlot, PlayerEntity aPlayer, boolean aShiftclick, boolean aRightclick, int aMouse, int aShift);
 	
 	/**
 	 * Do not make give this method the name canInteractWith because it clashes with Container
 	 */
-	public boolean isUseableByPlayerGUI(EntityPlayer aPlayer);
+	public boolean isUseableByPlayerGUI(PlayerEntity aPlayer);
 	
 	public void openInventoryGUI();
 	

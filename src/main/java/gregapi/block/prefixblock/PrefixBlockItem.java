@@ -65,7 +65,7 @@ public class PrefixBlockItem extends BlockItem implements IItemUpdatable, IPrefi
 	}
 	
 	@Override
-	public boolean placeBlockAt(ItemStack aStack, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ, int aSide, float hitX, float hitY, float hitZ, int aMeta) {
+	public boolean placeBlockAt(ItemStack aStack, PlayerEntity aPlayer, World aWorld, int aX, int aY, int aZ, int aSide, float hitX, float hitY, float hitZ, int aMeta) {
 		if (mBlock.placeBlock(aWorld, aX, aY, aZ, (byte)aSide, ST.meta_(aStack), aStack.getTagCompound(), T, F)) {
 			if (aWorld.getBlock(aX, aY, aZ) == field_150939_a) {
 				field_150939_a.onBlockPlacedBy(aWorld, aX, aY, aZ, aPlayer, aStack);
@@ -96,7 +96,7 @@ public class PrefixBlockItem extends BlockItem implements IItemUpdatable, IPrefi
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public void addInformation(ItemStack aStack, EntityPlayer aPlayer, @SuppressWarnings("rawtypes") List aList, boolean aF3_H) {
+	public void addInformation(ItemStack aStack, PlayerEntity aPlayer, @SuppressWarnings("rawtypes") List aList, boolean aF3_H) {
 		super.addInformation(aStack, aPlayer, aList, aF3_H);
 		if (mBlock.mSpawnProof) aList.add(LH.Chat.CYAN + LH.get(LH.TOOLTIP_SPAWNPROOF));
 		
@@ -128,7 +128,7 @@ public class PrefixBlockItem extends BlockItem implements IItemUpdatable, IPrefi
 	@Override public ItemStack getContainerItem(ItemStack aStack) {return null;}
 	@Override public void updateItemStack(ItemStack aStack) {if (mBlock.mMaterialList != OreDictMaterial.MATERIAL_ARRAY) return; int aDamage = ST.meta_(aStack); if (UT.Code.exists(aDamage, mBlock.mMaterialList)) {OreDictMaterial aMaterial = mBlock.mMaterialList[aDamage]; if (aMaterial != aMaterial.mTargetRegistration) aStack.setItemDamage(aMaterial.mTargetRegistration.mID);}}
 	@Override public void updateItemStack(ItemStack aStack, World aWorld, int aX, int aY, int aZ) {updateItemStack(aStack);}
-	@Override public void onCreated(ItemStack aStack, World aWorld, EntityPlayer aPlayer) {updateItemStack(aStack);}
+	@Override public void onCreated(ItemStack aStack, World aWorld, PlayerEntity aPlayer) {updateItemStack(aStack);}
 	@Override public boolean isBookEnchantable(ItemStack aStack, ItemStack aBook) {return F;}
 	@Override public boolean getIsRepairable(ItemStack aStack, ItemStack aMaterial) {return F;}
 	@Override public int getItemEnchantability() {return 0;}

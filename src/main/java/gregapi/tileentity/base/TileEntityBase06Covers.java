@@ -73,7 +73,7 @@ import gregapi.util.UT;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -130,7 +130,7 @@ public abstract class TileEntityBase06Covers extends TileEntityBase05Inventories
 	}
 	
 	@Override
-	public final boolean onBlockActivated2(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public final boolean onBlockActivated2(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (SIDES_INVALID[aSide] || aPlayer == null || !allowInteraction(aPlayer)) return onBlockActivated3(aPlayer, aSide, aHitX, aHitY, aHitZ);
 		byte tSide = usePipePlacementMode(aSide)?UT.Code.getSideWrenching(aSide, aHitX, aHitY, aHitZ):aSide;
 		if (hasCovers()) {
@@ -159,21 +159,21 @@ public abstract class TileEntityBase06Covers extends TileEntityBase05Inventories
 		return F;
 	}
 	
-	public boolean onBlockActivated3(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onBlockActivated3(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		return F;
 	}
 	
 	@Override
 	public final long onToolClick(String aTool, long aRemainingDurability, long aQuality, Entity aPlayer, List<String> aChatReturn, IInventory aPlayerInventory, boolean aSneaking, ItemStack aStack, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (!allowInteraction(aPlayer)) return 0;
-		if (checkObstruction(aPlayer instanceof EntityPlayer ? (EntityPlayer)aPlayer : null, aSide, aHitX, aHitY, aHitZ)) return 0;
+		if (checkObstruction(aPlayer instanceof PlayerEntity ? (PlayerEntity)aPlayer : null, aSide, aHitX, aHitY, aHitZ)) return 0;
 		if (SIDES_VALID[aSide] && hasCovers()) {
 			byte tSide = usePipePlacementMode(aSide) && mCovers.mIDs[aSide] == 0 ? UT.Code.getSideWrenching(aSide, aHitX, aHitY, aHitZ) : aSide;
 			if (aTool.equals(TOOL_crowbar) && isServerSide()) {
 				ItemStack tStack = getCoverItem(tSide);
 				ICover tCover = mCovers.mBehaviours[tSide];
 				if (tStack != null && setCoverItem(tSide, null, aPlayer, F, T)) {
-					if (!(aPlayer instanceof EntityPlayer) || !UT.Inventories.addStackToPlayerInventory((EntityPlayer)aPlayer, tStack, F)) ST.place(worldObj, getOffsetX(aSide)+0.5, getOffsetY(aSide)+0.5, getOffsetZ(aSide)+0.5, tStack);
+					if (!(aPlayer instanceof PlayerEntity) || !UT.Inventories.addStackToPlayerInventory((PlayerEntity)aPlayer, tStack, F)) ST.place(worldObj, getOffsetX(aSide)+0.5, getOffsetY(aSide)+0.5, getOffsetZ(aSide)+0.5, tStack);
 					if (tCover != null) tCover.onAfterCrowbar(this);
 					return 10000;
 				}
@@ -289,7 +289,7 @@ public abstract class TileEntityBase06Covers extends TileEntityBase05Inventories
 	}
 	
 	@Override
-	public void openCoverGUI(byte aSide, EntityPlayer aPlayer) {
+	public void openCoverGUI(byte aSide, PlayerEntity aPlayer) {
 		openGUI(aPlayer, -aSide-1);
 	}
 	
@@ -495,11 +495,11 @@ public abstract class TileEntityBase06Covers extends TileEntityBase05Inventories
 	
 	// GUI Stuff
 	@SideOnly(Side.CLIENT)
-	@Override public final Object getGUIClient(int aGUIID, EntityPlayer aPlayer) {return aGUIID <= -1 && aGUIID >= -6 ? hasCovers() && mCovers.mBehaviours[-aGUIID-1] != null ? mCovers.mBehaviours[-aGUIID-1].getGUIServer((byte)(-aGUIID-1), mCovers, aPlayer) : null : getGUIClient2(aGUIID, aPlayer);}
-	@Override public final Object getGUIServer(int aGUIID, EntityPlayer aPlayer) {return aGUIID <= -1 && aGUIID >= -6 ? hasCovers() && mCovers.mBehaviours[-aGUIID-1] != null ? mCovers.mBehaviours[-aGUIID-1].getGUIClient((byte)(-aGUIID-1), mCovers, aPlayer) : null : getGUIServer2(aGUIID, aPlayer);}
+	@Override public final Object getGUIClient(int aGUIID, PlayerEntity aPlayer) {return aGUIID <= -1 && aGUIID >= -6 ? hasCovers() && mCovers.mBehaviours[-aGUIID-1] != null ? mCovers.mBehaviours[-aGUIID-1].getGUIServer((byte)(-aGUIID-1), mCovers, aPlayer) : null : getGUIClient2(aGUIID, aPlayer);}
+	@Override public final Object getGUIServer(int aGUIID, PlayerEntity aPlayer) {return aGUIID <= -1 && aGUIID >= -6 ? hasCovers() && mCovers.mBehaviours[-aGUIID-1] != null ? mCovers.mBehaviours[-aGUIID-1].getGUIClient((byte)(-aGUIID-1), mCovers, aPlayer) : null : getGUIServer2(aGUIID, aPlayer);}
 	@SideOnly(Side.CLIENT)
-	public Object getGUIClient2(int aGUIID, EntityPlayer aPlayer) {return null;}
-	public Object getGUIServer2(int aGUIID, EntityPlayer aPlayer) {return null;}
+	public Object getGUIClient2(int aGUIID, PlayerEntity aPlayer) {return null;}
+	public Object getGUIServer2(int aGUIID, PlayerEntity aPlayer) {return null;}
 	
 	@Override
 	public boolean isUsingWrenchingOverlay(ItemStack aStack, byte aSide) {

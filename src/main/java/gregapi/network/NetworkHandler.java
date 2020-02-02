@@ -41,7 +41,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.MessageToMessageCodec;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntityMP;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -102,7 +102,7 @@ public final class NetworkHandler extends MessageToMessageCodec<FMLProxyPacket, 
 	}
 	
 	@Override
-	public void sendToPlayer(IPacket aPacket, EntityPlayerMP aPlayer) {
+	public void sendToPlayer(IPacket aPacket, PlayerEntityMP aPlayer) {
 		if (aPacket == null) return;
 		FMLEmbeddedChannel tChannel = getChannel(Side.SERVER);
 		tChannel.attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.PLAYER);
@@ -123,8 +123,8 @@ public final class NetworkHandler extends MessageToMessageCodec<FMLProxyPacket, 
 	@Override public void sendToAllPlayersInRange(IPacket aPacket, World aWorld, int aX, int aZ) {
 		if (aPacket == null) return;
 		if (aWorld != null && !aWorld.isRemote) for (Object tObject : aWorld.playerEntities) {
-			if (tObject instanceof EntityPlayerMP) {
-				EntityPlayerMP tPlayer = (EntityPlayerMP)tObject;
+			if (tObject instanceof PlayerEntityMP) {
+				PlayerEntityMP tPlayer = (PlayerEntityMP)tObject;
 				Chunk tChunk = aWorld.getChunkFromBlockCoords(aX, aZ);
 				if (tPlayer.getServerForPlayer().getPlayerManager().isPlayerWatchingChunk(tPlayer, tChunk.xPosition, tChunk.zPosition)) sendToPlayer(aPacket, tPlayer);
 			} else return;
@@ -135,8 +135,8 @@ public final class NetworkHandler extends MessageToMessageCodec<FMLProxyPacket, 
 	@Override public void sendToPlayerIfInRange(IPacket aPacket, UUID aPlayer, World aWorld, int aX, int aZ) {
 		if (aPacket == null) return;
 		if (aWorld != null && !aWorld.isRemote) for (Object tObject : aWorld.playerEntities) {
-			if (tObject instanceof EntityPlayerMP) {
-				EntityPlayerMP tPlayer = (EntityPlayerMP)tObject;
+			if (tObject instanceof PlayerEntityMP) {
+				PlayerEntityMP tPlayer = (PlayerEntityMP)tObject;
 				if (tPlayer.getUniqueID().equals(aPlayer)) {
 					Chunk tChunk = aWorld.getChunkFromBlockCoords(aX, aZ);
 					if (tPlayer.getServerForPlayer().getPlayerManager().isPlayerWatchingChunk(tPlayer, tChunk.xPosition, tChunk.zPosition)) {
@@ -152,8 +152,8 @@ public final class NetworkHandler extends MessageToMessageCodec<FMLProxyPacket, 
 	@Override public void sendToAllPlayersInRangeExcept(IPacket aPacket, UUID aPlayer, World aWorld, int aX, int aZ) {
 		if (aPacket == null) return;
 		if (aWorld != null && !aWorld.isRemote) for (Object tObject : aWorld.playerEntities) {
-			if (tObject instanceof EntityPlayerMP) {
-				EntityPlayerMP tPlayer = (EntityPlayerMP)tObject;
+			if (tObject instanceof PlayerEntityMP) {
+				PlayerEntityMP tPlayer = (PlayerEntityMP)tObject;
 				if (!tPlayer.getUniqueID().equals(aPlayer)) {
 					Chunk tChunk = aWorld.getChunkFromBlockCoords(aX, aZ);
 					if (tPlayer.getServerForPlayer().getPlayerManager().isPlayerWatchingChunk(tPlayer, tChunk.xPosition, tChunk.zPosition)) {

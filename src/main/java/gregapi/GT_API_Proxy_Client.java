@@ -77,7 +77,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderFallingBlock;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -118,12 +118,12 @@ public class GT_API_Proxy_Client extends GT_API_Proxy {
 	}
 	
 	@Override
-	public EntityPlayer getThePlayer() {
+	public PlayerEntity getThePlayer() {
 		return Minecraft.getMinecraft().thePlayer;
 	}
 	
 	@Override
-	public boolean sendUseItemPacket(EntityPlayer aPlayer, World aWorld, ItemStack aStack) {
+	public boolean sendUseItemPacket(PlayerEntity aPlayer, World aWorld, ItemStack aStack) {
 		Minecraft.getMinecraft().playerController.sendUseItem(aPlayer, aWorld, aStack);
 		return T;
 	}

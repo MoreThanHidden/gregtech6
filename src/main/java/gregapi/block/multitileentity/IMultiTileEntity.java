@@ -41,7 +41,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
@@ -92,7 +92,7 @@ public interface IMultiTileEntity extends ITileEntitySpecificPlacementBehavior {
 	public static interface IMTE_RemoveMaterialFromSide             extends IMultiTileEntity {public boolean removeMaterialFromSide(byte aSide, OreDictMaterialStack aMaterial);}
 	public static interface IMTE_GetDrops                           extends IMultiTileEntity {public ArrayListNoNulls<ItemStack> getDrops(int aFortune, boolean aSilkTouch);}
 	public static interface IMTE_GetBlockHardness                   extends IMultiTileEntity {public float getBlockHardness();}
-	public static interface IMTE_GetPlayerRelativeBlockHardness     extends IMultiTileEntity {public float getPlayerRelativeBlockHardness(EntityPlayer aPlayer, float aOriginal);}
+	public static interface IMTE_GetPlayerRelativeBlockHardness     extends IMultiTileEntity {public float getPlayerRelativeBlockHardness(PlayerEntity aPlayer, float aOriginal);}
 	public static interface IMTE_GetExplosionResistance             extends IMultiTileEntity {public float getExplosionResistance(Entity aExploder, double aExplosionX, double aExplosionY, double aExplosionZ); public float getExplosionResistance();}
 	public static interface IMTE_IsSideSolid                        extends IMultiTileEntity {public boolean isSideSolid(byte aSide);}
 	public static interface IMTE_IsBeaconBase                       extends IMultiTileEntity {public boolean isBeaconBase(int aBeaconX, int aBeaconY, int aBeaconZ);}
@@ -108,9 +108,9 @@ public interface IMultiTileEntity extends ITileEntitySpecificPlacementBehavior {
 	public static interface IMTE_OnBlockAdded                       extends IMultiTileEntity {public void onBlockAdded();}
 	public static interface IMTE_DropXpOnBlockBreak                 extends IMultiTileEntity {public void dropXpOnBlockBreak(int aXP);}
 	public static interface IMTE_CollisionRayTrace                  extends IMultiTileEntity {public MovingObjectPosition collisionRayTrace(Vec3 aVectorA, Vec3 aVectorB);}
-	public static interface IMTE_OnBlockActivated                   extends IMultiTileEntity {public boolean onBlockActivated(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ);}
+	public static interface IMTE_OnBlockActivated                   extends IMultiTileEntity {public boolean onBlockActivated(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ);}
 	public static interface IMTE_OnEntityWalking                    extends IMultiTileEntity {public void onEntityWalking(Entity aEntity);}
-	public static interface IMTE_OnBlockClicked                     extends IMultiTileEntity {public void onBlockClicked(EntityPlayer aPlayer);}
+	public static interface IMTE_OnBlockClicked                     extends IMultiTileEntity {public void onBlockClicked(PlayerEntity aPlayer);}
 	public static interface IMTE_VelocityToAddToEntity              extends IMultiTileEntity {public void velocityToAddToEntity(Entity aEntity, Vec3 aVector);}
 	public static interface IMTE_SetBlockBoundsBasedOnState         extends IMultiTileEntity {public void setBlockBoundsBasedOnState(Block aBlock);}
 	public static interface IMTE_IsProvidingWeakPower               extends IMultiTileEntity {/** Remember that it passes the opposite Side due to the way vanilla works! */public int isProvidingWeakPower(byte aSide);}
@@ -118,7 +118,7 @@ public interface IMultiTileEntity extends ITileEntitySpecificPlacementBehavior {
 	public static interface IMTE_OnEntityCollidedWithBlock          extends IMultiTileEntity {public void onEntityCollidedWithBlock(Entity aEntity);}
 	public static interface IMTE_CanBlockStay                       extends IMultiTileEntity {public boolean canBlockStay();}
 	public static interface IMTE_OnFallenUpon                       extends IMultiTileEntity {public void onFallenUpon(Entity aEntity, float aFallDistance);}
-	public static interface IMTE_OnBlockHarvested                   extends IMultiTileEntity {public void onBlockHarvested(int aMetaData, EntityPlayer aPlayer);}
+	public static interface IMTE_OnBlockHarvested                   extends IMultiTileEntity {public void onBlockHarvested(int aMetaData, PlayerEntity aPlayer);}
 	public static interface IMTE_OnBlockPreDestroy                  extends IMultiTileEntity {public void onBlockPreDestroy(int aMetaData);}
 	public static interface IMTE_FillWithRain                       extends IMultiTileEntity {public void fillWithRain();}
 	public static interface IMTE_GetComparatorInputOverride         extends IMultiTileEntity {public int getComparatorInputOverride(byte aSide);}
@@ -128,11 +128,11 @@ public interface IMultiTileEntity extends ITileEntitySpecificPlacementBehavior {
 	public static interface IMTE_IsReplaceable                      extends IMultiTileEntity {public boolean isReplaceable();}
 	public static interface IMTE_IsBurning                          extends IMultiTileEntity {public boolean isBurning();}
 	public static interface IMTE_IsAir                              extends IMultiTileEntity {public boolean isAir();}
-	public static interface IMTE_RemovedByPlayer                    extends IMultiTileEntity {public boolean removedByPlayer(World aWorld, EntityPlayer aPlayer, boolean aWillHarvest);}
+	public static interface IMTE_RemovedByPlayer                    extends IMultiTileEntity {public boolean removedByPlayer(World aWorld, PlayerEntity aPlayer, boolean aWillHarvest);}
 	public static interface IMTE_CanCreatureSpawn                   extends IMultiTileEntity {public boolean canCreatureSpawn(EnumCreatureType aType);}
 	public static interface IMTE_IsBed                              extends IMultiTileEntity {public boolean isBed(EntityLivingBase aPlayer);}
-	public static interface IMTE_GetBedSpawnPosition                extends IMultiTileEntity {public ChunkCoordinates getBedSpawnPosition(EntityPlayer aPlayer);}
-	public static interface IMTE_SetBedOccupied                     extends IMultiTileEntity {public void setBedOccupied(EntityPlayer aPlayer, boolean aOccupied);}
+	public static interface IMTE_GetBedSpawnPosition                extends IMultiTileEntity {public ChunkCoordinates getBedSpawnPosition(PlayerEntity aPlayer);}
+	public static interface IMTE_SetBedOccupied                     extends IMultiTileEntity {public void setBedOccupied(PlayerEntity aPlayer, boolean aOccupied);}
 	public static interface IMTE_GetBedDirection                    extends IMultiTileEntity {public int getBedDirection();}
 	public static interface IMTE_IsBedFoot                          extends IMultiTileEntity {public boolean isBedFoot();}
 	public static interface IMTE_BeginLeavesDecay                   extends IMultiTileEntity {public void beginLeavesDecay();}
@@ -216,7 +216,7 @@ public interface IMultiTileEntity extends ITileEntitySpecificPlacementBehavior {
 
 	public static interface IMTE_OnCrafted extends IMultiTileEntity {
 		/** Called when it is crafted. aPlayer and/or aWorld may be null! */
-		public void onCrafted(EntityPlayer aPlayer, World aWorld, ItemStack aStack);
+		public void onCrafted(PlayerEntity aPlayer, World aWorld, ItemStack aStack);
 	}
 	
 	public static interface IMTE_GetItemName extends IMultiTileEntity {
@@ -283,12 +283,12 @@ public interface IMultiTileEntity extends ITileEntitySpecificPlacementBehavior {
 	
 	public static interface IMTE_CanPlace extends IMultiTileEntity {
 		/** Return false if this TileEntity cannot be placed at that Location. */
-		public boolean canPlace(ItemStack aStack, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ, byte aSide, float aHitX, float aHitY, float aHitZ);
+		public boolean canPlace(ItemStack aStack, PlayerEntity aPlayer, World aWorld, int aX, int aY, int aZ, byte aSide, float aHitX, float aHitY, float aHitZ);
 	}
 	
 	public static interface IMTE_OnPlaced extends IMultiTileEntity {
 		/** Return false to prevent the Sound from being played, when the Block is placed. aSide is the Side of the Block the Player clicked to place this one. */
-		public boolean onPlaced(ItemStack aStack, EntityPlayer aPlayer, MultiTileEntityContainer aMTEContainer, World aWorld, int aX, int aY, int aZ, byte aSide, float aHitX, float aHitY, float aHitZ);
+		public boolean onPlaced(ItemStack aStack, PlayerEntity aPlayer, MultiTileEntityContainer aMTEContainer, World aWorld, int aX, int aY, int aZ, byte aSide, float aHitX, float aHitY, float aHitZ);
 	}
 	
 	public static interface IMTE_GetMaxStackSize extends IMultiTileEntity {
@@ -307,11 +307,11 @@ public interface IMultiTileEntity extends ITileEntitySpecificPlacementBehavior {
 	}
 	
 	public static interface IMTE_OnItemRightClick extends IMultiTileEntity {
-		public ItemStack onItemRightClick(MultiTileEntityItemInternal aItem, ItemStack aStack, World aWorld, EntityPlayer aPlayer);
+		public ItemStack onItemRightClick(MultiTileEntityItemInternal aItem, ItemStack aStack, World aWorld, PlayerEntity aPlayer);
 	}
 	
 	public static interface IMTE_OnItemUseFirst extends IMultiTileEntity {
-		public boolean onItemUseFirst(MultiTileEntityItemInternal aItem, ItemStack aStack, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ, byte aSide, float hitX, float hitY, float hitZ);
+		public boolean onItemUseFirst(MultiTileEntityItemInternal aItem, ItemStack aStack, PlayerEntity aPlayer, World aWorld, int aX, int aY, int aZ, byte aSide, float hitX, float hitY, float hitZ);
 	}
 	
 	public static interface IMTE_GetMaxItemUseDuration extends IMultiTileEntity {
@@ -323,7 +323,7 @@ public interface IMultiTileEntity extends ITileEntitySpecificPlacementBehavior {
 	}
 	
 	public static interface IMTE_OnEaten extends IMultiTileEntity {
-		public ItemStack onEaten(MultiTileEntityItemInternal aItem, ItemStack aStack, World aWorld, EntityPlayer aPlayer);
+		public ItemStack onEaten(MultiTileEntityItemInternal aItem, ItemStack aStack, World aWorld, PlayerEntity aPlayer);
 	}
 	
 	public static interface IMTE_GetFoodValues extends IMultiTileEntity {

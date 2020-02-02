@@ -38,7 +38,7 @@ import gregapi.render.ITexture;
 import gregapi.tileentity.ITileEntityFunnelAccessible;
 import gregapi.tileentity.base.TileEntityBase07Paintable;
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.FluidStack;
@@ -63,7 +63,7 @@ public class MultiTileEntityEnderGarbageBin extends TileEntityBase07Paintable im
 	}
 	
 	@Override
-	public boolean onBlockActivated3(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onBlockActivated3(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (isServerSide() && isUseableByPlayerGUI(aPlayer)) openGUI(aPlayer);
 		return T;
 	}
@@ -143,6 +143,6 @@ public class MultiTileEntityEnderGarbageBin extends TileEntityBase07Paintable im
 	
 	@Override public int getLightOpacity() {return LIGHT_OPACITY_WATER;}
 	
-	@Override public Object getGUIClient2(int aGUIID, EntityPlayer aPlayer) {return new ContainerClientDefault(aPlayer.inventory, this, aGUIID, RES_PATH_GUI + "machines/Trash.png");}
-	@Override public Object getGUIServer2(int aGUIID, EntityPlayer aPlayer) {return new ContainerCommonDefault(aPlayer.inventory, this, aGUIID);}
+	@Override public Object getGUIClient2(int aGUIID, PlayerEntity aPlayer) {return new ContainerClientDefault(aPlayer.inventory, this, aGUIID, RES_PATH_GUI + "machines/Trash.png");}
+	@Override public Object getGUIServer2(int aGUIID, PlayerEntity aPlayer) {return new ContainerCommonDefault(aPlayer.inventory, this, aGUIID);}
 }

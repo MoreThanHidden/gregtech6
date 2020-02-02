@@ -42,7 +42,7 @@ import gregapi.tileentity.base.TileEntityBase09FacingSingle;
 import gregapi.util.UT;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -179,7 +179,7 @@ public class MultiTileEntityButtonAdvanced extends TileEntityBase09FacingSingle 
 	}
 	
 	@Override
-	public boolean onBlockActivated3(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onBlockActivated3(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (isServerSide() && !mLampMode) {
 			if (mMaxLength > 0) {
 				mLength = mMaxLength;
@@ -288,7 +288,7 @@ public class MultiTileEntityButtonAdvanced extends TileEntityBase09FacingSingle 
 	@Override public boolean isObstructingBlockAt   (byte aSide) {return F;}
 	@Override public boolean useSidePlacementRotation       () {return T;}
 	@Override public boolean useInversePlacementRotation    () {return F;}
-	@Override public boolean checkObstruction(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {return F;}
+	@Override public boolean checkObstruction(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {return F;}
 	@Override public byte getDefaultSide() {return SIDE_FRONT;}
 	@Override public boolean canDrop(int aInventorySlot) {return F;}
 	

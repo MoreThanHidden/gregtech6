@@ -40,7 +40,7 @@ import gregapi.util.ST;
 import gregapi.util.WD;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -65,10 +65,10 @@ public class BlockConcrete extends BlockColored implements IBlockToolable {
 	@Override
 	public long onToolClick(String aTool, long aRemainingDurability, long aQuality, Entity aPlayer, List<String> aChatReturn, IInventory aPlayerInventory, boolean aSneaking, ItemStack aStack, World aWorld, byte aSide, int aX, int aY, int aZ, float aHitX, float aHitY, float aHitZ) {
 		if (aTool.equals(TOOL_drill)) {
-			if (mBlock == this && aPlayer instanceof EntityPlayer) {
-				for (int i = 0; i < ((EntityPlayer)aPlayer).inventory.mainInventory.length; i++) {
-					int tIndex = ((EntityPlayer)aPlayer).inventory.mainInventory.length-i-1;
-					ItemStack tStack = ((EntityPlayer)aPlayer).inventory.mainInventory[tIndex];
+			if (mBlock == this && aPlayer instanceof PlayerEntity) {
+				for (int i = 0; i < ((PlayerEntity)aPlayer).inventory.mainInventory.length; i++) {
+					int tIndex = ((PlayerEntity)aPlayer).inventory.mainInventory.length-i-1;
+					ItemStack tStack = ((PlayerEntity)aPlayer).inventory.mainInventory[tIndex];
 					if (OM.is("stickAnyIronOrSteel", tStack)) {
 						if (WD.set(aWorld, aX, aY, aZ, BlocksGT.ConcreteReinforced, WD.meta(aWorld, aX, aY, aZ), 3)) {
 							ST.use(aPlayer, tIndex, tStack);

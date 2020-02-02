@@ -31,7 +31,7 @@ import gregapi.data.LH.Chat;
 import gregapi.tileentity.ITileEntityMachineBlockUpdateable;
 import gregapi.util.UT;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -68,7 +68,7 @@ public abstract class TileEntityBase09FacingSingle extends TileEntityBase08Direc
 	}
 	
 	@Override
-	public boolean onPlaced(ItemStack aStack, EntityPlayer aPlayer, MultiTileEntityContainer aMTEContainer, World aWorld, int aX, int aY, int aZ, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onPlaced(ItemStack aStack, PlayerEntity aPlayer, MultiTileEntityContainer aMTEContainer, World aWorld, int aX, int aY, int aZ, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		mFacing = useSidePlacementRotation()?useInversePlacementRotation()?getValidSides()[OPPOSITES[aSide]]?OPPOSITES[aSide]:getDefaultSide():getValidSides()[aSide]?aSide:getDefaultSide():(useInversePlacementRotation()?UT.Code.getOppositeSideForPlayerPlacing(aPlayer, mFacing, getValidSides()):UT.Code.getSideForPlayerPlacing(aPlayer, mFacing, getValidSides()));
 		onFacingChange(SIDE_UNKNOWN);
 		checkCoverValidity();
@@ -81,7 +81,7 @@ public abstract class TileEntityBase09FacingSingle extends TileEntityBase08Direc
 	@Override public String getFacingTool() {return TOOL_wrench;}
 	@Override public short getFacing() {return mFacing;}
 	@Override public void setFacing(short aFacing) {setPrimaryFacing(UT.Code.side(aFacing));}
-	@Override public boolean wrenchCanSetFacing(EntityPlayer aPlayer, int aSide) {return getFacingTool() != null && getFacingTool().equals(TOOL_wrench) && getValidSides()[aSide];}
+	@Override public boolean wrenchCanSetFacing(PlayerEntity aPlayer, int aSide) {return getFacingTool() != null && getFacingTool().equals(TOOL_wrench) && getValidSides()[aSide];}
 	@Override public boolean isConnectedWrenchingOverlay(ItemStack aStack, byte aSide) {return aSide == mFacing;}
 	
 	public void setPrimaryFacing(byte aFacing) {if (isClientSide() || aFacing == mFacing) return; byte oFacing = mFacing; mFacing = aFacing; updateClientData(); causeBlockUpdate(); onFacingChange(oFacing); checkCoverValidity(); doEnetUpdate(); if (hasMultiBlockMachineRelevantData()) ITileEntityMachineBlockUpdateable.Util.causeMachineUpdate(this, F);}

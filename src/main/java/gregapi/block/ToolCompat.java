@@ -47,12 +47,14 @@ import micdoodle8.mods.galacticraft.core.blocks.BlockAdvanced;
 import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -83,19 +85,19 @@ public class ToolCompat {
 	}
 	
 	/** Providing compatibility for vanilla Blocks and certain Mod Interfaces. */
-	public static long onToolClick(Block aBlock, String aTool, long aRemainingDurability, long aQuality, Entity aPlayer, List<String> aChatReturn, IInventory aPlayerInventory, boolean aSneaking, ItemStack aStack, World aWorld, byte aSide, int aX, int aY, int aZ, float aHitX, float aHitY, float aHitZ) {
-		byte aMeta = WD.meta(aWorld, aX, aY, aZ);
-		TileEntity aTileEntity = WD.te(aWorld, aX, aY, aZ, T);
-		EntityPlayer aEntityPlayer = aPlayer instanceof EntityPlayer ? (EntityPlayer)aPlayer : null;
+	public static long onToolClick(Block aBlock, String aTool, long aRemainingDurability, long aQuality, Entity aPlayer, List<String> aChatReturn, IInventory aPlayerInventory, boolean aSneaking, ItemStack aStack, World aWorld, Direction aSide, BlockPos aPos, float aHitX, float aHitY, float aHitZ) {
+		byte aMeta = WD.meta(aWorld, aPos);
+		TileEntity aTileEntity = WD.te(aWorld, aPos, T);
+		PlayerEntity aPlayerEntity = aPlayer instanceof PlayerEntity ? (PlayerEntity)aPlayer : null;
 		EntityLivingBase aEntityLiving = aPlayer instanceof EntityLivingBase ? (EntityLivingBase)aPlayer : null;
 		
 		try {
 		
-		if (aTool.equals(TOOL_hoe) && (aEntityPlayer == null || aEntityPlayer.canPlayerEdit(aX, aY, aZ, aSide, aStack))) {
-			if (!MinecraftForge.EVENT_BUS.post(new UseHoeEvent(aEntityPlayer, aStack, aWorld, aX, aY, aZ))) {
+		if (aTool.equals(TOOL_hoe) && (aPlayerEntity == null || aPlayerEntity.canPlayerEdit(aPos, aSide, aStack))) {
+			if (!MinecraftForge.EVENT_BUS.post(new UseHoeEvent(aPlayerEntity, aStack, aWorld, aPos))) {
 				if (SIDES_TOP_HORIZONTAL[aSide] && !WD.hasCollide(aWorld, aX, aY+1, aZ) && (aBlock == Blocks.grass || aBlock == Blocks.dirt || aBlock == BlocksGT.Grass || IL.EtFu_Path.equal(aBlock) || IL.BoP_Grass_Origin.equal(aBlock) || IL.BoP_Grass_Long.equal(aBlock))) {
 					aWorld.playSoundEffect(aX + 0.5F, aY + 0.5F, aZ + 0.5F, Blocks.farmland.stepSound.getStepResourcePath(), (Blocks.farmland.stepSound.getVolume() + 1.0F) * 0.5F, Blocks.farmland.stepSound.getPitch() * 0.8F);
-					if (!aWorld.isRemote) aWorld.setBlock(aX, aY, aZ, Blocks.farmland);
+					if (!aWorld.isRemote) aWorld.setBlock(aPos, Blocks.farmland);
 					return 10000;
 				}
 			}
@@ -107,42 +109,42 @@ public class ToolCompat {
 			boolean rReturn = F;
 			if (BlocksGT.Beam1 != null) {
 				if (aBlock == Blocks.log) {
-					rReturn = aWorld.setBlock(aX, aY, aZ, BlocksGT.Beam1, aMeta, 3);
+					rReturn = aWorld.setBlock(aPos, BlocksGT.Beam1, aMeta, 3);
 				} else if (IL.TF_Log_Darkwood.equal(aBlock) && (aMeta & 3) != 3) {
-					rReturn = aWorld.setBlock(aX, aY, aZ, BlocksGT.Beam1, aMeta, 3);
+					rReturn = aWorld.setBlock(aPos, BlocksGT.Beam1, aMeta, 3);
 				} else if (IL.TF_Log_Time.equal(aBlock) && (aMeta & 1) == 0) {
-					rReturn = aWorld.setBlock(aX, aY, aZ, BlocksGT.Beam1, (aMeta&12)|((aMeta & 2) == 0 ? 1 : 2), 3);
+					rReturn = aWorld.setBlock(aPos, BlocksGT.Beam1, (aMeta&12)|((aMeta & 2) == 0 ? 1 : 2), 3);
 				}
 			}
 			if (!rReturn && BlocksGT.Beam3 != null) {
 				if (IL.TC_Greatwood_Log.equal(aBlock)) {
-					rReturn = aWorld.setBlock(aX, aY, aZ, BlocksGT.Beam3, aMeta, 3);
+					rReturn = aWorld.setBlock(aPos, BlocksGT.Beam3, aMeta, 3);
 				} else if (IL.AETHER_Skyroot_Log.equal(aBlock)) {
-					rReturn = aWorld.setBlock(aX, aY, aZ, BlocksGT.Beam3, (aMeta&12)|2, 3);
+					rReturn = aWorld.setBlock(aPos, BlocksGT.Beam3, (aMeta&12)|2, 3);
 				} else if (IL.AETHER_Skyroot_Log_Small.equal(aBlock)) {
-					rReturn = aWorld.setBlock(aX, aY, aZ, BlocksGT.Beam3, 2, 3);
+					rReturn = aWorld.setBlock(aPos, BlocksGT.Beam3, 2, 3);
 				} else if (IL.TF_Log_Darkwood.equal(aBlock) && (aMeta & 3) == 3) {
-					rReturn = aWorld.setBlock(aX, aY, aZ, BlocksGT.Beam3, aMeta, 3);
+					rReturn = aWorld.setBlock(aPos, BlocksGT.Beam3, aMeta, 3);
 				}
 			}
 			if (!rReturn && BlocksGT.Beam2 != null) {
 				if (aBlock == Blocks.log2) {
-					rReturn = aWorld.setBlock(aX, aY, aZ, BlocksGT.Beam2, aMeta, 3);
+					rReturn = aWorld.setBlock(aPos, BlocksGT.Beam2, aMeta, 3);
 				} else if (IL.IC2_Log_Rubber.equal(aBlock) || IL.MFR_Log_Rubber.equal(aBlock)) {
-					rReturn = aWorld.setBlock(aX, aY, aZ, BlocksGT.Beam2, 2, 3);
+					rReturn = aWorld.setBlock(aPos, BlocksGT.Beam2, 2, 3);
 				} else if (IL.BTL_Weedwood_Log.equal(aBlock)) {
-					rReturn = aWorld.setBlock(aX, aY, aZ, IL.BTL_Weedwood_Beam.block(), 0, 3);
+					rReturn = aWorld.setBlock(aPos, IL.BTL_Weedwood_Beam.block(), 0, 3);
 				} else if (IL.BTL_Weedwood_Beam.equal(aBlock)) {
 					rReturn = F;
 				} else if (IL.TF_Log_Trans.equal(aBlock) && (aMeta & 1) == 1) {
-					rReturn = aWorld.setBlock(aX, aY, aZ, BlocksGT.Beam2, (aMeta&12)|((aMeta & 2) == 0 ? 0 : 1), 3);
+					rReturn = aWorld.setBlock(aPos, BlocksGT.Beam2, (aMeta&12)|((aMeta & 2) == 0 ? 0 : 1), 3);
 				} else if (OM.is(OD.logWood, ST.make(aBlock, 1, aMeta))) {
-					rReturn = aWorld.setBlock(aX, aY, aZ, BlocksGT.Beam2, (aMeta&12)|3, 3);
+					rReturn = aWorld.setBlock(aPos, BlocksGT.Beam2, (aMeta&12)|3, 3);
 				}
 			}
 			if (rReturn) {
-				if (FAST_LEAF_DECAY) WD.leafdecay(aWorld, aX, aY, aZ, null);
-				UT.Inventories.addStackToPlayerInventoryOrDrop(aPlayer instanceof EntityPlayer ? (EntityPlayer)aPlayer : null, OM.dust(MT.Bark), aWorld, aX+OFFSETS_X[aSide], aY+OFFSETS_Y[aSide], aZ+OFFSETS_Z[aSide]);
+				if (FAST_LEAF_DECAY) WD.leafdecay(aWorld, aPos, null);
+				UT.Inventories.addStackToPlayerInventoryOrDrop(aPlayer instanceof PlayerEntity ? (PlayerEntity)aPlayer : null, OM.dust(MT.Bark), aWorld, aX+OFFSETS_X[aSide], aY+OFFSETS_Y[aSide], aZ+OFFSETS_Z[aSide]);
 				return aTool.equals(TOOL_axe) ? 500 : 1000;
 			}
 			return 0;
@@ -158,7 +160,7 @@ public class ToolCompat {
 				for (int i = -1; i < 2; i++) for (int j = -1; j < 2; j++) for (int k = -1; k < 2; k++) if (aWorld.getBlockMetadata(aX+i, aY+j, aZ+k) == 7) {
 					Block tBlock = aWorld.getBlock(aX+i, aY+j, aZ+k);
 					if (tBlock.getClass() == aBlock.getClass()) {
-						tBlock.onBlockActivated(aWorld, aX+i, aY+j, aZ+k, aEntityPlayer, aSide, aHitX, aHitY, aHitZ);
+						tBlock.onBlockActivated(aWorld, aX+i, aY+j, aZ+k, aPlayerEntity, aSide, aHitX, aHitY, aHitZ);
 						tDamage += 10000;
 					}
 				}
@@ -167,22 +169,22 @@ public class ToolCompat {
 		}
 		if (aTool.equals(TOOL_igniter) && (aStack == null || aStack.getItem() != Items.flint_and_steel)) {
 			if (aBlock instanceof BlockTNT) {
-				((BlockTNT)aBlock).func_150114_a(aWorld, aX, aY, aZ, 1, aEntityLiving);
-				aWorld.setBlockToAir(aX, aY, aZ);
+				((BlockTNT)aBlock).func_150114_a(aWorld, aPos, 1, aEntityLiving);
+				aWorld.setBlockToAir(aPos);
 				return 10000;
 			}
-			if (aEntityPlayer == null || aEntityPlayer.canPlayerEdit(aX+OFFSETS_X[aSide], aY+OFFSETS_Y[aSide], aZ+OFFSETS_Z[aSide], aSide, aStack)) {
+			if (aPlayerEntity == null || aPlayerEntity.canPlayerEdit(aX+OFFSETS_X[aSide], aY+OFFSETS_Y[aSide], aZ+OFFSETS_Z[aSide], aSide, aStack)) {
 				if (aWorld.isAirBlock(aX+OFFSETS_X[aSide], aY+OFFSETS_Y[aSide], aZ+OFFSETS_Z[aSide])) {
-					if (WD.oxygen(aWorld, aX, aY, aZ)) aWorld.setBlock(aX+OFFSETS_X[aSide], aY+OFFSETS_Y[aSide], aZ+OFFSETS_Z[aSide], Blocks.fire);
+					if (WD.oxygen(aWorld, aPos)) aWorld.setBlock(aX+OFFSETS_X[aSide], aY+OFFSETS_Y[aSide], aZ+OFFSETS_Z[aSide], Blocks.fire);
 					return 10000;
 				}
 			}
 		}
 		if (aTool.equals(TOOL_chisel) && !aSneaking) {
-			ItemStack tChiseledBlock = WD.stack(aWorld, aX, aY, aZ);
+			ItemStack tChiseledBlock = WD.stack(aWorld, aPos);
 			if (tChiseledBlock != null) {
 				Recipe tRecipe = RM.Chisel.findRecipe(null, null, T, Integer.MAX_VALUE, null, ZL_FS, tChiseledBlock);
-				if (tRecipe != null && tRecipe.blockINblockOUT() && ST.equal(tRecipe.mInputs[0], tChiseledBlock) && WD.set(aWorld, aX, aY, aZ, tRecipe.mOutputs[0])) return 10000;
+				if (tRecipe != null && tRecipe.blockINblockOUT() && ST.equal(tRecipe.mInputs[0], tChiseledBlock) && WD.set(aWorld, aPos, tRecipe.mOutputs[0])) return 10000;
 			}
 		}
 		if (aTool.equals(TOOL_rotator)) {
@@ -190,14 +192,14 @@ public class ToolCompat {
 		}
 		if (aTool.equals(TOOL_screwdriver)) {
 			if (aBlock instanceof BlockRedstoneDiode) {
-				if (aWorld.setBlockMetadataWithNotify(aX, aY, aZ, (aMeta / 4) * 4  + (((aMeta%4) + 1) % 4), 3)) return 10000;
+				if (aWorld.setBlockMetadataWithNotify(aPos, (aMeta / 4) * 4  + (((aMeta%4) + 1) % 4), 3)) return 10000;
 			}
 		}
 		if (aTool.equals(TOOL_crowbar)) {
 			if (!MD.RC.mLoaded && aBlock instanceof BlockRailBase) {
 				aWorld.isRemote = T;
 				// WTF, why are the two Coordinate Parameters in isFlexibleRail switched? And then it is used like x y z instead of using the broken namings.
-				boolean tResult = aWorld.setBlock(aX, aY, aZ, aBlock, ((BlockRailBase)aBlock).isFlexibleRail(aWorld, aX, aY, aZ)?(aMeta + 1) % 10:((aMeta / 8) * 8) + (((aMeta%8)+1) % 6), 0);
+				boolean tResult = aWorld.setBlock(aPos, aBlock, ((BlockRailBase)aBlock).isFlexibleRail(aWorld, aPos)?(aMeta + 1) % 10:((aMeta / 8) * 8) + (((aMeta%8)+1) % 6), 0);
 				aWorld.isRemote = F;
 				return tResult?10000:0;
 			}
@@ -205,71 +207,71 @@ public class ToolCompat {
 		if (aTool.equals(TOOL_softhammer)) {
 			if (aBlock == Blocks.lit_redstone_lamp) {
 				aWorld.isRemote = T;
-				boolean tResult = aWorld.setBlock(aX, aY, aZ, Blocks.redstone_lamp, 0, 0);
+				boolean tResult = aWorld.setBlock(aPos, Blocks.redstone_lamp, 0, 0);
 				aWorld.isRemote = F;
 				return tResult?10000:0;
 			}
 			if (aBlock == Blocks.redstone_lamp) {
 				aWorld.isRemote = T;
-				boolean tResult = aWorld.setBlock(aX, aY, aZ, Blocks.lit_redstone_lamp, 0, 0);
+				boolean tResult = aWorld.setBlock(aPos, Blocks.lit_redstone_lamp, 0, 0);
 				aWorld.isRemote = F;
 				return tResult?10000:0;
 			}
 			if (aBlock == Blocks.golden_rail) {
 				aWorld.isRemote = T;
-				boolean tResult = aWorld.setBlock(aX, aY, aZ, aBlock, (aMeta + 8) % 16, 0);
+				boolean tResult = aWorld.setBlock(aPos, aBlock, (aMeta + 8) % 16, 0);
 				aWorld.isRemote = F;
 				return tResult?10000:0;
 			}
 			if (aBlock == Blocks.activator_rail) {
 				aWorld.isRemote = T;
-				boolean tResult = aWorld.setBlock(aX, aY, aZ, aBlock, (aMeta + 8) % 16, 0);
+				boolean tResult = aWorld.setBlock(aPos, aBlock, (aMeta + 8) % 16, 0);
 				aWorld.isRemote = F;
 				return tResult?10000:0;
 			}
 			if (aBlock instanceof BlockRotatedPillar) {
-				if (aWorld.setBlockMetadataWithNotify(aX, aY, aZ, (aMeta + 4) % 12, 3)) return 10000;
+				if (aWorld.setBlockMetadataWithNotify(aPos, (aMeta + 4) % 12, 3)) return 10000;
 			}
 			if (aBlock == Blocks.piston || aBlock == Blocks.sticky_piston || aBlock == Blocks.dispenser || aBlock == Blocks.dropper) {
-				if (aWorld.setBlockMetadataWithNotify(aX, aY, aZ, (aMeta+1) % 6, 3)) return 10000;
+				if (aWorld.setBlockMetadataWithNotify(aPos, (aMeta+1) % 6, 3)) return 10000;
 			}
 			if (aBlock == Blocks.pumpkin || aBlock == Blocks.lit_pumpkin || aBlock == Blocks.furnace || aBlock == Blocks.lit_furnace || aBlock == Blocks.chest || aBlock == Blocks.trapped_chest) {
-				if (aWorld.setBlockMetadataWithNotify(aX, aY, aZ, ((aMeta-1)%4)+2, 3)) return 10000;
+				if (aWorld.setBlockMetadataWithNotify(aPos, ((aMeta-1)%4)+2, 3)) return 10000;
 			}
 			if (aBlock == Blocks.hopper) {
-				if (aWorld.setBlockMetadataWithNotify(aX, aY, aZ, (aMeta+1)%6==1?(aMeta+1)%6:2, 3)) return 10000;
+				if (aWorld.setBlockMetadataWithNotify(aPos, (aMeta+1)%6==1?(aMeta+1)%6:2, 3)) return 10000;
 			}
 		}
 		if (aTool.equals(TOOL_prospector)) {
-			if (prospectOre(aBlock, aMeta, aChatReturn, aWorld, aX, aY, aZ)) return 100;
-			if (aBlock != Blocks.obsidian && aBlock != BlocksGT.RockOres && (aBlock.isReplaceableOreGen(aWorld, aX, aY, aZ, Blocks.stone) || aBlock.isReplaceableOreGen(aWorld, aX, aY, aZ, Blocks.netherrack) || aBlock.isReplaceableOreGen(aWorld, aX, aY, aZ, Blocks.end_stone) || WD.stone(aBlock, aMeta))) {
-				if (prospectStone(aBlock, aMeta, aQuality, aChatReturn, aWorld, aSide, aX, aY, aZ)) return 10000;
+			if (prospectOre(aBlock, aMeta, aChatReturn, aWorld, aPos)) return 100;
+			if (aBlock != Blocks.obsidian && aBlock != BlocksGT.RockOres && (aBlock.isReplaceableOreGen(aWorld, aPos, Blocks.stone) || aBlock.isReplaceableOreGen(aWorld, aPos, Blocks.netherrack) || aBlock.isReplaceableOreGen(aWorld, aPos, Blocks.end_stone) || WD.stone(aBlock, aMeta))) {
+				if (prospectStone(aBlock, aMeta, aQuality, aChatReturn, aWorld, aSide, aPos)) return 10000;
 			}
 			return 0;
 		}
 		if (aTool.equals(TOOL_wrench) || aTool.equals(TOOL_monkeywrench)) {
 			if (GC_BLOCKADVANCED && aBlock instanceof BlockAdvanced) {
-				return (aSneaking ? ((BlockAdvanced)aBlock).onSneakUseWrench(aWorld, aX, aY, aZ, aEntityPlayer, aSide, aHitX, aHitY, aHitZ) : ((BlockAdvanced)aBlock).onUseWrench(aWorld, aX, aY, aZ, aEntityPlayer, aSide, aHitX, aHitY, aHitZ)) ? 2500 : 0;
+				return (aSneaking ? ((BlockAdvanced)aBlock).onSneakUseWrench(aWorld, aPos, aPlayerEntity, aSide, aHitX, aHitY, aHitZ) : ((BlockAdvanced)aBlock).onUseWrench(aWorld, aPos, aPlayerEntity, aSide, aHitX, aHitY, aHitZ)) ? 2500 : 0;
 			}
 			
 			byte aTargetSide = UT.Code.getSideWrenching(aSide, aHitX, aHitY, aHitZ);
 			if (IC_WRENCHABLE && aTileEntity instanceof IWrenchable) {
-				if (((IWrenchable)aTileEntity).wrenchCanSetFacing(aEntityPlayer, aTargetSide)) {
+				if (((IWrenchable)aTileEntity).wrenchCanSetFacing(aPlayerEntity, aTargetSide)) {
 					((IWrenchable)aTileEntity).setFacing(aTargetSide);
 					return 10000;
 				}
-				if (((IWrenchable)aTileEntity).wrenchCanRemove(aEntityPlayer)) {
+				if (((IWrenchable)aTileEntity).wrenchCanRemove(aPlayerEntity)) {
 					int tDamage = Math.max(10000, (int)(30000 / ((IWrenchable)aTileEntity).getWrenchDropRate()));
-					ArrayList<ItemStack> tDrops = aBlock.getDrops(aWorld, aX, aY, aZ, aMeta, 0);
-					ItemStack tOutput = ((IWrenchable)aTileEntity).getWrenchDrop(aEntityPlayer);
+					ArrayList<ItemStack> tDrops = aBlock.getDrops(aWorld, aPos, aMeta, 0);
+					ItemStack tOutput = ((IWrenchable)aTileEntity).getWrenchDrop(aPlayerEntity);
 					
-					if (aWorld.setBlockToAir(aX, aY, aZ)) {
+					if (aWorld.setBlockToAir(aPos)) {
 						if (RNGSUS.nextInt(tDamage) < aRemainingDurability) {
 							for (ItemStack tStack : tDrops) {
 								if (tOutput == null) {
-									if (aPlayer instanceof EntityPlayer) UT.Inventories.addStackToPlayerInventoryOrDrop((EntityPlayer)aPlayer, tStack, F); else ST.drop(aWorld, aX+0.5, aY+0.5, aZ+0.5, tStack);
+									if (aPlayer instanceof PlayerEntity) UT.Inventories.addStackToPlayerInventoryOrDrop((PlayerEntity)aPlayer, tStack, F); else ST.drop(aWorld, aX+0.5, aY+0.5, aZ+0.5, tStack);
 								} else {
-									if (aPlayer instanceof EntityPlayer) UT.Inventories.addStackToPlayerInventoryOrDrop((EntityPlayer)aPlayer, tOutput, F); else ST.drop(aWorld, aX+0.5, aY+0.5, aZ+0.5, tOutput);
+									if (aPlayer instanceof PlayerEntity) UT.Inventories.addStackToPlayerInventoryOrDrop((PlayerEntity)aPlayer, tOutput, F); else ST.drop(aWorld, aX+0.5, aY+0.5, aZ+0.5, tOutput);
 									tOutput = null;
 								}
 							}
@@ -280,11 +282,11 @@ public class ToolCompat {
 			}
 			
 			if (aBlock instanceof BlockRotatedPillar) {
-				if (aWorld.setBlockMetadataWithNotify(aX, aY, aZ, (aMeta + 4) % 12, 3)) return 10000;
+				if (aWorld.setBlockMetadataWithNotify(aPos, (aMeta + 4) % 12, 3)) return 10000;
 			}
 			
 			if (aBlock instanceof BlockWorkbench || aBlock instanceof BlockBookshelf) {
-				if (aWorld.setBlockToAir(aX, aY, aZ)) {
+				if (aWorld.setBlockToAir(aPos)) {
 					ST.drop(aWorld, aX+0.5, aY+0.5, aZ+0.5, ST.make(aBlock, 1, aMeta));
 					return 10000;
 				}
@@ -292,40 +294,40 @@ public class ToolCompat {
 			
 			if (aMeta == aTargetSide) {
 				if (aBlock instanceof BlockPumpkin || aBlock instanceof BlockPistonBase || aBlock instanceof BlockDispenser || aBlock instanceof BlockFurnace || aBlock instanceof BlockChest || aBlock instanceof BlockHopper || aBlock instanceof BlockEnderChest) {
-					if (aWorld.setBlockToAir(aX, aY, aZ)) {
+					if (aWorld.setBlockToAir(aPos)) {
 						ST.drop(aWorld, aX+0.5, aY+0.5, aZ+0.5, ST.make(aBlock, 1, 0));
 						return 10000;
 					}
 				}
 			} else {
 				if (aBlock instanceof BlockPistonBase || aBlock instanceof BlockDispenser) {
-					if (aMeta < 6 && aWorld.setBlockMetadataWithNotify(aX, aY, aZ, aTargetSide, 3)) return 10000;
+					if (aMeta < 6 && aWorld.setBlockMetadataWithNotify(aPos, aTargetSide, 3)) return 10000;
 				}
 				if (aBlock instanceof BlockPumpkin || aBlock instanceof BlockFurnace || aBlock instanceof BlockChest || aBlock instanceof BlockEnderChest) {
-					if (SIDES_HORIZONTAL[aTargetSide] && aWorld.setBlockMetadataWithNotify(aX, aY, aZ, aTargetSide, 3)) return 10000;
+					if (SIDES_HORIZONTAL[aTargetSide] && aWorld.setBlockMetadataWithNotify(aPos, aTargetSide, 3)) return 10000;
 				}
 				if (aBlock instanceof BlockHopper) {
-					if (SIDES_BOTTOM_HORIZONTAL[aTargetSide] && aWorld.setBlockMetadataWithNotify(aX, aY, aZ, aTargetSide, 3)) return 10000;
+					if (SIDES_BOTTOM_HORIZONTAL[aTargetSide] && aWorld.setBlockMetadataWithNotify(aPos, aTargetSide, 3)) return 10000;
 				}
 			}
 			if (aBlock instanceof BlockRailBase || aBlock instanceof BlockRedstoneDiode || aBlock instanceof BlockPistonExtension || aBlock instanceof BlockPistonBase) {
 				// wrench doesn't work on those.
 			} else {
-				if (Arrays.asList(aBlock.getValidRotations(aWorld, aX, aY, aZ)).contains(ForgeDirection.getOrientation(aTargetSide))) {
-					if (aBlock.rotateBlock(aWorld, aX, aY, aZ, ForgeDirection.getOrientation(aTargetSide))) return 10000;
+				if (Arrays.asList(aBlock.getValidRotations(aWorld, aPos)).contains(ForgeDirection.getOrientation(aTargetSide))) {
+					if (aBlock.rotateBlock(aWorld, aPos, ForgeDirection.getOrientation(aTargetSide))) return 10000;
 				}
 			}
 		}
 		
 		} catch(Throwable e) {
-			FMLLog.severe("Exception occured when ToolCompat was used at the Coordinates: [%d;%d;%d] at '%s' with TileEntity '%s' using the Tool '%s' %s", aX, aY, aZ, aBlock.getUnlocalizedName(), aTileEntity.getClass(), aTool, e.toString());
+			FMLLog.severe("Exception occured when ToolCompat was used at the Coordinates: [%d;%d;%d] at '%s' with TileEntity '%s' using the Tool '%s' %s", aPos, aBlock.getUnlocalizedName(), aTileEntity.getClass(), aTool, e.toString());
 			e.printStackTrace(ERR);
 		}
 		return 0;
 	}
 	
-	public static boolean prospectOre(Block aBlock, byte aMeta, List<String> aChatReturn, World aWorld, int aX, int aY, int aZ) {
-		OreDictItemData tAssotiation = OM.anyassociation(ST.make(aBlock, 1, aWorld.getBlockMetadata(aX, aY, aZ)));
+	public static boolean prospectOre(Block aBlock, byte aMeta, List<String> aChatReturn, World aWorld, BlockPos aPos) {
+		OreDictItemData tAssotiation = OM.anyassociation(ST.make(aBlock, 1, aWorld.getBlockMetadata(aPos)));
 		if (tAssotiation != null && tAssotiation.mPrefix.contains(TD.Prefix.ORE)) {
 			if (aChatReturn != null) aChatReturn.add(tAssotiation.mMaterial.mMaterial.getLocal() + " Ore!");
 			return T;
@@ -333,7 +335,7 @@ public class ToolCompat {
 		return F;
 	}
 	
-	public static boolean prospectStone(Block aBlock, byte aMeta, long aQuality, List<String> aChatReturn, World aWorld, byte aSide, int aX, int aY, int aZ) {
+	public static boolean prospectStone(Block aBlock, byte aMeta, long aQuality, List<String> aChatReturn, World aWorld, byte aSide, BlockPos aPos) {
 		Block tBlock;
 		int tX = aX, tY = aY, tZ = aZ;
 		for (int i = 0, j = (int)(4 + aQuality); i < j; i++) {

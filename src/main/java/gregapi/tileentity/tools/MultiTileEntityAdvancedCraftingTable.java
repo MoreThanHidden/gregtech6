@@ -57,7 +57,7 @@ import gregapi.util.ST;
 import gregapi.util.UT;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -116,7 +116,7 @@ public class MultiTileEntityAdvancedCraftingTable extends TileEntityBase09Facing
 	}
 	
 	@Override
-	public boolean onBlockActivated3(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onBlockActivated3(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (SIDES_TOP[aSide]) return !isServerSide() || openGUI(aPlayer, 0);
 		if (ALONG_AXIS[aSide][mFacing]) return !isServerSide() || openGUI(aPlayer, 1);
 		return F;
@@ -256,7 +256,7 @@ public class MultiTileEntityAdvancedCraftingTable extends TileEntityBase09Facing
 		return tList;
 	}
 	
-	public ItemStack consumeMaterials(EntityPlayer aPlayer, ItemStack aHoldStack, boolean aSubsequentClick) {
+	public ItemStack consumeMaterials(PlayerEntity aPlayer, ItemStack aHoldStack, boolean aSubsequentClick) {
 		if (!slotHas(31)) return aHoldStack;
 		
 		if (aHoldStack != null) {
@@ -506,11 +506,11 @@ public class MultiTileEntityAdvancedCraftingTable extends TileEntityBase09Facing
 	@Override public FluidTankInfo[] getTankInfo(ForgeDirection aDirection) {return L1_FLUIDTANKINFO_DUMMY;}
 	
 	@SideOnly(Side.CLIENT)
-	@Override public Object getGUIClient2(int aGUIID, EntityPlayer aPlayer) {return aGUIID == 1 ? new ContainerClientDefault(   new ContainerCommonDefault(aPlayer.inventory, this, aGUIID, 35, 36)) : new MultiTileEntityGUIClientAdvancedCraftingTable(aPlayer.inventory, this, aGUIID);}
-	@Override public Object getGUIServer2(int aGUIID, EntityPlayer aPlayer) {return aGUIID == 1 ?                               new ContainerCommonDefault(aPlayer.inventory, this, aGUIID, 35, 36)  : new MultiTileEntityGUICommonAdvancedCraftingTable(aPlayer.inventory, this, aGUIID);}
+	@Override public Object getGUIClient2(int aGUIID, PlayerEntity aPlayer) {return aGUIID == 1 ? new ContainerClientDefault(   new ContainerCommonDefault(aPlayer.inventory, this, aGUIID, 35, 36)) : new MultiTileEntityGUIClientAdvancedCraftingTable(aPlayer.inventory, this, aGUIID);}
+	@Override public Object getGUIServer2(int aGUIID, PlayerEntity aPlayer) {return aGUIID == 1 ?                               new ContainerCommonDefault(aPlayer.inventory, this, aGUIID, 35, 36)  : new MultiTileEntityGUICommonAdvancedCraftingTable(aPlayer.inventory, this, aGUIID);}
 	
 	@Override
-	public boolean interceptClick(int aGUIID, Slot_Normal aSlot, int aSlotIndex, int aInvSlot, EntityPlayer aPlayer, boolean aShiftclick, boolean aRightclick, int aMouse, int aShift) {
+	public boolean interceptClick(int aGUIID, Slot_Normal aSlot, int aSlotIndex, int aInvSlot, PlayerEntity aPlayer, boolean aShiftclick, boolean aRightclick, int aMouse, int aShift) {
 		if (aGUIID != 0) return F;
 		slotNull(aInvSlot);
 		if (aInvSlot == 30 && !aRightclick && aShiftclick) {setBluePrint(null); return T;}
@@ -518,7 +518,7 @@ public class MultiTileEntityAdvancedCraftingTable extends TileEntityBase09Facing
 	}
 	
 	@Override
-	public ItemStack slotClick(int aGUIID, Slot_Normal aSlot, int aSlotIndex, int aInvSlot, EntityPlayer aPlayer, boolean aShiftclick, boolean aRightclick, int aMouse, int aShift) {
+	public ItemStack slotClick(int aGUIID, Slot_Normal aSlot, int aSlotIndex, int aInvSlot, PlayerEntity aPlayer, boolean aShiftclick, boolean aRightclick, int aMouse, int aShift) {
 		if (aInvSlot == 31) {
 			ItemStack tCraftedStack = getCraftingOutput(), tStack;
 			if (tCraftedStack != null) {

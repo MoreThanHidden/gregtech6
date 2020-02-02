@@ -61,7 +61,7 @@ import ic2.api.item.ISpecialElectricItem;
 import micdoodle8.mods.galacticraft.api.item.IItemElectric;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
@@ -117,7 +117,7 @@ public abstract class MultiItemRandom extends MultiItem implements Runnable, squ
 	}
 	
 	@Override
-	public ItemStack onItemRightClick(ItemStack aStack, World aWorld, EntityPlayer aPlayer) {
+	public ItemStack onItemRightClick(ItemStack aStack, World aWorld, PlayerEntity aPlayer) {
 		useEnergy(TD.Energy.EU, aStack, 0, aPlayer, null, null, 0, 0, 0, T);
 		isItemStackUsable(aStack);
 		IFoodStat tStat = mFoodStats.get((short)getDamage(aStack));
@@ -308,7 +308,7 @@ public abstract class MultiItemRandom extends MultiItem implements Runnable, squ
 	}
 	
 	@Override
-	public ItemStack onEaten(ItemStack aStack, World aWorld, EntityPlayer aPlayer) {
+	public ItemStack onEaten(ItemStack aStack, World aWorld, PlayerEntity aPlayer) {
 		IFoodStat tStat = mFoodStats.get((short)getDamage(aStack));
 		if (tStat != null) {
 			
@@ -415,7 +415,7 @@ public abstract class MultiItemRandom extends MultiItem implements Runnable, squ
 	}
 	
 	@Override
-	public IIcon getIcon(ItemStack aStack, int aRenderPass, EntityPlayer aPlayer, ItemStack aUsedStack, int aUseRemaining) {
+	public IIcon getIcon(ItemStack aStack, int aRenderPass, PlayerEntity aPlayer, ItemStack aUsedStack, int aUseRemaining) {
 		return getIcon(aStack, aRenderPass);
 	}
 	

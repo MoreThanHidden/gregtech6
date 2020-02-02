@@ -22,7 +22,7 @@ package gregapi.dummies;
 import static gregapi.data.CS.*;
 
 import gregapi.util.ST;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
@@ -39,7 +39,7 @@ public class DummyInventory implements IInventory {
 	@Override public boolean hasCustomInventoryName() {return F;}
 	@Override public int getInventoryStackLimit() {return 64;}
 	@Override public void markDirty() {/**/}
-	@Override public boolean isUseableByPlayer(EntityPlayer p_70300_1_) {return F;}
+	@Override public boolean isUseableByPlayer(PlayerEntity p_70300_1_) {return F;}
 	@Override public void openInventory() {/**/}
 	@Override public void closeInventory() {/**/}
 	@Override public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_) {return T;}

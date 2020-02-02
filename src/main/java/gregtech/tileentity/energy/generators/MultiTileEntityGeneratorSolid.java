@@ -46,7 +46,7 @@ import gregapi.util.UT;
 import gregapi.util.WD;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -137,7 +137,7 @@ public class MultiTileEntityGeneratorSolid extends TileEntityBase09FacingSingle 
 	@Override public boolean attachCoversFirst(byte aSide) {return F;}
 	
 	@Override
-	public boolean onBlockActivated3(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onBlockActivated3(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (aSide != mFacing) return F;
 		if (isServerSide()) {
 			ItemStack aStack = aPlayer.getCurrentEquippedItem();
@@ -187,7 +187,7 @@ public class MultiTileEntityGeneratorSolid extends TileEntityBase09FacingSingle 
 		if (aTool.equals(TOOL_extinguisher  ) && (aSide == mFacing || aPlayer == null)) {mBurning = F; return 10000;}
 		if (aTool.equals(TOOL_shovel        ) &&  aSide == mFacing && slotHas(1)) {
 			long rDamage = 1000 * slot(1).stackSize;
-			UT.Inventories.addStackToPlayerInventoryOrDrop(aPlayer instanceof EntityPlayer ? (EntityPlayer)aPlayer : null, slot(1), worldObj, xCoord, yCoord, zCoord);
+			UT.Inventories.addStackToPlayerInventoryOrDrop(aPlayer instanceof PlayerEntity ? (PlayerEntity)aPlayer : null, slot(1), worldObj, xCoord, yCoord, zCoord);
 			slotKill(1);
 			return rDamage;
 		}

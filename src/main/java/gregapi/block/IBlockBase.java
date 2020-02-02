@@ -21,7 +21,7 @@ package gregapi.block;
 
 import java.util.List;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
@@ -36,10 +36,10 @@ public interface IBlockBase extends IBlock {
 	public boolean doesPistonPush(short aMeta);
 	public boolean canCreatureSpawn(int aMeta);
 	public boolean isSealable(int aMeta, byte aSide);
-	public void addInformation(ItemStack aStack, int aMeta, EntityPlayer aPlayer, List<String> aList, boolean aF3_H);
+	public void addInformation(ItemStack aStack, int aMeta, PlayerEntity aPlayer, List<String> aList, boolean aF3_H);
 	public float getExplosionResistance(int aMeta);
 	public int getItemStackLimit(ItemStack aStack);
-	public ItemStack onItemRightClick(ItemStack aStack, World aWorld, EntityPlayer aPlayer);
-	public boolean onItemUse(ItemBlockBase aItem, ItemStack aStack, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ, int aSide, float aHitX, float aHitY, float aHitZ);
-	public boolean onItemUseFirst(ItemBlockBase aItem, ItemStack aStack, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ, int aSide, float aHitX, float aHitY, float aHitZ);
+	public ItemStack onItemRightClick(ItemStack aStack, World aWorld, PlayerEntity aPlayer);
+	public boolean onItemUse(ItemBlockBase aItem, ItemStack aStack, PlayerEntity aPlayer, World aWorld, int aX, int aY, int aZ, int aSide, float aHitX, float aHitY, float aHitZ);
+	public boolean onItemUseFirst(ItemBlockBase aItem, ItemStack aStack, PlayerEntity aPlayer, World aWorld, int aX, int aY, int aZ, int aSide, float aHitX, float aHitY, float aHitZ);
 }

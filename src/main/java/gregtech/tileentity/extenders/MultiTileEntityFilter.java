@@ -42,7 +42,7 @@ import gregapi.util.OM;
 import gregapi.util.ST;
 import gregapi.util.UT;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -86,8 +86,8 @@ public class MultiTileEntityFilter extends MultiTileEntityExtender implements IT
 		return super.writeItemNBT2(aNBT);
 	}
 	
-	@Override public Object getGUIClient2(int aGUIID, EntityPlayer aPlayer) {return new MultiTileEntityGUIClientFilter(aPlayer.inventory, this, aGUIID);}
-	@Override public Object getGUIServer2(int aGUIID, EntityPlayer aPlayer) {return new MultiTileEntityGUICommonFilter(aPlayer.inventory, this, aGUIID);}
+	@Override public Object getGUIClient2(int aGUIID, PlayerEntity aPlayer) {return new MultiTileEntityGUIClientFilter(aPlayer.inventory, this, aGUIID);}
+	@Override public Object getGUIServer2(int aGUIID, PlayerEntity aPlayer) {return new MultiTileEntityGUICommonFilter(aPlayer.inventory, this, aGUIID);}
 	@Override public int getSizeInventoryGUI() {return mFilter==null?0:mFilter.length;}
 	@Override public ItemStack getStackInSlotGUI(int aSlot) {return mFilter[aSlot];}
 	@Override public ItemStack decrStackSizeGUI(int aSlot, int aDecrement) {mInventoryChanged = T; if (mFilter[aSlot] != null) {if (mFilter[aSlot].stackSize <= aDecrement) {ItemStack tStack = mFilter[aSlot]; mFilter[aSlot] = null; return tStack;} ItemStack rStack = mFilter[aSlot].splitStack(aDecrement); if (mFilter[aSlot].stackSize <= 0) mFilter[aSlot] = null; return rStack;} return null;}
@@ -137,7 +137,7 @@ public class MultiTileEntityFilter extends MultiTileEntityExtender implements IT
 	}
 	
 	@Override
-	public boolean onBlockActivated3(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onBlockActivated3(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (isServerSide() && isUseableByPlayerGUI(aPlayer)) openGUI(aPlayer);
 		return T;
 	}
@@ -241,7 +241,7 @@ public class MultiTileEntityFilter extends MultiTileEntityExtender implements IT
 		@Override public int getShiftClickSlotCount() {return 0;}
 		
 		@Override
-		public ItemStack slotClick(int aSlotIndex, int aMouseclick, int aShifthold, EntityPlayer aPlayer) {
+		public ItemStack slotClick(int aSlotIndex, int aMouseclick, int aShifthold, PlayerEntity aPlayer) {
 			if (aSlotIndex < 0 || aSlotIndex >= inventorySlots.size()) return super.slotClick(aSlotIndex, aMouseclick, aShifthold, aPlayer);
 			if (aSlotIndex >= mTileEntity.getSizeInventoryGUI()) {
 				if (aShifthold != 1) return super.slotClick(aSlotIndex, aMouseclick, aShifthold, aPlayer);

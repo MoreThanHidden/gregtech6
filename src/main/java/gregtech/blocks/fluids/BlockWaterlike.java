@@ -35,6 +35,7 @@ import gregapi.util.ST;
 import gregapi.util.UT;
 import gregapi.util.WD;
 import net.minecraft.block.Block;
+import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
@@ -54,7 +55,7 @@ import net.minecraftforge.fluids.FluidStack;
 /**
  * @author Gregorius Techneticies
  */
-public abstract class BlockWaterlike extends BlockFluidClassic implements IBlockOnHeadInside {
+public abstract class BlockWaterlike extends FlowingFluidBlock implements IBlockOnHeadInside {
 	public final Fluid mFluid;
 	
 	public BlockWaterlike(String aName, Fluid aFluid) {

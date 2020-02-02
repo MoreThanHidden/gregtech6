@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 
-import cpw.mods.fml.common.FMLCommonHandler;
 import gregapi.GT_API;
 import gregapi.block.BlockBase;
 import gregapi.block.IBlockDebugable;
@@ -63,62 +62,31 @@ import gregapi.tileentity.machines.ITileEntitySwitchableMode;
 import gregapi.tileentity.machines.ITileEntitySwitchableOnOff;
 import gregapi.util.UT.Code;
 import gregtech.blocks.fluids.BlockWaterlike;
-import micdoodle8.mods.galacticraft.api.block.IPartialSealableBlock;
-import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
-import micdoodle8.mods.galacticraft.core.util.OxygenUtil;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockBush;
-import net.minecraft.block.BlockDoor;
-import net.minecraft.block.BlockFire;
-import net.minecraft.block.BlockLeaves;
-import net.minecraft.block.BlockLiquid;
-import net.minecraft.block.BlockSlab;
-import net.minecraft.block.BlockStairs;
-import net.minecraft.block.BlockTrapDoor;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Blocks;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.play.server.S07PacketRespawn;
-import net.minecraft.network.play.server.S1DPacketEntityEffect;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntitySign;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldProvider;
-import net.minecraft.world.WorldServer;
-import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidBlock;
-import net.minecraftforge.fluids.IFluidHandler;
-import thaumcraft.api.nodes.INode;
-import twilightforest.TwilightForestMod;
 
 /**
  * @author Gregorius Techneticies
  */
 public class WD {
 	public static ItemStack suck(IHasWorldAndCoords aCoordinates) {return suck(aCoordinates.getWorld(), aCoordinates.getX(), aCoordinates.getY(), aCoordinates.getZ());}
-	public static ItemStack suck(World aWorld, double aX, double aY, double aZ) {return suck(aWorld, aX, aY, aZ, 1, 1, 1);}
+	public static ItemStack suck(World aWorld, double aX, double aY, double aZ) {return suck(aWorld, aPos, 1, 1, 1);}
 	@SuppressWarnings("unchecked")
 	public static ItemStack suck(World aWorld, double aX, double aY, double aZ, double aL, double aH, double aW) {
-		for (EntityItem tItem : (ArrayList<EntityItem>)aWorld.getEntitiesWithinAABB(EntityItem.class, AxisAlignedBB.getBoundingBox(aX, aY, aZ, aX+aL, aY+aH, aZ+aW))) {
+		for (EntityItem tItem : (ArrayList<EntityItem>)aWorld.getEntitiesWithinAABB(EntityItem.class, AxisAlignedBB.getBoundingBox(aPos, aX+aL, aY+aH, aZ+aW))) {
 			if (!tItem.isDead) {
 				aWorld.removeEntity(tItem);
 				ItemStack rStack = tItem.getEntityItem();
@@ -130,16 +98,16 @@ public class WD {
 		return null;
 	}
 	
-	public static boolean obstructed(World aWorld, int aX, int aY, int aZ, byte aSide) {
+	public static boolean obstructed(World aWorld, BlockPos aPos, byte aSide) {
 		aX += OFFSETS_X[aSide]; aY += OFFSETS_Y[aSide]; aZ += OFFSETS_Z[aSide];
-		TileEntity tTileEntity = te(aWorld, aX, aY, aZ, T);
+		TileEntity tTileEntity = te(aWorld, aPos, T);
 		if (tTileEntity != null) {
 			if (tTileEntity instanceof ITileEntityQuickObstructionCheck) return ((ITileEntityQuickObstructionCheck)tTileEntity).isObstructingBlockAt(OPPOSITES[aSide]);
 			if (MD.TC.mLoaded && tTileEntity instanceof INode) return F;
 		}
-		Block tBlock = aWorld.getBlock(aX, aY, aZ);
+		Block tBlock = aWorld.getBlock(aPos);
 		if (tBlock instanceof BlockTrapDoor || tBlock instanceof BlockDoor) return F;
-		AxisAlignedBB tBoundingBox = tBlock.getCollisionBoundingBoxFromPool(aWorld, aX, aY, aZ);
+		AxisAlignedBB tBoundingBox = tBlock.getCollisionBoundingBoxFromPool(aWorld, aPos);
 		if (tBoundingBox == null) return F;
 		switch(aSide) {
 		case 0: return tBoundingBox.maxY-aY > PX_N[4] && tBoundingBox.maxX-aX > PX_P[2] && tBoundingBox.minX-aX < PX_N[2] && tBoundingBox.maxZ-aZ > PX_P[2] && tBoundingBox.minZ-aZ < PX_N[2];
@@ -152,7 +120,7 @@ public class WD {
 		return F;
 	}
 	
-	public static MovingObjectPosition getMOP(World aWorld, EntityPlayer aPlayer, boolean aFlag) {
+	public static RayTraceResult getMOP(World aWorld, PlayerEntity aPlayer, boolean aFlag) {
 		Vec3 vec3 = Vec3.createVectorHelper(
 		  aPlayer.prevPosX + (aPlayer.posX - aPlayer.prevPosX)
 		, aPlayer.prevPosY + (aPlayer.posY - aPlayer.prevPosY) + (aWorld.isRemote ? aPlayer.getEyeHeight() - aPlayer.getDefaultEyeHeight() : aPlayer.getEyeHeight()) // isRemote check to revert changes to ray trace position due to adding the eye height clientside and player yOffset differences
@@ -164,7 +132,7 @@ public class WD {
 		float  tX     =  MathHelper.sin(-tYaw   * 0.017453292F - (float)Math.PI);
 		float  tW     = -MathHelper.cos(-tPitch * 0.017453292F);
 		float  tY     =  MathHelper.sin(-tPitch * 0.017453292F);
-		double tReach = (aPlayer instanceof EntityPlayerMP ? ((EntityPlayerMP)aPlayer).theItemInWorldManager.getBlockReachDistance() : 5);
+		double tReach = (aPlayer instanceof PlayerEntityMP ? ((PlayerEntityMP)aPlayer).theItemInWorldManager.getBlockReachDistance() : 5);
 		return aWorld.func_147447_a(vec3, vec3.addVector(tX * tW * tReach, tY * tReach, tZ * tW * tReach), aFlag, !aFlag, F);
 	}
 	
@@ -213,8 +181,8 @@ public class WD {
 			if (aEntity.ridingEntity != null) aEntity.mountEntity(null);
 			if (aEntity.riddenByEntity != null) aEntity.riddenByEntity.mountEntity(null);
 			
-			if (aEntity instanceof EntityPlayerMP) {
-				EntityPlayerMP aPlayer = (EntityPlayerMP)aEntity;
+			if (aEntity instanceof PlayerEntityMP) {
+				PlayerEntityMP aPlayer = (PlayerEntityMP)aEntity;
 				aPlayer.dimension = aDimension;
 				aPlayer.playerNetServerHandler.sendPacket(new S07PacketRespawn(aPlayer.dimension, aPlayer.worldObj.difficultySetting, aPlayer.worldObj.getWorldInfo().getTerrainType(), aPlayer.theItemInWorldManager.getGameType()));
 				tOriginalWorld.removePlayerEntityDangerously(aPlayer);
@@ -253,9 +221,9 @@ public class WD {
 			}
 			
 			if (aEntity instanceof EntityLivingBase) {
-				((EntityLivingBase)aEntity).setPositionAndUpdate(aX, aY, aZ);
+				((EntityLivingBase)aEntity).setPositionAndUpdate(aPos);
 			} else {
-				aEntity.setPosition(aX, aY, aZ);
+				aEntity.setPosition(aPos);
 			}
 			
 			tOriginalWorld.resetUpdateEntityTick();
@@ -272,9 +240,9 @@ public class WD {
 	}
 	
 	/** to get a TileEntity properly, according to my additional Interfaces. Normally you should set aLoadUnloadedChunks to false, unless you have already checked these Coordinates, or you want to load Chunks */
-	public static DelegatorTileEntity<TileEntity> te(World aWorld, int aX, int aY, int aZ, byte aSide, boolean aLoadUnloadedChunks) {
-		TileEntity aTileEntity = te(aWorld, aX, aY, aZ, aLoadUnloadedChunks);
-		return aTileEntity instanceof ITileEntityDelegating ? ((ITileEntityDelegating)aTileEntity).getDelegateTileEntity(aSide) : new DelegatorTileEntity<>(aTileEntity, aWorld, aX, aY, aZ, aSide);
+	public static DelegatorTileEntity<TileEntity> te(World aWorld, BlockPos aPos, byte aSide, boolean aLoadUnloadedChunks) {
+		TileEntity aTileEntity = te(aWorld, aPos, aLoadUnloadedChunks);
+		return aTileEntity instanceof ITileEntityDelegating ? ((ITileEntityDelegating)aTileEntity).getDelegateTileEntity(aSide) : new DelegatorTileEntity<>(aTileEntity, aWorld, aPos, aSide);
 	}
 	
 	/** to get a TileEntity properly, according to my additional Interfaces. Normally you should set aLoadUnloadedChunks to false, unless you have already checked these Coordinates, or you want to load Chunks */
@@ -291,21 +259,21 @@ public class WD {
 	}
 	
 	/** to get a TileEntity properly, according to my additional Interfaces. Normally you should set aLoadUnloadedChunks to false, unless you have already checked these Coordinates, or you want to load Chunks */
-	public static TileEntity te(World aWorld, int aX, int aY, int aZ, boolean aLoadUnloadedChunks) {
-		if (aLoadUnloadedChunks || aWorld.blockExists(aX, aY, aZ)) {
-			TileEntity rTileEntity = aWorld.getTileEntity(aX, aY, aZ);
+	public static TileEntity te(World aWorld, BlockPos aPos, boolean aLoadUnloadedChunks) {
+		if (aLoadUnloadedChunks || aWorld.blockExists(aPos)) {
+			TileEntity rTileEntity = aWorld.getTileEntity(aPos);
 			if (rTileEntity != null) return rTileEntity;
 			rTileEntity = LAST_BROKEN_TILEENTITY.get();
 			if (rTileEntity != null && rTileEntity.xCoord == aX && rTileEntity.yCoord == aY && rTileEntity.zCoord == aZ) return rTileEntity;
-			Block tBlock = aWorld.getBlock(aX, aY, aZ);
-			return tBlock instanceof IBlockTileEntity ? ((IBlockTileEntity)tBlock).getTileEntity(aWorld, aX, aY, aZ) : null;
+			Block tBlock = aWorld.getBlock(aPos);
+			return tBlock instanceof IBlockTileEntity ? ((IBlockTileEntity)tBlock).getTileEntity(aWorld, aPos) : null;
 		}
 		return null;
 	}
 	
 	/** Sets the TileEntity at the passed position, with the option of turning adjacent TileEntity updates off. */
-	public static TileEntity te(World aWorld, int aX, int aY, int aZ, TileEntity aTileEntity, boolean aCauseTileEntityUpdates) {
-		if (aCauseTileEntityUpdates) aWorld.setTileEntity(aX, aY, aZ, aTileEntity); else {
+	public static TileEntity te(World aWorld, BlockPos aPos, TileEntity aTileEntity, boolean aCauseTileEntityUpdates) {
+		if (aCauseTileEntityUpdates) aWorld.setTileEntity(aPos, aTileEntity); else {
 			Chunk tChunk = aWorld.getChunkFromChunkCoords(aX >> 4, aZ >> 4);
 			if (tChunk != null) {
 				aWorld.addTileEntity(aTileEntity);
@@ -316,29 +284,29 @@ public class WD {
 		return aTileEntity;
 	}
 	
-	public static boolean oxygen(World aWorld, int aX, int aY, int aZ) {
-		return  !MD.GC.mLoaded || !(aWorld.provider instanceof IGalacticraftWorldProvider) || OxygenUtil.checkTorchHasOxygen(aWorld, NB, aX, aY, aZ);
+	public static boolean oxygen(World aWorld, BlockPos aPos) {
+		return  !MD.GC.mLoaded || !(aWorld.provider instanceof IGalacticraftWorldProvider) || OxygenUtil.checkTorchHasOxygen(aWorld, NB, aPos);
 	}
-	public static boolean collectable_air(World aWorld, int aX, int aY, int aZ) {
-		return (!MD.GC.mLoaded || !(aWorld.provider instanceof IGalacticraftWorldProvider)) && !hasCollide(aWorld, aX, aY, aZ);
+	public static boolean collectable_air(World aWorld, BlockPos aPos) {
+		return (!MD.GC.mLoaded || !(aWorld.provider instanceof IGalacticraftWorldProvider)) && !hasCollide(aWorld, aPos);
 	}
 	
 	/** @return the regular Environment Temperature of the World at this Location according to my calculations. In Kelvin, ofcourse. */
-	public static long envTemp(World aWorld, int aX, int aY, int aZ) {
-		return envTemp(aWorld.getBiomeGenForCoords(aX, aZ), aX, aY, aZ);
+	public static long envTemp(World aWorld, BlockPos aPos) {
+		return envTemp(aWorld.getBiomeGenForCoords(aX, aZ), aPos);
 	}
-	public static long envTemp(BiomeGenBase aBiome, int aX, int aY, int aZ) {
-		return Math.max(1, aBiome == null ? DEF_ENV_TEMP : (long)(C - 3 + aBiome.getFloatTemperature(aX, aY, aZ) * 20));
+	public static long envTemp(BiomeGenBase aBiome, BlockPos aPos) {
+		return Math.max(1, aBiome == null ? DEF_ENV_TEMP : (long)(C - 3 + aBiome.getFloatTemperature(aPos) * 20));
 	}
 	public static long envTemp(BiomeGenBase aBiome) {
 		return Math.max(1, aBiome == null ? DEF_ENV_TEMP : (long)(C - 3 + aBiome.temperature * 20));
 	}
 	
 	/** @return the regular Temperature of the World at this Location according to my calculations. In Kelvin, ofcourse. */
-	public static long temperature(World aWorld, int aX, int aY, int aZ) {
-		long rTemperature = envTemp(aWorld, aX, aY, aZ);
-		if (burning(aWorld, aX, aY, aZ)) rTemperature = Math.max(rTemperature, C + 200);
-		for (ChunkCoordinates tCoords : new ChunkCoordinates[] {new ChunkCoordinates(aX, aY, aZ), new ChunkCoordinates(aX+1, aY, aZ), new ChunkCoordinates(aX-1, aY, aZ), new ChunkCoordinates(aX, aY+1, aZ), new ChunkCoordinates(aX, aY-1, aZ), new ChunkCoordinates(aX, aY, aZ+1), new ChunkCoordinates(aX, aY, aZ-1)}) {
+	public static long temperature(World aWorld, BlockPos aPos) {
+		long rTemperature = envTemp(aWorld, aPos);
+		if (burning(aWorld, aPos)) rTemperature = Math.max(rTemperature, C + 200);
+		for (ChunkCoordinates tCoords : new ChunkCoordinates[] {new ChunkCoordinates(aPos), new ChunkCoordinates(aX+1, aY, aZ), new ChunkCoordinates(aX-1, aY, aZ), new ChunkCoordinates(aX, aY+1, aZ), new ChunkCoordinates(aX, aY-1, aZ), new ChunkCoordinates(aPos+1), new ChunkCoordinates(aPos-1)}) {
 			Block tBlock = block(aWorld, tCoords.posX, tCoords.posY, tCoords.posZ, F);
 			if (tBlock == Blocks.lava || tBlock == Blocks.flowing_lava) rTemperature = Math.max(rTemperature, C + 500);
 			else if (tBlock instanceof BlockFire) rTemperature = Math.max(rTemperature, C + 200);
@@ -346,56 +314,56 @@ public class WD {
 		return rTemperature;
 	}
 	
-	public static ItemStack stack(World aWorld, int aX, int aY, int aZ) {
-		Block tBlock = aWorld.getBlock(aX, aY, aZ);
-		return ST.make(tBlock, 1, tBlock instanceof IBlockExtendedMetaData ? ((IBlockExtendedMetaData)tBlock).getExtendedMetaData(aWorld, aX, aY, aZ) : aWorld.getBlockMetadata(aX, aY, aZ));
+	public static ItemStack stack(World aWorld, BlockPos aPos) {
+		Block tBlock = aWorld.getBlock(aPos);
+		return ST.make(tBlock, 1, tBlock instanceof IBlockExtendedMetaData ? ((IBlockExtendedMetaData)tBlock).getExtendedMetaData(aWorld, aPos) : aWorld.getBlockMetadata(aPos));
 	}
 	
-	public static void update(IBlockAccess aWorld, int aX, int aY, int aZ) {
-		((World)aWorld).markBlockForUpdate(aX, aY, aZ);
+	public static void update(IBlockAccess aWorld, BlockPos aPos) {
+		((World)aWorld).markBlockForUpdate(aPos);
 		if (CLIENT_BLOCKUPDATE_SOUNDS && CODE_CLIENT && CLIENT_TIME > 100) {
-			EntityPlayer tPlayer = GT_API.api_proxy.getThePlayer();
+			PlayerEntity tPlayer = GT_API.api_proxy.getThePlayer();
 			if (tPlayer != null && Math.abs(tPlayer.posX - aX) < 16 && Math.abs(tPlayer.posY - aY) < 16 && Math.abs(tPlayer.posZ - aZ) < 16) {
-				UT.Sounds.play(SFX.MC_FIREWORK_LAUNCH, 1, 1.0F, 1.0F, aX, aY, aZ);
+				UT.Sounds.play(SFX.MC_FIREWORK_LAUNCH, 1, 1.0F, 1.0F, aPos);
 			}
 		}
 	}
 	
-	public static Block block(World aWorld, int aX, int aY, int aZ, boolean aLoadUnloadedChunks) {return aLoadUnloadedChunks || aWorld.blockExists(aX, aY, aZ) ? aWorld.getBlock(aX, aY, aZ) : NB;}
-	public static Block block(World aWorld, int aX, int aY, int aZ) {return aWorld.getBlock(aX, aY, aZ);}
-	public static Block block(World aWorld, int aX, int aY, int aZ, byte aSide, boolean aLoadUnloadedChunks) {return block(aWorld, aX+OFFSETS_X[aSide], aY+OFFSETS_Y[aSide], aZ+OFFSETS_Z[aSide], aLoadUnloadedChunks);}
-	public static Block block(World aWorld, int aX, int aY, int aZ, byte aSide) {return block(aWorld, aX+OFFSETS_X[aSide], aY+OFFSETS_Y[aSide], aZ+OFFSETS_Z[aSide]);}
-	public static byte  meta (World aWorld, int aX, int aY, int aZ, boolean aLoadUnloadedChunks) {return aLoadUnloadedChunks || aWorld.blockExists(aX, aY, aZ) ? UT.Code.bind4(aWorld.getBlockMetadata(aX, aY, aZ)) : 0;}
-	public static byte  meta (World aWorld, int aX, int aY, int aZ) {return UT.Code.bind4(aWorld.getBlockMetadata(aX, aY, aZ));}
-	public static byte  meta (World aWorld, int aX, int aY, int aZ, byte aSide, boolean aLoadUnloadedChunks) {return meta(aWorld, aX+OFFSETS_X[aSide], aY+OFFSETS_Y[aSide], aZ+OFFSETS_Z[aSide], aLoadUnloadedChunks);}
-	public static byte  meta (World aWorld, int aX, int aY, int aZ, byte aSide) {return meta(aWorld, aX+OFFSETS_X[aSide], aY+OFFSETS_Y[aSide], aZ+OFFSETS_Z[aSide]);}
+	public static Block block(World aWorld, BlockPos aPos, boolean aLoadUnloadedChunks) {return aLoadUnloadedChunks || aWorld.blockExists(aPos) ? aWorld.getBlock(aPos) : NB;}
+	public static Block block(World aWorld, BlockPos aPos) {return aWorld.getBlock(aPos);}
+	public static Block block(World aWorld, BlockPos aPos, byte aSide, boolean aLoadUnloadedChunks) {return block(aWorld, aX+OFFSETS_X[aSide], aY+OFFSETS_Y[aSide], aZ+OFFSETS_Z[aSide], aLoadUnloadedChunks);}
+	public static Block block(World aWorld, BlockPos aPos, byte aSide) {return block(aWorld, aX+OFFSETS_X[aSide], aY+OFFSETS_Y[aSide], aZ+OFFSETS_Z[aSide]);}
+	public static byte  meta (World aWorld, BlockPos aPos, boolean aLoadUnloadedChunks) {return aLoadUnloadedChunks || aWorld.blockExists(aPos) ? UT.Code.bind4(aWorld.getBlockMetadata(aPos)) : 0;}
+	public static byte  meta (World aWorld, BlockPos aPos) {return UT.Code.bind4(aWorld.getBlockMetadata(aPos));}
+	public static byte  meta (World aWorld, BlockPos aPos, byte aSide, boolean aLoadUnloadedChunks) {return meta(aWorld, aX+OFFSETS_X[aSide], aY+OFFSETS_Y[aSide], aZ+OFFSETS_Z[aSide], aLoadUnloadedChunks);}
+	public static byte  meta (World aWorld, BlockPos aPos, byte aSide) {return meta(aWorld, aX+OFFSETS_X[aSide], aY+OFFSETS_Y[aSide], aZ+OFFSETS_Z[aSide]);}
 	
-	public static boolean set(World aWorld, int aX, int aY, int aZ, Block aBlock, long aMeta, long aFlags) {
-		return set(aWorld, aX, aY, aZ, aBlock, Code.bind4(aMeta), (byte)aFlags, aBlock.isOpaqueCube());
+	public static boolean set(World aWorld, BlockPos aPos, Block aBlock, long aMeta, long aFlags) {
+		return set(aWorld, aPos, aBlock, Code.bind4(aMeta), (byte)aFlags, aBlock.isOpaqueCube());
 	}
 	
-	public static boolean set(World aWorld, int aX, int aY, int aZ, Block aBlock, long aMeta, long aFlags, boolean aRemoveGrassBelow) {
+	public static boolean set(World aWorld, BlockPos aPos, Block aBlock, long aMeta, long aFlags, boolean aRemoveGrassBelow) {
 		if (aRemoveGrassBelow) {
 			Block tBlock = aWorld.getBlock(aX, aY-1, aZ);
 			if (tBlock == Blocks.grass || tBlock == Blocks.mycelium) aWorld.setBlock(aX, aY-1, aZ, Blocks.dirt, 0, (byte)aFlags);
 		}
-		return aWorld.setBlock(aX, aY, aZ, aBlock, Code.bind4(aMeta), (byte)aFlags);
+		return aWorld.setBlock(aPos, aBlock, Code.bind4(aMeta), (byte)aFlags);
 	}
 	
-	public static boolean set(Chunk aChunk, int aX, int aY, int aZ, Block aBlock, long aMeta) {
-		return aChunk.func_150807_a(aX, aY, aZ, aBlock, Code.bind4(aMeta));
+	public static boolean set(Chunk aChunk, BlockPos aPos, Block aBlock, long aMeta) {
+		return aChunk.func_150807_a(aPos, aBlock, Code.bind4(aMeta));
 	}
-	public static boolean set(Chunk aChunk, int aX, int aY, int aZ, Block aBlock, long aMeta, boolean aRemoveGrassBelow) {
+	public static boolean set(Chunk aChunk, BlockPos aPos, Block aBlock, long aMeta, boolean aRemoveGrassBelow) {
 		if (aRemoveGrassBelow) {
 			Block tBlock = aChunk.getBlock(aX, aY-1, aZ);
 			if (tBlock == Blocks.grass || tBlock == Blocks.mycelium) aChunk.func_150807_a(aX, aY-1, aZ, Blocks.dirt, 0);
 		}
-		return aChunk.func_150807_a(aX, aY, aZ, aBlock, Code.bind4(aMeta));
+		return aChunk.func_150807_a(aPos, aBlock, Code.bind4(aMeta));
 	}
 	
-	public static boolean sign(World aWorld, int aX, int aY, int aZ, byte aSide, long aFlags, String aLine1, String aLine2, String aLine3, String aLine4) {
-		aWorld.setBlock(aX, aY, aZ, Blocks.wall_sign, aSide, (byte)aFlags);
-		TileEntity tSign = te(aWorld, aX, aY, aZ, T);
+	public static boolean sign(World aWorld, BlockPos aPos, byte aSide, long aFlags, String aLine1, String aLine2, String aLine3, String aLine4) {
+		aWorld.setBlock(aPos, Blocks.wall_sign, aSide, (byte)aFlags);
+		TileEntity tSign = te(aWorld, aPos, T);
 		if (!(tSign instanceof TileEntitySign)) return F;
 		((TileEntitySign)tSign).signText[0] = aLine1;
 		((TileEntitySign)tSign).signText[1] = aLine2;
@@ -413,8 +381,8 @@ public class WD {
 		return rRandom;
 	}
 	
-	public static int random(World aWorld, int aX, int aY, int aZ, int aBound) {return random(aWorld.getSeed(), aX, aY, aZ, aBound);}
-	public static int random(long aSeed, int aX, int aY, int aZ, int aBound) {
+	public static int random(World aWorld, BlockPos aPos, int aBound) {return random(aWorld.getSeed(), aPos, aBound);}
+	public static int random(long aSeed, BlockPos aPos, int aBound) {
 		Random rRandom = new Random(aSeed);
 		for (int i = 0; i < 10; i++) rRandom.nextInt(0x00ffffff);
 		rRandom = new Random(aSeed ^ ((rRandom.nextLong() >> 2 + 1L) * aX + (rRandom.nextLong() >> 2 + 1L) * aZ));
@@ -428,18 +396,18 @@ public class WD {
 	public static boolean even(ChunkCoordinates aCoords) {return even(aCoords.posX, aCoords.posY, aCoords.posZ);}
 	public static boolean even(int... aCoords) {int i = 0; for (int tCoord : aCoords) if (tCoord % 2 == 0) i++; return i % 2 == 0;}
 	
-	public static boolean setIfDiff(World aWorld, int aX, int aY, int aZ, Block aBlock, int aMetaData, int aFlags) {return (aWorld.getBlock(aX, aY, aZ) != aBlock || aWorld.getBlockMetadata(aX, aY, aZ) != aMetaData) && aWorld.setBlock(aX, aY, aZ, aBlock, aMetaData, aFlags);}
+	public static boolean setIfDiff(World aWorld, BlockPos aPos, Block aBlock, int aMetaData, int aFlags) {return (aWorld.getBlock(aPos) != aBlock || aWorld.getBlockMetadata(aPos) != aMetaData) && aWorld.setBlock(aPos, aBlock, aMetaData, aFlags);}
 	
-	public static boolean set(World aWorld, int aX, int aY, int aZ, ItemStack aStack) {
+	public static boolean set(World aWorld, BlockPos aPos, ItemStack aStack) {
 		Block tBlock = ST.block(aStack);
 		if (tBlock == NB) return F;
-		if (tBlock instanceof IBlockPlacable) return ((IBlockPlacable)tBlock).placeBlock(aWorld, aX, aY, aZ, (byte)6, ST.meta_(aStack), aStack.getTagCompound(), T, F);
-		if (ST.meta_(aStack) < 16) return aWorld.setBlock(aX, aY, aZ, tBlock, ST.meta_(aStack), 3);
+		if (tBlock instanceof IBlockPlacable) return ((IBlockPlacable)tBlock).placeBlock(aWorld, aPos, (byte)6, ST.meta_(aStack), aStack.getTagCompound(), T, F);
+		if (ST.meta_(aStack) < 16) return aWorld.setBlock(aPos, tBlock, ST.meta_(aStack), 3);
 		return F;
 	}
 	
-	public static boolean leafdecay(World aWorld, int aX, int aY, int aZ, Block aBlock) {
-		if (aBlock == null || (!(aBlock instanceof BlockBase) && aBlock.canSustainLeaves(aWorld, aX, aY, aZ))) {
+	public static boolean leafdecay(World aWorld, BlockPos aPos, Block aBlock) {
+		if (aBlock == null || (!(aBlock instanceof BlockBase) && aBlock.canSustainLeaves(aWorld, aPos))) {
 			for (int i = -7; i <= 7; ++i) for (int j = -7; j <= 7; ++j) for (int k = -7; k <= 7; ++k) {
 				Block tBlock = aWorld.getBlock(aX+i, aY+j, aZ+k);
 				if (!(tBlock instanceof BlockBase) && tBlock.isLeaves(aWorld, aX+i, aY+j, aZ+k)) {
@@ -451,7 +419,7 @@ public class WD {
 		return F;
 	}
 	
-	public static boolean liquid(World aWorld, int aX, int aY, int aZ) {return liquid(aWorld.getBlock(aX, aY, aZ));}
+	public static boolean liquid(World aWorld, BlockPos aPos) {return liquid(aWorld.getBlock(aPos));}
 	public static boolean liquid(Block aBlock) {return aBlock instanceof BlockLiquid || aBlock instanceof IFluidBlock;}
 	
 	public static boolean stone(Block aBlock, short aMetaData) {
@@ -460,47 +428,47 @@ public class WD {
 		return BlocksGT.stoneToNormalOres.containsKey(tStack) || BlocksGT.stoneToBrokenOres.containsKey(tStack) || BlocksGT.stoneToSmallOres.containsKey(tStack);
 	}
 	
-	public static boolean floor(World aWorld, int aX, int aY, int aZ) {return floor(aWorld, aX, aY, aZ, aWorld.getBlock(aX, aY, aZ));}
-	public static boolean floor(World aWorld, int aX, int aY, int aZ, Block aBlock) {return aBlock.isSideSolid(aWorld, aX, aY, aZ, FORGE_DIR[SIDE_UP]) || floor(aBlock);}
+	public static boolean floor(World aWorld, BlockPos aPos) {return floor(aWorld, aPos, aWorld.getBlock(aPos));}
+	public static boolean floor(World aWorld, BlockPos aPos, Block aBlock) {return aBlock.isSideSolid(aWorld, aPos, FORGE_DIR[SIDE_UP]) || floor(aBlock);}
 	public static boolean floor(Block aBlock) {return aBlock.isOpaqueCube() || aBlock instanceof BlockSlab || aBlock instanceof BlockStairs || aBlock instanceof BlockMetaType;}
 	
 	@SuppressWarnings("unlikely-arg-type")
 	public static boolean ore(Block aBlock, short aMetaData) {return (aBlock instanceof IBlockPlacable && (BlocksGT.stoneToBrokenOres.containsValue(aBlock) || BlocksGT.stoneToNormalOres.containsValue(aBlock) || BlocksGT.stoneToSmallOres.containsValue(aBlock)) || OM.prefixcontains(ST.make(aBlock, 1, aMetaData), TD.Prefix.ORE));}
 	public static boolean ore_stone(Block aBlock, short aMetaData) {return ore(aBlock, aMetaData) || stone(aBlock, aMetaData);}
 	
-	public static boolean visOcc(World aWorld, int aX, int aY, int aZ, boolean aLoadUnloadedChunks, boolean aDefault) {return visOpq(aWorld, aX+1, aY, aZ, aLoadUnloadedChunks || !border(aX, aZ, aX+1, aZ), aDefault) && visOpq(aWorld, aX-1, aY, aZ, aLoadUnloadedChunks || !border(aX, aZ, aX-1, aZ), aDefault) && visOpq(aWorld, aX, aY+1, aZ, T, aDefault) && visOpq(aWorld, aX, aY-1, aZ, T, aDefault) && visOpq(aWorld, aX, aY, aZ+1, aLoadUnloadedChunks || !border(aX, aZ, aX, aZ+1), aDefault) && visOpq(aWorld, aX, aY, aZ-1, aLoadUnloadedChunks || !border(aX, aZ, aX, aZ-1), aDefault);}
-	public static boolean visOpq(World aWorld, int aX, int aY, int aZ, boolean aLoadUnloadedChunks, boolean aDefault) {return aLoadUnloadedChunks || aWorld.blockExists(aX, aY, aZ) ? visOpq(aWorld.getBlock(aX, aY, aZ)) : aDefault;}
+	public static boolean visOcc(World aWorld, BlockPos aPos, boolean aLoadUnloadedChunks, boolean aDefault) {return visOpq(aWorld, aX+1, aY, aZ, aLoadUnloadedChunks || !border(aX, aZ, aX+1, aZ), aDefault) && visOpq(aWorld, aX-1, aY, aZ, aLoadUnloadedChunks || !border(aX, aZ, aX-1, aZ), aDefault) && visOpq(aWorld, aX, aY+1, aZ, T, aDefault) && visOpq(aWorld, aX, aY-1, aZ, T, aDefault) && visOpq(aWorld, aPos+1, aLoadUnloadedChunks || !border(aX, aZ, aX, aZ+1), aDefault) && visOpq(aWorld, aPos-1, aLoadUnloadedChunks || !border(aX, aZ, aX, aZ-1), aDefault);}
+	public static boolean visOpq(World aWorld, BlockPos aPos, boolean aLoadUnloadedChunks, boolean aDefault) {return aLoadUnloadedChunks || aWorld.blockExists(aPos) ? visOpq(aWorld.getBlock(aPos)) : aDefault;}
 	public static boolean visOpq(Block aBlock) {return aBlock.isOpaqueCube() || VISUALLY_OPAQUE_BLOCKS.contains(aBlock);}
 	
-	public static boolean occ(World aWorld, int aX, int aY, int aZ, boolean aLoadUnloadedChunks, boolean aDefault) {return opq(aWorld, aX+1, aY, aZ, aLoadUnloadedChunks || !border(aX, aZ, aX+1, aZ), aDefault) && opq(aWorld, aX-1, aY, aZ, aLoadUnloadedChunks || !border(aX, aZ, aX-1, aZ), aDefault) && opq(aWorld, aX, aY+1, aZ, T, aDefault) && opq(aWorld, aX, aY-1, aZ, T, aDefault) && opq(aWorld, aX, aY, aZ+1, aLoadUnloadedChunks || !border(aX, aZ, aX, aZ+1), aDefault) && opq(aWorld, aX, aY, aZ-1, aLoadUnloadedChunks || !border(aX, aZ, aX, aZ-1), aDefault);}
-	public static boolean opq(World aWorld, int aX, int aY, int aZ, boolean aLoadUnloadedChunks, boolean aDefault) {return aLoadUnloadedChunks || aWorld.blockExists(aX, aY, aZ) ? opq(aWorld.getBlock(aX, aY, aZ)) : aDefault;}
+	public static boolean occ(World aWorld, BlockPos aPos, boolean aLoadUnloadedChunks, boolean aDefault) {return opq(aWorld, aX+1, aY, aZ, aLoadUnloadedChunks || !border(aX, aZ, aX+1, aZ), aDefault) && opq(aWorld, aX-1, aY, aZ, aLoadUnloadedChunks || !border(aX, aZ, aX-1, aZ), aDefault) && opq(aWorld, aX, aY+1, aZ, T, aDefault) && opq(aWorld, aX, aY-1, aZ, T, aDefault) && opq(aWorld, aPos+1, aLoadUnloadedChunks || !border(aX, aZ, aX, aZ+1), aDefault) && opq(aWorld, aPos-1, aLoadUnloadedChunks || !border(aX, aZ, aX, aZ-1), aDefault);}
+	public static boolean opq(World aWorld, BlockPos aPos, boolean aLoadUnloadedChunks, boolean aDefault) {return aLoadUnloadedChunks || aWorld.blockExists(aPos) ? opq(aWorld.getBlock(aPos)) : aDefault;}
 	public static boolean opq(Block aBlock) {return aBlock.isOpaqueCube() && !(aBlock instanceof BlockLeaves);}
 	
-	public static boolean air(World aWorld, int aX, int aY, int aZ) {return air(aWorld, aX, aY, aZ, aWorld.getBlock(aX, aY, aZ));}
-	public static boolean air(World aWorld, int aX, int aY, int aZ, Block aBlock) {return aBlock == NB || (aBlock.isAir(aWorld, aX, aY, aZ) && !(MD.TC.mLoaded && !aBlock.isOpaqueCube() && te(aWorld, aX, aY, aZ, T) instanceof INode));}
+	public static boolean air(World aWorld, BlockPos aPos) {return air(aWorld, aPos, aWorld.getBlock(aPos));}
+	public static boolean air(World aWorld, BlockPos aPos, Block aBlock) {return aBlock == NB || (aBlock.isAir(aWorld, aPos) && !(MD.TC.mLoaded && !aBlock.isOpaqueCube() && te(aWorld, aPos, T) instanceof INode));}
 	public static boolean air(Block aBlock) {return aBlock == NB;}
 	
-	public static boolean lava(IBlockAccess aWorld, int aX, int aY, int aZ) {return lava(aWorld, aX, aY, aZ, aWorld.getBlock(aX, aY, aZ));}
-	public static boolean lava(IBlockAccess aWorld, int aX, int aY, int aZ, Block aBlock) {return aBlock == Blocks.lava || aBlock == Blocks.flowing_lava;}
+	public static boolean lava(IBlockAccess aWorld, BlockPos aPos) {return lava(aWorld, aPos, aWorld.getBlock(aPos));}
+	public static boolean lava(IBlockAccess aWorld, BlockPos aPos, Block aBlock) {return aBlock == Blocks.lava || aBlock == Blocks.flowing_lava;}
 	public static boolean lava(Block aBlock) {return aBlock == Blocks.lava || aBlock == Blocks.flowing_lava;}
 	
-	public static boolean water(IBlockAccess aWorld, int aX, int aY, int aZ) {return water(aWorld, aX, aY, aZ, aWorld.getBlock(aX, aY, aZ));}
-	public static boolean water(IBlockAccess aWorld, int aX, int aY, int aZ, Block aBlock) {return aBlock == Blocks.water || aBlock == Blocks.flowing_water;}
+	public static boolean water(IBlockAccess aWorld, BlockPos aPos) {return water(aWorld, aPos, aWorld.getBlock(aPos));}
+	public static boolean water(IBlockAccess aWorld, BlockPos aPos, Block aBlock) {return aBlock == Blocks.water || aBlock == Blocks.flowing_water;}
 	public static boolean water(Block aBlock) {return aBlock == Blocks.water || aBlock == Blocks.flowing_water;}
 	
 	public static boolean waterstream(Block aBlock) {return MD.Streams.mLoaded && UT.Code.stringValidate(ST.regName(aBlock)).startsWith("streams:river/tile.water");}
 	
-	public static boolean anywater(IBlockAccess aWorld, int aX, int aY, int aZ) {return anywater(aWorld, aX, aY, aZ, aWorld.getBlock(aX, aY, aZ));}
-	public static boolean anywater(IBlockAccess aWorld, int aX, int aY, int aZ, Block aBlock) {return aBlock instanceof BlockWaterlike || water(aWorld, aX, aY, aZ, aBlock) || waterstream(aBlock);}
+	public static boolean anywater(IBlockAccess aWorld, BlockPos aPos) {return anywater(aWorld, aPos, aWorld.getBlock(aPos));}
+	public static boolean anywater(IBlockAccess aWorld, BlockPos aPos, Block aBlock) {return aBlock instanceof BlockWaterlike || water(aWorld, aPos, aBlock) || waterstream(aBlock);}
 	public static boolean anywater(Block aBlock) {return aBlock instanceof BlockWaterlike || water(aBlock) || waterstream(aBlock);}
 	
-	public static boolean bedrock(World aWorld, int aX, int aY, int aZ) {return bedrock(aWorld, aX, aY, aZ, aWorld.getBlock(aX, aY, aZ));}
-	public static boolean bedrock(World aWorld, int aX, int aY, int aZ, Block aBlock) {return aBlock == Blocks.bedrock || (IL.BTL_Bedrock.exists() && IL.BTL_Bedrock.equal(aBlock));}
+	public static boolean bedrock(World aWorld, BlockPos aPos) {return bedrock(aWorld, aPos, aWorld.getBlock(aPos));}
+	public static boolean bedrock(World aWorld, BlockPos aPos, Block aBlock) {return aBlock == Blocks.bedrock || (IL.BTL_Bedrock.exists() && IL.BTL_Bedrock.equal(aBlock));}
 	public static boolean bedrock(Block aBlock) {return aBlock == Blocks.bedrock || (IL.BTL_Bedrock.exists() && IL.BTL_Bedrock.equal(aBlock));}
 	
-	public static boolean grass(World aWorld, int aX, int aY, int aZ, boolean aLoadUnloadedChunks) {return grass(block(aWorld, aX, aY, aZ, aLoadUnloadedChunks), meta(aWorld, aX, aY, aZ, aLoadUnloadedChunks));}
-	public static boolean grass(World aWorld, int aX, int aY, int aZ) {return grass(block(aWorld, aX, aY, aZ), meta(aWorld, aX, aY, aZ));}
-	public static boolean grass(World aWorld, int aX, int aY, int aZ, Block aBlock, long aMeta) {return grass(aBlock, aMeta);}
+	public static boolean grass(World aWorld, BlockPos aPos, boolean aLoadUnloadedChunks) {return grass(block(aWorld, aPos, aLoadUnloadedChunks), meta(aWorld, aPos, aLoadUnloadedChunks));}
+	public static boolean grass(World aWorld, BlockPos aPos) {return grass(block(aWorld, aPos), meta(aWorld, aPos));}
+	public static boolean grass(World aWorld, BlockPos aPos, Block aBlock, long aMeta) {return grass(aBlock, aMeta);}
 	public static boolean grass(Block aBlock, long aMeta) {
 		if (aBlock == Blocks.tallgrass) return T;
 		if (aBlock == Blocks.double_plant)  return aMeta ==  2 || aMeta ==  3;
@@ -508,98 +476,98 @@ public class WD {
 		return IL.AETHER_Tall_Grass.equal(aBlock);
 	}
 	
-	public static boolean easyRep(World aWorld, int aX, int aY, int aZ) {return easyRep(aWorld, aX, aY, aZ, aWorld.getBlock(aX, aY, aZ));}
-	public static boolean easyRep(World aWorld, int aX, int aY, int aZ, Block aBlock) {return air(aWorld, aX, aY, aZ, aBlock) || aBlock instanceof BlockBush || aBlock.isLeaves(aWorld, aX, aY, aZ) || aBlock.canBeReplacedByLeaves(aWorld, aX, aY, aZ);}
+	public static boolean easyRep(World aWorld, BlockPos aPos) {return easyRep(aWorld, aPos, aWorld.getBlock(aPos));}
+	public static boolean easyRep(World aWorld, BlockPos aPos, Block aBlock) {return air(aWorld, aPos, aBlock) || aBlock instanceof BlockBush || aBlock.isLeaves(aWorld, aPos) || aBlock.canBeReplacedByLeaves(aWorld, aPos);}
 	
-	public static boolean infiniteWater(World aWorld, int aX, int aY, int aZ) {return (MD.TF.mLoaded && aWorld.provider.dimensionId == TwilightForestMod.dimensionID ? UT.Code.inside(21, 31, aY) : UT.Code.inside(52, 62, aY)) && BIOMES_RIVER_LAKE.contains(aWorld.getBiomeGenForCoords(aX, aZ).biomeName);}
-	public static boolean infiniteWater(World aWorld, int aX, int aY, int aZ, Block aBlock) {return waterstream(aBlock) || ((aBlock == Blocks.water || aBlock == Blocks.flowing_water) && (MD.TF.mLoaded && aWorld.provider.dimensionId == TwilightForestMod.dimensionID ? UT.Code.inside(21, 31, aY) : UT.Code.inside(52, 62, aY)) && BIOMES_RIVER_LAKE.contains(aWorld.getBiomeGenForCoords(aX, aZ).biomeName));}
+	public static boolean infiniteWater(World aWorld, BlockPos aPos) {return (MD.TF.mLoaded && aWorld.provider.dimensionId == TwilightForestMod.dimensionID ? UT.Code.inside(21, 31, aY) : UT.Code.inside(52, 62, aY)) && BIOMES_RIVER_LAKE.contains(aWorld.getBiomeGenForCoords(aX, aZ).biomeName);}
+	public static boolean infiniteWater(World aWorld, BlockPos aPos, Block aBlock) {return waterstream(aBlock) || ((aBlock == Blocks.water || aBlock == Blocks.flowing_water) && (MD.TF.mLoaded && aWorld.provider.dimensionId == TwilightForestMod.dimensionID ? UT.Code.inside(21, 31, aY) : UT.Code.inside(52, 62, aY)) && BIOMES_RIVER_LAKE.contains(aWorld.getBiomeGenForCoords(aX, aZ).biomeName));}
 	
-	public static boolean hasCollide(World aWorld, int aX, int aY, int aZ) {return hasCollide(aWorld, aX, aY, aZ, aWorld.getBlock(aX, aY, aZ));}
-	public static boolean hasCollide(World aWorld, int aX, int aY, int aZ, Block aBlock) {return aBlock.isOpaqueCube() || aBlock.getCollisionBoundingBoxFromPool(aWorld, aX, aY, aZ) != null;}
+	public static boolean hasCollide(World aWorld, BlockPos aPos) {return hasCollide(aWorld, aPos, aWorld.getBlock(aPos));}
+	public static boolean hasCollide(World aWorld, BlockPos aPos, Block aBlock) {return aBlock.isOpaqueCube() || aBlock.getCollisionBoundingBoxFromPool(aWorld, aPos) != null;}
 	
 	public static boolean hasCollide(World aWorld, ChunkCoordinates aCoords) {return hasCollide(aWorld, aCoords, aWorld.getBlock(aCoords.posX, aCoords.posY, aCoords.posZ));}
 	public static boolean hasCollide(World aWorld, ChunkCoordinates aCoords, Block aBlock) {return aBlock.isOpaqueCube() || aBlock.getCollisionBoundingBoxFromPool(aWorld, aCoords.posX, aCoords.posY, aCoords.posZ) != null;}
 	
-	public static boolean burning(World aWorld, int aX, int aY, int aZ) {return block(aWorld, aX, aY, aZ, F) instanceof BlockFire || block(aWorld, aX+1, aY, aZ, F) instanceof BlockFire || block(aWorld, aX-1, aY, aZ, F) instanceof BlockFire || block(aWorld, aX, aY+1, aZ, F) instanceof BlockFire || block(aWorld, aX, aY-1, aZ, F) instanceof BlockFire || block(aWorld, aX, aY, aZ+1, F) instanceof BlockFire || block(aWorld, aX, aY, aZ-1, F) instanceof BlockFire;}
+	public static boolean burning(World aWorld, BlockPos aPos) {return block(aWorld, aPos, F) instanceof BlockFire || block(aWorld, aX+1, aY, aZ, F) instanceof BlockFire || block(aWorld, aX-1, aY, aZ, F) instanceof BlockFire || block(aWorld, aX, aY+1, aZ, F) instanceof BlockFire || block(aWorld, aX, aY-1, aZ, F) instanceof BlockFire || block(aWorld, aPos+1, F) instanceof BlockFire || block(aWorld, aPos-1, F) instanceof BlockFire;}
 	
 	public static void burn(World aWorld, ChunkCoordinates aCoords, boolean aReplaceCenter, boolean aCheckFlammability) {for (byte tSide : aReplaceCenter?ALL_SIDES:ALL_SIDES_VALID) fire(aWorld, aCoords.posX+OFFSETS_X[tSide], aCoords.posY+OFFSETS_Y[tSide], aCoords.posZ+OFFSETS_Z[tSide], aCheckFlammability);}
-	public static void burn(World aWorld, int aX, int aY, int aZ  , boolean aReplaceCenter, boolean aCheckFlammability) {for (byte tSide : aReplaceCenter?ALL_SIDES:ALL_SIDES_VALID) fire(aWorld, aX+OFFSETS_X[tSide], aY+OFFSETS_Y[tSide], aZ+OFFSETS_Z[tSide], aCheckFlammability);}
+	public static void burn(World aWorld, BlockPos aPos  , boolean aReplaceCenter, boolean aCheckFlammability) {for (byte tSide : aReplaceCenter?ALL_SIDES:ALL_SIDES_VALID) fire(aWorld, aX+OFFSETS_X[tSide], aY+OFFSETS_Y[tSide], aZ+OFFSETS_Z[tSide], aCheckFlammability);}
 	
 	public static boolean fire(World aWorld, ChunkCoordinates aCoords, boolean aCheckFlammability) {return fire(aWorld, aCoords.posX, aCoords.posY, aCoords.posZ, aCheckFlammability);}
-	public static boolean fire(World aWorld, int aX, int aY, int aZ, boolean aCheckFlammability) {
-		Block tBlock = aWorld.getBlock(aX, aY, aZ);
+	public static boolean fire(World aWorld, BlockPos aPos, boolean aCheckFlammability) {
+		Block tBlock = aWorld.getBlock(aPos);
 		if (tBlock.getMaterial() == Material.lava || tBlock.getMaterial() == Material.fire) return F;
-		if (tBlock.getMaterial() == Material.carpet || tBlock.getCollisionBoundingBoxFromPool(aWorld, aX, aY, aZ) == null) {
-			if (MD.TC.mLoaded && te(aWorld, aX, aY, aZ, T) instanceof INode) return F;
-			if (tBlock.getFlammability(aWorld, aX, aY, aZ, FORGE_DIR[SIDE_ANY]) > 0) return aWorld.setBlock(aX, aY, aZ, Blocks.fire, 0, 3);
+		if (tBlock.getMaterial() == Material.carpet || tBlock.getCollisionBoundingBoxFromPool(aWorld, aPos) == null) {
+			if (MD.TC.mLoaded && te(aWorld, aPos, T) instanceof INode) return F;
+			if (tBlock.getFlammability(aWorld, aPos, FORGE_DIR[SIDE_ANY]) > 0) return aWorld.setBlock(aPos, Blocks.fire, 0, 3);
 			if (aCheckFlammability) {
-				for (byte tSide : ALL_SIDES_VALID) if (block(aWorld, aX, aY, aZ, tSide).getFlammability(aWorld, aX+OFFSETS_X[tSide], aY+OFFSETS_Y[tSide], aZ+OFFSETS_Z[tSide], FORGE_DIR_OPPOSITES[tSide]) > 0) return aWorld.setBlock(aX, aY, aZ, Blocks.fire);
+				for (byte tSide : ALL_SIDES_VALID) if (block(aWorld, aPos, tSide).getFlammability(aWorld, aX+OFFSETS_X[tSide], aY+OFFSETS_Y[tSide], aZ+OFFSETS_Z[tSide], FORGE_DIR_OPPOSITES[tSide]) > 0) return aWorld.setBlock(aPos, Blocks.fire);
 			} else {
-				return aWorld.setBlock(aX, aY, aZ, Blocks.fire, 0, 3);
+				return aWorld.setBlock(aPos, Blocks.fire, 0, 3);
 			}
 		}
 		return F;
 	}
 	
-	public static boolean oreGenReplaceable(World aWorld, int aX, int aY, int aZ, boolean aAllowAir) {
-		Block aBlock = aWorld.getBlock(aX, aY, aZ);
+	public static boolean oreGenReplaceable(World aWorld, BlockPos aPos, boolean aAllowAir) {
+		Block aBlock = aWorld.getBlock(aPos);
 		if (aBlock == NB) return aAllowAir;
-		byte aMetaData = (byte)aWorld.getBlockMetadata(aX, aY, aZ);
+		byte aMetaData = (byte)aWorld.getBlockMetadata(aPos);
 		if (BlocksGT.sDontGenerateOresIn.contains(new ItemStackContainer(aBlock, 1, aMetaData))) return F;
 		if (BlocksGT.stoneToNormalOres.containsKey(new ItemStackContainer(aBlock, 1, aMetaData))) return T;
-		if (Blocks.stone        != aBlock && aBlock.isReplaceableOreGen(aWorld, aX, aY, aZ, Blocks.stone        )) return T;
-		if (Blocks.gravel       != aBlock && aBlock.isReplaceableOreGen(aWorld, aX, aY, aZ, Blocks.gravel       )) return T;
-		if (Blocks.sand         != aBlock && aBlock.isReplaceableOreGen(aWorld, aX, aY, aZ, Blocks.sand         )) return T;
-		if (Blocks.netherrack   != aBlock && aBlock.isReplaceableOreGen(aWorld, aX, aY, aZ, Blocks.netherrack   )) return T;
-		if (Blocks.end_stone    != aBlock && aBlock.isReplaceableOreGen(aWorld, aX, aY, aZ, Blocks.end_stone    )) return T;
+		if (Blocks.stone        != aBlock && aBlock.isReplaceableOreGen(aWorld, aPos, Blocks.stone        )) return T;
+		if (Blocks.gravel       != aBlock && aBlock.isReplaceableOreGen(aWorld, aPos, Blocks.gravel       )) return T;
+		if (Blocks.sand         != aBlock && aBlock.isReplaceableOreGen(aWorld, aPos, Blocks.sand         )) return T;
+		if (Blocks.netherrack   != aBlock && aBlock.isReplaceableOreGen(aWorld, aPos, Blocks.netherrack   )) return T;
+		if (Blocks.end_stone    != aBlock && aBlock.isReplaceableOreGen(aWorld, aPos, Blocks.end_stone    )) return T;
 		return F;
 	}
 	
-	public static boolean setOre(World aWorld, int aX, int aY, int aZ, OreDictMaterial aMaterial) {
-		return aMaterial != null && setOre(aWorld, aX, aY, aZ, aMaterial.mID);
+	public static boolean setOre(World aWorld, BlockPos aPos, OreDictMaterial aMaterial) {
+		return aMaterial != null && setOre(aWorld, aPos, aMaterial.mID);
 	}
 	
-	public static boolean setOre(World aWorld, int aX, int aY, int aZ, short aID) {
+	public static boolean setOre(World aWorld, BlockPos aPos, short aID) {
 		if (aID <= 0 && aID == W) return F;
-		Block aBlock = aWorld.getBlock(aX, aY, aZ);
+		Block aBlock = aWorld.getBlock(aPos);
 		if (aBlock == NB) return F;
-		byte aMetaData = (byte)aWorld.getBlockMetadata(aX, aY, aZ);
+		byte aMetaData = (byte)aWorld.getBlockMetadata(aPos);
 		if (BlocksGT.sDontGenerateOresIn.contains(new ItemStackContainer(aBlock, 1, aMetaData))) return F;
 		IBlockPlacable tBlock = BlocksGT.stoneToNormalOres.get(new ItemStackContainer(aBlock, 1, aMetaData));
 		if (tBlock == null) {
-		if (Blocks.stone        != aBlock && aBlock.isReplaceableOreGen(aWorld, aX, aY, aZ, Blocks.stone        )) tBlock = BlocksGT.ore; else
-		if (Blocks.gravel       != aBlock && aBlock.isReplaceableOreGen(aWorld, aX, aY, aZ, Blocks.gravel       )) tBlock = BlocksGT.oreGravel; else
-		if (Blocks.sand         != aBlock && aBlock.isReplaceableOreGen(aWorld, aX, aY, aZ, Blocks.sand         )) tBlock = BlocksGT.oreSand; else
-		if (Blocks.netherrack   != aBlock && aBlock.isReplaceableOreGen(aWorld, aX, aY, aZ, Blocks.netherrack   )) tBlock = BlocksGT.oreNetherrack; else
-		if (Blocks.end_stone    != aBlock && aBlock.isReplaceableOreGen(aWorld, aX, aY, aZ, Blocks.end_stone    )) tBlock = BlocksGT.oreEndstone;
+		if (Blocks.stone        != aBlock && aBlock.isReplaceableOreGen(aWorld, aPos, Blocks.stone        )) tBlock = BlocksGT.ore; else
+		if (Blocks.gravel       != aBlock && aBlock.isReplaceableOreGen(aWorld, aPos, Blocks.gravel       )) tBlock = BlocksGT.oreGravel; else
+		if (Blocks.sand         != aBlock && aBlock.isReplaceableOreGen(aWorld, aPos, Blocks.sand         )) tBlock = BlocksGT.oreSand; else
+		if (Blocks.netherrack   != aBlock && aBlock.isReplaceableOreGen(aWorld, aPos, Blocks.netherrack   )) tBlock = BlocksGT.oreNetherrack; else
+		if (Blocks.end_stone    != aBlock && aBlock.isReplaceableOreGen(aWorld, aPos, Blocks.end_stone    )) tBlock = BlocksGT.oreEndstone;
 		}
-		return tBlock != null && tBlock.placeBlock(aWorld, aX, aY, aZ, (byte)6, aID, null, F, T);
+		return tBlock != null && tBlock.placeBlock(aWorld, aPos, (byte)6, aID, null, F, T);
 	}
 	
-	public static boolean setSmallOre(World aWorld, int aX, int aY, int aZ, OreDictMaterial aMaterial) {
-		return aMaterial != null && setSmallOre(aWorld, aX, aY, aZ, aMaterial.mID);
+	public static boolean setSmallOre(World aWorld, BlockPos aPos, OreDictMaterial aMaterial) {
+		return aMaterial != null && setSmallOre(aWorld, aPos, aMaterial.mID);
 	}
 	
-	public static boolean setSmallOre(World aWorld, int aX, int aY, int aZ, short aID) {
+	public static boolean setSmallOre(World aWorld, BlockPos aPos, short aID) {
 		if (aID <= 0 && aID == W) return F;
-		Block aBlock = aWorld.getBlock(aX, aY, aZ);
+		Block aBlock = aWorld.getBlock(aPos);
 		if (aBlock == NB) return F;
-		byte aMetaData = (byte)aWorld.getBlockMetadata(aX, aY, aZ);
+		byte aMetaData = (byte)aWorld.getBlockMetadata(aPos);
 		if (BlocksGT.sDontGenerateOresIn.contains(new ItemStackContainer(aBlock, 1, aMetaData))) return F;
 		IBlockPlacable tBlock = BlocksGT.stoneToSmallOres.get(new ItemStackContainer(aBlock, 1, aMetaData));
 		if (tBlock == null) {
-		if (Blocks.stone        != aBlock && aBlock.isReplaceableOreGen(aWorld, aX, aY, aZ, Blocks.stone        )) tBlock = BlocksGT.oreSmall; else
-		if (Blocks.gravel       != aBlock && aBlock.isReplaceableOreGen(aWorld, aX, aY, aZ, Blocks.gravel       )) tBlock = BlocksGT.oreSmallGravel; else
-		if (Blocks.sand         != aBlock && aBlock.isReplaceableOreGen(aWorld, aX, aY, aZ, Blocks.sand         )) tBlock = BlocksGT.oreSmallSand; else
-		if (Blocks.netherrack   != aBlock && aBlock.isReplaceableOreGen(aWorld, aX, aY, aZ, Blocks.netherrack   )) tBlock = BlocksGT.oreSmallNetherrack; else
-		if (Blocks.end_stone    != aBlock && aBlock.isReplaceableOreGen(aWorld, aX, aY, aZ, Blocks.end_stone    )) tBlock = BlocksGT.oreSmallEndstone;
+		if (Blocks.stone        != aBlock && aBlock.isReplaceableOreGen(aWorld, aPos, Blocks.stone        )) tBlock = BlocksGT.oreSmall; else
+		if (Blocks.gravel       != aBlock && aBlock.isReplaceableOreGen(aWorld, aPos, Blocks.gravel       )) tBlock = BlocksGT.oreSmallGravel; else
+		if (Blocks.sand         != aBlock && aBlock.isReplaceableOreGen(aWorld, aPos, Blocks.sand         )) tBlock = BlocksGT.oreSmallSand; else
+		if (Blocks.netherrack   != aBlock && aBlock.isReplaceableOreGen(aWorld, aPos, Blocks.netherrack   )) tBlock = BlocksGT.oreSmallNetherrack; else
+		if (Blocks.end_stone    != aBlock && aBlock.isReplaceableOreGen(aWorld, aPos, Blocks.end_stone    )) tBlock = BlocksGT.oreSmallEndstone;
 		}
-		return tBlock != null && tBlock.placeBlock(aWorld, aX, aY, aZ, (byte)6, aID, null, F, T);
+		return tBlock != null && tBlock.placeBlock(aWorld, aPos, (byte)6, aID, null, F, T);
 	}
 	
 	/** Removes Bedrock from that Position and replaces it with regular Stone of the region. */
-	public static boolean removeBedrock(World aWorld, int aX, int aY, int aZ) {
-		Block tBlock = aWorld.getBlock(aX, aY, aZ), tStone = (aWorld.provider.dimensionId == DIM_NETHER ? Blocks.netherrack : Blocks.stone);
+	public static boolean removeBedrock(World aWorld, BlockPos aPos) {
+		Block tBlock = aWorld.getBlock(aPos), tStone = (aWorld.provider.dimensionId == DIM_NETHER ? Blocks.netherrack : Blocks.stone);
 		
 		if (tBlock == NB || bedrock(tBlock)) {
 			for (int i = 1; i < 7; i++) for (byte tSide : ALL_SIDES_BUT_BOTTOM) {
@@ -607,24 +575,24 @@ public class WD {
 				if (tBlock != NB && tBlock != tStone && !bedrock(tBlock)) {
 					int tMetaData = aWorld.getBlockMetadata(aX+OFFSETS_X[tSide]*i, aY+OFFSETS_Y[tSide]*i, aZ+OFFSETS_Z[tSide]*i);
 					if (BlocksGT.stoneToNormalOres.containsKey(new ItemStackContainer(tBlock, 1, tMetaData))) {
-						return aWorld.setBlock(aX, aY, aZ, tBlock, tMetaData, 0);
+						return aWorld.setBlock(aPos, tBlock, tMetaData, 0);
 					}
 				}
 			}
-			return aWorld.setBlock(aX, aY, aZ, tStone, 0, 0);
+			return aWorld.setBlock(aPos, tStone, 0, 0);
 		}
 		return F;
 	}
 	
-	public static long scan(ArrayList<String> aList, EntityPlayer aPlayer, World aWorld, int aScanLevel, int aX, int aY, int aZ, byte aSide, float aClickX, float aClickY, float aClickZ) {
+	public static long scan(ArrayList<String> aList, PlayerEntity aPlayer, World aWorld, int aScanLevel, BlockPos aPos, byte aSide, float aClickX, float aClickY, float aClickZ) {
 		if (aList == null) return 0;
 		
 		ArrayList<String> rList = new ArrayListNoNulls<>();
 		long rEUAmount = 0;
 		
-		Block aBlock = aWorld.getBlock(aX, aY, aZ);
-		byte aMeta = (byte)aWorld.getBlockMetadata(aX, aY, aZ);
-		TileEntity aTileEntity = te(aWorld, aX, aY, aZ, T);
+		Block aBlock = aWorld.getBlock(aPos);
+		byte aMeta = (byte)aWorld.getBlockMetadata(aPos);
+		TileEntity aTileEntity = te(aWorld, aPos, T);
 		
 		rList.add("--- X: " + aX + " Y: " + aY + " Z: " + aZ + " ---");
 		try {
@@ -633,13 +601,13 @@ public class WD {
 				rList.add("Block Class: " + aBlock.getClass());
 				if (aTileEntity != null) rList.add("TileEntity Class: " + aTileEntity.getClass());
 			}
-			float tResistance = aBlock.getExplosionResistance(aPlayer, aWorld, aX, aY, aZ, aPlayer.posX, aPlayer.posY, aPlayer.posZ);
-			rList.add("Hardness: " + aBlock.getBlockHardness(aWorld, aX, aY, aZ) + "  Blast Resistance: " + tResistance + (tResistance < 16 ? " (TNT Blastable)" : " (TNT Proof)"));
+			float tResistance = aBlock.getExplosionResistance(aPlayer, aWorld, aPos, aPlayer.posX, aPlayer.posY, aPlayer.posZ);
+			rList.add("Hardness: " + aBlock.getBlockHardness(aWorld, aPos) + "  Blast Resistance: " + tResistance + (tResistance < 16 ? " (TNT Blastable)" : " (TNT Proof)"));
 			int tHarvestLevel = aBlock.getHarvestLevel(aMeta);
 			String tHarvestTool = aBlock.getHarvestTool(aMeta);
 			rList.add(tHarvestLevel == 0 && aBlock.getMaterial().isAdventureModeExempt() ? "Hand-Harvestable, but " + (Code.stringValid(tHarvestTool)?Code.capitalise(tHarvestTool):"None") + " is faster" : "Tool to Harvest: " + (Code.stringValid(tHarvestTool)?Code.capitalise(tHarvestTool):"None") + " (" + tHarvestLevel + ")");
-			if (aBlock.isBeaconBase(aWorld, aX, aY, aZ, aX, aY+1, aZ)) rList.add("Is usable for Beacon Pyramids");
-			if (MD.GC.mLoaded && aBlock instanceof IPartialSealableBlock) rList.add(((IPartialSealableBlock)aBlock).isSealed(aWorld, aX, aY, aZ, FORGE_DIR[aSide ^ 1]) ? "Is Sealable on this Side" : "Is not Sealable on this Side");
+			if (aBlock.isBeaconBase(aWorld, aPos, aX, aY+1, aZ)) rList.add("Is usable for Beacon Pyramids");
+			if (MD.GC.mLoaded && aBlock instanceof IPartialSealableBlock) rList.add(((IPartialSealableBlock)aBlock).isSealed(aWorld, aPos, FORGE_DIR[aSide ^ 1]) ? "Is Sealable on this Side" : "Is not Sealable on this Side");
 		} catch(Throwable e) {if (D1) e.printStackTrace(ERR);}
 		if (aTileEntity != null) {
 			try {if (aTileEntity instanceof ITileEntityWeight && ((ITileEntityWeight)aTileEntity).getWeightValue(aSide) > 0) {
@@ -750,11 +718,11 @@ public class WD {
 		}
 		try {if (aBlock instanceof IBlockDebugable) {
 			rEUAmount+=V[3];
-			ArrayList<String> temp = ((IBlockDebugable)aBlock).getDebugInfo(aPlayer, aX, aY, aZ, aScanLevel);
+			ArrayList<String> temp = ((IBlockDebugable)aBlock).getDebugInfo(aPlayer, aPos, aScanLevel);
 			if (temp != null) rList.addAll(temp);
 		}} catch(Throwable e) {if (D1) e.printStackTrace(ERR);}
 		
-		BlockScanningEvent tEvent = new BlockScanningEvent(aWorld, aPlayer, aX, aY, aZ, aSide, aScanLevel, aBlock, aTileEntity, rList, aClickX, aClickY, aClickZ);
+		BlockScanningEvent tEvent = new BlockScanningEvent(aWorld, aPlayer, aPos, aSide, aScanLevel, aBlock, aTileEntity, rList, aClickX, aClickY, aClickZ);
 		tEvent.mEUCost = rEUAmount;
 		MinecraftForge.EVENT_BUS.post(tEvent);
 		if (!tEvent.isCanceled()) aList.addAll(rList);

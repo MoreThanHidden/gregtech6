@@ -36,7 +36,7 @@ import gregapi.util.ST;
 import gregapi.util.UT;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -91,7 +91,7 @@ public class BlockTreeLogA extends BlockBaseLogFlammable implements IBlockToolab
 		if (aTool.equals(TOOL_axe) || aTool.equals(TOOL_saw) || aTool.equals(TOOL_knife)) {
 			if (aWorld.isRemote) return 0;
 			aWorld.setBlock(aX, aY, aZ, BlocksGT.BeamA, aWorld.getBlockMetadata(aX, aY, aZ), 3);
-			UT.Inventories.addStackToPlayerInventoryOrDrop(aPlayer instanceof EntityPlayer ? (EntityPlayer)aPlayer : null, OM.dust(MT.Bark), aWorld, aX+OFFSETS_X[aSide], aY+OFFSETS_Y[aSide], aZ+OFFSETS_Z[aSide]);
+			UT.Inventories.addStackToPlayerInventoryOrDrop(aPlayer instanceof PlayerEntity ? (PlayerEntity)aPlayer : null, OM.dust(MT.Bark), aWorld, aX+OFFSETS_X[aSide], aY+OFFSETS_Y[aSide], aZ+OFFSETS_Z[aSide]);
 			return 1000;
 		}
 		if (SIDES_HORIZONTAL[aSide] && aTool.equals(TOOL_drill) && aWorld.getBlockMetadata(aX, aY, aZ) == 1) {

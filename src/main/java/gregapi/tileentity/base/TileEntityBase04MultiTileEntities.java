@@ -46,8 +46,8 @@ import gregapi.util.UT;
 import gregapi.util.WD;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerEntityMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChunkCoordinates;
@@ -140,7 +140,7 @@ public abstract class TileEntityBase04MultiTileEntities extends TileEntityBase03
 	}
 	
 	@Override
-	public void sendClientData(boolean aSendAll, EntityPlayerMP aPlayer) {
+	public void sendClientData(boolean aSendAll, PlayerEntityMP aPlayer) {
 		super.sendClientData(aSendAll, aPlayer);
 		if (aSendAll && UT.Code.stringValid(mCustomName)) {
 			if (aPlayer == null) {
@@ -152,7 +152,7 @@ public abstract class TileEntityBase04MultiTileEntities extends TileEntityBase03
 	}
 	
 	@Override
-	public final boolean onBlockActivated(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public final boolean onBlockActivated(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		try {
 			return allowRightclick(aPlayer) && (checkObstruction(aPlayer, aSide, aHitX, aHitY, aHitZ) || onBlockActivated2(aPlayer, aSide, aHitX, aHitY, aHitZ));
 		} catch(Throwable e) {
@@ -161,11 +161,11 @@ public abstract class TileEntityBase04MultiTileEntities extends TileEntityBase03
 		}
 	}
 	
-	public boolean onBlockActivated2(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onBlockActivated2(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		return F;
 	}
 	
-	public boolean checkObstruction(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean checkObstruction(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		return !(aPlayer == null || aPlayer instanceof FakePlayer || SIDES_INVALID[aSide] || !WD.obstructed(worldObj, xCoord, yCoord, zCoord, aSide));
 	}
 	

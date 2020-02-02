@@ -36,7 +36,7 @@ import gregapi.util.OM;
 import gregapi.util.ST;
 import gregapi.util.UT;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
@@ -90,9 +90,9 @@ public class CoverFilterFluid extends AbstractCoverAttachment {
 	
 	@Override
 	public boolean onCoverClickedRight(byte aCoverSide, CoverData aData, Entity aPlayer, byte aSideClicked, float aHitX, float aHitY, float aHitZ) {
-		if (aPlayer instanceof EntityPlayer && aData.mTileEntity.isServerSide()) {
+		if (aPlayer instanceof PlayerEntity && aData.mTileEntity.isServerSide()) {
 			if (aData.mNBTs[aCoverSide] == null || !aData.mNBTs[aCoverSide].hasKey("gt.filter.fluid")) {
-				ItemStack tStack = ((EntityPlayer)aPlayer).getCurrentEquippedItem();
+				ItemStack tStack = ((PlayerEntity)aPlayer).getCurrentEquippedItem();
 				if (ST.valid(tStack)) {
 					FluidStack tFluid = FL.getFluid(tStack, T);
 					if (tFluid == null) {

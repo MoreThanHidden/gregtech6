@@ -60,7 +60,7 @@ import gregapi.util.ST;
 import gregapi.util.UT;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -475,7 +475,7 @@ public class MultiTileEntityBasicMachine extends TileEntityBase09FacingSingle im
 	}
 	
 	@Override
-	public boolean onBlockActivated3(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onBlockActivated3(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (isServerSide()) openGUI(aPlayer, aSide);
 		return T;
 	}
@@ -970,8 +970,8 @@ public class MultiTileEntityBasicMachine extends TileEntityBase09FacingSingle im
 	
 	@Override public void onFacingChange(byte aPreviousFacing) {updateAccessibleSlots();}
 	
-	@Override public Object getGUIClient2(int aGUIID, EntityPlayer aPlayer) {return new ContainerClientBasicMachine(aPlayer.inventory, this, mRecipes, aGUIID, mGUITexture);}
-	@Override public Object getGUIServer2(int aGUIID, EntityPlayer aPlayer) {return new ContainerCommonBasicMachine(aPlayer.inventory, this, mRecipes, aGUIID);}
+	@Override public Object getGUIClient2(int aGUIID, PlayerEntity aPlayer) {return new ContainerClientBasicMachine(aPlayer.inventory, this, mRecipes, aGUIID, mGUITexture);}
+	@Override public Object getGUIServer2(int aGUIID, PlayerEntity aPlayer) {return new ContainerCommonBasicMachine(aPlayer.inventory, this, mRecipes, aGUIID);}
 	
 	@Override public byte getVisualData() {return (byte)((mActive?1:0)|(mRunning?2:0));}
 	

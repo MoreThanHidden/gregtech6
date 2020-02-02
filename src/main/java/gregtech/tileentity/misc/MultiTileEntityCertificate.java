@@ -45,7 +45,7 @@ import gregapi.util.UT;
 import gregtech.GT6_Main;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
@@ -129,7 +129,7 @@ public class MultiTileEntityCertificate extends TileEntityBase09FacingSingle imp
 	}
 	
 	@Override
-	public boolean onBlockActivated3(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean onBlockActivated3(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (isServerSide()) {
 			if (mGold) {UT.Entities.sendchat(aPlayer, "This Certificate is owned by " + LH.Chat.YELLOW + getCustomName()); return T;}
 			if (mSilver) {UT.Entities.sendchat(aPlayer, "This Certificate is owned by " + LH.Chat.CYAN + getCustomName()); return T;}
@@ -152,7 +152,7 @@ public class MultiTileEntityCertificate extends TileEntityBase09FacingSingle imp
 	}
 	
 	@Override
-	public boolean checkObstruction(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
+	public boolean checkObstruction(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		return F;
 	}
 	
