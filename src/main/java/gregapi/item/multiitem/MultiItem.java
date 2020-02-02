@@ -50,7 +50,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
@@ -149,10 +149,10 @@ public abstract class MultiItem extends ItemBase implements IItemEnergy {
 		ArrayList<IBehavior<MultiItem>> tList = mItemBehaviors.get((short)getDamage(aStack));
 		if (tList != null) for (IBehavior<MultiItem> tBehavior : tList) try {
 			if (tBehavior.onRightClickEntity(this, aStack, aPlayer, aEntity)) {
-				if (aStack.stackSize <= 0) aPlayer.destroyCurrentEquippedItem();
+				if (aStack.getCount() <= 0) aPlayer.destroyCurrentEquippedItem();
 				return T;
 			}
-			if (aStack.stackSize <= 0) {
+			if (aStack.getCount() <= 0) {
 				aPlayer.destroyCurrentEquippedItem();
 				return F;
 			}
@@ -169,10 +169,10 @@ public abstract class MultiItem extends ItemBase implements IItemEnergy {
 		ArrayList<IBehavior<MultiItem>> tList = mItemBehaviors.get((short)getDamage(aStack));
 		if (tList != null) for (IBehavior<MultiItem> tBehavior : tList) try {
 			if (tBehavior.onLeftClickEntity(this, aStack, aPlayer, aEntity)) {
-				if (aStack.stackSize <= 0) aPlayer.destroyCurrentEquippedItem();
+				if (aStack.getCount() <= 0) aPlayer.destroyCurrentEquippedItem();
 				return T;
 			}
-			if (aStack.stackSize <= 0) {
+			if (aStack.getCount() <= 0) {
 				aPlayer.destroyCurrentEquippedItem();
 				return F;
 			}
@@ -190,10 +190,10 @@ public abstract class MultiItem extends ItemBase implements IItemEnergy {
 		ArrayList<IBehavior<MultiItem>> tList = mItemBehaviors.get((short)getDamage(aStack));
 		if (tList != null) for (IBehavior<MultiItem> tBehavior : tList) try {
 			if (tBehavior.onItemUse(this, aStack, aPlayer, aWorld, aX, aY, aZ, UT.Code.side(aSide), hitX, hitY, hitZ)) {
-				if (aStack.stackSize <= 0) aPlayer.destroyCurrentEquippedItem();
+				if (aStack.getCount() <= 0) aPlayer.destroyCurrentEquippedItem();
 				return T;
 			}
-			if (aStack.stackSize <= 0) {
+			if (aStack.getCount() <= 0) {
 				aPlayer.destroyCurrentEquippedItem();
 				return F;
 			}
@@ -211,10 +211,10 @@ public abstract class MultiItem extends ItemBase implements IItemEnergy {
 		ArrayList<IBehavior<MultiItem>> tList = mItemBehaviors.get((short)getDamage(aStack));
 		if (tList != null) for (IBehavior<MultiItem> tBehavior : tList) try {
 			if (tBehavior.onItemUseFirst(this, aStack, aPlayer, aWorld, aX, aY, aZ, UT.Code.side(aSide), hitX, hitY, hitZ)) {
-				if (aStack.stackSize <= 0) aPlayer.destroyCurrentEquippedItem();
+				if (aStack.getCount() <= 0) aPlayer.destroyCurrentEquippedItem();
 				return T;
 			}
-			if (aStack.stackSize <= 0) {
+			if (aStack.getCount() <= 0) {
 				aPlayer.destroyCurrentEquippedItem();
 				return F;
 			}
@@ -261,7 +261,7 @@ public abstract class MultiItem extends ItemBase implements IItemEnergy {
 		if (tStats != null && tStats[0] > 0) {
 			FluidStack tFluid = getFluidContent(aStack);
 			aList.add(LH.Chat.BLUE + ((tFluid==null?"No Fluids Contained":FL.name(tFluid, T))) + LH.Chat.GRAY);
-			aList.add(LH.Chat.BLUE + ((tFluid==null?0:tFluid.amount) + "L / " + tStats[0] + "L") + LH.Chat.GRAY);
+			aList.add(LH.Chat.BLUE + ((tFluid==null?0:tFluid.getAmount()) + "L / " + tStats[0] + "L") + LH.Chat.GRAY);
 		}
 		
 		addAdditionalToolTips(aList, aStack, aF3_H);
@@ -296,7 +296,7 @@ public abstract class MultiItem extends ItemBase implements IItemEnergy {
 	}
 	
 	public int fill(ItemStack aStack, FluidStack aFluid, boolean doFill) {
-		if (aStack == null || aStack.stackSize != 1) return 0;
+		if (aStack == null || aStack.getCount() != 1) return 0;
 		
 		ItemStack tStack = FL.fill(aFluid, aStack, F, F, F, F);
 		if (tStack != null) {
@@ -306,20 +306,20 @@ public abstract class MultiItem extends ItemBase implements IItemEnergy {
 		}
 		
 		Long[] tStats = getFluidContainerStats(aStack);
-		if (tStats == null || tStats[0] <= 0 || aFluid == null || aFluid.amount <= 0 || !isAllowedToFill(aStack, aFluid)) return 0;
+		if (tStats == null || tStats[0] <= 0 || aFluid == null || aFluid.getAmount() <= 0 || !isAllowedToFill(aStack, aFluid)) return 0;
 		
 		FluidStack tFluid = getFluidContent(aStack);
 		
 		if (tFluid == null) {
-			if (aFluid.amount <= tStats[0]) {
+			if (aFluid.getAmount() <= tStats[0]) {
 				if (doFill) {
 					setFluidContent(aStack, aFluid);
 				}
-				return aFluid.amount;
+				return aFluid.getAmount();
 			}
 			if (doFill) {
 				tFluid = aFluid.copy();
-				tFluid.amount = (int)(long)tStats[0];
+				tFluid.getAmount() = (int)(long)tStats[0];
 				setFluidContent(aStack, tFluid);
 			}
 			return (int)(long)tStats[0];
@@ -327,16 +327,16 @@ public abstract class MultiItem extends ItemBase implements IItemEnergy {
 		
 		if (!tFluid.isFluidEqual(aFluid)) return 0;
 		
-		int space = (int)(long)tStats[0] - tFluid.amount;
-		if (aFluid.amount <= space) {
+		int space = (int)(long)tStats[0] - tFluid.getAmount();
+		if (aFluid.getAmount() <= space) {
 			if (doFill) {
-				tFluid.amount += aFluid.amount;
+				tFluid.getAmount() += aFluid.getAmount();
 				setFluidContent(aStack, tFluid);
 			}
-			return aFluid.amount;
+			return aFluid.getAmount();
 		}
 		if (doFill) {
-			tFluid.amount = (int)(long)tStats[0];
+			tFluid.getAmount() = (int)(long)tStats[0];
 			setFluidContent(aStack, tFluid);
 		}
 		return space;
@@ -345,14 +345,14 @@ public abstract class MultiItem extends ItemBase implements IItemEnergy {
 	public boolean isAllowedToFill(ItemStack aStack, FluidStack aFluid) {return T;}
 	
 	public FluidStack drain(ItemStack aStack, int aMaxDrain, boolean aDoDrain) {
-		if (aStack == null || aStack.stackSize != 1) return null;
+		if (aStack == null || aStack.getCount() != 1) return null;
 		
 		FluidStack tFluid = FL.getFluid(aStack, F);
-		if (tFluid != null && aMaxDrain >= tFluid.amount) {
+		if (tFluid != null && aMaxDrain >= tFluid.getAmount()) {
 			if (aDoDrain) {
 				ItemStack tStack = ST.container(aStack, F);
 				if (tStack == null) {
-					aStack.stackSize = 0;
+					aStack.getCount() = 0;
 					return tFluid;
 				}
 				aStack.setItemDamage(ST.meta_(tStack));
@@ -367,9 +367,9 @@ public abstract class MultiItem extends ItemBase implements IItemEnergy {
 		tFluid = getFluidContent(aStack);
 		if (tFluid == null) return null;
 		
-		if (tFluid.amount < aMaxDrain) aMaxDrain = tFluid.amount;
+		if (tFluid.getAmount() < aMaxDrain) aMaxDrain = tFluid.getAmount();
 		if (aDoDrain) {
-			tFluid.amount -= aMaxDrain;
+			tFluid.getAmount() -= aMaxDrain;
 			setFluidContent(aStack, tFluid);
 		}
 		
@@ -385,9 +385,9 @@ public abstract class MultiItem extends ItemBase implements IItemEnergy {
 	}
 	
 	public void setFluidContent(ItemStack aStack, FluidStack aFluid) {
-		NBTTagCompound tNBT = aStack.getTagCompound();
+		CompoundNBT tNBT = aStack.getTagCompound();
 		if (tNBT == null) tNBT = UT.NBT.make(); else tNBT.removeTag("gt.fluidcontent");
-		if (aFluid != null && aFluid.amount > 0) FL.save(tNBT, "gt.fluidcontent", aFluid);
+		if (aFluid != null && aFluid.getAmount() > 0) FL.save(tNBT, "gt.fluidcontent", aFluid);
 		UT.NBT.set(aStack, tNBT);
 		isItemStackUsable(aStack);
 	}

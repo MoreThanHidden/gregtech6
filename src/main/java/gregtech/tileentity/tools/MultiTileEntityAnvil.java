@@ -60,7 +60,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 
@@ -73,19 +73,19 @@ public class MultiTileEntityAnvil extends TileEntityBase09FacingSingle implement
 	public long mDurability = 10000;
 	
 	@Override
-	public void readFromNBT2(NBTTagCompound aNBT) {
+	public void readFromNBT2(CompoundNBT aNBT) {
 		super.readFromNBT2(aNBT);
 		if (aNBT.hasKey(NBT_DURABILITY)) mDurability = aNBT.getLong(NBT_DURABILITY);
 	}
 	
 	@Override
-	public void writeToNBT2(NBTTagCompound aNBT) {
+	public void writeToNBT2(CompoundNBT aNBT) {
 		super.writeToNBT2(aNBT);
 		UT.NBT.setNumber(aNBT, NBT_DURABILITY, mDurability);
 	}
 	
 	@Override
-	public NBTTagCompound writeItemNBT2(NBTTagCompound aNBT) {
+	public CompoundNBT writeItemNBT2(CompoundNBT aNBT) {
 		UT.NBT.setNumber(aNBT, NBT_DURABILITY, mDurability);
 		return super.writeItemNBT2(aNBT);
 	}
@@ -251,9 +251,9 @@ public class MultiTileEntityAnvil extends TileEntityBase09FacingSingle implement
 			}
 			if (slotHas(0)) {
 				if (!slotHas(1)) {
-					if (slot(0).stackSize % 2 != 0 && UT.Inventories.addStackToPlayerInventoryOrDrop(aPlayer, ST.amount(1, slot(0)), T, worldObj, xCoord+0.5, yCoord+1.2, zCoord+0.5)) slot(0).stackSize--;
-					if (slot(0).stackSize > 1) {
-						slot(0).stackSize /= 2;
+					if (slot(0).getCount() % 2 != 0 && UT.Inventories.addStackToPlayerInventoryOrDrop(aPlayer, ST.amount(1, slot(0)), T, worldObj, xCoord+0.5, yCoord+1.2, zCoord+0.5)) slot(0).getCount()--;
+					if (slot(0).getCount() > 1) {
+						slot(0).getCount() /= 2;
 						slot(1, ST.copy(slot(0)));
 					}
 					slotNull(0);
@@ -261,9 +261,9 @@ public class MultiTileEntityAnvil extends TileEntityBase09FacingSingle implement
 					return T;
 				}
 			} else if (slotHas(1)) {
-				if (slot(1).stackSize % 2 != 0 && UT.Inventories.addStackToPlayerInventoryOrDrop(aPlayer, ST.amount(1, slot(1)), T, worldObj, xCoord+0.5, yCoord+1.2, zCoord+0.5)) slot(1).stackSize--;
-				if (slot(1).stackSize > 1) {
-					slot(1).stackSize /= 2;
+				if (slot(1).getCount() % 2 != 0 && UT.Inventories.addStackToPlayerInventoryOrDrop(aPlayer, ST.amount(1, slot(1)), T, worldObj, xCoord+0.5, yCoord+1.2, zCoord+0.5)) slot(1).getCount()--;
+				if (slot(1).getCount() > 1) {
+					slot(1).getCount() /= 2;
 					slot(0, ST.copy(slot(1)));
 				}
 				slotNull(1);
@@ -405,7 +405,7 @@ public class MultiTileEntityAnvil extends TileEntityBase09FacingSingle implement
 	@Override public boolean[] getValidSides() {return SIDES_HORIZONTAL;}
 	
 	// Inventory Stuff
-	@Override public ItemStack[] getDefaultInventory(NBTTagCompound aNBT) {return new ItemStack[2];}
+	@Override public ItemStack[] getDefaultInventory(CompoundNBT aNBT) {return new ItemStack[2];}
 	@Override public boolean canDrop(int aInventorySlot) {return T;}
 	
 	@Override public boolean canInsertItem2 (int aSlot, ItemStack aStack, byte aSide) {return !ToolsGT.contains(TOOL_hammer, slot(0)) && !ToolsGT.contains(TOOL_hammer, slot(1)) && (RM.Anvil.containsInput(aStack, this, NI) || RM.AnvilBendSmall.containsInput(aStack, this, NI) || RM.AnvilBendBig.containsInput(aStack, this, NI));}

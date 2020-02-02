@@ -46,7 +46,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.AxisAlignedBB;
 
 /**
@@ -58,20 +58,20 @@ public class MultiTileEntityGrindStone extends TileEntityBase09FacingSingle impl
 	protected Recipe mLastRecipe = null;
 
 	@Override
-	public void readFromNBT2(NBTTagCompound aNBT) {
+	public void readFromNBT2(CompoundNBT aNBT) {
 		super.readFromNBT2(aNBT);
 		if (aNBT.hasKey(NBT_STATE)) mStone = aNBT.getByte(NBT_STATE);
 		if (aNBT.hasKey(NBT_RECIPEMAP)) mRecipes = RecipeMap.RECIPE_MAPS.get(aNBT.getString(NBT_RECIPEMAP));
 	}
 
 	@Override
-	public void writeToNBT2(NBTTagCompound aNBT) {
+	public void writeToNBT2(CompoundNBT aNBT) {
 		super.writeToNBT2(aNBT);
 		aNBT.setByte(NBT_STATE, mStone);
 	}
 
 	@Override
-	public NBTTagCompound writeItemNBT2(NBTTagCompound aNBT) {
+	public CompoundNBT writeItemNBT2(CompoundNBT aNBT) {
 		aNBT.setByte(NBT_STATE, mStone);
 		return aNBT;
 	}
@@ -100,10 +100,10 @@ public class MultiTileEntityGrindStone extends TileEntityBase09FacingSingle impl
 				if (aStack == null || mRecipes == null || !UT.Entities.isPlayer(aPlayer)) {
 					mClickCount = 0;
 				} else if (mStone <= 0) {
-					if (ST.equal(aStack, Blocks.sandstone) && aStack.stackSize > 0) {
+					if (ST.equal(aStack, Blocks.sandstone) && aStack.getCount() > 0) {
 						mClickCount = 0;
 						mStone = 4;
-						if (!UT.Entities.hasInfiniteItems(aPlayer)) aStack.stackSize--;
+						if (!UT.Entities.hasInfiniteItems(aPlayer)) aStack.getCount()--;
 					}
 				} else if (UT.Entities.hasInfiniteItems(aPlayer) || ++mClickCount >= 20) {
 					mClickCount = 0;

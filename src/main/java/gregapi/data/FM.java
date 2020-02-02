@@ -26,7 +26,7 @@ import gregapi.recipes.Recipe.RecipeMap;
 import gregapi.recipes.maps.RecipeMapFuel;
 import gregapi.recipes.maps.RecipeMapFurnaceFuel;
 import gregapi.util.UT;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 
 /**
  * @author Gregorius Techneticies
@@ -48,19 +48,19 @@ public class FM {
 	;
 	
 	public static void te_fuel_magmatic(String fluidName, int energy) {
-		NBTTagCompound toSend = UT.NBT.make();
+		CompoundNBT toSend = UT.NBT.make();
 		toSend.setString("fluidName", fluidName);
 		toSend.setInteger("energy", energy);
 		FMLInterModComms.sendMessage("ThermalExpansion", "MagmaticFuel", toSend);
 	}
 	public static void te_fuel_compression(String fluidName, int energy) {
-		NBTTagCompound toSend = UT.NBT.make();
+		CompoundNBT toSend = UT.NBT.make();
 		toSend.setString("fluidName", fluidName);
 		toSend.setInteger("energy", energy);
 		FMLInterModComms.sendMessage("ThermalExpansion", "CompressionFuel", toSend);
 	}
 	public static void te_coolant(String fluidName, int energy) {
-		NBTTagCompound toSend = UT.NBT.make();
+		CompoundNBT toSend = UT.NBT.make();
 		toSend.setString("fluidName", fluidName);
 		toSend.setInteger("energy", energy);
 		FMLInterModComms.sendMessage("ThermalExpansion", "Coolant", toSend);

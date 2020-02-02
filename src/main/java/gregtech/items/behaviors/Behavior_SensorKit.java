@@ -41,9 +41,9 @@ public class Behavior_SensorKit extends AbstractBehaviorDefault {
 			TileEntity tTileEntity = WD.te(aWorld, aX, aY, aZ, T);
 			if (tTileEntity instanceof IInventory && !((IInventory)tTileEntity).isUseableByPlayer(aPlayer)) return F;/*
 			if (tTileEntity instanceof IGregTechDeviceInformation && ((IGregTechDeviceInformation)tTileEntity).isGivingInformation()) {
-				UT.Stacks.set(aStack, IL.NC_SensorCard.get(aStack.stackSize));
-				NBTTagCompound tNBT = aStack.getTagCompound();
-				if (tNBT == null) tNBT = new NBTTagCompound();
+				UT.Stacks.set(aStack, IL.NC_SensorCard.get(aStack.getCount()));
+				CompoundNBT tNBT = aStack.getTagCompound();
+				if (tNBT == null) tNBT = new CompoundNBT();
 				tNBT.setInteger("x", aX);
 				tNBT.setInteger("y", aY);
 				tNBT.setInteger("z", aZ);

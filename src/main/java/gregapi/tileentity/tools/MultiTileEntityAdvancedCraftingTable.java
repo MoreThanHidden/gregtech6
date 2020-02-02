@@ -68,7 +68,7 @@ import net.minecraft.item.ItemHoe;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.stats.AchievementList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -85,7 +85,7 @@ public class MultiTileEntityAdvancedCraftingTable extends TileEntityBase09Facing
 	public String mGUITexture = RES_PATH_GUI + "machines/AdvancedCraftingTable.png";
 	
 	@Override
-	public void readFromNBT2(NBTTagCompound aNBT) {
+	public void readFromNBT2(CompoundNBT aNBT) {
 		super.readFromNBT2(aNBT);
 		if (aNBT.hasKey(NBT_MODE+".16.blocked")) mBlocked16 = aNBT.getBoolean(NBT_MODE+".16.blocked");
 		if (aNBT.hasKey(NBT_MODE+".36.blocked")) mBlocked36 = aNBT.getBoolean(NBT_MODE+".36.blocked");
@@ -99,7 +99,7 @@ public class MultiTileEntityAdvancedCraftingTable extends TileEntityBase09Facing
 	}
 	
 	@Override
-	public void writeToNBT2(NBTTagCompound aNBT) {
+	public void writeToNBT2(CompoundNBT aNBT) {
 		super.writeToNBT2(aNBT);
 		UT.NBT.setBoolean(aNBT, NBT_MODE+".16.blocked", mBlocked16);
 		UT.NBT.setBoolean(aNBT, NBT_MODE+".36.blocked", mBlocked36);
@@ -180,7 +180,7 @@ public class MultiTileEntityAdvancedCraftingTable extends TileEntityBase09Facing
 	
 	public void sortIntoTheInputSlots() {
 		for (int i : SLOTS_CRAFTING) if (slotHas(i)) {
-			if (slot(i).stackSize == 0) slotKill(i);
+			if (slot(i).getCount() == 0) slotKill(i);
 			if (slotHas(i)) for (int j : SLOTS_STORAGE) if (ST.equal(slot(i), slot(j))) ST.move(this, i, j);
 			if (slotHas(i)) for (int j : SLOTS_STORAGE) if (!slotHas(j)) ST.move(this, i, j);
 		}
@@ -218,14 +218,14 @@ public class MultiTileEntityAdvancedCraftingTable extends TileEntityBase09Facing
 	
 	public boolean canDoCraftingOutput() {
 		if (!slotHas(31)) return F;
-		for (ItemStack tStack : recipeContent()) if (tStack.stackSize > getAmountOf(tStack)) return F;
+		for (ItemStack tStack : recipeContent()) if (tStack.getCount() > getAmountOf(tStack)) return F;
 		return T;
 	}
 	
 	protected int getAmountOf(ItemStack aStack) {
 		int tAmount = 0;
 		for (int i : SLOTS_CONSUMPTION) if (ST.equalTools(aStack, slot(i), F)) {
-			tAmount+=slot(i).stackSize;
+			tAmount+=slot(i).getCount();
 			if (tAmount >= SLOTS_CRAFTING.length) return tAmount;
 		}
 		for (byte tSide : ALL_SIDES_VALID) {
@@ -245,7 +245,7 @@ public class MultiTileEntityAdvancedCraftingTable extends TileEntityBase09Facing
 				boolean temp = F;
 				for (int j = 0; j < tList.size(); j++) {
 					if (ST.equalTools(slot(i), tList.get(j), F)) {
-						tList.get(j).stackSize++;
+						tList.get(j).getCount()++;
 						temp = T;
 						break;
 					}
@@ -267,7 +267,7 @@ public class MultiTileEntityAdvancedCraftingTable extends TileEntityBase09Facing
 				}
 				return aHoldStack;
 			}
-			if (aHoldStack.stackSize + slot(31).stackSize > aHoldStack.getMaxStackSize()) return aHoldStack;
+			if (aHoldStack.getCount() + slot(31).getCount() > aHoldStack.getMaxStackSize()) return aHoldStack;
 			for (int i : SLOTS_CRAFTING) if (OM.is("gt:autocrafterinfinite", slot(i))) {
 				if (!aSubsequentClick && mDoSound) {
 					UT.Sounds.play(SFX.MC_HMM, 50, 1.0F, 1.0F, getCoords());
@@ -301,8 +301,8 @@ public class MultiTileEntityAdvancedCraftingTable extends TileEntityBase09Facing
 							tDelegator = getAdjacentTileEntity(tSide2);
 							if (tDelegator.mTileEntity instanceof ITileEntityConnectedInventory) {
 								int tRemoved = ((ITileEntityConnectedInventory)tDelegator.mTileEntity).addStackToConnectedInventory(tDelegator.mSideOfTileEntity, ST.copy(tContainer), T);
-								tContainer.stackSize -= tRemoved;
-								if (tContainer.stackSize < 1) {
+								tContainer.getCount() -= tRemoved;
+								if (tContainer.getCount() < 1) {
 									tContainer = null;
 									break;
 								}
@@ -316,8 +316,8 @@ public class MultiTileEntityAdvancedCraftingTable extends TileEntityBase09Facing
 									break;
 								}
 								if (ST.equal(tContainer, slot(k))) {
-									if (tContainer.stackSize + slot(k).stackSize <= slot(k).getMaxStackSize()) {
-										slot(k).stackSize += tContainer.stackSize;
+									if (tContainer.getCount() + slot(k).getCount() <= slot(k).getMaxStackSize()) {
+										slot(k).getCount() += tContainer.getCount();
 										updateInventory();
 										break;
 									}
@@ -329,7 +329,7 @@ public class MultiTileEntityAdvancedCraftingTable extends TileEntityBase09Facing
 				}
 			}
 			if (tNeeds) for (int j : SLOTS_CONSUMPTION) if (j < 21 || j >= 30 || j == i) {
-				if (ST.equalTools(slot(i), slot(j), F) && slot(j).stackSize > 0) {
+				if (ST.equalTools(slot(i), slot(j), F) && slot(j).getCount() > 0) {
 					tNeeds = F;
 					TOOL_SOUNDS = F;
 					ItemStack tContainer2 = ST.container(slot(j), F);
@@ -354,8 +354,8 @@ public class MultiTileEntityAdvancedCraftingTable extends TileEntityBase09Facing
 							DelegatorTileEntity<TileEntity> tDelegator = getAdjacentTileEntity(tSide);
 							if (tDelegator.mTileEntity instanceof ITileEntityConnectedInventory) {
 								int tRemoved = ((ITileEntityConnectedInventory)tDelegator.mTileEntity).addStackToConnectedInventory(tDelegator.mSideOfTileEntity, ST.copy(tContainer2), T);
-								tContainer2.stackSize -= tRemoved;
-								if (tContainer2.stackSize < 1) {
+								tContainer2.getCount() -= tRemoved;
+								if (tContainer2.getCount() < 1) {
 									tContainer2 = null;
 									break;
 								}
@@ -365,7 +365,7 @@ public class MultiTileEntityAdvancedCraftingTable extends TileEntityBase09Facing
 					// Consume the Item.
 					if (tContainer2 == null || (tContainer2.isItemStackDamageable() && tContainer2.getItemDamage() >= tContainer2.getMaxDamage())) {
 						decrStackSize(j, 1);
-					} else if (slot(j).stackSize == 1) {
+					} else if (slot(j).getCount() == 1) {
 						slot(j, tContainer2);
 					} else {
 						decrStackSize(j, 1);
@@ -375,8 +375,8 @@ public class MultiTileEntityAdvancedCraftingTable extends TileEntityBase09Facing
 								break;
 							}
 							if (ST.equal(tContainer2, slot(k))) {
-								if (tContainer2.stackSize + slot(k).stackSize <= slot(k).getMaxStackSize()) {
-									slot(k).stackSize += tContainer2.stackSize;
+								if (tContainer2.getCount() + slot(k).getCount() <= slot(k).getMaxStackSize()) {
+									slot(k).getCount() += tContainer2.getCount();
 									updateInventory();
 									break;
 								}
@@ -388,9 +388,9 @@ public class MultiTileEntityAdvancedCraftingTable extends TileEntityBase09Facing
 			}
 		}
 		
-		if (aHoldStack == null) aHoldStack = ST.copy(slot(31)); else aHoldStack.stackSize += slot(31).stackSize;
+		if (aHoldStack == null) aHoldStack = ST.copy(slot(31)); else aHoldStack.getCount() += slot(31).getCount();
 		
-		aHoldStack.onCrafting(worldObj, aPlayer, slot(31).stackSize);
+		aHoldStack.onCrafting(worldObj, aPlayer, slot(31).getCount());
 		
 		if (aHoldStack.getItem() == Item.getItemFromBlock(Blocks.crafting_table)) aPlayer.addStat(AchievementList.buildWorkBench, 1);
 		if (aHoldStack.getItem() == Item.getItemFromBlock(Blocks.furnace)) aPlayer.addStat(AchievementList.buildFurnace, 1);
@@ -437,7 +437,7 @@ public class MultiTileEntityAdvancedCraftingTable extends TileEntityBase09Facing
 	
 	@Override public int[] getAccessibleSlotsFromSide2(byte aSide) {return mBlocked16 ? mBlocked36 ? mFlushMode?SLOTS_FLUSHING:SLOTS : mFlushMode?SLOTS_36_FLUSHING:SLOTS_36 : mBlocked36 ? mFlushMode?SLOTS_16_FLUSHING:SLOTS_16 : mFlushMode?SLOTS_ALL_FLUSHING:SLOTS_ALL;}
 	@Override public boolean canDrop(int aInventorySlot) {return aInventorySlot < 31 || aInventorySlot > 32;}
-	@Override public ItemStack[] getDefaultInventory(NBTTagCompound aNBT) {return new ItemStack[71];}
+	@Override public ItemStack[] getDefaultInventory(CompoundNBT aNBT) {return new ItemStack[71];}
 	@Override public int getInventoryStackLimitGUI(int aSlot) {return aSlot == 30 ? 1 : 64;}
 	@Override public boolean allowCovers(byte aSide) {return SIDES_BOTTOM_HORIZONTAL[aSide];}
 	@Override public boolean isItemValidForSlotGUI(int aSlot, ItemStack aStack) {return aSlot != 30 || IL.Paper_Blueprint_Empty.equal(aStack, F, T) || IL.Paper_Blueprint_Used.equal(aStack, F, T);}
@@ -467,27 +467,27 @@ public class MultiTileEntityAdvancedCraftingTable extends TileEntityBase09Facing
 	
 	@Override
 	public int fill(ForgeDirection aDirection, FluidStack aFluid, boolean aDoFill) {
-		if (aFluid == null || aFluid.amount <= 0) return 0;
+		if (aFluid == null || aFluid.getAmount() <= 0) return 0;
 		
 		for (int i : SLOTS_TOOLS) {
 			ItemStack tOutput = FL.fill(aFluid, slot(i), F, T, F, T);
 			if (tOutput != null) {
-				if (slot(i).stackSize == 1) {
+				if (slot(i).getCount() == 1) {
 					if (aDoFill) slot(i, tOutput);
-					return FL.getFluid(tOutput, T).amount * tOutput.stackSize;
+					return FL.getFluid(tOutput, T).amount * tOutput.getCount();
 				}
 				for (int j : SLOTS_TOOLS) {
-					if (!slotHas(j) || (ST.equal(tOutput, slot(j)) && slot(j).stackSize + tOutput.stackSize <= tOutput.getMaxStackSize())) {
+					if (!slotHas(j) || (ST.equal(tOutput, slot(j)) && slot(j).getCount() + tOutput.getCount() <= tOutput.getMaxStackSize())) {
 						if (aDoFill) {
 							decrStackSize(i, 1);
 							if (slotHas(j)) {
-								slot(j).stackSize++;
+								slot(j).getCount()++;
 								updateInventory();
 							} else {
 								slot(j, tOutput);
 							}
 						}
-						return FL.getFluid(tOutput, T).amount * tOutput.stackSize;
+						return FL.getFluid(tOutput, T).amount * tOutput.getCount();
 					}
 				}
 			}
@@ -526,9 +526,9 @@ public class MultiTileEntityAdvancedCraftingTable extends TileEntityBase09Facing
 					if (aRightclick) {
 						// SHIFT RIGHTCLICK
 						for (int i = 0; i < aPlayer.inventory.mainInventory.length; i++) {
-							if (aPlayer.inventory.mainInventory[i] == null || (ST.equal(tCraftedStack, aPlayer.inventory.mainInventory[i]) && tCraftedStack.stackSize + aPlayer.inventory.mainInventory[i].stackSize <= aPlayer.inventory.mainInventory[i].getMaxStackSize())) {
-								for (int j = 0; j < tCraftedStack.getMaxStackSize() / tCraftedStack.stackSize && canDoCraftingOutput(); j++) {
-									if (!ST.equal(tStack = getCraftingOutput(), tCraftedStack) || tStack.stackSize != tCraftedStack.stackSize) {
+							if (aPlayer.inventory.mainInventory[i] == null || (ST.equal(tCraftedStack, aPlayer.inventory.mainInventory[i]) && tCraftedStack.getCount() + aPlayer.inventory.mainInventory[i].getCount() <= aPlayer.inventory.mainInventory[i].getMaxStackSize())) {
+								for (int j = 0; j < tCraftedStack.getMaxStackSize() / tCraftedStack.getCount() && canDoCraftingOutput(); j++) {
+									if (!ST.equal(tStack = getCraftingOutput(), tCraftedStack) || tStack.getCount() != tCraftedStack.getCount()) {
 										return aPlayer.inventory.getItemStack();
 									}
 									aPlayer.inventory.mainInventory[i] = (consumeMaterials(aPlayer, aPlayer.inventory.mainInventory[i], i != 0 || j != 0));
@@ -539,10 +539,10 @@ public class MultiTileEntityAdvancedCraftingTable extends TileEntityBase09Facing
 					}
 					// SHIFT LEFTCLICK
 					for (int i = 0; i < aPlayer.inventory.mainInventory.length; i++) {
-						if (aPlayer.inventory.mainInventory[i] == null || (ST.equal(tCraftedStack, aPlayer.inventory.mainInventory[i]) && tCraftedStack.stackSize + aPlayer.inventory.mainInventory[i].stackSize <= aPlayer.inventory.mainInventory[i].getMaxStackSize())) {
+						if (aPlayer.inventory.mainInventory[i] == null || (ST.equal(tCraftedStack, aPlayer.inventory.mainInventory[i]) && tCraftedStack.getCount() + aPlayer.inventory.mainInventory[i].getCount() <= aPlayer.inventory.mainInventory[i].getMaxStackSize())) {
 							boolean temp = F;
-							for (int j = 0; j < tCraftedStack.getMaxStackSize() / tCraftedStack.stackSize && canDoCraftingOutput(); j++) {
-								if (!ST.equal(tStack = getCraftingOutput(), tCraftedStack) || tStack.stackSize != tCraftedStack.stackSize) {
+							for (int j = 0; j < tCraftedStack.getMaxStackSize() / tCraftedStack.getCount() && canDoCraftingOutput(); j++) {
+								if (!ST.equal(tStack = getCraftingOutput(), tCraftedStack) || tStack.getCount() != tCraftedStack.getCount()) {
 									return aPlayer.inventory.getItemStack();
 								}
 								aPlayer.inventory.mainInventory[i] = (consumeMaterials(aPlayer, aPlayer.inventory.mainInventory[i], i != 0 || j != 0));
@@ -555,8 +555,8 @@ public class MultiTileEntityAdvancedCraftingTable extends TileEntityBase09Facing
 				}
 				if (aRightclick) {
 					// RIGHTCLICK
-					for (int i = 0; i < tCraftedStack.getMaxStackSize() / tCraftedStack.stackSize && canDoCraftingOutput(); i++) {
-						if (!ST.equal(tStack = getCraftingOutput(), tCraftedStack) || tStack.stackSize != tCraftedStack.stackSize) {
+					for (int i = 0; i < tCraftedStack.getMaxStackSize() / tCraftedStack.getCount() && canDoCraftingOutput(); i++) {
+						if (!ST.equal(tStack = getCraftingOutput(), tCraftedStack) || tStack.getCount() != tCraftedStack.getCount()) {
 							return aPlayer.inventory.getItemStack();
 						}
 						aPlayer.inventory.setItemStack(consumeMaterials(aPlayer, aPlayer.inventory.getItemStack(), i != 0));

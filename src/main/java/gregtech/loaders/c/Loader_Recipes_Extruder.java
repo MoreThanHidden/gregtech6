@@ -226,7 +226,7 @@ public class Loader_Recipes_Extruder implements Runnable {
 				RM.Extruder.addRecipe2(T, F, F, F, F, tEUt, tCostsPerIngot   ,            tStack , IL.Shape_Extruder_Cell               .get(0), IL.Food_Can_Empty.get(1));
 				RM.Extruder.addRecipe2(T, F, F, F, F, tEUt, tCostsPerIngot   ,            tStack , IL.Shape_SimpleEx_Cell               .get(0), IL.Food_Can_Empty.get(1));
 				}
-				if (tStack.stackSize *  3 <= tStack.getMaxStackSize()) {
+				if (tStack.getCount() *  3 <= tStack.getMaxStackSize()) {
 				if (tMaterial == MT.WaxBee) {
 				RM.Extruder.addRecipe2(T, F, F, F, F, tEUt, tCostsPerIngot* 3, ST.mul_( 3,tStack), IL.Shape_Extruder_Cell               .get(0), IL.FR_WaxCapsule.get(4));
 				RM.Extruder.addRecipe2(T, F, F, F, F, tEUt, tCostsPerIngot* 3, ST.mul_( 3,tStack), IL.Shape_SimpleEx_Cell               .get(0), IL.FR_WaxCapsule.get(4));
@@ -240,7 +240,7 @@ public class Loader_Recipes_Extruder implements Runnable {
 				RM.Extruder.addRecipe2(T, F, F, F, F, tEUt, tCostsPerIngot* 3, ST.mul_( 3,tStack), IL.Shape_SimpleEx_Cell               .get(0), IL.FR_MagicCapsule.get(4));
 				}
 				}
-				if (tStack.stackSize *  6 <= tStack.getMaxStackSize()) {
+				if (tStack.getCount() *  6 <= tStack.getMaxStackSize()) {
 				if (tMaterial == MT.Plastic) {
 				RM.Extruder.addRecipe2(T, F, F, F, T, tEUt, tCostsPerIngot* 6, ST.mul_( 6,tStack), IL.Shape_Extruder_Cell               .get(0), IL.PlasticCan.get(1));
 				RM.Extruder.addRecipe2(T, F, F, F, T, tEUt, tCostsPerIngot* 6, ST.mul_( 6,tStack), IL.Shape_SimpleEx_Cell               .get(0), IL.PlasticCan.get(1));

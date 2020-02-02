@@ -234,7 +234,7 @@ public class WD {
 	}
 	
 	/** to get a TileEntity properly, according to my additional Interfaces. Normally you should set aLoadUnloadedChunks to false, unless you have already checked these Coordinates, or you want to load Chunks */
-	public static DelegatorTileEntity<TileEntity> te(World aWorld, ChunkCoordinates aCoords, byte aSide, boolean aLoadUnloadedChunks) {
+	public static DelegatorTileEntity<TileEntity> te(World aWorld, ChunkPos aCoords, byte aSide, boolean aLoadUnloadedChunks) {
 		TileEntity aTileEntity = te(aWorld, aCoords, aLoadUnloadedChunks);
 		return aTileEntity instanceof ITileEntityDelegating ? ((ITileEntityDelegating)aTileEntity).getDelegateTileEntity(aSide) : new DelegatorTileEntity<>(aTileEntity, aWorld, aCoords, aSide);
 	}
@@ -246,7 +246,7 @@ public class WD {
 	}
 	
 	/** to get a TileEntity properly, according to my additional Interfaces. Normally you should set aLoadUnloadedChunks to false, unless you have already checked these Coordinates, or you want to load Chunks */
-	public static TileEntity te(World aWorld, ChunkCoordinates aCoords, boolean aLoadUnloadedChunks) {
+	public static TileEntity te(World aWorld, ChunkPos aCoords, boolean aLoadUnloadedChunks) {
 		if (aLoadUnloadedChunks || aWorld.blockExists(aCoords.posX, aCoords.posY, aCoords.posZ)) {
 			TileEntity rTileEntity = aWorld.getTileEntity(aCoords.posX, aCoords.posY, aCoords.posZ);
 			if (rTileEntity != null) return rTileEntity;
@@ -306,7 +306,7 @@ public class WD {
 	public static long temperature(World aWorld, BlockPos aPos) {
 		long rTemperature = envTemp(aWorld, aPos);
 		if (burning(aWorld, aPos)) rTemperature = Math.max(rTemperature, C + 200);
-		for (ChunkCoordinates tCoords : new ChunkCoordinates[] {new ChunkCoordinates(aPos), new ChunkCoordinates(aX+1, aY, aZ), new ChunkCoordinates(aX-1, aY, aZ), new ChunkCoordinates(aX, aY+1, aZ), new ChunkCoordinates(aX, aY-1, aZ), new ChunkCoordinates(aPos+1), new ChunkCoordinates(aPos-1)}) {
+		for (ChunkPos tCoords : new ChunkPos[] {new ChunkPos(aPos), new ChunkPos(aX+1, aY, aZ), new ChunkPos(aX-1, aY, aZ), new ChunkPos(aX, aY+1, aZ), new ChunkPos(aX, aY-1, aZ), new ChunkPos(aPos+1), new ChunkPos(aPos-1)}) {
 			Block tBlock = block(aWorld, tCoords.posX, tCoords.posY, tCoords.posZ, F);
 			if (tBlock == Blocks.lava || tBlock == Blocks.flowing_lava) rTemperature = Math.max(rTemperature, C + 500);
 			else if (tBlock instanceof BlockFire) rTemperature = Math.max(rTemperature, C + 200);
@@ -345,7 +345,7 @@ public class WD {
 	public static boolean set(World aWorld, BlockPos aPos, Block aBlock, long aMeta, long aFlags, boolean aRemoveGrassBelow) {
 		if (aRemoveGrassBelow) {
 			Block tBlock = aWorld.getBlock(aX, aY-1, aZ);
-			if (tBlock == Blocks.grass || tBlock == Blocks.mycelium) aWorld.setBlock(aX, aY-1, aZ, Blocks.dirt, 0, (byte)aFlags);
+			if (tBlock == Blocks.GRASS || tBlock == Blocks.MYCELIUM) aWorld.setBlock(aX, aY-1, aZ, Blocks.DIRT, 0, (byte)aFlags);
 		}
 		return aWorld.setBlock(aPos, aBlock, Code.bind4(aMeta), (byte)aFlags);
 	}
@@ -356,7 +356,7 @@ public class WD {
 	public static boolean set(Chunk aChunk, BlockPos aPos, Block aBlock, long aMeta, boolean aRemoveGrassBelow) {
 		if (aRemoveGrassBelow) {
 			Block tBlock = aChunk.getBlock(aX, aY-1, aZ);
-			if (tBlock == Blocks.grass || tBlock == Blocks.mycelium) aChunk.func_150807_a(aX, aY-1, aZ, Blocks.dirt, 0);
+			if (tBlock == Blocks.GRASS || tBlock == Blocks.MYCELIUM) aChunk.func_150807_a(aX, aY-1, aZ, Blocks.DIRT, 0);
 		}
 		return aChunk.func_150807_a(aPos, aBlock, Code.bind4(aMeta));
 	}
@@ -393,7 +393,7 @@ public class WD {
 	public static boolean border(int aFromX, int aFromZ, int aToX, int aToZ) {return aFromX >> 4 != aToX >> 4 || aFromZ >> 4 != aToZ >> 4;}
 	
 	public static boolean even(TileEntity aTileEntity) {return even(aTileEntity.xCoord, aTileEntity.yCoord, aTileEntity.zCoord);}
-	public static boolean even(ChunkCoordinates aCoords) {return even(aCoords.posX, aCoords.posY, aCoords.posZ);}
+	public static boolean even(ChunkPos aCoords) {return even(aCoords.posX, aCoords.posY, aCoords.posZ);}
 	public static boolean even(int... aCoords) {int i = 0; for (int tCoord : aCoords) if (tCoord % 2 == 0) i++; return i % 2 == 0;}
 	
 	public static boolean setIfDiff(World aWorld, BlockPos aPos, Block aBlock, int aMetaData, int aFlags) {return (aWorld.getBlock(aPos) != aBlock || aWorld.getBlockMetadata(aPos) != aMetaData) && aWorld.setBlock(aPos, aBlock, aMetaData, aFlags);}
@@ -485,15 +485,15 @@ public class WD {
 	public static boolean hasCollide(World aWorld, BlockPos aPos) {return hasCollide(aWorld, aPos, aWorld.getBlock(aPos));}
 	public static boolean hasCollide(World aWorld, BlockPos aPos, Block aBlock) {return aBlock.isOpaqueCube() || aBlock.getCollisionBoundingBoxFromPool(aWorld, aPos) != null;}
 	
-	public static boolean hasCollide(World aWorld, ChunkCoordinates aCoords) {return hasCollide(aWorld, aCoords, aWorld.getBlock(aCoords.posX, aCoords.posY, aCoords.posZ));}
-	public static boolean hasCollide(World aWorld, ChunkCoordinates aCoords, Block aBlock) {return aBlock.isOpaqueCube() || aBlock.getCollisionBoundingBoxFromPool(aWorld, aCoords.posX, aCoords.posY, aCoords.posZ) != null;}
+	public static boolean hasCollide(World aWorld, ChunkPos aCoords) {return hasCollide(aWorld, aCoords, aWorld.getBlock(aCoords.posX, aCoords.posY, aCoords.posZ));}
+	public static boolean hasCollide(World aWorld, ChunkPos aCoords, Block aBlock) {return aBlock.isOpaqueCube() || aBlock.getCollisionBoundingBoxFromPool(aWorld, aCoords.posX, aCoords.posY, aCoords.posZ) != null;}
 	
 	public static boolean burning(World aWorld, BlockPos aPos) {return block(aWorld, aPos, F) instanceof BlockFire || block(aWorld, aX+1, aY, aZ, F) instanceof BlockFire || block(aWorld, aX-1, aY, aZ, F) instanceof BlockFire || block(aWorld, aX, aY+1, aZ, F) instanceof BlockFire || block(aWorld, aX, aY-1, aZ, F) instanceof BlockFire || block(aWorld, aPos+1, F) instanceof BlockFire || block(aWorld, aPos-1, F) instanceof BlockFire;}
 	
-	public static void burn(World aWorld, ChunkCoordinates aCoords, boolean aReplaceCenter, boolean aCheckFlammability) {for (byte tSide : aReplaceCenter?ALL_SIDES:ALL_SIDES_VALID) fire(aWorld, aCoords.posX+OFFSETS_X[tSide], aCoords.posY+OFFSETS_Y[tSide], aCoords.posZ+OFFSETS_Z[tSide], aCheckFlammability);}
+	public static void burn(World aWorld, ChunkPos aCoords, boolean aReplaceCenter, boolean aCheckFlammability) {for (byte tSide : aReplaceCenter?ALL_SIDES:ALL_SIDES_VALID) fire(aWorld, aCoords.posX+OFFSETS_X[tSide], aCoords.posY+OFFSETS_Y[tSide], aCoords.posZ+OFFSETS_Z[tSide], aCheckFlammability);}
 	public static void burn(World aWorld, BlockPos aPos  , boolean aReplaceCenter, boolean aCheckFlammability) {for (byte tSide : aReplaceCenter?ALL_SIDES:ALL_SIDES_VALID) fire(aWorld, aX+OFFSETS_X[tSide], aY+OFFSETS_Y[tSide], aZ+OFFSETS_Z[tSide], aCheckFlammability);}
 	
-	public static boolean fire(World aWorld, ChunkCoordinates aCoords, boolean aCheckFlammability) {return fire(aWorld, aCoords.posX, aCoords.posY, aCoords.posZ, aCheckFlammability);}
+	public static boolean fire(World aWorld, ChunkPos aCoords, boolean aCheckFlammability) {return fire(aWorld, aCoords.posX, aCoords.posY, aCoords.posZ, aCheckFlammability);}
 	public static boolean fire(World aWorld, BlockPos aPos, boolean aCheckFlammability) {
 		Block tBlock = aWorld.getBlock(aPos);
 		if (tBlock.getMaterial() == Material.lava || tBlock.getMaterial() == Material.fire) return F;

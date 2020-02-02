@@ -36,7 +36,7 @@ import gregapi.util.UT;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTSizeTracker;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.IBlockAccess;
 
 /**
@@ -60,9 +60,9 @@ public class PacketItemStackChat implements IPacket {
 	public ByteArrayDataOutput encode() {
 		ByteArrayDataOutput aData = ByteStreams.newDataOutput();
 		aData.writeShort(ST.id(mStack));
-		aData.writeByte(mStack.stackSize);
+		aData.writeByte(mStack.getCount());
 		aData.writeShort(ST.meta_(mStack));
-		NBTTagCompound tNBT = mStack.getTagCompound();
+		CompoundNBT tNBT = mStack.getTagCompound();
 		if (tNBT == null) aData.writeShort(-1); else {
 			try {
 				byte[] tData = CompressedStreamTools.compress(tNBT);
@@ -75,10 +75,10 @@ public class PacketItemStackChat implements IPacket {
 	
 	@Override
 	public IPacket decode(ByteArrayDataInput aData) {
-		return new PacketItemStackChat(ST.make(aData.readShort(), aData.readByte(), aData.readShort(), readNBTTagCompoundFromBuffer(aData)));
+		return new PacketItemStackChat(ST.make(aData.readShort(), aData.readByte(), aData.readShort(), readCompoundNBTFromBuffer(aData)));
 	}
 	
-	public NBTTagCompound readNBTTagCompoundFromBuffer(ByteArrayDataInput aData) {
+	public CompoundNBT readCompoundNBTFromBuffer(ByteArrayDataInput aData) {
 		short tLength = aData.readShort();
 		if (tLength <= 0) return null;
 		byte[] tData = new byte[tLength];

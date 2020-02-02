@@ -45,7 +45,7 @@ import gregapi.util.UT;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 
@@ -57,7 +57,7 @@ public class MultiTileEntitySapBag extends TileEntityBase09FacingSingle implemen
 	public FluidTankGT mTank = new FluidTankGT(8000);
 	
 	@Override
-	public void readFromNBT2(NBTTagCompound aNBT) {
+	public void readFromNBT2(CompoundNBT aNBT) {
 		super.readFromNBT2(aNBT);
 		if (aNBT.hasKey(NBT_ACTIVE)) mFull = oFull = aNBT.getBoolean(NBT_ACTIVE);
 		mTank.setCapacity(aNBT.getLong(NBT_TANK_CAPACITY));
@@ -65,7 +65,7 @@ public class MultiTileEntitySapBag extends TileEntityBase09FacingSingle implemen
 	}
 	
 	@Override
-	public void writeToNBT2(NBTTagCompound aNBT) {
+	public void writeToNBT2(CompoundNBT aNBT) {
 		super.writeToNBT2(aNBT);
 		UT.NBT.setBoolean(aNBT, NBT_ACTIVE, mFull);
 		mTank.writeToNBT(aNBT, NBT_TANK);
@@ -113,7 +113,7 @@ public class MultiTileEntitySapBag extends TileEntityBase09FacingSingle implemen
 			}
 			ItemStack aStack = aPlayer.getCurrentEquippedItem(), tStack;
 			if (aStack != null) if ((tStack = FL.fill(mTank, ST.amount(1, aStack), T, T, T, T)) != null) {
-				aStack.stackSize--;
+				aStack.getCount()--;
 				UT.Inventories.addStackToPlayerInventoryOrDrop(aPlayer, tStack, T);
 				return T;
 			}
@@ -179,7 +179,7 @@ public class MultiTileEntitySapBag extends TileEntityBase09FacingSingle implemen
 		}
 	}
 	
-	@Override public ItemStack[] getDefaultInventory(NBTTagCompound aNBT) {return new ItemStack[1];}
+	@Override public ItemStack[] getDefaultInventory(CompoundNBT aNBT) {return new ItemStack[1];}
 	@Override public int[] getAccessibleSlotsFromSide2(byte aSide) {return ZL_INTEGER;}
 	@Override public boolean canInsertItem2 (int aSlot, ItemStack aStack, byte aSide) {return F;}
 	@Override public boolean canExtractItem2(int aSlot, ItemStack aStack, byte aSide) {return F;}

@@ -1862,12 +1862,12 @@ public class Loader_MultiTileEntities implements Runnable {
 	private static void misc(MultiTileEntityRegistry aRegistry, MultiTileEntityBlock aMetal, MultiTileEntityBlock aMetalChips, MultiTileEntityBlock aMetalWires, MultiTileEntityBlock aMachine, MultiTileEntityBlock aWooden, MultiTileEntityBlock aBush, MultiTileEntityBlock aStone, MultiTileEntityBlock aWool, MultiTileEntityBlock aTNT, MultiTileEntityBlock aHive, MultiTileEntityBlock aUtilMetal, MultiTileEntityBlock aUtilStone, MultiTileEntityBlock aUtilWood, MultiTileEntityBlock aUtilWool, OreDictMaterial aMat, Class<? extends TileEntity> aClass) {
 		aRegistry.add("Miniature Nether Portal"                             , "Portals"                             , 32766, 32766, MultiTileEntityMiniPortalNether.class                   ,                 3, 16, aStone         , null                                                                          ,"SSS", "SsS", "SSS", 'S', OP.stickLong.dat(MT.Obsidian));
 		aRegistry.add("Miniature End Portal"                                , "Portals"                             , 32000, 32766, MultiTileEntityMiniPortalEnd.class                      ,                 1, 16, aStone         , null                                                                          ,"ESE", "SGS", "ESE", 'S', OP.stickLong.dat(MT.Endstone), 'E', OP.gem.dat(MT.EnderEye), 'G', Items.ghast_tear);
-		aRegistry.add("Miniature Twilight Portal"                           , "Portals"                             , 32001, 32766, MultiTileEntityMiniPortalTwilight.class                 ,                 0, 16, aBush          , UT.NBT.make(NBT_HIDDEN, !MD.TF    .mLoaded), MD.TF    .mLoaded ? new Object[] {"FGF", "GWG", "FGF", 'G', Blocks.grass, 'W', OD.container1000water, 'F', OD.flower} : ZL);
+		aRegistry.add("Miniature Twilight Portal"                           , "Portals"                             , 32001, 32766, MultiTileEntityMiniPortalTwilight.class                 ,                 0, 16, aBush          , UT.NBT.make(NBT_HIDDEN, !MD.TF    .mLoaded), MD.TF    .mLoaded ? new Object[] {"FGF", "GWG", "FGF", 'G', Blocks.GRASS, 'W', OD.container1000water, 'F', OD.flower} : ZL);
 		aRegistry.add("Miniature Erebus Portal"                             , "Portals"                             , 32002, 32766, MultiTileEntityMiniPortalErebus.class                   ,                 0, 16, aStone         , UT.NBT.make(NBT_HIDDEN, !MD.ERE   .mLoaded), MD.ERE   .mLoaded ? new Object[] {"SLS", "LKL", "SLS", 'S', OP.stickLong.dat(MT.Umber), 'L', OP.treeLeaves, 'K', ST.make(MD.ERE, "gaeanKeystone", 1, 0)} : ZL);
 		aRegistry.add("Miniature Deep Dark Portal"                          , "Portals"                             , 32003, 32766, MultiTileEntityMiniPortalDeepDark.class                 ,                 2, 16, aStone         , UT.NBT.make(NBT_HIDDEN, !MD.ExU   .mLoaded), MD.ExU   .mLoaded ? new Object[] {"SSS", "SXS", "SSS", 'S', OP.stickLong.dat(MT.Obsidian), 'X', ST.make(MD.ExU, "dark_portal", 1, 0)} : ZL);
 		aRegistry.add("Miniature Last Millenium Portal"                     , "Portals"                             , 32004, 32766, MultiTileEntityMiniPortalEndOfTime.class                ,                 2, 16, aStone         , UT.NBT.make(NBT_HIDDEN, !MD.ExU   .mLoaded), MD.ExU   .mLoaded ? new Object[] {"SSS", "SXS", "SSS", 'S', OP.stickLong.dat(MT.Obsidian), 'X', ST.make(MD.ExU, "dark_portal", 1, 2)} : ZL);
 		aRegistry.add("Miniature Atum Portal"                               , "Portals"                             , 32005, 32766, MultiTileEntityMiniPortalAtum.class                     ,                 0, 16, aStone         , UT.NBT.make(NBT_HIDDEN, !MD.ATUM  .mLoaded), MD.ATUM  .mLoaded ? new Object[] {"SSS", "SsS", "SSS", 'S', OP.stickLong.dat(MT.Limestone)} : ZL);
-		aRegistry.add("Miniature Betweenlands Portal"                       , "Portals"                             , 32006, 32766, MultiTileEntityMiniPortalBetweenlands.class             ,                 0, 16, aWooden        , UT.NBT.make(NBT_HIDDEN, !MD.BTL   .mLoaded), MD.BTL   .mLoaded ? new Object[] {"PsP", "PSP", "PGP", 'P', ST.make(MD.BTL, "portalBark", 1, 0), 'S', OP.treeSapling, 'G', Blocks.grass} : ZL);
+		aRegistry.add("Miniature Betweenlands Portal"                       , "Portals"                             , 32006, 32766, MultiTileEntityMiniPortalBetweenlands.class             ,                 0, 16, aWooden        , UT.NBT.make(NBT_HIDDEN, !MD.BTL   .mLoaded), MD.BTL   .mLoaded ? new Object[] {"PsP", "PSP", "PGP", 'P', ST.make(MD.BTL, "portalBark", 1, 0), 'S', OP.treeSapling, 'G', Blocks.GRASS} : ZL);
 		aRegistry.add("Miniature Aether Portal"                             , "Portals"                             , 32015, 32766, MultiTileEntityMiniPortalAether.class                   ,                 0, 16, aStone         , UT.NBT.make(NBT_HIDDEN, !MD.AETHER.mLoaded), MD.AETHER.mLoaded ? new Object[] {"SSS", "SsS", "SSS", 'S', OP.stickLong.dat(ANY.Glowstone)} : ZL);
 		aRegistry.add("Miniature Enviromine Portal"                         , "Portals"                             , 32051, 32766, MultiTileEntityMiniPortalEnviromine.class               ,                 0, 16, aStone         , UT.NBT.make(NBT_HIDDEN, !MD.ENVM  .mLoaded), MD.ENVM  .mLoaded ? new Object[] {"SSS", "SsS", "SSS", 'S', OP.stickLong.dat(MT.GraniteBlack)} : ZL);
 		aRegistry.add("Miniature Alfheim Portal"                            , "Portals"                             , 32052, 32766, MultiTileEntityMiniPortalAlfheim.class                  ,                 0, 16, aWooden        , UT.NBT.make(NBT_HIDDEN, !MD.ALF   .mLoaded), MD.ALF   .mLoaded ? new Object[] {"SSS", "SXS", "SSS", 'S', OP.stickLong.dat(MT.Dreamwood), 'X', ST.make(MD.ALF, "AlfheimPortal", 1, 0)} : ZL);
@@ -1911,7 +1911,7 @@ public class Loader_MultiTileEntities implements Runnable {
 				CR.shaped(ST.amount(6, tPanel), CR.DEF_REV_NCC_MIR, "TsT", "TPT", "TdT", 'P', PlankData.PLANKS[i], 'T', OP.screw.dat(ANY.Iron));
 				CoverRegistry.put(tPanel, new CoverTextureSimple(BlockTextureDefault.get(PlankData.PLANK_ICONS[i]), SFX.MC_DIG_WOOD));
 			} else {
-				CoverRegistry.put(tPanel, new CoverTextureSimple(BlockTextureCopied.get(Blocks.planks), SFX.MC_DIG_WOOD));
+				CoverRegistry.put(tPanel, new CoverTextureSimple(BlockTextureCopied.get(Blocks.OAK_PLANKS), SFX.MC_DIG_WOOD));
 			}
 		}
 		for (int i = 0; i < 100; i++) {
@@ -1920,7 +1920,7 @@ public class Loader_MultiTileEntities implements Runnable {
 				CR.shaped(ST.amount(6, tPanel), CR.DEF_REV_NCC_MIR, "TsT", "TPT", "TdT", 'P', PlankData.PLANKS[i+100], 'T', OP.screw.dat(ANY.Iron));
 				CoverRegistry.put(tPanel, new CoverTextureSimple(BlockTextureDefault.get(PlankData.PLANK_ICONS[i+100]), SFX.MC_DIG_WOOD));
 			} else {
-				CoverRegistry.put(tPanel, new CoverTextureSimple(BlockTextureCopied.get(Blocks.planks), SFX.MC_DIG_WOOD));
+				CoverRegistry.put(tPanel, new CoverTextureSimple(BlockTextureCopied.get(Blocks.OAK_PLANKS), SFX.MC_DIG_WOOD));
 			}
 		}
 		for (int i = 0; i < 100; i++) {
@@ -1929,7 +1929,7 @@ public class Loader_MultiTileEntities implements Runnable {
 				CR.shaped(ST.amount(6, tPanel), CR.DEF_REV_NCC_MIR, "TsT", "TPT", "TdT", 'P', PlankData.PLANKS[i+200], 'T', OP.screw.dat(ANY.Iron));
 				CoverRegistry.put(tPanel, new CoverTextureSimple(BlockTextureDefault.get(PlankData.PLANK_ICONS[i+200]), SFX.MC_DIG_WOOD));
 			} else {
-				CoverRegistry.put(tPanel, new CoverTextureSimple(BlockTextureCopied.get(Blocks.planks), SFX.MC_DIG_WOOD));
+				CoverRegistry.put(tPanel, new CoverTextureSimple(BlockTextureCopied.get(Blocks.OAK_PLANKS), SFX.MC_DIG_WOOD));
 			}
 		}
 		

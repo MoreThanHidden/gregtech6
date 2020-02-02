@@ -31,7 +31,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 
@@ -51,7 +51,7 @@ public class Behavior_CureZombie extends AbstractBehaviorDefault {
 				UT.Entities.consumeCurrentItem(aPlayer);
 				if (!((EntityZombie)aEntity).worldObj.isRemote) {
 					int tCureTime = RNGSUS.nextInt(mAverageCureTime * 2) + 500;
-					NBTTagCompound tNBT = UT.NBT.make();
+					CompoundNBT tNBT = UT.NBT.make();
 					aEntity.writeToNBT(tNBT);
 					tNBT.setInteger("ConversionTime", tCureTime);
 					aEntity.readFromNBT(tNBT);

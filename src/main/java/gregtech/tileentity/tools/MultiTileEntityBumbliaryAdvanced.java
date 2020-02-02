@@ -51,7 +51,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 
 /**
  * @author Gregorius Techneticies
@@ -63,7 +63,7 @@ public class MultiTileEntityBumbliaryAdvanced extends TileEntityBase07Paintable 
 	public ItemStack[] mOffSpring = ZL_IS;
 	
 	@Override
-	public void readFromNBT2(NBTTagCompound aNBT) {
+	public void readFromNBT2(CompoundNBT aNBT) {
 		super.readFromNBT2(aNBT);
 		if (aNBT.hasKey(NBT_PROGRESS)) mLife = aNBT.getLong(NBT_PROGRESS);
 		
@@ -74,7 +74,7 @@ public class MultiTileEntityBumbliaryAdvanced extends TileEntityBase07Paintable 
 	}
 	
 	@Override
-	public void writeToNBT2(NBTTagCompound aNBT) {
+	public void writeToNBT2(CompoundNBT aNBT) {
 		super.writeToNBT2(aNBT);
 		UT.NBT.setNumber(aNBT, NBT_PROGRESS, mLife);
 		if (mOffSpring.length > 0) {
@@ -111,7 +111,7 @@ public class MultiTileEntityBumbliaryAdvanced extends TileEntityBase07Paintable 
 			if (slotHas(SLOT_ROYAL) && slot(SLOT_ROYAL).getItem() instanceof IItemBumbleBee) {
 				ItemStack tRoyalStack = slot(SLOT_ROYAL);
 				IItemBumbleBee tRoyalItem = (IItemBumbleBee)tRoyalStack.getItem();
-				NBTTagCompound tRoyalTag = Util.getBumbleTag(tRoyalStack);
+				CompoundNBT tRoyalTag = Util.getBumbleTag(tRoyalStack);
 				short tRoyalMeta = ST.meta_(tRoyalStack);
 				if (mLife > 0 && tRoyalItem.bumbleType(tRoyalStack) % 5 == 2) {
 					if (mBreedingCountDown < 1200) mBreedingCountDown = 1200;
@@ -250,7 +250,7 @@ public class MultiTileEntityBumbliaryAdvanced extends TileEntityBase07Paintable 
 								for (ItemStack tOffSpring : mOffSpring) if (ST.valid(tOffSpring)) Util.setBumbleTag(tOffSpring, Util.getBumbleGenes(tRoyalStack, tBreedStack, RNGSUS));
 								
 								mLife = Util.getLifeSpan(tRoyalTag);
-								decrStackSize(tBreedSlot, tBreedSlot == SLOT_DRONE && tBreedStack.stackSize > 1 ? 2 : 1);
+								decrStackSize(tBreedSlot, tBreedSlot == SLOT_DRONE && tBreedStack.getCount() > 1 ? 2 : 1);
 								slot(SLOT_ROYAL, ST.amount(1, tRoyalItem.bumbleCrown(tRoyalStack)));
 								
 								for (int tDroneSlot : SLOTS_DRONE) if (slotHas(tDroneSlot) && slot(tDroneSlot).getItem() instanceof IItemBumbleBee && ((IItemBumbleBee)slot(tDroneSlot).getItem()).bumbleType(slot(tDroneSlot)) % 5 != 0) {
@@ -330,7 +330,7 @@ public class MultiTileEntityBumbliaryAdvanced extends TileEntityBase07Paintable 
 	, SLOTS_AUTO[] = {0, 4, 5, 9, 10, 11, 14, 15, 16, 17, 18, 19}
 	;
 	
-	@Override public ItemStack[] getDefaultInventory(NBTTagCompound aNBT) {return new ItemStack[20];}
+	@Override public ItemStack[] getDefaultInventory(CompoundNBT aNBT) {return new ItemStack[20];}
 	@Override public int[] getAccessibleSlotsFromSide2(byte aSide) {return SLOTS_AUTO;}
 	@Override public int getInventoryStackLimitGUI(int aSlot) {return aSlot == SLOT_ROYAL ? 1 : 64;}
 	@Override public boolean canInsertItem2(int aSlot, ItemStack aStack, byte aSide) {return F;}
@@ -363,11 +363,11 @@ public class MultiTileEntityBumbliaryAdvanced extends TileEntityBase07Paintable 
 		return slotHas(SLOT_ROYAL) && slot(SLOT_ROYAL).getItem() instanceof IItemBumbleBee && ((IItemBumbleBee)slot(SLOT_ROYAL).getItem()).bumbleType(slot(SLOT_ROYAL)) % 5 == 2 && ((IItemBumbleBee)slot(SLOT_ROYAL).getItem()).bumbleAttack(slot(SLOT_ROYAL), ST.meta_(slot(SLOT_ROYAL)), aEntity);
 	}
 	
-	private boolean checkEnvironment(NBTTagCompound aBumbleTag) {
+	private boolean checkEnvironment(CompoundNBT aBumbleTag) {
 		return UT.Code.inside(Util.getTemperatureMin(aBumbleTag), Util.getTemperatureMax(aBumbleTag), mTemperature) && UT.Code.inside_(Util.getHumidityMin(aBumbleTag), Util.getHumidityMax(aBumbleTag), mHumidity) && (mSky ? Util.getOutsideActive(aBumbleTag) : Util.getInsideActive(aBumbleTag));
 	}
 	
-	private boolean checkWork(NBTTagCompound aBumbleTag) {
+	private boolean checkWork(CompoundNBT aBumbleTag) {
 		if (mSky) {
 			if (worldObj.isThundering() && !Util.getStormproof(aBumbleTag)) return F;
 			if (worldObj.isRaining() && mHumidity > 0 && !Util.getRainproof(aBumbleTag)) return F;

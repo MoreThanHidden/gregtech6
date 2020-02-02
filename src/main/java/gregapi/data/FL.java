@@ -43,7 +43,7 @@ import gregapi.util.UT.Code;
 import gregapi.util.UT.NBT;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.fluids.BlockFluidBase;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
@@ -603,13 +603,13 @@ public enum FL {
 	public static boolean exists(String aFluidName) {return FluidRegistry.getFluid(aFluidName) != null;}
 	
 	public static ItemStack display(Fluid aFluid) {return aFluid == null ? null : display(make(aFluid, 0), F, F);}
-	public static ItemStack display(FluidStack aFluid, boolean aUseStackSize, boolean aLimitStackSize) {return display(aFluid, aFluid == null ? 0 : aFluid.amount, aUseStackSize, aLimitStackSize);}
+	public static ItemStack display(FluidStack aFluid, boolean aUseStackSize, boolean aLimitStackSize) {return display(aFluid, aFluid == null ? 0 : aFluid.getAmount(), aUseStackSize, aLimitStackSize);}
 	public static ItemStack display(FluidTankGT aTank, boolean aUseStackSize, boolean aLimitStackSize) {return display(aTank.getFluid(), aTank.amount(), aUseStackSize, aLimitStackSize);}
 	public static ItemStack display(FluidStack aFluid, long aAmount, boolean aUseStackSize, boolean aLimitStackSize) {
 		if (aFluid == null || aFluid.getFluid() == null) return null;
 		ItemStack rStack = IL.Display_Fluid.getWithMeta(aUseStackSize ? aLimitStackSize ? UT.Code.bind7(aAmount / 1000) : aAmount / 1000 : 1, id_(aFluid));
 		if (rStack == null) return null;
-		NBTTagCompound tNBT = NBT.makeString("f", aFluid.getFluid().getName());
+		CompoundNBT tNBT = NBT.makeString("f", aFluid.getFluid().getName());
 		if (aAmount != 0) NBT.setNumber(tNBT, "a", aAmount);
 		NBT.setNumber(tNBT, "h", temperature(aFluid));
 		NBT.setBoolean(tNBT, "s", gas(aFluid));
@@ -736,8 +736,8 @@ public enum FL {
 	
 	public static FluidStack amount(FluidStack aFluid, long aAmount) {return aFluid == null ? null : new FluidStack(aFluid, Code.bindInt(aAmount));}
 	
-	public static FluidStack mul(FluidStack aFluid, long aMultiplier) {return aFluid == null ? null : amount(aFluid, aFluid.amount * aMultiplier);}
-	public static FluidStack mul(FluidStack aFluid, long aMultiplier, long aDivider, boolean aRoundUp) {return aFluid == null ? null : amount(aFluid, Code.units(aFluid.amount, aDivider, aMultiplier, aRoundUp));}
+	public static FluidStack mul(FluidStack aFluid, long aMultiplier) {return aFluid == null ? null : amount(aFluid, aFluid.getAmount() * aMultiplier);}
+	public static FluidStack mul(FluidStack aFluid, long aMultiplier, long aDivider, boolean aRoundUp) {return aFluid == null ? null : amount(aFluid, Code.units(aFluid.getAmount(), aDivider, aMultiplier, aRoundUp));}
 	
 	public static long fill (@SuppressWarnings("rawtypes") DelegatorTileEntity aDelegator, FluidStack aFluid, boolean aDoFill) {return aDelegator != null && aDelegator.mTileEntity instanceof IFluidHandler && aFluid != null ? fill_(aDelegator, aFluid, aDoFill) : 0;}
 	public static long fill_(@SuppressWarnings("rawtypes") DelegatorTileEntity aDelegator, FluidStack aFluid, boolean aDoFill) {return fill_((IFluidHandler)aDelegator.mTileEntity, aDelegator.mSideOfTileEntity, aFluid, aDoFill);}
@@ -749,9 +749,9 @@ public enum FL {
 	public static boolean fillAll (@SuppressWarnings("rawtypes") DelegatorTileEntity aDelegator, FluidStack aFluid, boolean aDoFill) {return aDelegator != null && aDelegator.mTileEntity instanceof IFluidHandler && aFluid != null && fillAll_(aDelegator, aFluid, aDoFill);}
 	public static boolean fillAll_(@SuppressWarnings("rawtypes") DelegatorTileEntity aDelegator, FluidStack aFluid, boolean aDoFill) {return fillAll_((IFluidHandler)aDelegator.mTileEntity, aDelegator.mSideOfTileEntity, aFluid, aDoFill);}
 	public static boolean fillAll (IFluidHandler aFluidHandler, byte aSide, FluidStack aFluid, boolean aDoFill) {return aFluidHandler != null && aFluid != null && fillAll_(aFluidHandler, aSide, aFluid, aDoFill);}
-	public static boolean fillAll_(IFluidHandler aFluidHandler, byte aSide, FluidStack aFluid, boolean aDoFill) {return aFluidHandler.fill(FORGE_DIR[aSide], aFluid, F) == aFluid.amount && (!aDoFill || aFluidHandler.fill(FORGE_DIR[aSide], aFluid, T) > 0);}
+	public static boolean fillAll_(IFluidHandler aFluidHandler, byte aSide, FluidStack aFluid, boolean aDoFill) {return aFluidHandler.fill(FORGE_DIR[aSide], aFluid, F) == aFluid.getAmount() && (!aDoFill || aFluidHandler.fill(FORGE_DIR[aSide], aFluid, T) > 0);}
 	public static boolean fillAll (IFluidHandler aFluidHandler, byte[] aSides, FluidStack aFluid, boolean aDoFill) {return aFluidHandler != null && aFluid != null && fillAll_(aFluidHandler, aSides, aFluid, aDoFill);}
-	public static boolean fillAll_(IFluidHandler aFluidHandler, byte[] aSides, FluidStack aFluid, boolean aDoFill) {for (byte tSide : aSides) if (aFluidHandler.fill(FORGE_DIR[tSide], aFluid, F) == aFluid.amount && (!aDoFill || aFluidHandler.fill(FORGE_DIR[tSide], aFluid, T) > 0)) return T; return F;}
+	public static boolean fillAll_(IFluidHandler aFluidHandler, byte[] aSides, FluidStack aFluid, boolean aDoFill) {for (byte tSide : aSides) if (aFluidHandler.fill(FORGE_DIR[tSide], aFluid, F) == aFluid.getAmount() && (!aDoFill || aFluidHandler.fill(FORGE_DIR[tSide], aFluid, T) > 0)) return T; return F;}
 	
 	public static long move (@SuppressWarnings("rawtypes") DelegatorTileEntity aFrom, @SuppressWarnings("rawtypes") DelegatorTileEntity aTo) {return move (aFrom, aTo, Integer.MAX_VALUE);}
 	public static long move_(@SuppressWarnings("rawtypes") DelegatorTileEntity aFrom, @SuppressWarnings("rawtypes") DelegatorTileEntity aTo) {return move_(aFrom, aTo, Integer.MAX_VALUE);}
@@ -851,17 +851,17 @@ public enum FL {
 	public static ItemStack fill(FluidStack aFluid, ItemStack aStack, boolean aRemoveFluidDirectly, boolean aCheckIFluidContainerItems, boolean aAllowPartialFilling, boolean aIsNonCannerCheck) {
 		if (ST.invalid(aStack) || aFluid == null) return NI;
 		if (aFluid.getFluid() == FluidRegistry.WATER && ST.equal(aStack, Items.glass_bottle)) {
-			if (aFluid.amount >= 250) {
-				if (aRemoveFluidDirectly) aFluid.amount -= 250;
+			if (aFluid.getAmount() >= 250) {
+				if (aRemoveFluidDirectly) aFluid.getAmount() -= 250;
 				return ST.make(Items.potionitem, 1, 0);
 			}
 			return NI;
 		}
 		if (aIsNonCannerCheck && IL.GC_Canister.exists() && (IL.GC_Canister.equal(aStack, T, T) || ST.equal(ST.container(aStack, T), IL.GC_Canister.wild(1)))) return aStack;
-		if (aCheckIFluidContainerItems && aStack.getItem() instanceof IFluidContainerItem && ((IFluidContainerItem)aStack.getItem()).getCapacity(aStack) > 0 && (((IFluidContainerItem)aStack.getItem()).getFluid(aStack) == null || (equal(((IFluidContainerItem)aStack.getItem()).getFluid(aStack), aFluid) && ((IFluidContainerItem)aStack.getItem()).getFluid(aStack).amount < ((IFluidContainerItem)aStack.getItem()).getCapacity(aStack))) && (aAllowPartialFilling || ((IFluidContainerItem)aStack.getItem()).getCapacity(aStack) <= aFluid.amount)) {
+		if (aCheckIFluidContainerItems && aStack.getItem() instanceof IFluidContainerItem && ((IFluidContainerItem)aStack.getItem()).getCapacity(aStack) > 0 && (((IFluidContainerItem)aStack.getItem()).getFluid(aStack) == null || (equal(((IFluidContainerItem)aStack.getItem()).getFluid(aStack), aFluid) && ((IFluidContainerItem)aStack.getItem()).getFluid(aStack).amount < ((IFluidContainerItem)aStack.getItem()).getCapacity(aStack))) && (aAllowPartialFilling || ((IFluidContainerItem)aStack.getItem()).getCapacity(aStack) <= aFluid.getAmount())) {
 			if (IL.Cell_Universal_Fluid.equal(aStack, T, T) && (temperature(aFluid, DEF_ENV_TEMP) > MT.Sn.mMeltingPoint || !simple(aFluid) || acid(aFluid) || powerconducting(aFluid))) return aStack;
 			if (aRemoveFluidDirectly)
-				aFluid.amount -= ((IFluidContainerItem)aStack.getItem()).fill(aStack = ST.amount(1, aStack), aFluid, T);
+				aFluid.getAmount() -= ((IFluidContainerItem)aStack.getItem()).fill(aStack = ST.amount(1, aStack), aFluid, T);
 			else
 				((IFluidContainerItem)aStack.getItem()).fill(aStack = ST.amount(1, aStack), aFluid, T);
 			return aStack;
@@ -869,8 +869,8 @@ public enum FL {
 		Map<String, FluidContainerData> tFluidToContainer = EMPTY_TO_FLUID_TO_DATA.get(new ItemStackContainer(aStack));
 		if (tFluidToContainer == null) return NI;
 		FluidContainerData tData = tFluidToContainer.get(aFluid.getFluid().getName());
-		if (tData == null || tData.fluid.amount > aFluid.amount) return NI;
-		if (aRemoveFluidDirectly) aFluid.amount -= tData.fluid.amount;
+		if (tData == null || tData.fluid.amount > aFluid.getAmount()) return NI;
+		if (aRemoveFluidDirectly) aFluid.getAmount() -= tData.fluid.amount;
 		return ST.amount(1, tData.filledContainer);
 	}
 	
@@ -885,14 +885,14 @@ public enum FL {
 		FluidStack aFluid = aTank.getFluid();
 		if (ST.invalid(aStack) || aFluid == null) return NI;
 		if (aFluid.getFluid() == FluidRegistry.WATER && ST.equal(aStack, Items.glass_bottle)) {
-			if (aFluid.amount >= 250) {
+			if (aFluid.getAmount() >= 250) {
 				if (aRemoveFluidDirectly) aTank.drain(250, T);
 				return ST.make(Items.potionitem, 1, 0);
 			}
 			return NI;
 		}
 		if (aIsNonCannerCheck && IL.GC_Canister.exists() && (IL.GC_Canister.equal(aStack, T, T) || ST.equal(ST.container(aStack, T), IL.GC_Canister.wild(1)))) return aStack;
-		if (aCheckIFluidContainerItems && aStack.getItem() instanceof IFluidContainerItem && ((IFluidContainerItem)aStack.getItem()).getCapacity(aStack) > 0 && (((IFluidContainerItem)aStack.getItem()).getFluid(aStack) == null || (equal(((IFluidContainerItem)aStack.getItem()).getFluid(aStack), aFluid) && ((IFluidContainerItem)aStack.getItem()).getFluid(aStack).amount < ((IFluidContainerItem)aStack.getItem()).getCapacity(aStack))) && (aAllowPartialFilling || ((IFluidContainerItem)aStack.getItem()).getCapacity(aStack) <= aFluid.amount)) {
+		if (aCheckIFluidContainerItems && aStack.getItem() instanceof IFluidContainerItem && ((IFluidContainerItem)aStack.getItem()).getCapacity(aStack) > 0 && (((IFluidContainerItem)aStack.getItem()).getFluid(aStack) == null || (equal(((IFluidContainerItem)aStack.getItem()).getFluid(aStack), aFluid) && ((IFluidContainerItem)aStack.getItem()).getFluid(aStack).amount < ((IFluidContainerItem)aStack.getItem()).getCapacity(aStack))) && (aAllowPartialFilling || ((IFluidContainerItem)aStack.getItem()).getCapacity(aStack) <= aFluid.getAmount())) {
 			if (IL.Cell_Universal_Fluid.equal(aStack, T, T) && (temperature(aFluid, DEF_ENV_TEMP) > MT.Sn.mMeltingPoint || !simple(aFluid) || acid(aFluid) || powerconducting(aFluid))) return aStack;
 			if (aRemoveFluidDirectly)
 				aTank.drain(((IFluidContainerItem)aStack.getItem()).fill(aStack = ST.amount(1, aStack), aFluid, T), T);
@@ -903,7 +903,7 @@ public enum FL {
 		Map<String, FluidContainerData> tFluidToContainer = EMPTY_TO_FLUID_TO_DATA.get(new ItemStackContainer(aStack));
 		if (tFluidToContainer == null) return NI;
 		FluidContainerData tData = tFluidToContainer.get(aFluid.getFluid().getName());
-		if (tData == null || tData.fluid.amount > aFluid.amount) return NI;
+		if (tData == null || tData.fluid.amount > aFluid.getAmount()) return NI;
 		if (aRemoveFluidDirectly) aTank.drain(tData.fluid.amount, T);
 		return ST.amount(1, tData.filledContainer);
 	}
@@ -942,11 +942,11 @@ public enum FL {
 	
 
 	/** Loads a FluidStack properly. */
-	public static FluidStack load (NBTTagCompound aNBT, String aTagName) {return aNBT == null ? null : load(aNBT.getCompoundTag(aTagName));}
+	public static FluidStack load (CompoundNBT aNBT, String aTagName) {return aNBT == null ? null : load(aNBT.getCompoundTag(aTagName));}
 	/** Loads a FluidStack properly. */
-	public static FluidStack load (NBTTagCompound aNBT) {return aNBT == null || aNBT.hasNoTags() ? null : load_(aNBT);}
+	public static FluidStack load (CompoundNBT aNBT) {return aNBT == null || aNBT.hasNoTags() ? null : load_(aNBT);}
 	/** Loads a FluidStack properly. */
-	public static FluidStack load_(NBTTagCompound aNBT) {
+	public static FluidStack load_(CompoundNBT aNBT) {
 		if (aNBT == null) return null;
 		String aName = aNBT.getString("FluidName");
 		if (Code.stringInvalid(aName)) return null;
@@ -960,16 +960,16 @@ public enum FL {
 	}
 	
 	/** Saves a FluidStack properly. */
-	public static NBTTagCompound save(NBTTagCompound aNBT, String aTagName, FluidStack aFluid) {
+	public static CompoundNBT save(CompoundNBT aNBT, String aTagName, FluidStack aFluid) {
 		if (aNBT == null) aNBT = NBT.make();
-		NBTTagCompound tNBT = save(aFluid);
+		CompoundNBT tNBT = save(aFluid);
 		if (tNBT != null) aNBT.setTag(aTagName, tNBT);
 		return aNBT;
 	}
 	/** Saves a FluidStack properly. */
-	public static NBTTagCompound save (FluidStack aFluid) {return aFluid == null || aFluid.getFluid() == null ? null : save_(aFluid);}
+	public static CompoundNBT save (FluidStack aFluid) {return aFluid == null || aFluid.getFluid() == null ? null : save_(aFluid);}
 	/** Saves a FluidStack properly. */
-	public static NBTTagCompound save_(FluidStack aFluid) {return aFluid.writeToNBT(NBT.make());}
+	public static CompoundNBT save_(FluidStack aFluid) {return aFluid.writeToNBT(NBT.make());}
 	
 	
 	

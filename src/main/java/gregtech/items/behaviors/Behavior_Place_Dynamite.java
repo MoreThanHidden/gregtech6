@@ -30,7 +30,7 @@ import gregapi.util.UT;
 import gregapi.util.WD;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.World;
 
 public class Behavior_Place_Dynamite extends AbstractBehaviorDefault {
@@ -43,17 +43,17 @@ public class Behavior_Place_Dynamite extends AbstractBehaviorDefault {
 			int tIndex = aPlayer.inventory.mainInventory.length-i-1;
 			ItemStack tStack = aPlayer.inventory.mainInventory[tIndex];
 			if (IL.Dynamite.equal(tStack, F, T) || IL.Dynamite_Strong.equal(tStack, F, T)) {
-				NBTTagCompound tOldTag = tStack.getTagCompound();
+				CompoundNBT tOldTag = tStack.getTagCompound();
 				if (tStack.hasTagCompound()) {
-					tStack.setTagCompound((NBTTagCompound)tStack.getTagCompound().copy());
+					tStack.setTagCompound((CompoundNBT)tStack.getTagCompound().copy());
 				} else {
 					tStack.setTagCompound(UT.NBT.make());
 				}
 				tStack.getTagCompound().setBoolean(NBT_MODE, T);
-				int tOldSize = tStack.stackSize;
+				int tOldSize = tStack.getCount();
 				if (tStack.tryPlaceItemIntoWorld(aPlayer, aWorld, aX, aY, aZ, aSide, aHitX, aHitY, aHitZ)) {
 					if (UT.Entities.hasInfiniteItems(aPlayer)) {
-						tStack.stackSize = tOldSize;
+						tStack.getCount() = tOldSize;
 					} else {
 						((MultiItemTool)aItem).doDamage(aStack, 100, aPlayer);
 						ST.use(aPlayer, tIndex, tStack, 0);

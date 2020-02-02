@@ -32,7 +32,7 @@ import gregapi.util.UT;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.Explosion;
 
@@ -45,13 +45,13 @@ public abstract class TileEntityBase05Inventories extends TileEntityBase04MultiT
 	public boolean mInventoryChanged = F;
 	
 	@Override
-	public void readFromNBT2(NBTTagCompound aNBT) {
+	public void readFromNBT2(CompoundNBT aNBT) {
 		// Standard readFromNBT process to load Inventory.
 		mInventory = getDefaultInventory(aNBT);
 		if (mInventory != null && mInventory.length > 0) {
 			NBTTagList tList = aNBT.getTagList(NBT_INV_LIST, 10);
 			for (int i = 0; i < tList.tagCount(); i++) {
-				NBTTagCompound tNBT = tList.getCompoundTagAt(i);
+				CompoundNBT tNBT = tList.getCompoundTagAt(i);
 				int tSlot = tNBT.getShort("s");
 				if (tSlot >= 0 && tSlot < mInventory.length) mInventory[tSlot] = ST.load(tNBT, getDefaultStack(tSlot));
 			}
@@ -59,7 +59,7 @@ public abstract class TileEntityBase05Inventories extends TileEntityBase04MultiT
 	}
 	
 	@Override
-	public void writeToNBT2(NBTTagCompound aNBT) {
+	public void writeToNBT2(CompoundNBT aNBT) {
 		if (mInventory != null && mInventory.length > 0) {
 			NBTTagList tList = new NBTTagList();
 			for (short tSlot = 0; tSlot < mInventory.length; tSlot++) if (mInventory[tSlot] != null && canSave(tSlot)) tList.appendTag(UT.NBT.makeShort(ST.save(mInventory[tSlot]), "s", tSlot));
@@ -67,7 +67,7 @@ public abstract class TileEntityBase05Inventories extends TileEntityBase04MultiT
 		}
 	}
 	
-	public ItemStack[] getDefaultInventory(NBTTagCompound aNBT) {
+	public ItemStack[] getDefaultInventory(CompoundNBT aNBT) {
 		short tSize = aNBT.getShort(NBT_INV_SIZE);
 		return tSize > 0 ? new ItemStack[tSize] : ZL_IS;
 	}
@@ -81,12 +81,12 @@ public abstract class TileEntityBase05Inventories extends TileEntityBase04MultiT
 	@Override public final ItemStack slot(int aIndex, ItemStack aStack) {return mInventory[aIndex] = aStack;}
 	@Override public final ItemStack slot(int aIndex) {return mInventory[aIndex];}
 	@Override public final ItemStack slotTake(int aIndex) {ItemStack rStack = mInventory[aIndex]; mInventory[aIndex] = null; return rStack;}
-	@Override public final boolean slotNull(int aIndex) {if (mInventory[aIndex] != null && mInventory[aIndex].stackSize <= 0) return slotKill(aIndex); return F;}
+	@Override public final boolean slotNull(int aIndex) {if (mInventory[aIndex] != null && mInventory[aIndex].getCount() <= 0) return slotKill(aIndex); return F;}
 	@Override public final boolean slotKill(int aIndex) {mInventory[aIndex] = null; return T;}
 	@Override public final boolean slotHas(int aIndex) {return mInventory[aIndex] != null;}
 	@Override public final boolean invempty() {for (int i = 0; i < mInventory.length; i++) if (mInventory[i] != null) return F; return T;}
 	@Override public final int invsize() {return mInventory.length;}
-	@Override public final NBTTagCompound slotNBT(int aIndex) {return mInventory[aIndex] != null ? mInventory[aIndex].getTagCompound() : null;}
+	@Override public final CompoundNBT slotNBT(int aIndex) {return mInventory[aIndex] != null ? mInventory[aIndex].getTagCompound() : null;}
 	
 	@Override public void updateInventory() {mInventoryChanged = T;}
 	@Override public boolean isUseableByPlayer(PlayerEntity aPlayer) {return !isDead() && allowInteraction(aPlayer) && aPlayer.getDistanceSq(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D) <= 64D;}
@@ -94,7 +94,7 @@ public abstract class TileEntityBase05Inventories extends TileEntityBase04MultiT
 	@Override public void closeInventory() {/**/}
 	@Override public int getInventoryStackLimit() {return 64;}
 	@Override public void markDirty() {super.markDirty(); updateInventory();}
-	@Override public ItemStack decrStackSize(int aSlot, int aDecrement) {updateInventory(); if (mInventory[aSlot] == null) return NI; if (mInventory[aSlot].stackSize <= aDecrement) {ItemStack tStack = ST.copy(mInventory[aSlot]); if (allowZeroStacks(aSlot)) mInventory[aSlot].stackSize = 0; else mInventory[aSlot] = NI; return tStack;} ItemStack rStack = mInventory[aSlot].splitStack(aDecrement); if (mInventory[aSlot].stackSize <= 0 && !allowZeroStacks(aSlot)) mInventory[aSlot] = NI; return rStack;}
+	@Override public ItemStack decrStackSize(int aSlot, int aDecrement) {updateInventory(); if (mInventory[aSlot] == null) return NI; if (mInventory[aSlot].getCount() <= aDecrement) {ItemStack tStack = ST.copy(mInventory[aSlot]); if (allowZeroStacks(aSlot)) mInventory[aSlot].getCount() = 0; else mInventory[aSlot] = NI; return tStack;} ItemStack rStack = mInventory[aSlot].splitStack(aDecrement); if (mInventory[aSlot].getCount() <= 0 && !allowZeroStacks(aSlot)) mInventory[aSlot] = NI; return rStack;}
 	@Override public ItemStack getStackInSlotOnClosing(int aSlot) {ItemStack rStack = mInventory[aSlot]; mInventory[aSlot] = null; return rStack;}
 	@Override public ItemStack getStackInSlot(int aSlot) {return mInventory[aSlot];}
 	@Override public String getInventoryName() {String rName = getCustomName(); if (UT.Code.stringValid(rName)) return rName; MultiTileEntityRegistry tRegistry = MultiTileEntityRegistry.getRegistry(getMultiTileEntityRegistryID()); return tRegistry==null?getClass().getName():tRegistry.getLocal(getMultiTileEntityID());}
@@ -105,7 +105,7 @@ public abstract class TileEntityBase05Inventories extends TileEntityBase04MultiT
 	public boolean allowZeroStacks(int aSlot) {return F;}
 	public ItemStack[] getInventory() {return mInventory;}
 	public void setInventory(ItemStack[] aInventory) {mInventory = aInventory;}
-	public void removeAllDroppableNullStacks() {for (int i = 0; i < mInventory.length; i++) if (canDrop(i) && mInventory[i] != null && mInventory[i].stackSize <= 0) mInventory[i] = NI;}
+	public void removeAllDroppableNullStacks() {for (int i = 0; i < mInventory.length; i++) if (canDrop(i) && mInventory[i] != null && mInventory[i].getCount() <= 0) mInventory[i] = NI;}
 	
 	public abstract boolean canDrop(int aSlot);
 	public boolean breakDrop(int aSlot) {return T;}
@@ -116,7 +116,7 @@ public abstract class TileEntityBase05Inventories extends TileEntityBase04MultiT
 	// These Functions are intentionally duplicates of the Functions above.
 	@Override public int getSizeInventoryGUI() {return mInventory==null?0:mInventory.length;}
 	@Override public ItemStack getStackInSlotGUI(int aSlot) {return mInventory[aSlot];}
-	@Override public ItemStack decrStackSizeGUI(int aSlot, int aDecrement) {updateInventory(); if (mInventory[aSlot] == null) return NI; if (mInventory[aSlot].stackSize <= aDecrement) {ItemStack tStack = ST.copy(mInventory[aSlot]); if (allowZeroStacks(aSlot)) mInventory[aSlot].stackSize = 0; else mInventory[aSlot] = NI; return tStack;} ItemStack rStack = mInventory[aSlot].splitStack(aDecrement); if (mInventory[aSlot].stackSize <= 0 && !allowZeroStacks(aSlot)) mInventory[aSlot] = NI; return rStack;}
+	@Override public ItemStack decrStackSizeGUI(int aSlot, int aDecrement) {updateInventory(); if (mInventory[aSlot] == null) return NI; if (mInventory[aSlot].getCount() <= aDecrement) {ItemStack tStack = ST.copy(mInventory[aSlot]); if (allowZeroStacks(aSlot)) mInventory[aSlot].getCount() = 0; else mInventory[aSlot] = NI; return tStack;} ItemStack rStack = mInventory[aSlot].splitStack(aDecrement); if (mInventory[aSlot].getCount() <= 0 && !allowZeroStacks(aSlot)) mInventory[aSlot] = NI; return rStack;}
 	@Override public ItemStack getStackInSlotOnClosingGUI(int aSlot) {ItemStack rStack = mInventory[aSlot]; mInventory[aSlot] = null; return rStack;}
 	@Override public void setInventorySlotContentsGUI(int aSlot, ItemStack aStack) {updateInventory(); mInventory[aSlot] = OM.get(aStack);}
 	@Override public String getInventoryNameGUI() {String rName = getCustomName(); if (UT.Code.stringValid(rName)) return rName; MultiTileEntityRegistry tRegistry = MultiTileEntityRegistry.getRegistry(getMultiTileEntityRegistryID()); return tRegistry==null?getClass().getName():tRegistry.getLocal(getMultiTileEntityID());}
@@ -138,16 +138,16 @@ public abstract class TileEntityBase05Inventories extends TileEntityBase04MultiT
 	@Override
 	public boolean breakBlock() {
 		if (isServerSide()) for (short i = 0; i < mInventory.length; i++) if (mInventory[i] != null && canDrop(i) && !ST.debug(mInventory[i]) && breakDrop(i)) {
-			ItemStack tDumpedStack = ST.amount(UT.Code.bind_(0, 512 * Math.max(1, mInventory[i].getMaxStackSize()), mInventory[i].stackSize), mInventory[i]);
+			ItemStack tDumpedStack = ST.amount(UT.Code.bind_(0, 512 * Math.max(1, mInventory[i].getMaxStackSize()), mInventory[i].getCount()), mInventory[i]);
 			int tMaxSize = Math.max(1, mInventory[i].getMaxStackSize());
 			
-			while (tDumpedStack.stackSize > tMaxSize) {
+			while (tDumpedStack.getCount() > tMaxSize) {
 				ST.drop(worldObj, getCoords(), ST.amount(tMaxSize, tDumpedStack));
-				tDumpedStack.stackSize -= tMaxSize;
-				mInventory[i].stackSize -= tMaxSize;
+				tDumpedStack.getCount() -= tMaxSize;
+				mInventory[i].getCount() -= tMaxSize;
 			}
-			if (tDumpedStack.stackSize > 0) {
-				mInventory[i].stackSize -= tDumpedStack.stackSize;
+			if (tDumpedStack.getCount() > 0) {
+				mInventory[i].getCount() -= tDumpedStack.getCount();
 				ST.drop(worldObj, getCoords(), ST.copy(tDumpedStack));
 			}
 			
@@ -165,8 +165,8 @@ public abstract class TileEntityBase05Inventories extends TileEntityBase04MultiT
 			return T;
 		}
 		aStack = OM.get_(aStack);
-		if (ST.equal(tStack, aStack) && tStack.stackSize + aStack.stackSize <= Math.min(Math.max(1, tStack.getMaxStackSize()), getInventoryStackLimit())) {
-			tStack.stackSize+=aStack.stackSize;
+		if (ST.equal(tStack, aStack) && tStack.getCount() + aStack.getCount() <= Math.min(Math.max(1, tStack.getMaxStackSize()), getInventoryStackLimit())) {
+			tStack.getCount()+=aStack.getCount();
 			updateInventory();
 			return T;
 		}

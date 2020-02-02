@@ -45,7 +45,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 
 public class MultiTileEntityEngineFlux extends TileEntityBase09FacingSingle implements ITileEntityAdjacentOnOff, ITileEntityEnergyFluxHandler, ITileEntityRunningActively, ITileEntitySwitchableMode {
 	/** The Array containing the different Engine State Colours from Blue over Green to Red */
@@ -57,7 +57,7 @@ public class MultiTileEntityEngineFlux extends TileEntityBase09FacingSingle impl
 	protected TagData mEnergyTypeEmitted = TD.Energy.KU, mEnergyTypeAccepted = TD.Energy.RF;
 	
 	@Override
-	public void readFromNBT2(NBTTagCompound aNBT) {
+	public void readFromNBT2(CompoundNBT aNBT) {
 		super.readFromNBT2(aNBT);
 		mEnergy = aNBT.getLong(NBT_ENERGY);
 		if (aNBT.hasKey(NBT_ACTIVE_ENERGY)) mEmitsEnergy = aNBT.getBoolean(NBT_ACTIVE_ENERGY);
@@ -72,7 +72,7 @@ public class MultiTileEntityEngineFlux extends TileEntityBase09FacingSingle impl
 	}
 	
 	@Override
-	public void writeToNBT2(NBTTagCompound aNBT) {
+	public void writeToNBT2(CompoundNBT aNBT) {
 		super.writeToNBT2(aNBT);
 		UT.NBT.setNumber(aNBT, NBT_ENERGY, mEnergy);
 		if (mState != 15) aNBT.setByte(NBT_MODE, mState);
@@ -83,7 +83,7 @@ public class MultiTileEntityEngineFlux extends TileEntityBase09FacingSingle impl
 	}
 	
 	@Override
-	public NBTTagCompound writeItemNBT2(NBTTagCompound aNBT) {
+	public CompoundNBT writeItemNBT2(CompoundNBT aNBT) {
 		if (mState != 15) aNBT.setByte(NBT_MODE, mState);
 		return aNBT;
 	}

@@ -44,7 +44,7 @@ import gregapi.util.UT;
 import gregtech.items.tools.early.GT_Tool_HardHammer;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 
 public class MultiTileEntityAutoToolHammer extends TileEntityBase09FacingSingle implements ITileEntityEnergy {
@@ -54,7 +54,7 @@ public class MultiTileEntityAutoToolHammer extends TileEntityBase09FacingSingle 
 	protected TagData mEnergyTypeAccepted = TD.Energy.KU;
 	
 	@Override
-	public void readFromNBT2(NBTTagCompound aNBT) {
+	public void readFromNBT2(CompoundNBT aNBT) {
 		super.readFromNBT2(aNBT);
 		mEnergy = aNBT.getLong(NBT_ENERGY);
 		if (aNBT.hasKey(NBT_STATE)) mPullingBack = aNBT.getBoolean(NBT_STATE);
@@ -64,7 +64,7 @@ public class MultiTileEntityAutoToolHammer extends TileEntityBase09FacingSingle 
 	}
 	
 	@Override
-	public void writeToNBT2(NBTTagCompound aNBT) {
+	public void writeToNBT2(CompoundNBT aNBT) {
 		super.writeToNBT2(aNBT);
 		UT.NBT.setNumber(aNBT, NBT_ENERGY, mEnergy);
 		UT.NBT.setBoolean(aNBT, NBT_STATE, mPullingBack);

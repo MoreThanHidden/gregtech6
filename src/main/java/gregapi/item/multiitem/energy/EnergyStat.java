@@ -33,7 +33,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.World;
 
 public class EnergyStat implements IItemEnergy {
@@ -128,7 +128,7 @@ public class EnergyStat implements IItemEnergy {
 	public ItemStack setEnergyStored(TagData aEnergyType, ItemStack aStack, long aAmount) {
 		if (aEnergyType != mType && aEnergyType != null) return aStack;
 		
-		NBTTagCompound tNBT = aStack.getTagCompound();
+		CompoundNBT tNBT = aStack.getTagCompound();
 		if (tNBT == null) tNBT = UT.NBT.make(); else tNBT.removeTag(NBT_ENERGY);
 		
 		if (aAmount > 0) {
@@ -140,7 +140,7 @@ public class EnergyStat implements IItemEnergy {
 			UT.NBT.setNumber(tNBT, NBT_ENERGY, aAmount);
 		} else {
 			if (mEmptyItem == null) {
-				aStack.stackSize--;
+				aStack.getCount()--;
 			} else {
 				ST.set(aStack, mEmptyItem, F, F);
 			}
@@ -152,7 +152,7 @@ public class EnergyStat implements IItemEnergy {
 	@Override
 	public long getEnergyStored(TagData aEnergyType, ItemStack aStack) {
 		if (aEnergyType != mType && aEnergyType != null) return 0;
-		NBTTagCompound tNBT = aStack.getTagCompound();
+		CompoundNBT tNBT = aStack.getTagCompound();
 		return tNBT==null?0:tNBT.getLong(NBT_ENERGY);
 	}
 	
@@ -165,6 +165,6 @@ public class EnergyStat implements IItemEnergy {
 	@Override public long getEnergySizeOutputMax(TagData aEnergyType, ItemStack aStack) {return aEnergyType == mType || aEnergyType == null ? mSize * 2 : 0;}
 	@Override public Collection<TagData> getEnergyTypes(ItemStack aStack) {return new HashSetNoNulls<>(F, mType);}
 	@Override public boolean isEnergyType(TagData aEnergyType, ItemStack aStack, boolean aEmitting) {return (aEnergyType == mType || aEnergyType == null) && (aEmitting ? mCanDecharge : mCanCharge);}
-	@Override public boolean canEnergyInjection (TagData aEnergyType, ItemStack aStack, long aSize) {return mCanCharge   && (aEnergyType == mType || aEnergyType == null) && aStack.stackSize == 1 && aSize <= getEnergySizeInputMax (aEnergyType, aStack) && aSize >= getEnergySizeInputMin (aEnergyType, aStack);}
-	@Override public boolean canEnergyExtraction(TagData aEnergyType, ItemStack aStack, long aSize) {return mCanDecharge && (aEnergyType == mType || aEnergyType == null) && aStack.stackSize == 1 && aSize <= getEnergySizeOutputMax(aEnergyType, aStack) && aSize >= getEnergySizeOutputMin(aEnergyType, aStack);}
+	@Override public boolean canEnergyInjection (TagData aEnergyType, ItemStack aStack, long aSize) {return mCanCharge   && (aEnergyType == mType || aEnergyType == null) && aStack.getCount() == 1 && aSize <= getEnergySizeInputMax (aEnergyType, aStack) && aSize >= getEnergySizeInputMin (aEnergyType, aStack);}
+	@Override public boolean canEnergyExtraction(TagData aEnergyType, ItemStack aStack, long aSize) {return mCanDecharge && (aEnergyType == mType || aEnergyType == null) && aStack.getCount() == 1 && aSize <= getEnergySizeOutputMax(aEnergyType, aStack) && aSize >= getEnergySizeOutputMin(aEnergyType, aStack);}
 }

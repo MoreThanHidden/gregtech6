@@ -40,7 +40,7 @@ import gregapi.util.UT;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.fluids.FluidStack;
@@ -53,7 +53,7 @@ public class MultiTileEntityFluidFunnel extends TileEntityBase10Attachment {
 	public boolean mAcidProof = F;
 	
 	@Override
-	public void readFromNBT2(NBTTagCompound aNBT) {
+	public void readFromNBT2(CompoundNBT aNBT) {
 		super.readFromNBT2(aNBT);
 		if (aNBT.hasKey(NBT_ACIDPROOF)) mAcidProof = aNBT.getBoolean(NBT_ACIDPROOF);
 	}
@@ -71,17 +71,17 @@ public class MultiTileEntityFluidFunnel extends TileEntityBase10Attachment {
 			ItemStack aStack = aPlayer.getCurrentEquippedItem();
 			if (aStack != null) {
 				FluidStack tFluid = FL.getFluid(ST.amount(1, aStack), T);
-				if (!FL.gas(tFluid, T) && tFluid.amount > 0 && (mAcidProof || !FL.acid(tFluid))) {
+				if (!FL.gas(tFluid, T) && tFluid.getAmount() > 0 && (mAcidProof || !FL.acid(tFluid))) {
 					DelegatorTileEntity<TileEntity> tDelegator = getAdjacentTileEntity(mFacing);
 					if (tDelegator.mTileEntity instanceof ITileEntityFunnelAccessible) {
 						int tAmount = ((ITileEntityFunnelAccessible)tDelegator.mTileEntity).funnelFill(tDelegator.mSideOfTileEntity, tFluid, F);
-						if (tAmount >= tFluid.amount && ((ITileEntityFunnelAccessible)tDelegator.mTileEntity).funnelFill(tDelegator.mSideOfTileEntity, tFluid, T) > 0) {
+						if (tAmount >= tFluid.getAmount() && ((ITileEntityFunnelAccessible)tDelegator.mTileEntity).funnelFill(tDelegator.mSideOfTileEntity, tFluid, T) > 0) {
 							UT.Sounds.send(SFX.MC_LIQUID_WATER, 1.0F, 1.0F, this);
-							aStack.stackSize--;
+							aStack.getCount()--;
 							UT.Inventories.addStackToPlayerInventoryOrDrop(aPlayer, ST.container(ST.amount(1, aStack), T), T);
 							return T;
 						}
-						if (aStack.getItem() instanceof IFluidContainerItem && aStack.stackSize == 1) {
+						if (aStack.getItem() instanceof IFluidContainerItem && aStack.getCount() == 1) {
 							UT.Sounds.send(SFX.MC_LIQUID_WATER, 1.0F, 1.0F, this);
 							((IFluidContainerItem)aStack.getItem()).drain(aStack, ((ITileEntityFunnelAccessible)tDelegator.mTileEntity).funnelFill(tDelegator.mSideOfTileEntity, tFluid, T), T);
 							return T;

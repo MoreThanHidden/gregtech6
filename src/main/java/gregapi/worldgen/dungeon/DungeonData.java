@@ -37,11 +37,11 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFlowerPot;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.fluids.Fluid;
@@ -57,13 +57,13 @@ public class DungeonData extends WorldAndCoords {
 	public final long mKeyIDs[];
 	public final ItemStack mKeyStacks[];
 	public final boolean mGeneratedKeys[];
-	public final HashSetNoNulls<ChunkCoordinates> mLightUpdateCoords;
+	public final HashSetNoNulls<ChunkPos> mLightUpdateCoords;
 	public final HashSetNoNulls<TagData> mTags;
 	public final WorldgenDungeonGT mStructure;
-	public final NBTTagCompound mCoin;
+	public final CompoundNBT mCoin;
 	public final Random mRandom;
 	
-	public DungeonData(World aWorld, int aX, int aY, int aZ, WorldgenDungeonGT aStructure, BlockStones aPrimaryBlock, BlockStones aSecondaryBlock, MultiTileEntityRegistry aRegistry, HashSetNoNulls<ChunkCoordinates> aLightUpdateCoords, HashSetNoNulls<TagData> aTags, long[] aKeyIDs, ItemStack[] aKeyStacks, boolean[] aGeneratedKeys, byte[][] aRoomLayout, int aRoomX, int aRoomZ, int aConnectionCount, int aColor, Random aRandom, NBTTagCompound aCoin) {
+	public DungeonData(World aWorld, int aX, int aY, int aZ, WorldgenDungeonGT aStructure, BlockStones aPrimaryBlock, BlockStones aSecondaryBlock, MultiTileEntityRegistry aRegistry, HashSetNoNulls<ChunkPos> aLightUpdateCoords, HashSetNoNulls<TagData> aTags, long[] aKeyIDs, ItemStack[] aKeyStacks, boolean[] aGeneratedKeys, byte[][] aRoomLayout, int aRoomX, int aRoomZ, int aConnectionCount, int aColor, Random aRandom, CompoundNBT aCoin) {
 		super(aWorld, aX, aY, aZ);
 		mStructure = aStructure;
 		mPrimary = aPrimaryBlock;
@@ -113,13 +113,13 @@ public class DungeonData extends WorldAndCoords {
 	public boolean colored    (int aX, int aY, int aZ) {return set(aX, aY, aZ, BlocksGT.Concrete, mColor, 2);}
 	
 	public boolean lamp(int aX, int aY, int aZ, Block aPrimary, Block aSecondary, int aGenerateRedstoneBrick) {
-		mLightUpdateCoords.add(new ChunkCoordinates(mX+aX, mY+aY, mZ+aZ));
+		mLightUpdateCoords.add(new ChunkPos(mX+aX, mY+aY, mZ+aZ));
 		if (aGenerateRedstoneBrick != 0) redstoned(aX, aY+aGenerateRedstoneBrick, aZ);
 		return set(aX, aY, aZ, aGenerateRedstoneBrick == 0 ? Blocks.redstone_lamp : Blocks.lit_redstone_lamp, 0, 2);
 	}
 	
 	public boolean lamp(int aX, int aY, int aZ, int aGenerateRedstoneBrick) {
-		mLightUpdateCoords.add(new ChunkCoordinates(mX+aX, mY+aY, mZ+aZ));
+		mLightUpdateCoords.add(new ChunkPos(mX+aX, mY+aY, mZ+aZ));
 		if (aGenerateRedstoneBrick != 0) redstoned(aX, aY+aGenerateRedstoneBrick, aZ);
 		return set(aX, aY, aZ, aGenerateRedstoneBrick == 0 ? Blocks.redstone_lamp : Blocks.lit_redstone_lamp, 0, 2);
 	}
@@ -142,16 +142,16 @@ public class DungeonData extends WorldAndCoords {
 	public boolean set(int aX, int aY, int aZ, byte aSide, long aMeta, boolean aCauseBlockUpdates, boolean aForcePlacement) {
 		return mMTERegistryGT.mBlock.placeBlock(mWorld, mX+aX, mY+aY, mZ+aZ, aSide, (short)aMeta, null, aCauseBlockUpdates, aForcePlacement);
 	}
-	public boolean set(int aX, int aY, int aZ, long aMeta, NBTTagCompound aNBT) {
+	public boolean set(int aX, int aY, int aZ, long aMeta, CompoundNBT aNBT) {
 		return mMTERegistryGT.mBlock.placeBlock(mWorld, mX+aX, mY+aY, mZ+aZ, SIDE_UNKNOWN, (short)aMeta, aNBT, T, T);
 	}
-	public boolean set(int aX, int aY, int aZ, byte aSide, long aMeta, NBTTagCompound aNBT) {
+	public boolean set(int aX, int aY, int aZ, byte aSide, long aMeta, CompoundNBT aNBT) {
 		return mMTERegistryGT.mBlock.placeBlock(mWorld, mX+aX, mY+aY, mZ+aZ, aSide, (short)aMeta, aNBT, T, T);
 	}
-	public boolean set(int aX, int aY, int aZ, long aMeta, NBTTagCompound aNBT, boolean aCauseBlockUpdates, boolean aForcePlacement) {
+	public boolean set(int aX, int aY, int aZ, long aMeta, CompoundNBT aNBT, boolean aCauseBlockUpdates, boolean aForcePlacement) {
 		return mMTERegistryGT.mBlock.placeBlock(mWorld, mX+aX, mY+aY, mZ+aZ, SIDE_UNKNOWN, (short)aMeta, aNBT, aCauseBlockUpdates, aForcePlacement);
 	}
-	public boolean set(int aX, int aY, int aZ, byte aSide, long aMeta, NBTTagCompound aNBT, boolean aCauseBlockUpdates, boolean aForcePlacement) {
+	public boolean set(int aX, int aY, int aZ, byte aSide, long aMeta, CompoundNBT aNBT, boolean aCauseBlockUpdates, boolean aForcePlacement) {
 		return mMTERegistryGT.mBlock.placeBlock(mWorld, mX+aX, mY+aY, mZ+aZ, aSide, (short)aMeta, aNBT, aCauseBlockUpdates, aForcePlacement);
 	}
 	
@@ -167,16 +167,16 @@ public class DungeonData extends WorldAndCoords {
 	public boolean set(IBlockPlacable aBlock, int aX, int aY, int aZ, byte aSide, long aMeta, boolean aCauseBlockUpdates, boolean aForcePlacement) {
 		return aBlock.placeBlock(mWorld, mX+aX, mY+aY, mZ+aZ, aSide, (short)aMeta, null, aCauseBlockUpdates, aForcePlacement);
 	}
-	public boolean set(IBlockPlacable aBlock, int aX, int aY, int aZ, long aMeta, NBTTagCompound aNBT) {
+	public boolean set(IBlockPlacable aBlock, int aX, int aY, int aZ, long aMeta, CompoundNBT aNBT) {
 		return aBlock.placeBlock(mWorld, mX+aX, mY+aY, mZ+aZ, SIDE_UNKNOWN, (short)aMeta, aNBT, T, T);
 	}
-	public boolean set(IBlockPlacable aBlock, int aX, int aY, int aZ, byte aSide, long aMeta, NBTTagCompound aNBT) {
+	public boolean set(IBlockPlacable aBlock, int aX, int aY, int aZ, byte aSide, long aMeta, CompoundNBT aNBT) {
 		return aBlock.placeBlock(mWorld, mX+aX, mY+aY, mZ+aZ, aSide, (short)aMeta, aNBT, T, T);
 	}
-	public boolean set(IBlockPlacable aBlock, int aX, int aY, int aZ, long aMeta, NBTTagCompound aNBT, boolean aCauseBlockUpdates, boolean aForcePlacement) {
+	public boolean set(IBlockPlacable aBlock, int aX, int aY, int aZ, long aMeta, CompoundNBT aNBT, boolean aCauseBlockUpdates, boolean aForcePlacement) {
 		return aBlock.placeBlock(mWorld, mX+aX, mY+aY, mZ+aZ, SIDE_UNKNOWN, (short)aMeta, aNBT, aCauseBlockUpdates, aForcePlacement);
 	}
-	public boolean set(IBlockPlacable aBlock, int aX, int aY, int aZ, byte aSide, long aMeta, NBTTagCompound aNBT, boolean aCauseBlockUpdates, boolean aForcePlacement) {
+	public boolean set(IBlockPlacable aBlock, int aX, int aY, int aZ, byte aSide, long aMeta, CompoundNBT aNBT, boolean aCauseBlockUpdates, boolean aForcePlacement) {
 		return aBlock.placeBlock(mWorld, mX+aX, mY+aY, mZ+aZ, aSide, (short)aMeta, aNBT, aCauseBlockUpdates, aForcePlacement);
 	}
 	

@@ -58,7 +58,7 @@ public class MultiTileEntityFluidometer extends MultiTileEntitySensorTE {
 		}
 		if (tBlock instanceof IFluidBlock) {
 			FluidStack tFluid = ((IFluidBlock)tBlock).drain(aDelegator.mWorld, aDelegator.mX, aDelegator.mY, aDelegator.mZ, F);
-			return tFluid == null ? 0 : tFluid.amount;
+			return tFluid == null ? 0 : tFluid.getAmount();
 		}
 		return 0;
 	}

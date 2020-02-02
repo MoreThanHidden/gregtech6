@@ -47,7 +47,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -66,7 +66,7 @@ public abstract class TileEntityBase08Barrel extends TileEntityBase07Paintable i
 	public boolean mGasProof = F, mAcidProof = F, mPlasmaProof = F;
 	
 	@Override
-	public void readFromNBT2(NBTTagCompound aNBT) {
+	public void readFromNBT2(CompoundNBT aNBT) {
 		super.readFromNBT2(aNBT);
 		if (aNBT.hasKey(NBT_GASPROOF)) mGasProof = aNBT.getBoolean(NBT_GASPROOF);
 		if (aNBT.hasKey(NBT_ACIDPROOF)) mAcidProof = aNBT.getBoolean(NBT_ACIDPROOF);
@@ -78,7 +78,7 @@ public abstract class TileEntityBase08Barrel extends TileEntityBase07Paintable i
 	}
 	
 	@Override
-	public void writeToNBT2(NBTTagCompound aNBT) {
+	public void writeToNBT2(CompoundNBT aNBT) {
 		super.writeToNBT2(aNBT);
 		if (mMode != 0) aNBT.setByte(NBT_MODE, mMode);
 		UT.NBT.setNumber(aNBT, NBT_PROGRESS, mSealedTime);
@@ -86,7 +86,7 @@ public abstract class TileEntityBase08Barrel extends TileEntityBase07Paintable i
 	}
 	
 	@Override
-	public NBTTagCompound writeItemNBT2(NBTTagCompound aNBT) {
+	public CompoundNBT writeItemNBT2(CompoundNBT aNBT) {
 		if (mMode != 0) aNBT.setByte(NBT_MODE, mMode);
 		UT.NBT.setNumber(aNBT, NBT_PROGRESS, mSealedTime);
 		mTank.writeToNBT(aNBT, NBT_TANK);
@@ -159,7 +159,7 @@ public abstract class TileEntityBase08Barrel extends TileEntityBase07Paintable i
 		super.onTick2(aTimer, aIsServerSide);
 		if (aIsServerSide) {
 			FluidStack tFluid = mTank.getFluid();
-			if (tFluid != null && tFluid.amount > 0) {
+			if (tFluid != null && tFluid.getAmount() > 0) {
 				if (FL.temperature(tFluid) >= mMeltingPoint && meltdown()) return;
 				if (!mAcidProof && FL.acid(tFluid)) {
 					GarbageGT.trash(mTank);
@@ -290,7 +290,7 @@ public abstract class TileEntityBase08Barrel extends TileEntityBase07Paintable i
 	
 	@Override
 	public int removeFluidFromConnectedTank(byte aSide, FluidStack aFluid, boolean aOnlyRemoveIfItCanRemoveAllAtOnce) {
-		if (mTank.contains(aFluid) && mTank.has(aOnlyRemoveIfItCanRemoveAllAtOnce ? aFluid.amount : 1)) return (int)mTank.remove(aFluid.amount);
+		if (mTank.contains(aFluid) && mTank.has(aOnlyRemoveIfItCanRemoveAllAtOnce ? aFluid.getAmount() : 1)) return (int)mTank.remove(aFluid.getAmount());
 		return 0;
 	}
 	

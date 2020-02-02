@@ -54,7 +54,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
@@ -67,7 +67,7 @@ public class MultiTileEntityBush extends TileEntityBase09FacingSingle implements
 	public byte oStage = 0, mStage = 0, mGrowth = 0, mSpeed = 0;
 	
 	@Override
-	public void readFromNBT2(NBTTagCompound aNBT) {
+	public void readFromNBT2(CompoundNBT aNBT) {
 		mBerry = ST.load(aNBT, NBT_VALUE);
 		mStage = aNBT.getByte(NBT_STATE);
 		mGrowth = aNBT.getByte(NBT_PROGRESS);
@@ -75,7 +75,7 @@ public class MultiTileEntityBush extends TileEntityBase09FacingSingle implements
 	}
 	
 	@Override
-	public void writeToNBT2(NBTTagCompound aNBT) {
+	public void writeToNBT2(CompoundNBT aNBT) {
 		super.writeToNBT2(aNBT);
 		aNBT.setByte(NBT_STATE, mStage);
 		aNBT.setByte(NBT_PROGRESS, mGrowth);
@@ -83,7 +83,7 @@ public class MultiTileEntityBush extends TileEntityBase09FacingSingle implements
 	}
 	
 	@Override
-	public NBTTagCompound writeItemNBT2(NBTTagCompound aNBT) {
+	public CompoundNBT writeItemNBT2(CompoundNBT aNBT) {
 		super.writeItemNBT2(aNBT);
 		ST.save(aNBT, NBT_VALUE, mBerry);
 		return aNBT;
@@ -102,7 +102,7 @@ public class MultiTileEntityBush extends TileEntityBase09FacingSingle implements
 	@Override
 	public void onTickFirst2(boolean aIsServerSide) {
 		super.onTickFirst2(aIsServerSide);
-		if (getBlockAtSide(SIDE_UP) == Blocks.snow_layer) worldObj.setBlockToAir(xCoord, yCoord+1, zCoord);
+		if (getBlockAtSide(SIDE_UP) == Blocks.SNOW_layer) worldObj.setBlockToAir(xCoord, yCoord+1, zCoord);
 	}
 	
 	@Override

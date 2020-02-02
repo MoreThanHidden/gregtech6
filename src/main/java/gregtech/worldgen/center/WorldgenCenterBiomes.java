@@ -86,8 +86,8 @@ public class WorldgenCenterBiomes extends WorldgenObject {
 					WD.set(aChunk, i, mHeight-6, j, BlocksGT.River, 0);
 					WD.set(aChunk, i, mHeight-7, j, BlocksGT.Sands, 0);
 					WD.set(aChunk, i, mHeight-8, j, Blocks.gravel, 1);
-					WD.set(aChunk, i, mHeight-9, j, Blocks.clay, 0);
-					WD.set(aChunk, i, mHeight-10, j, Blocks.clay, 0);
+					WD.set(aChunk, i, mHeight-9, j, Blocks.CLAY, 0);
+					WD.set(aChunk, i, mHeight-10, j, Blocks.CLAY, 0);
 					for (int k = 1; k < mHeight-10; k++) WD.set(aChunk, i, k, j, Blocks.stone, 1);
 				}
 				BlockRiver.PLACEMENT_ALLOWED = F;
@@ -112,13 +112,13 @@ public class WorldgenCenterBiomes extends WorldgenObject {
 						Arrays.fill(aChunk.getBiomeArray(), (byte)BiomeGenBase.coldTaiga.biomeID);
 						for (int i = 0; i < 16; i++) for (int j = 0; j < 16; j++) {
 							for (int k = 2; k < 64; k++) WD.set(aChunk, i, mHeight+k, j, NB, 0);
-							WD.set(aChunk, i, mHeight+1, j, Blocks.snow_layer, aRandom.nextInt(2));
-							WD.set(aChunk, i, mHeight  , j, Blocks.dirt, 2);
-							WD.set(aChunk, i, mHeight-1, j, Blocks.dirt, 2);
-							WD.set(aChunk, i, mHeight-2, j, Blocks.dirt, 2);
-							WD.set(aChunk, i, mHeight-3, j, Blocks.dirt, 2);
-							WD.set(aChunk, i, mHeight-4, j, Blocks.dirt, 2);
-							WD.set(aChunk, i, mHeight-5, j, Blocks.dirt, 2);
+							WD.set(aChunk, i, mHeight+1, j, Blocks.SNOW_layer, aRandom.nextInt(2));
+							WD.set(aChunk, i, mHeight  , j, Blocks.DIRT, 2);
+							WD.set(aChunk, i, mHeight-1, j, Blocks.DIRT, 2);
+							WD.set(aChunk, i, mHeight-2, j, Blocks.DIRT, 2);
+							WD.set(aChunk, i, mHeight-3, j, Blocks.DIRT, 2);
+							WD.set(aChunk, i, mHeight-4, j, Blocks.DIRT, 2);
+							WD.set(aChunk, i, mHeight-5, j, Blocks.DIRT, 2);
 							for (int k = 1; k < mHeight-5; k++) WD.set(aChunk, i, k, j, Blocks.mossy_cobblestone, 0);
 						}
 						
@@ -137,12 +137,12 @@ public class WorldgenCenterBiomes extends WorldgenObject {
 						Arrays.fill(aChunk.getBiomeArray(), (byte)BiomeGenBase.forest.biomeID);
 						for (int i = 0; i < 16; i++) for (int j = 0; j < 16; j++) {
 							for (int k = 1; k < 64; k++) WD.set(aChunk, i, mHeight+k, j, NB, 0);
-							WD.set(aChunk, i, mHeight  , j, Blocks.grass, 0);
-							WD.set(aChunk, i, mHeight-1, j, Blocks.dirt, 0);
-							WD.set(aChunk, i, mHeight-2, j, Blocks.dirt, 0);
-							WD.set(aChunk, i, mHeight-3, j, Blocks.dirt, 0);
-							WD.set(aChunk, i, mHeight-4, j, Blocks.dirt, 0);
-							WD.set(aChunk, i, mHeight-5, j, Blocks.dirt, 0);
+							WD.set(aChunk, i, mHeight  , j, Blocks.GRASS, 0);
+							WD.set(aChunk, i, mHeight-1, j, Blocks.DIRT, 0);
+							WD.set(aChunk, i, mHeight-2, j, Blocks.DIRT, 0);
+							WD.set(aChunk, i, mHeight-3, j, Blocks.DIRT, 0);
+							WD.set(aChunk, i, mHeight-4, j, Blocks.DIRT, 0);
+							WD.set(aChunk, i, mHeight-5, j, Blocks.DIRT, 0);
 							for (int k = 1; k < mHeight-5; k++) WD.set(aChunk, i, k, j, k < 32 ? BlocksGT.Kimberlite : BlocksGT.Quartzite, aRandom.nextBoolean()?2:0);
 						}
 						WD.set(aChunk,  6, mHeight+1,  6, Blocks.pumpkin, 0);
@@ -159,8 +159,8 @@ public class WorldgenCenterBiomes extends WorldgenObject {
 						Arrays.fill(aChunk.getBiomeArray(), (byte)BiomeGenBase.plains.biomeID);
 						for (int i = 0; i < 16; i++) for (int j = 0; j < 16; j++) {
 							for (int k = 1; k < 64; k++) WD.set(aChunk, i, mHeight+k, j, NB, 0);
-							WD.set(aChunk, i, mHeight  , j, Blocks.grass, 0);
-							WD.set(aChunk, i, mHeight-1, j, Blocks.dirt, 0);
+							WD.set(aChunk, i, mHeight  , j, Blocks.GRASS, 0);
+							WD.set(aChunk, i, mHeight-1, j, Blocks.DIRT, 0);
 							WD.set(aChunk, i, mHeight-2, j, BlocksGT.Diggables, 1);
 							WD.set(aChunk, i, mHeight-3, j, BlocksGT.Diggables, 1);
 							WD.set(aChunk, i, mHeight-4, j, BlocksGT.Diggables, 1);
@@ -243,7 +243,7 @@ public class WorldgenCenterBiomes extends WorldgenObject {
 							Block tBlock = IL.EtFu_Dirt.block();
 							for (int i = 0; i < 16; i++) for (int j = 0; j < 16; j++) {
 								for (int k = 1; k < 64; k++) WD.set(aChunk, i, mHeight+k, j, NB, 0);
-								WD.set(aChunk, i, mHeight  , j, Blocks.grass, 0);
+								WD.set(aChunk, i, mHeight  , j, Blocks.GRASS, 0);
 								WD.set(aChunk, i, mHeight-1, j, tBlock, 0);
 								WD.set(aChunk, i, mHeight-2, j, tBlock, 0);
 								WD.set(aChunk, i, mHeight-3, j, tBlock, 0);
@@ -254,12 +254,12 @@ public class WorldgenCenterBiomes extends WorldgenObject {
 						} else {
 							for (int i = 0; i < 16; i++) for (int j = 0; j < 16; j++) {
 								for (int k = 1; k < 64; k++) WD.set(aChunk, i, mHeight+k, j, NB, 0);
-								WD.set(aChunk, i, mHeight  , j, Blocks.grass, 0);
-								WD.set(aChunk, i, mHeight-1, j, Blocks.dirt, 1);
-								WD.set(aChunk, i, mHeight-2, j, Blocks.dirt, 1);
-								WD.set(aChunk, i, mHeight-3, j, Blocks.dirt, 1);
-								WD.set(aChunk, i, mHeight-4, j, Blocks.dirt, 1);
-								WD.set(aChunk, i, mHeight-5, j, Blocks.dirt, 1);
+								WD.set(aChunk, i, mHeight  , j, Blocks.GRASS, 0);
+								WD.set(aChunk, i, mHeight-1, j, Blocks.DIRT, 1);
+								WD.set(aChunk, i, mHeight-2, j, Blocks.DIRT, 1);
+								WD.set(aChunk, i, mHeight-3, j, Blocks.DIRT, 1);
+								WD.set(aChunk, i, mHeight-4, j, Blocks.DIRT, 1);
+								WD.set(aChunk, i, mHeight-5, j, Blocks.DIRT, 1);
 								for (int k = 1; k < mHeight-5; k++) WD.set(aChunk, i, k, j, k < 32 ? BlocksGT.Komatiite : BlocksGT.Basalt, aRandom.nextBoolean()?2:0);
 							}
 						}

@@ -63,9 +63,9 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.Potion;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.ChunkPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
@@ -81,7 +81,7 @@ import net.minecraftforge.event.world.BlockEvent;
 public class MultiItemTool extends MultiItem implements IItemGTHandTool, IItemGTContainerTool {
 	public final HashMap<Short, IToolStats> mToolStats = new HashMap<>();
 	
-	public static ChunkCoordinates LAST_TOOL_COORDS_BEFORE_DAMAGE = null;
+	public static ChunkPos LAST_TOOL_COORDS_BEFORE_DAMAGE = null;
 	
 	/**
 	 * Creates the Item using these Parameters.
@@ -159,7 +159,7 @@ public class MultiItemTool extends MultiItem implements IItemGTHandTool, IItemGT
 		ItemStack rStack = ST.make(this, aAmount, aToolID);
 		IToolStats tToolStats = getToolStats(rStack);
 		if (tToolStats != null) {
-			NBTTagCompound tMainNBT = UT.NBT.make(), tToolNBT = UT.NBT.make();
+			CompoundNBT tMainNBT = UT.NBT.make(), tToolNBT = UT.NBT.make();
 			if (aPrimaryMaterial != null) {
 				if (aPrimaryMaterial.mID > 0) tToolNBT.setShort("a", aPrimaryMaterial.mID); else tToolNBT.setString("b", aPrimaryMaterial.toString());
 				UT.NBT.setNumber(tToolNBT, "j", 100L*(long)(aPrimaryMaterial.mToolDurability * tToolStats.getMaxDurabilityMultiplier()));
@@ -244,7 +244,7 @@ public class MultiItemTool extends MultiItem implements IItemGTHandTool, IItemGT
 				}
 			}
 		}
-		if (aStack.stackSize <= 0) aPlayer.destroyCurrentEquippedItem();
+		if (aStack.getCount() <= 0) aPlayer.destroyCurrentEquippedItem();
 		return T;
 	}
 	
@@ -296,7 +296,7 @@ public class MultiItemTool extends MultiItem implements IItemGTHandTool, IItemGT
 	}
 	
 	public static final OreDictMaterial getPrimaryMaterial(ItemStack aStack, OreDictMaterial aDefault) {
-		NBTTagCompound aNBT = aStack.getTagCompound();
+		CompoundNBT aNBT = aStack.getTagCompound();
 		if (aNBT != null) {
 			aNBT = aNBT.getCompoundTag("GT.ToolStats");
 			if (aNBT != null) {
@@ -313,7 +313,7 @@ public class MultiItemTool extends MultiItem implements IItemGTHandTool, IItemGT
 	}
 	
 	public static final OreDictMaterial getSecondaryMaterial(ItemStack aStack, OreDictMaterial aDefault) {
-		NBTTagCompound aNBT = aStack.getTagCompound();
+		CompoundNBT aNBT = aStack.getTagCompound();
 		if (aNBT != null) {
 			aNBT = aNBT.getCompoundTag("GT.ToolStats");
 			if (aNBT != null) {
@@ -331,7 +331,7 @@ public class MultiItemTool extends MultiItem implements IItemGTHandTool, IItemGT
 	
 	@Override
 	public IItemEnergy getEnergyStats(ItemStack aStack) {
-		NBTTagCompound aNBT = aStack.getTagCompound();
+		CompoundNBT aNBT = aStack.getTagCompound();
 		if (aNBT != null) {
 			aNBT = aNBT.getCompoundTag("GT.ToolStats");
 			if (aNBT != null) {
@@ -348,7 +348,7 @@ public class MultiItemTool extends MultiItem implements IItemGTHandTool, IItemGT
 	}
 	
 	public static final long getToolMaxDamage(ItemStack aStack) {
-		NBTTagCompound aNBT = aStack.getTagCompound();
+		CompoundNBT aNBT = aStack.getTagCompound();
 		if (aNBT != null) {
 			aNBT = aNBT.getCompoundTag("GT.ToolStats");
 			if (aNBT.hasKey("j")) return Math.max(1, aNBT.getLong("j"));
@@ -358,7 +358,7 @@ public class MultiItemTool extends MultiItem implements IItemGTHandTool, IItemGT
 	}
 	
 	public static final long getToolDamage(ItemStack aStack) {
-		NBTTagCompound aNBT = aStack.getTagCompound();
+		CompoundNBT aNBT = aStack.getTagCompound();
 		if (aNBT != null) {
 			aNBT = aNBT.getCompoundTag("GT.ToolStats");
 			if (aNBT.hasKey("k")) return aNBT.getLong("k");
@@ -368,7 +368,7 @@ public class MultiItemTool extends MultiItem implements IItemGTHandTool, IItemGT
 	}
 	
 	public static final boolean setToolDamage(ItemStack aStack, long aDamage) {
-		NBTTagCompound aNBT = aStack.getTagCompound();
+		CompoundNBT aNBT = aStack.getTagCompound();
 		if (aNBT != null) {
 			UT.NBT.setNumber(aNBT.getCompoundTag("GT.ToolStats"), "k", aDamage);
 			return T;
@@ -389,7 +389,7 @@ public class MultiItemTool extends MultiItem implements IItemGTHandTool, IItemGT
 			if (tNewDamage >= getToolMaxDamage(aStack)) {
 				IToolStats tStats = getToolStats(aStack);
 				if (tStats == null) {
-					aStack.stackSize = 0;
+					aStack.getCount() = 0;
 				} else {
 					if (TOOL_SOUNDS) {
 						if (aPlayer == null) {
@@ -405,14 +405,14 @@ public class MultiItemTool extends MultiItem implements IItemGTHandTool, IItemGT
 						}
 					}
 					ItemStack tBroken = tStats.getBrokenItem(aStack);
-					if (ST.invalid(tBroken) || tBroken.stackSize <= 0) {
-						aStack.stackSize = 0;
+					if (ST.invalid(tBroken) || tBroken.getCount() <= 0) {
+						aStack.getCount() = 0;
 					} else if (aPlayer instanceof PlayerEntity) {
-						if (tBroken.stackSize > 64) tBroken.stackSize = 64;
+						if (tBroken.getCount() > 64) tBroken.getCount() = 64;
 						if (!aPlayer.worldObj.isRemote) UT.Inventories.addStackToPlayerInventoryOrDrop((PlayerEntity)aPlayer, tBroken, F);
-						aStack.stackSize = 0;
+						aStack.getCount() = 0;
 					} else {
-						if (tBroken.stackSize > 64) tBroken.stackSize = 64;
+						if (tBroken.getCount() > 64) tBroken.getCount() = 64;
 						ST.set(aStack, tBroken);
 					}
 				}
@@ -466,7 +466,7 @@ public class MultiItemTool extends MultiItem implements IItemGTHandTool, IItemGT
 		IToolStats tStats = getToolStats(aStack);
 		if (tStats == null) return null;
 		doDamage(aStack, tStats.getToolDamagePerContainerCraft(), null);
-		aStack = aStack.stackSize > 0 ? aStack : null;
+		aStack = aStack.getCount() > 0 ? aStack : null;
 		if (TOOL_SOUNDS && aStack != null && LAST_TOOL_COORDS_BEFORE_DAMAGE != null) UT.Sounds.play(tStats.getCraftingSound(), 200, 1, LAST_TOOL_COORDS_BEFORE_DAMAGE);
 		return aStack;
 	}
@@ -478,7 +478,7 @@ public class MultiItemTool extends MultiItem implements IItemGTHandTool, IItemGT
 		IToolStats tStats = getToolStats(aStack);
 		if (tStats == null) return F;
 		doDamage(aStack, tStats.getToolDamagePerContainerCraft(), null);
-		return aStack.stackSize > 0;
+		return aStack.getCount() > 0;
 	}
 	
 	public IToolStats getToolStats(ItemStack aStack) {
@@ -518,10 +518,10 @@ public class MultiItemTool extends MultiItem implements IItemGTHandTool, IItemGT
 	
 	@Override
 	public boolean isItemStackUsable(ItemStack aStack) {
-		if (aStack == null || aStack.stackSize <= 0) return F;
+		if (aStack == null || aStack.getCount() <= 0) return F;
 		IToolStats tStats = getToolStatsInternal(aStack);
 		if (ST.meta_(aStack) % 2 == 1 || tStats == null) {
-			NBTTagCompound aNBT = aStack.getTagCompound();
+			CompoundNBT aNBT = aStack.getTagCompound();
 			if (aNBT != null) aNBT.removeTag("ench");
 			return F;
 		}
@@ -573,7 +573,7 @@ public class MultiItemTool extends MultiItem implements IItemGTHandTool, IItemGT
 	}
 	
 	public short getEmptyMetaData(ItemStack aStack) {
-		NBTTagCompound aNBT = aStack.getTagCompound();
+		CompoundNBT aNBT = aStack.getTagCompound();
 		if (aNBT != null) aNBT.removeTag("ench");
 		return (short)(ST.meta_(aStack)+1-(ST.meta_(aStack) % 2));
 	}

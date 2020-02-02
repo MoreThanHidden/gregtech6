@@ -70,13 +70,13 @@ public class BlockGrass extends BlockBaseMeta {
 		BlocksGT.plantableTrees.add(this);
 		BlocksGT.plantableGrass.add(this);
 		
-		RM.generify(ST.make(this, 1, W), ST.make(Blocks.grass, 1, 0));
-		CR.shapeless(ST.make(Blocks.grass, 1, 0), new Object[] {this});
+		RM.generify(ST.make(this, 1, W), ST.make(Blocks.GRASS, 1, 0));
+		CR.shapeless(ST.make(Blocks.GRASS, 1, 0), new Object[] {this});
 		
-		CR.shapeless(ST.make(this, 8, 0), new Object[] {Blocks.grass, Blocks.grass, Blocks.grass, DYE_OREDICTS[DYE_INDEX_Green    ], Blocks.grass, Blocks.grass, Blocks.grass, Blocks.grass, Blocks.grass});
-		CR.shapeless(ST.make(this, 8, 1), new Object[] {Blocks.grass, Blocks.grass, Blocks.grass, DYE_OREDICTS[DYE_INDEX_Lime     ], Blocks.grass, Blocks.grass, Blocks.grass, Blocks.grass, Blocks.grass});
-		CR.shapeless(ST.make(this, 8, 2), new Object[] {Blocks.grass, Blocks.grass, Blocks.grass, DYE_OREDICTS[DYE_INDEX_Black    ], Blocks.grass, Blocks.grass, Blocks.grass, Blocks.grass, Blocks.grass});
-		CR.shapeless(ST.make(this, 8, 3), new Object[] {Blocks.grass, Blocks.grass, Blocks.grass, DYE_OREDICTS[DYE_INDEX_LightGray], Blocks.grass, Blocks.grass, Blocks.grass, Blocks.grass, Blocks.grass});
+		CR.shapeless(ST.make(this, 8, 0), new Object[] {Blocks.GRASS, Blocks.GRASS, Blocks.GRASS, DYE_OREDICTS[DYE_INDEX_Green    ], Blocks.GRASS, Blocks.GRASS, Blocks.GRASS, Blocks.GRASS, Blocks.GRASS});
+		CR.shapeless(ST.make(this, 8, 1), new Object[] {Blocks.GRASS, Blocks.GRASS, Blocks.GRASS, DYE_OREDICTS[DYE_INDEX_Lime     ], Blocks.GRASS, Blocks.GRASS, Blocks.GRASS, Blocks.GRASS, Blocks.GRASS});
+		CR.shapeless(ST.make(this, 8, 2), new Object[] {Blocks.GRASS, Blocks.GRASS, Blocks.GRASS, DYE_OREDICTS[DYE_INDEX_Black    ], Blocks.GRASS, Blocks.GRASS, Blocks.GRASS, Blocks.GRASS, Blocks.GRASS});
+		CR.shapeless(ST.make(this, 8, 3), new Object[] {Blocks.GRASS, Blocks.GRASS, Blocks.GRASS, DYE_OREDICTS[DYE_INDEX_LightGray], Blocks.GRASS, Blocks.GRASS, Blocks.GRASS, Blocks.GRASS, Blocks.GRASS});
 	}
 	
 	static {
@@ -94,15 +94,15 @@ public class BlockGrass extends BlockBaseMeta {
 		return tType == EnumPlantType.Plains || (tType == EnumPlantType.Beach && (WD.anywater(aWorld, aX+1, aY, aZ) || WD.anywater(aWorld, aX-1, aY, aZ) || WD.anywater(aWorld, aX, aY, aZ+1) || WD.anywater(aWorld, aX, aY, aZ-1)));
 	}
 	
-	public static final IconContainerCopied DIRT = new IconContainerCopied(Blocks.dirt, 0, SIDE_BOTTOM);
+	public static final IconContainerCopied DIRT = new IconContainerCopied(Blocks.DIRT, 0, SIDE_BOTTOM);
 	
 	@Override public IIcon getIcon(int aSide, int aMeta) {return (SIDES_BOTTOM[aSide]?DIRT:(SIDES_TOP[aSide]?Textures.BlockIcons.GRASSES_TOP:Textures.BlockIcons.GRASSES_SIDE)[aMeta % 16]).getIcon(0);}
-	@Override public ArrayList<ItemStack> getDrops(World aWorld, int aX, int aY, int aZ, int aMeta, int aFortune) {return new ArrayListNoNulls<>(F, ST.make(Blocks.dirt, 1, 0));}
+	@Override public ArrayList<ItemStack> getDrops(World aWorld, int aX, int aY, int aZ, int aMeta, int aFortune) {return new ArrayListNoNulls<>(F, ST.make(Blocks.DIRT, 1, 0));}
 	@Override public boolean doesPistonPush  (short aMeta) {return T;}
 	@Override public boolean canCreatureSpawn(int   aMeta) {return F;}
 	@Override public boolean isSealable      (int   aMeta, byte aSide) {return F;}
 	@Override public String getHarvestTool   (int   aMeta) {return TOOL_shovel;}
 	@Override public int getHarvestLevel     (int   aMeta) {return 0;}
-	@Override public float getBlockHardness(World aWorld, int aX, int aY, int aZ) {return Blocks.grass.getBlockHardness(aWorld, aX, aY, aZ);}
-	@Override public float getExplosionResistance(int aMeta) {return Blocks.grass.getExplosionResistance(null);}
+	@Override public float getBlockHardness(World aWorld, int aX, int aY, int aZ) {return Blocks.GRASS.getBlockHardness(aWorld, aX, aY, aZ);}
+	@Override public float getExplosionResistance(int aMeta) {return Blocks.GRASS.getExplosionResistance(null);}
 }

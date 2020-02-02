@@ -44,7 +44,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 
@@ -53,12 +53,12 @@ import net.minecraft.util.AxisAlignedBB;
  */
 public class MultiTileEntityRope extends TileEntityBase09FacingSingle implements ITileEntityQuickObstructionCheck, IMTE_IsLadder, IMTE_OnBlockHarvested, IMTE_SetBlockBoundsBasedOnState, IMTE_GetCollisionBoundingBoxFromPool, IMTE_GetSelectedBoundingBoxFromPool {
 	@Override
-	public void readFromNBT2(NBTTagCompound aNBT) {
+	public void readFromNBT2(CompoundNBT aNBT) {
 		super.readFromNBT2(aNBT);
 	}
 	
 	@Override
-	public void writeToNBT2(NBTTagCompound aNBT) {
+	public void writeToNBT2(CompoundNBT aNBT) {
 		super.writeToNBT2(aNBT);
 	}
 	
@@ -81,8 +81,8 @@ public class MultiTileEntityRope extends TileEntityBase09FacingSingle implements
 					continue;
 				}
 				if (WD.air(worldObj, xCoord, tY, zCoord)) {
-					tRegistry.mBlock.placeBlock(worldObj, xCoord, tY, zCoord, SIDE_ANY, getMultiTileEntityID(), UT.NBT.make(aStack.hasTagCompound()?(NBTTagCompound)aStack.getTagCompound().copy():null, NBT_FACING, mFacing), T, F);
-					if (!UT.Entities.hasInfiniteItems(aPlayer)) aStack.stackSize--;
+					tRegistry.mBlock.placeBlock(worldObj, xCoord, tY, zCoord, SIDE_ANY, getMultiTileEntityID(), UT.NBT.make(aStack.hasTagCompound()?(CompoundNBT)aStack.getTagCompound().copy():null, NBT_FACING, mFacing), T, F);
+					if (!UT.Entities.hasInfiniteItems(aPlayer)) aStack.getCount()--;
 					UT.Sounds.send(SFX.MC_DIG_CLOTH, this);
 				}
 				return T;

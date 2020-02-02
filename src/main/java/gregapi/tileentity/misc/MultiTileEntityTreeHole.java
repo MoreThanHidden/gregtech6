@@ -37,7 +37,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 
 /**
  * @author Gregorius Techneticies
@@ -46,19 +46,19 @@ public abstract class MultiTileEntityTreeHole extends TileEntityBase09FacingSing
 	public boolean mHasResin = F;
 	
 	@Override
-	public void readFromNBT2(NBTTagCompound aNBT) {
+	public void readFromNBT2(CompoundNBT aNBT) {
 		super.readFromNBT2(aNBT);
 		if (aNBT.hasKey(NBT_ACTIVE)) mHasResin = aNBT.getBoolean(NBT_ACTIVE);
 	}
 	
 	@Override
-	public void writeToNBT2(NBTTagCompound aNBT) {
+	public void writeToNBT2(CompoundNBT aNBT) {
 		super.writeToNBT2(aNBT);
 		UT.NBT.setBoolean(aNBT, NBT_ACTIVE, mHasResin);
 	}
 	
 	@Override
-	public NBTTagCompound writeItemNBT2(NBTTagCompound aNBT) {
+	public CompoundNBT writeItemNBT2(CompoundNBT aNBT) {
 		super.writeItemNBT2(aNBT);
 		UT.NBT.setBoolean(aNBT, NBT_ACTIVE, mHasResin);
 		return aNBT;
@@ -87,7 +87,7 @@ public abstract class MultiTileEntityTreeHole extends TileEntityBase09FacingSing
 				}
 				assert aStack != null;
 				if (tStack != null) {
-					aStack.stackSize--;
+					aStack.getCount()--;
 					UT.Inventories.addStackToPlayerInventoryOrDrop(aPlayer, tStack, T);
 				}
 			}

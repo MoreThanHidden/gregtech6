@@ -37,7 +37,7 @@ import net.minecraft.block.BlockColored;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.World;
 
 public class Behavior_Spray_Color extends AbstractBehaviorDefault {
@@ -56,13 +56,13 @@ public class Behavior_Spray_Color extends AbstractBehaviorDefault {
 	
 	@Override
 	public boolean onItemUseFirst(MultiItem aItem, ItemStack aStack, PlayerEntity aPlayer, World aWorld, int aX, int aY, int aZ, byte aSide, float hitX, float hitY, float hitZ) {
-		if (aWorld.isRemote || aStack.stackSize != 1) return F;
+		if (aWorld.isRemote || aStack.getCount() != 1) return F;
 		
 		boolean rOutput = F;
 		
 		if (!aPlayer.canPlayerEdit(aX, aY, aZ, aSide, aStack)) return F;
 		
-		NBTTagCompound tNBT = aStack.getTagCompound();
+		CompoundNBT tNBT = aStack.getTagCompound();
 		if (tNBT == null) tNBT = UT.NBT.make();
 		long tUses = tNBT.getLong("gt.remaining");
 		
@@ -84,7 +84,7 @@ public class Behavior_Spray_Color extends AbstractBehaviorDefault {
 		
 		if (tUses <= 0) {
 			if (mEmpty == null) {
-				aStack.stackSize--;
+				aStack.getCount()--;
 			} else {
 				aStack.func_150996_a(mEmpty.getItem());
 				ST.meta_(aStack, ST.meta_(mEmpty));
@@ -116,7 +116,7 @@ public class Behavior_Spray_Color extends AbstractBehaviorDefault {
 	@Override
 	public List<String> getAdditionalToolTips(MultiItem aItem, List<String> aList, ItemStack aStack) {
 		aList.add(LH.get("gt.behaviour.paintspray."+mColor+".tooltip"));
-		NBTTagCompound tNBT = aStack.getTagCompound();
+		CompoundNBT tNBT = aStack.getTagCompound();
 		long tRemaining = (ST.equal(aStack, mFull, T)?mUses:tNBT==null?0:tNBT.getLong("gt.remaining"));
 		aList.add(LH.get("gt.behaviour.paintspray.uses") + " " + (tRemaining / 10) + "." + (tRemaining % 10));
 		aList.add(LH.get("gt.behaviour.unstackable"));

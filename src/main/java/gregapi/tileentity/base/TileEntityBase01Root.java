@@ -68,10 +68,10 @@ import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.ChunkPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -112,7 +112,7 @@ public abstract class TileEntityBase01Root extends TileEntity implements ITileEn
 	/** If this TileEntity is ticking at all */
 	public final boolean mIsTicking;
 	
-	private final ChunkCoordinates mReturnedCoordinates = new ChunkCoordinates();
+	private final ChunkPos mReturnedCoordinates = new ChunkPos();
 	
 	public TileEntityBase01Root(boolean aIsTicking) {
 		mIsTicking = aIsTicking;
@@ -145,16 +145,16 @@ public abstract class TileEntityBase01Root extends TileEntity implements ITileEn
 	@Override public int getOffsetXN(byte aSide, int aMultiplier) {return xCoord - OFFSETS_X[aSide] * aMultiplier;}
 	@Override public int getOffsetYN(byte aSide, int aMultiplier) {return yCoord - OFFSETS_Y[aSide] * aMultiplier;}
 	@Override public int getOffsetZN(byte aSide, int aMultiplier) {return zCoord - OFFSETS_Z[aSide] * aMultiplier;}
-	@Override public ChunkCoordinates getCoords() {mReturnedCoordinates.posX = xCoord; mReturnedCoordinates.posY = yCoord; mReturnedCoordinates.posZ = zCoord; return mReturnedCoordinates;}
-	@Override public ChunkCoordinates getOffset (byte aSide, int aMultiplier) {return new ChunkCoordinates(getOffsetX (aSide, aMultiplier), getOffsetY (aSide, aMultiplier), getOffsetZ (aSide, aMultiplier));}
-	@Override public ChunkCoordinates getOffsetN(byte aSide, int aMultiplier) {return new ChunkCoordinates(getOffsetXN(aSide, aMultiplier), getOffsetYN(aSide, aMultiplier), getOffsetZN(aSide, aMultiplier));}
+	@Override public ChunkPos getCoords() {mReturnedCoordinates.posX = xCoord; mReturnedCoordinates.posY = yCoord; mReturnedCoordinates.posZ = zCoord; return mReturnedCoordinates;}
+	@Override public ChunkPos getOffset (byte aSide, int aMultiplier) {return new ChunkPos(getOffsetX (aSide, aMultiplier), getOffsetY (aSide, aMultiplier), getOffsetZ (aSide, aMultiplier));}
+	@Override public ChunkPos getOffsetN(byte aSide, int aMultiplier) {return new ChunkPos(getOffsetXN(aSide, aMultiplier), getOffsetYN(aSide, aMultiplier), getOffsetZN(aSide, aMultiplier));}
 	@Override public boolean isServerSide() {return worldObj == null ? cpw.mods.fml.common.FMLCommonHandler.instance().getEffectiveSide().isServer() : !worldObj.isRemote;}
 	@Override public boolean isClientSide() {return worldObj == null ? cpw.mods.fml.common.FMLCommonHandler.instance().getEffectiveSide().isClient() :  worldObj.isRemote;}
 	@Override public boolean openGUI(PlayerEntity aPlayer) {return openGUI(aPlayer, 0);}
 	@Override public boolean openGUI(PlayerEntity aPlayer, int aID) {if (aPlayer == null) return F; aPlayer.openGui(GAPI, aID, worldObj, xCoord, yCoord, zCoord); return T;}
 	@Override public int getRandomNumber(int aRange) {return RNGSUS.nextInt(aRange);}
 	@Override public int rng(int aRange) {return RNGSUS.nextInt(aRange);}
-	@Override public BiomeGenBase getBiome(ChunkCoordinates aCoords) {return worldObj==null?BiomeGenBase.plains:worldObj.getBiomeGenForCoords(aCoords.posX, aCoords.posZ);}
+	@Override public BiomeGenBase getBiome(ChunkPos aCoords) {return worldObj==null?BiomeGenBase.plains:worldObj.getBiomeGenForCoords(aCoords.posX, aCoords.posZ);}
 	@Override public BiomeGenBase getBiome(int aX, int aZ) {return worldObj==null?BiomeGenBase.plains:worldObj.getBiomeGenForCoords(aX, aZ);}
 	@Override public BiomeGenBase getBiome() {return getBiome(xCoord, zCoord);}
 	@Override public Block getBlockOffset(int aX, int aY, int aZ) {return getBlock(xCoord+aX, yCoord+aY, zCoord+aZ);}
@@ -263,56 +263,56 @@ public abstract class TileEntityBase01Root extends TileEntity implements ITileEn
 	}
 	
 	@Override
-	public Block getBlock(ChunkCoordinates aCoords) {
+	public Block getBlock(ChunkPos aCoords) {
 		if (worldObj == null) return NB;
 		if (mIgnoreUnloadedChunks && crossedChunkBorder(aCoords) && !worldObj.blockExists(aCoords.posX, aCoords.posY, aCoords.posZ)) return NB;
 		return worldObj.getBlock(aCoords.posX, aCoords.posY, aCoords.posZ);
 	}
 	
 	@Override
-	public byte getMetaData(ChunkCoordinates aCoords) {
+	public byte getMetaData(ChunkPos aCoords) {
 		if (worldObj == null) return 0;
 		if (mIgnoreUnloadedChunks && crossedChunkBorder(aCoords) && !worldObj.blockExists(aCoords.posX, aCoords.posY, aCoords.posZ)) return 0;
 		return (byte)worldObj.getBlockMetadata(aCoords.posX, aCoords.posY, aCoords.posZ);
 	}
 	
 	@Override
-	public byte getLightLevel(ChunkCoordinates aCoords) {
+	public byte getLightLevel(ChunkPos aCoords) {
 		if (worldObj == null) return 14;
 		if (mIgnoreUnloadedChunks && crossedChunkBorder(aCoords) && !worldObj.blockExists(aCoords.posX, aCoords.posY, aCoords.posZ)) return 0;
 		return UT.Code.bind4((long)worldObj.getLightBrightness(aCoords.posX, aCoords.posY, aCoords.posZ)*15);
 	}
 	
 	@Override
-	public boolean getSky(ChunkCoordinates aCoords) {
+	public boolean getSky(ChunkPos aCoords) {
 		if (worldObj == null) return T;
 		if (mIgnoreUnloadedChunks && crossedChunkBorder(aCoords) && !worldObj.blockExists(aCoords.posX, aCoords.posY, aCoords.posZ)) return T;
 		return worldObj.canBlockSeeTheSky(aCoords.posX, aCoords.posY, aCoords.posZ);
 	}
 	
 	@Override
-	public boolean getRain(ChunkCoordinates aCoords) {
+	public boolean getRain(ChunkPos aCoords) {
 		if (worldObj == null) return T;
 		if (mIgnoreUnloadedChunks && crossedChunkBorder(aCoords) && !worldObj.blockExists(aCoords.posX, aCoords.posY, aCoords.posZ)) return T;
 		return worldObj.getPrecipitationHeight(aCoords.posX, aCoords.posZ) <= aCoords.posY;
 	}
 	
 	@Override
-	public boolean getOpacity(ChunkCoordinates aCoords) {
+	public boolean getOpacity(ChunkPos aCoords) {
 		if (worldObj == null) return F;
 		if (mIgnoreUnloadedChunks && crossedChunkBorder(aCoords) && !worldObj.blockExists(aCoords.posX, aCoords.posY, aCoords.posZ)) return F;
 		return worldObj.getBlock(aCoords.posX, aCoords.posY, aCoords.posZ).isOpaqueCube();
 	}
 	
 	@Override
-	public boolean getAir(ChunkCoordinates aCoords) {
+	public boolean getAir(ChunkPos aCoords) {
 		if (worldObj == null) return T;
 		if (mIgnoreUnloadedChunks && crossedChunkBorder(aCoords) && !worldObj.blockExists(aCoords.posX, aCoords.posY, aCoords.posZ)) return T;
 		return worldObj.getBlock(aCoords.posX, aCoords.posY, aCoords.posZ).isAir(worldObj, aCoords.posX, aCoords.posY, aCoords.posZ);
 	}
 	
 	@Override
-	public TileEntity getTileEntity(ChunkCoordinates aCoords) {
+	public TileEntity getTileEntity(ChunkPos aCoords) {
 		if (worldObj == null) return null;
 		if (mIgnoreUnloadedChunks && crossedChunkBorder(aCoords) && !worldObj.blockExists(aCoords.posX, aCoords.posY, aCoords.posZ)) return null;
 		return WD.te(worldObj, aCoords, T);
@@ -437,7 +437,7 @@ public abstract class TileEntityBase01Root extends TileEntity implements ITileEn
 		return aX >> 4 != xCoord >> 4 || aZ >> 4 != zCoord >> 4;
 	}
 	
-	public final boolean crossedChunkBorder(ChunkCoordinates aCoords) {
+	public final boolean crossedChunkBorder(ChunkPos aCoords) {
 		return aCoords.posX >> 4 != xCoord >> 4 || aCoords.posZ >> 4 != zCoord >> 4;
 	}
 	
@@ -553,7 +553,7 @@ public abstract class TileEntityBase01Root extends TileEntity implements ITileEn
 	protected IFluidTank[] getFluidTanks(byte aSide) {return ZL_FT;}
 	
 	public int fill(ForgeDirection aDirection, FluidStack aFluid, boolean aDoFill) {
-		if (aFluid == null || aFluid.amount <= 0) return 0;
+		if (aFluid == null || aFluid.getAmount() <= 0) return 0;
 		IFluidTank tTank = getFluidTankFillable(UT.Code.side(aDirection), aFluid);
 		if (tTank == null) return 0;
 		int rFilledAmount = tTank.fill(aFluid, aDoFill);
@@ -562,10 +562,10 @@ public abstract class TileEntityBase01Root extends TileEntity implements ITileEn
 	}
 	
 	public FluidStack drain(ForgeDirection aDirection, FluidStack aFluid, boolean aDoDrain) {
-		if (aFluid == null || aFluid.amount <= 0) return null;
+		if (aFluid == null || aFluid.getAmount() <= 0) return null;
 		IFluidTank tTank = getFluidTankDrainable(UT.Code.side(aDirection), aFluid);
 		if (tTank == null || tTank.getFluid() == null || tTank.getFluidAmount() == 0 || !tTank.getFluid().isFluidEqual(aFluid)) return null;
-		FluidStack rDrained = tTank.drain(aFluid.amount, aDoDrain);
+		FluidStack rDrained = tTank.drain(aFluid.getAmount(), aDoDrain);
 		if (rDrained != null && aDoDrain) updateInventory();
 		return rDrained;
 	}
@@ -606,7 +606,7 @@ public abstract class TileEntityBase01Root extends TileEntity implements ITileEn
 	protected IFluidTank[] getFluidTanks(MultiTileEntityMultiBlockPart aPart, byte aSide) {return getFluidTanks(aSide);}
 	
 	public int fill(MultiTileEntityMultiBlockPart aPart, byte aDirection, FluidStack aFluid, boolean aDoFill) {
-		if (aFluid == null || aFluid.amount <= 0) return 0;
+		if (aFluid == null || aFluid.getAmount() <= 0) return 0;
 		IFluidTank tTank = getFluidTankFillable(aPart, UT.Code.side(aDirection), aFluid);
 		if (tTank == null) return 0;
 		int rFilledAmount = tTank.fill(aFluid, aDoFill);
@@ -615,10 +615,10 @@ public abstract class TileEntityBase01Root extends TileEntity implements ITileEn
 	}
 	
 	public FluidStack drain(MultiTileEntityMultiBlockPart aPart, byte aDirection, FluidStack aFluid, boolean aDoDrain) {
-		if (aFluid == null || aFluid.amount <= 0) return null;
+		if (aFluid == null || aFluid.getAmount() <= 0) return null;
 		IFluidTank tTank = getFluidTankDrainable(aPart, UT.Code.side(aDirection), aFluid);
 		if (tTank == null || tTank.getFluid() == null || tTank.getFluidAmount() == 0 || !tTank.getFluid().isFluidEqual(aFluid)) return null;
-		FluidStack rDrained = tTank.drain(aFluid.amount, aDoDrain);
+		FluidStack rDrained = tTank.drain(aFluid.getAmount(), aDoDrain);
 		if (rDrained != null && aDoDrain) updateInventory();
 		return rDrained;
 	}
@@ -795,12 +795,12 @@ public abstract class TileEntityBase01Root extends TileEntity implements ITileEn
 	public ItemStack slot(int aIndex, ItemStack aStack) {return NI;}
 	public ItemStack slot(int aIndex) {return NI;}
 	public ItemStack slotTake(int aIndex) {return NI;}
-	public boolean slotNull(int aIndex) {if (slotHas(aIndex) && slot(aIndex).stackSize < 0) return slotKill(aIndex); return F;}
+	public boolean slotNull(int aIndex) {if (slotHas(aIndex) && slot(aIndex).getCount() < 0) return slotKill(aIndex); return F;}
 	public boolean slotKill(int aIndex) {slot(aIndex, NI); return T;}
 	public boolean slotHas(int aIndex) {return F;}
 	public boolean invempty() {return T;}
 	public int invsize() {return 0;}
-	public NBTTagCompound slotNBT(int aIndex) {return null;}
+	public CompoundNBT slotNBT(int aIndex) {return null;}
 	
 	// Connectable Inventories
 	
@@ -808,11 +808,11 @@ public abstract class TileEntityBase01Root extends TileEntity implements ITileEn
 	
 	public int addStackToConnectedInventory(byte aSide, ItemStack aStack, boolean aOnlyAddIfItAlreadyHasItemsOfThatTypeOrIsDedicated) {
 		if (ST.invalid(aStack)) return 0;
-		int rCount = 0, aCount = aStack.stackSize;
+		int rCount = 0, aCount = aStack.getCount();
 		for (int tSlot : getAccessibleSlotsOfConnectedInventory()) if (ST.equal(slot(tSlot), aStack)) {
 			aOnlyAddIfItAlreadyHasItemsOfThatTypeOrIsDedicated = F;
-			int tChange = Math.min(aCount, slot(tSlot).getMaxStackSize() - slot(tSlot).stackSize);
-			slot(tSlot).stackSize += tChange;
+			int tChange = Math.min(aCount, slot(tSlot).getMaxStackSize() - slot(tSlot).getCount());
+			slot(tSlot).getCount() += tChange;
 			rCount += tChange;
 			aCount -= tChange;
 			if (aCount <= 0) {
@@ -834,13 +834,13 @@ public abstract class TileEntityBase01Root extends TileEntity implements ITileEn
 	public int removeStackFromConnectedInventory(byte aSide, ItemStack aStack, boolean aOnlyRemoveIfItCanRemoveAllAtOnce) {
 		if (ST.invalid(aStack)) return 0;
 		int rCount = 0;
-		if (!aOnlyRemoveIfItCanRemoveAllAtOnce || getAmountOfItemsInConnectedInventory(aSide, aStack, aStack.stackSize) >= aStack.stackSize) {
+		if (!aOnlyRemoveIfItCanRemoveAllAtOnce || getAmountOfItemsInConnectedInventory(aSide, aStack, aStack.getCount()) >= aStack.getCount()) {
 			for (int tSlot : getAccessibleSlotsOfConnectedInventory()) if (ST.equal(slot(tSlot), aStack)) {
-				int tChange = Math.min(aStack.stackSize - rCount, slot(tSlot).stackSize);
-				slot(tSlot).stackSize -= tChange;
-				if (slot(tSlot).stackSize <= 0) slotKill(tSlot);
+				int tChange = Math.min(aStack.getCount() - rCount, slot(tSlot).getCount());
+				slot(tSlot).getCount() -= tChange;
+				if (slot(tSlot).getCount() <= 0) slotKill(tSlot);
 				rCount += tChange;
-				if (rCount >= aStack.stackSize) {
+				if (rCount >= aStack.getCount()) {
 					updateInventory();
 					return rCount;
 				}
@@ -853,7 +853,7 @@ public abstract class TileEntityBase01Root extends TileEntity implements ITileEn
 	public long getAmountOfItemsInConnectedInventory(byte aSide, ItemStack aStack, long aStopCountingAtThisNumber) {
 		if (ST.invalid(aStack)) return 0;
 		long rCount = 0;
-		for (int tSlot : getAccessibleSlotsOfConnectedInventory()) if (ST.equal(slot(tSlot), aStack) && (rCount += slot(tSlot).stackSize) >= aStopCountingAtThisNumber) break;
+		for (int tSlot : getAccessibleSlotsOfConnectedInventory()) if (ST.equal(slot(tSlot), aStack) && (rCount += slot(tSlot).getCount()) >= aStopCountingAtThisNumber) break;
 		return rCount;
 	}
 	

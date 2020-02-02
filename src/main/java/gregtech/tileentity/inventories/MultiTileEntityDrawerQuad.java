@@ -44,7 +44,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 
 /**
@@ -54,13 +54,13 @@ public class MultiTileEntityDrawerQuad extends TileEntityBase09FacingSingle impl
 	public boolean mSidedAccess = F;
 	
 	@Override
-	public void readFromNBT2(NBTTagCompound aNBT) {
+	public void readFromNBT2(CompoundNBT aNBT) {
 		super.readFromNBT2(aNBT);
 		if (aNBT.hasKey(NBT_MODE)) mSidedAccess = aNBT.getBoolean(NBT_MODE);
 	}
 	
 	@Override
-	public void writeToNBT2(NBTTagCompound aNBT) {
+	public void writeToNBT2(CompoundNBT aNBT) {
 		super.writeToNBT2(aNBT);
 		UT.NBT.setBoolean(aNBT, NBT_MODE, mSidedAccess);
 	}
@@ -113,7 +113,7 @@ public class MultiTileEntityDrawerQuad extends TileEntityBase09FacingSingle impl
 	};
 	
 	@Override public boolean canDrop(int aSlot) {return T;}
-	@Override public ItemStack[] getDefaultInventory(NBTTagCompound aNBT) {return new ItemStack[144];}
+	@Override public ItemStack[] getDefaultInventory(CompoundNBT aNBT) {return new ItemStack[144];}
 	@Override public int[] getAccessibleSlotsFromSide2(byte aSide) {return SLOTS[mSidedAccess ? FACING_ROTATIONS[mFacing][aSide] : SIDE_ANY];}
 	@Override public boolean canInsertItem2 (int aSlot, ItemStack aStack, byte aSide) {return T;}
 	@Override public boolean canExtractItem2(int aSlot, ItemStack aStack, byte aSide) {return T;}

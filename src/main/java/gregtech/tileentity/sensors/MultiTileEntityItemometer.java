@@ -48,14 +48,14 @@ public class MultiTileEntityItemometer extends MultiTileEntitySensorTE {
 				if (tSlots != null && tSlots.length >  0) {
 					for (int i : tSlots) {
 						ItemStack tStack = ((IInventory)aDelegator.mTileEntity).getStackInSlot(i);
-						if (tStack != null) rAmount += tStack.stackSize;
+						if (tStack != null) rAmount += tStack.getCount();
 					}
 					return rAmount;
 				}
 			}
 			for (int i = 0, j = ((IInventory)aDelegator.mTileEntity).getSizeInventory(); i < j; i++) {
 				ItemStack tStack = ((IInventory)aDelegator.mTileEntity).getStackInSlot(i);
-				if (tStack != null) rAmount += tStack.stackSize;
+				if (tStack != null) rAmount += tStack.getCount();
 			}
 			return rAmount;
 		}

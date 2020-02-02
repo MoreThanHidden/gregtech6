@@ -43,7 +43,6 @@ import gregapi.compat.galacticraft.ICompatGC;
 import gregapi.compat.industrialcraft.ICompatIC2;
 import gregapi.compat.industrialcraft.ICompatIC2EUItem;
 import gregapi.compat.thaumcraft.ICompatTC;
-import gregapi.config.Config;
 import gregapi.dummies.DummyWorld;
 import gregapi.fluid.FluidTankGT;
 import gregapi.item.ItemArmorBase;
@@ -64,22 +63,21 @@ import gregapi.util.ST;
 import gregapi.util.UT;
 import gregapi.worldgen.WorldgenObject;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.BlockFluidClassic;
+import net.minecraft.util.Direction;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.biome.Biomes;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTank;
-import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidTank;
-import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.templates.FluidTank;
 
 /**
  * @author Gregorius Techneticies
@@ -140,7 +138,8 @@ public class CS {
 	public static final long DEF_ENV_TEMP = C + 20, DEFAULT_ENVIRONMENT_TEMPERATURE = C + 20; // 293.15 IRL
 	
 	/** The Item WildCard Tag. Even shorter than the "-1" of the past */
-	public static final short W = OreDictionary.WILDCARD_VALUE;
+	//TODO: Wildcard Value
+	public static final short W = -1;
 	
 	/** Used Client Side as a placeholder for "is owned by someone other than you" */
 	public static final UUID NOT_YOU = new UUID(+1, -1);
@@ -232,29 +231,29 @@ public class CS {
 	public static final int LIGHT_OPACITY_NONE = 0, LIGHT_OPACITY_LEAVES = 1, LIGHT_OPACITY_WATER = 3, LIGHT_OPACITY_MAX = 255;
 	
 	public static final Set<String>
-	  BIOMES_RIVER              = new HashSetNoNulls<>(F, BiomeGenBase.river.biomeName, BiomeGenBase.frozenRiver.biomeName, "Lush River", "Estuary", "Twilight Stream", "Tropical River") // "Creek Bed" Unsure whether to add this
-	, BIOMES_RIVER_LAKE         = new HashSetNoNulls<>(F, BiomeGenBase.river.biomeName, BiomeGenBase.frozenRiver.biomeName, "Lush River", "Estuary", "Twilight Stream", "Tropical River", "Tropical Lake", "Twilight Lake", "Lake", "Oasis") // "Ephemeral Lake", "Ephemeral Lake Edge" those are vapourizing Lakes that vanish depending on Season.
-	, BIOMES_OCEAN              = new HashSetNoNulls<>(F, BiomeGenBase.ocean.biomeName, BiomeGenBase.frozenOcean.biomeName, BiomeGenBase.deepOcean.biomeName, "Coral Reef", "Kelp Forest", "Mangrove", "Ocean Oil Field", "Improved Oceans", "Tropical Ocean")
-	, BIOMES_OCEAN_BEACH        = new HashSetNoNulls<>(F, BiomeGenBase.ocean.biomeName, BiomeGenBase.frozenOcean.biomeName, BiomeGenBase.deepOcean.biomeName, BiomeGenBase.beach.biomeName, BiomeGenBase.coldBeach.biomeName, BiomeGenBase.stoneBeach.biomeName, BiomeGenBase.mushroomIslandShore.biomeName, "Coral Reef", "Kelp Forest", "Mangrove", "Ocean Oil Field", "Improved Oceans", "Tropical Ocean", "Tropical Beach")
-	, BIOMES_INFINITE_WATER     = new HashSetNoNulls<>(F, BiomeGenBase.ocean.biomeName, BiomeGenBase.frozenOcean.biomeName, BiomeGenBase.deepOcean.biomeName, BiomeGenBase.beach.biomeName, BiomeGenBase.coldBeach.biomeName, BiomeGenBase.stoneBeach.biomeName, BiomeGenBase.mushroomIslandShore.biomeName, "Coral Reef", "Kelp Forest", "Mangrove", "Ocean Oil Field", "Improved Oceans", "Tropical Ocean", "Tropical Beach", BiomeGenBase.river.biomeName, BiomeGenBase.frozenRiver.biomeName, "Lush River", "Estuary", "Twilight Lake", "Lake", "Oasis", "Woodland Lake", "Woodland Lake Edge")
-	, BIOMES_JUNGLE             = new HashSetNoNulls<>(F, BiomeGenBase.jungle.biomeName, BiomeGenBase.jungleHills.biomeName, BiomeGenBase.jungleEdge.biomeName, "Undergound Jungle", "Undergound Jungle M", "Jungle Island", "Extreme Jungle", "Jungle M", "JungleEdge M", "Mini Jungle", "Rainforest Hills")
-	, BIOMES_DESERT             = new HashSetNoNulls<>(F, BiomeGenBase.desert.biomeName, BiomeGenBase.desertHills.biomeName, "Sahara", "Red Desert", "Desert Archipelago", "Oasis", "Sandstone Canyon", "Sandstone Canyon 2", "Sandstone Ranges", "Sandstone Ranges M", "Sahel", "Lush Desert", "Desert Oil Field", "Desert Island", "Desert M", "Mountainous Desert", "Desert Mountains", "Volcanic Desert", "Volcanic Desert M", "Ulterior Outback", "Ulterior Outback M")
-	, BIOMES_MESA               = new HashSetNoNulls<>(F, BiomeGenBase.mesa.biomeName, BiomeGenBase.mesaPlateau.biomeName, BiomeGenBase.mesaPlateau_F.biomeName, "Canyon", "Mesa (Bryce)", "Mesa Plateau F M", "Mesa Plateau M", "Mesa", "Clay Hills")
-	, BIOMES_SAVANNA            = new HashSetNoNulls<>(F, BiomeGenBase.savanna.biomeName, BiomeGenBase.savannaPlateau.biomeName, "Steppe", "Subterranean Savannah", "Subterranean Savannah M", "Oak Savanna", "Savannah", "Savanna M", "Savanna Plateau M", "Savanna", "Shrubland", "Shrublands", "Roofed Shrublands", "Xeric Savanna", "Xeric Shrubland", "Prairie")
-	, BIOMES_SWAMP              = new HashSetNoNulls<>(F, BiomeGenBase.swampland.biomeName, "Swampland M", "Green Swamplands", "DeepSwamp", "Land of Lakes Marsh", "Marsh", "Lush Swamp", "Moor", "Mire", "Bog", "Twilight Swamp", "Submerged Swamp", "Submerged Swamp M", "Fire Swamp")
-	, BIOMES_TAIGA              = new HashSetNoNulls<>(F, BiomeGenBase.taiga.biomeName, BiomeGenBase.taigaHills.biomeName, BiomeGenBase.coldTaiga.biomeName, BiomeGenBase.coldTaigaHills.biomeName, BiomeGenBase.megaTaiga.biomeName, BiomeGenBase.megaTaigaHills.biomeName, "Mountain Taiga", "Cold Taiga M", "Taiga M", "Pinelands", "Tall Pine Forest", "Shield", "Cold Boreal Forest", "Cold Cypress Forest", "Cold Fir Forest", "Cold Pine Forest", "Boreal Archipelago", "Boreal Forest", "Boreal Plateau", "Boreal Plateau M")
-	, BIOMES_FROZEN             = new HashSetNoNulls<>(F, BiomeGenBase.icePlains.biomeName, BiomeGenBase.iceMountains.biomeName, BiomeGenBase.coldTaiga.biomeName, BiomeGenBase.coldTaigaHills.biomeName, "Snow Island", "Ice Plains Spikes", "Ice Wasteland", "Cold Taiga M", "Frost Forest", "Snowy Rainforest", "Snow Forest", "Snowy Forest", "Twilight Glacier", "Alpine", "Glacier", "Tundra", "Snowy Desert", "Snowy Plateau", "Snowy Ranges", "Snowy Wastelands", "Polar Desert", "Ice Sheet", "Frozen Archipelago", "Alpine Mountains", "Alpine Mountains Edge", "Alpine Mountains M", "Alpine Tundra")
-	, BIOMES_WOODS              = new HashSetNoNulls<>(F, BiomeGenBase.forest.biomeName, BiomeGenBase.forestHills.biomeName, "Autumn Forest", "Elysian Forest M", "Elysian Forest", "Meadow Forest", "Seasonal Forest", "Seasonal Forest Clearing", "Forested Hills", "Forested Island", "Snow Forest", "Forest Island", "Forested Archipelago", "Forested Mountains", "Forested Valley", "Redwood Forest", "Woodlands", "Woodland Mountains", "Woodland Field", "Woodland Hills", "Woodland Lake", "Woodland Lake Edge", "Maple Woods", BiomeGenBase.roofedForest.biomeName, BiomeGenBase.birchForest.biomeName, BiomeGenBase.birchForestHills.biomeName, "Pine Forest", "Rainforest", "Rainforest Valley", "Redwood Forest", "Lush Redwoods", "Dense Twilight Forest", "Twilight Forest", "Firefly Forest", "Spruce Woods", "Autumn Woods", "Flower Forest", "Birch Hills", "Birch Forest M", "Birch Forest Hills M", "Roofed Forest M", "Woodlands", "Temperate Rainforest", "Pinelands", "Tall Pine Forest", "Shield", "Mystic Grove", "Ominous Woods", "Blossom Hills", "Blossom Woods", "Aspen Forest", "Aspen Hills", "Cypress Forest", "Silver Pine Forest", "Silver Pine Hills", "Fir Forest", "Flowery Archipelago", "Oak Forest", "Pine Forest", "Pine Forest Archipelago", "Rainforest Hills", "Rainforest Mountains", "Extreme Rainforest Mountains")
-	, BIOMES_FOREST             = new HashSetNoNulls<>(F, BiomeGenBase.forest.biomeName, BiomeGenBase.forestHills.biomeName, "Autumn Forest", "Elysian Forest M", "Elysian Forest", "Meadow Forest", "Seasonal Forest", "Seasonal Forest Clearing", "Forested Hills", "Forested Island", "Snow Forest", "Forest Island", "Forested Archipelago", "Forested Mountains", "Forested Valley", "Redwood Forest", "Woodlands", "Woodland Mountains", "Woodland Field", "Woodland Hills", "Woodland Lake", "Woodland Lake Edge")
-	, BIOMES_MAPLE              = new HashSetNoNulls<>(F, BiomeGenBase.forest.biomeName, BiomeGenBase.forestHills.biomeName, "Autumn Forest", "Elysian Forest M", "Elysian Forest", "Meadow Forest", "Seasonal Forest", "Seasonal Forest Clearing", "Forested Hills", "Forested Island", "Snow Forest", "Forest Island", "Forested Archipelago", "Forested Mountains", "Forested Valley", "Maple Woods")
-	, BIOMES_PLAINS             = new HashSetNoNulls<>(F, BiomeGenBase.plains.biomeName, "Meadow", "Meadow M", "Grassland", "Flower Field", "Sunflower Plains", "Clearing", "Twilight Clearing", "Elysian Fields", "Elysian Fields M", "Lowlands", "Origin Valley", "Grassy Archipelago", "Alfheim", "Rainforest Plains", "Tropics", "Highlands", "Bald Hill", "Tundra", "Low Hills")
-	, BIOMES_HAZEL              = new HashSetNoNulls<>(F, BiomeGenBase.plains.biomeName, "Meadow", "Meadow M", "Grassland", "Flower Field", "Sunflower Plains", "Clearing", "Twilight Clearing", "Elysian Fields", "Elysian Fields M", "Lowlands", "Origin Valley", "Grassy Archipelago", "Alfheim")
-	, BIOMES_MOUNTAINS          = new HashSetNoNulls<>(F, BiomeGenBase.extremeHills.biomeName, BiomeGenBase.extremeHillsEdge.biomeName, BiomeGenBase.extremeHillsPlus.biomeName, BiomeGenBase.stoneBeach.biomeName, "Extreme Hills M", "Extreme Hills+ M", "Mountainous Archipelago", "Mountains", "Mountains Edge", "Plateau", "Highlands", "Highlands Center", "Alps", "Cliffs", "Flying Mountains", "Rock Mountains", "Snow Mountains", "Rock Island", "Valley", "Alpine Mountains", "Alpine Mountains Edge", "Alpine Mountains M", "Alpine Tundra", "Stone Canyon", "Stone Canyon 2", "Rocky Desert", "Rocky Hills", "Rainforest Mountains", "Extreme Rainforest Mountains")
-	, BIOMES_NETHER             = new HashSetNoNulls<>(F, BiomeGenBase.hell.biomeName)
-	, BIOMES_END                = new HashSetNoNulls<>(F, BiomeGenBase.sky.biomeName)
+	  BIOMES_RIVER              = new HashSetNoNulls<>(F, Biomes.RIVER.getDisplayName().getFormattedText(), Biomes.FROZEN_RIVER.getDisplayName().getFormattedText(), "Lush River", "Estuary", "Twilight Stream", "Tropical River") // "Creek Bed" Unsure whether to add this
+	, BIOMES_RIVER_LAKE         = new HashSetNoNulls<>(F, Biomes.RIVER.getDisplayName().getFormattedText(), Biomes.FROZEN_RIVER.getDisplayName().getFormattedText(), "Lush River", "Estuary", "Twilight Stream", "Tropical River", "Tropical Lake", "Twilight Lake", "Lake", "Oasis") // "Ephemeral Lake", "Ephemeral Lake Edge" those are vapourizing Lakes that vanish depending on Season.
+	, BIOMES_OCEAN              = new HashSetNoNulls<>(F, Biomes.OCEAN.getDisplayName().getFormattedText(), Biomes.FROZEN_OCEAN.getDisplayName().getFormattedText(), Biomes.DEEP_OCEAN.getDisplayName().getFormattedText(), "Coral Reef", "Kelp Forest", "Mangrove", "Ocean Oil Field", "Improved Oceans", "Tropical Ocean")
+	, BIOMES_OCEAN_BEACH        = new HashSetNoNulls<>(F, Biomes.OCEAN.getDisplayName().getFormattedText(), Biomes.FROZEN_OCEAN.getDisplayName().getFormattedText(), Biomes.DEEP_OCEAN.getDisplayName().getFormattedText(), Biomes.BEACH.getDisplayName().getFormattedText(), Biomes.SNOWY_BEACH.getDisplayName().getFormattedText(), Biomes.STONE_SHORE.getDisplayName().getFormattedText(), Biomes.MUSHROOM_FIELD_SHORE.getDisplayName().getFormattedText(), "Coral Reef", "Kelp Forest", "Mangrove", "Ocean Oil Field", "Improved Oceans", "Tropical Ocean", "Tropical Beach")
+	, BIOMES_INFINITE_WATER     = new HashSetNoNulls<>(F, Biomes.OCEAN.getDisplayName().getFormattedText(), Biomes.FROZEN_OCEAN.getDisplayName().getFormattedText(), Biomes.DEEP_OCEAN.getDisplayName().getFormattedText(), Biomes.BEACH.getDisplayName().getFormattedText(), Biomes.SNOWY_BEACH.getDisplayName().getFormattedText(), Biomes.STONE_SHORE.getDisplayName().getFormattedText(), Biomes.MUSHROOM_FIELD_SHORE.getDisplayName().getFormattedText(), "Coral Reef", "Kelp Forest", "Mangrove", "Ocean Oil Field", "Improved Oceans", "Tropical Ocean", "Tropical Beach", Biomes.RIVER.getDisplayName().getFormattedText(), Biomes.FROZEN_RIVER.getDisplayName().getFormattedText(), "Lush River", "Estuary", "Twilight Lake", "Lake", "Oasis", "Woodland Lake", "Woodland Lake Edge")
+	, BIOMES_JUNGLE             = new HashSetNoNulls<>(F, Biomes.JUNGLE.getDisplayName().getFormattedText(), Biomes.JUNGLE_HILLS.getDisplayName().getFormattedText(), Biomes.JUNGLE_EDGE.getDisplayName().getFormattedText(), "Undergound Jungle", "Undergound Jungle M", "Jungle Island", "Extreme Jungle", "Jungle M", "JungleEdge M", "Mini Jungle", "Rainforest Hills")
+	, BIOMES_DESERT             = new HashSetNoNulls<>(F, Biomes.DESERT.getDisplayName().getFormattedText(), Biomes.DESERT_HILLS.getDisplayName().getFormattedText(), "Sahara", "Red Desert", "Desert Archipelago", "Oasis", "Sandstone Canyon", "Sandstone Canyon 2", "Sandstone Ranges", "Sandstone Ranges M", "Sahel", "Lush Desert", "Desert Oil Field", "Desert Island", "Desert M", "Mountainous Desert", "Desert Mountains", "Volcanic Desert", "Volcanic Desert M", "Ulterior Outback", "Ulterior Outback M")
+	, BIOMES_MESA               = new HashSetNoNulls<>(F, Biomes.BADLANDS.getDisplayName().getFormattedText(), Biomes.BADLANDS_PLATEAU.getDisplayName().getFormattedText(), Biomes.ERODED_BADLANDS.getDisplayName().getFormattedText(), "Canyon", "Mesa (Bryce)", "Mesa Plateau F M", "Mesa Plateau M", "Mesa", "Clay Hills")
+	, BIOMES_SAVANNA            = new HashSetNoNulls<>(F, Biomes.SAVANNA.getDisplayName().getFormattedText(), Biomes.SAVANNA_PLATEAU.getDisplayName().getFormattedText(), "Steppe", "Subterranean Savannah", "Subterranean Savannah M", "Oak Savanna", "Savannah", "Savanna M", "Savanna Plateau M", "Savanna", "Shrubland", "Shrublands", "Roofed Shrublands", "Xeric Savanna", "Xeric Shrubland", "Prairie")
+	, BIOMES_SWAMP              = new HashSetNoNulls<>(F, Biomes.SWAMP.getDisplayName().getFormattedText(), "Swampland M", "Green Swamplands", "DeepSwamp", "Land of Lakes Marsh", "Marsh", "Lush Swamp", "Moor", "Mire", "Bog", "Twilight Swamp", "Submerged Swamp", "Submerged Swamp M", "Fire Swamp")
+	, BIOMES_TAIGA              = new HashSetNoNulls<>(F, Biomes.TAIGA.getDisplayName().getFormattedText(), Biomes.TAIGA_HILLS.getDisplayName().getFormattedText(), Biomes.SNOWY_TAIGA.getDisplayName().getFormattedText(), Biomes.SNOWY_TAIGA_HILLS.getDisplayName().getFormattedText(), Biomes.GIANT_TREE_TAIGA.getDisplayName().getFormattedText(), Biomes.GIANT_TREE_TAIGA_HILLS.getDisplayName().getFormattedText(), "Mountain Taiga", "Cold Taiga M", "Taiga M", "Pinelands", "Tall Pine Forest", "Shield", "Cold Boreal Forest", "Cold Cypress Forest", "Cold Fir Forest", "Cold Pine Forest", "Boreal Archipelago", "Boreal Forest", "Boreal Plateau", "Boreal Plateau M")
+	, BIOMES_FROZEN             = new HashSetNoNulls<>(F, Biomes.ICE_SPIKES.getDisplayName().getFormattedText(), Biomes.SNOWY_MOUNTAINS.getDisplayName().getFormattedText(), Biomes.SNOWY_TAIGA.getDisplayName().getFormattedText(), Biomes.SNOWY_TAIGA_HILLS.getDisplayName().getFormattedText(), "Snow Island", "Ice Plains Spikes", "Ice Wasteland", "Cold Taiga M", "Frost Forest", "Snowy Rainforest", "Snow Forest", "Snowy Forest", "Twilight Glacier", "Alpine", "Glacier", "Tundra", "Snowy Desert", "Snowy Plateau", "Snowy Ranges", "Snowy Wastelands", "Polar Desert", "Ice Sheet", "Frozen Archipelago", "Alpine Mountains", "Alpine Mountains Edge", "Alpine Mountains M", "Alpine Tundra")
+	, BIOMES_WOODS              = new HashSetNoNulls<>(F, Biomes.FOREST.getDisplayName().getFormattedText(), Biomes.WOODED_HILLS.getDisplayName().getFormattedText(), "Autumn Forest", "Elysian Forest M", "Elysian Forest", "Meadow Forest", "Seasonal Forest", "Seasonal Forest Clearing", "Forested Hills", "Forested Island", "Snow Forest", "Forest Island", "Forested Archipelago", "Forested Mountains", "Forested Valley", "Redwood Forest", "Woodlands", "Woodland Mountains", "Woodland Field", "Woodland Hills", "Woodland Lake", "Woodland Lake Edge", "Maple Woods", Biomes.DARK_FOREST.getDisplayName().getFormattedText(), Biomes.BIRCH_FOREST.getDisplayName().getFormattedText(), Biomes.BIRCH_FOREST_HILLS.getDisplayName().getFormattedText(), "Pine Forest", "Rainforest", "Rainforest Valley", "Redwood Forest", "Lush Redwoods", "Dense Twilight Forest", "Twilight Forest", "Firefly Forest", "Spruce Woods", "Autumn Woods", "Flower Forest", "Birch Hills", "Birch Forest M", "Birch Forest Hills M", "Roofed Forest M", "Woodlands", "Temperate Rainforest", "Pinelands", "Tall Pine Forest", "Shield", "Mystic Grove", "Ominous Woods", "Blossom Hills", "Blossom Woods", "Aspen Forest", "Aspen Hills", "Cypress Forest", "Silver Pine Forest", "Silver Pine Hills", "Fir Forest", "Flowery Archipelago", "Oak Forest", "Pine Forest", "Pine Forest Archipelago", "Rainforest Hills", "Rainforest Mountains", "Extreme Rainforest Mountains")
+	, BIOMES_FOREST             = new HashSetNoNulls<>(F, Biomes.FOREST.getDisplayName().getFormattedText(), Biomes.WOODED_HILLS.getDisplayName().getFormattedText(), "Autumn Forest", "Elysian Forest M", "Elysian Forest", "Meadow Forest", "Seasonal Forest", "Seasonal Forest Clearing", "Forested Hills", "Forested Island", "Snow Forest", "Forest Island", "Forested Archipelago", "Forested Mountains", "Forested Valley", "Redwood Forest", "Woodlands", "Woodland Mountains", "Woodland Field", "Woodland Hills", "Woodland Lake", "Woodland Lake Edge")
+	, BIOMES_MAPLE              = new HashSetNoNulls<>(F, Biomes.FOREST.getDisplayName().getFormattedText(), Biomes.WOODED_HILLS.getDisplayName().getFormattedText(), "Autumn Forest", "Elysian Forest M", "Elysian Forest", "Meadow Forest", "Seasonal Forest", "Seasonal Forest Clearing", "Forested Hills", "Forested Island", "Snow Forest", "Forest Island", "Forested Archipelago", "Forested Mountains", "Forested Valley", "Maple Woods")
+	, BIOMES_PLAINS             = new HashSetNoNulls<>(F, Biomes.PLAINS.getDisplayName().getFormattedText(), "Meadow", "Meadow M", "Grassland", "Flower Field", "Sunflower Plains", "Clearing", "Twilight Clearing", "Elysian Fields", "Elysian Fields M", "Lowlands", "Origin Valley", "Grassy Archipelago", "Alfheim", "Rainforest Plains", "Tropics", "Highlands", "Bald Hill", "Tundra", "Low Hills")
+	, BIOMES_HAZEL              = new HashSetNoNulls<>(F, Biomes.PLAINS.getDisplayName().getFormattedText(), "Meadow", "Meadow M", "Grassland", "Flower Field", "Sunflower Plains", "Clearing", "Twilight Clearing", "Elysian Fields", "Elysian Fields M", "Lowlands", "Origin Valley", "Grassy Archipelago", "Alfheim")
+	, BIOMES_MOUNTAINS          = new HashSetNoNulls<>(F, Biomes.MOUNTAINS.getDisplayName().getFormattedText(), Biomes.MOUNTAIN_EDGE.getDisplayName().getFormattedText(), Biomes.GRAVELLY_MOUNTAINS.getDisplayName().getFormattedText(), Biomes.SNOWY_MOUNTAINS.getDisplayName().getFormattedText(), "Extreme Hills M", "Extreme Hills+ M", "Mountainous Archipelago", "Mountains", "Mountains Edge", "Plateau", "Highlands", "Highlands Center", "Alps", "Cliffs", "Flying Mountains", "Rock Mountains", "Snow Mountains", "Rock Island", "Valley", "Alpine Mountains", "Alpine Mountains Edge", "Alpine Mountains M", "Alpine Tundra", "Stone Canyon", "Stone Canyon 2", "Rocky Desert", "Rocky Hills", "Rainforest Mountains", "Extreme Rainforest Mountains")
+	, BIOMES_NETHER             = new HashSetNoNulls<>(F, Biomes.NETHER.getDisplayName().getFormattedText())
+	, BIOMES_END                = new HashSetNoNulls<>(F, Biomes.THE_END.getDisplayName().getFormattedText(), Biomes.END_BARRENS.getDisplayName().getFormattedText(), Biomes.END_HIGHLANDS.getDisplayName().getFormattedText(), Biomes.END_MIDLANDS.getDisplayName().getFormattedText(), Biomes.SMALL_END_ISLANDS.getDisplayName().getFormattedText())
 	, BIOMES_WASTELANDS         = new HashSetNoNulls<>(F, "Wasteland", "Wastelands", "Wasteland Mountains", "Wasteland Forest", "Radioactive Wasteland")
 	, BIOMES_RADIOACTIVE        = new HashSetNoNulls<>(F, "Radioactive Wasteland")
-	, BIOMES_SHROOM             = new HashSetNoNulls<>(F, BiomeGenBase.mushroomIsland.biomeName, BiomeGenBase.mushroomIslandShore.biomeName, "Fungal Forest", "Fungal Forest M")
+	, BIOMES_SHROOM             = new HashSetNoNulls<>(F, Biomes.MUSHROOM_FIELDS.getDisplayName().getFormattedText(), Biomes.MUSHROOM_FIELD_SHORE.getDisplayName().getFormattedText(), "Fungal Forest", "Fungal Forest M")
 	, BIOMES_MAGICAL            = new HashSetNoNulls<>(F, "Magical Forest", "Tainted Land", "Eerie", "WyvernBiome", "Eldritch", "Enchanted Forest", "Mystic Grove", "Alfheim")
 	, BIOMES_MAGICAL_GOOD       = new HashSetNoNulls<>(F, "Magical Forest", "Eldritch", "Enchanted Forest", "Mystic Grove", "Alfheim")
 	, BIOMES_MAGICAL_BAD        = new HashSetNoNulls<>(F, "Tainted Land", "Eerie", "WyvernBiome", "Ominous Woods")
@@ -268,7 +267,7 @@ public class CS {
 	// "Wasteland City", "Fens", "Carr", "Kakadu", "Scree", "Scrub", "Riparian Zone", "Basin", "Badlands", "Outback", "Tropical Islands", "Tropical Archipelago", "Windy Island", "Volcano Island", "Volcano", "Volcano M"
 	
 	/** Stores the Coordinates that any given Player last interacted with. */
-	public static final Map<EntityPlayer, ChunkCoordinates> PLAYER_LAST_CLICKED = new IdentityHashMap<>();
+	public static final Map<PlayerEntity, ChunkPos> PLAYER_LAST_CLICKED = new IdentityHashMap<>();
 	
 	/** a Random generator so I don't need to instantiate a new one all the time. */
 	public static final Random RNGSUS = new Random(), RANDOM = RNGSUS;
@@ -573,11 +572,6 @@ public class CS {
 											OFFSETS_Y = {-1,+1, 0, 0, 0, 0, 0},
 											OFFSETS_Z = { 0, 0,-1,+1, 0, 0, 0};
 	
-	/** Side->ForgeDirection Mappings. */
-	public static final ForgeDirection[]    FORGE_DIR = {ForgeDirection.DOWN, ForgeDirection.UP, ForgeDirection.NORTH, ForgeDirection.SOUTH, ForgeDirection.WEST, ForgeDirection.EAST, ForgeDirection.UNKNOWN};
-	/** Side->Opposite Mappings with ForgeDirection. */
-	public static final ForgeDirection[]    FORGE_DIR_OPPOSITES = {ForgeDirection.UP, ForgeDirection.DOWN, ForgeDirection.SOUTH, ForgeDirection.NORTH, ForgeDirection.EAST, ForgeDirection.WEST, ForgeDirection.UNKNOWN};
-	
 	/** Compass alike Array for the proper ordering of North, East, South and West. */
 	public static final byte[]              COMPASS_DIRECTIONS      = {SIDE_NORTH, SIDE_EAST, SIDE_SOUTH, SIDE_WEST};
 	/** Side -> Compass Direction. Defaults to North if wrong value. */
@@ -744,14 +738,13 @@ public class CS {
 	/** Zero-Length Array to save on Memory. */ public static final OreDictMaterial         [] ZL_MT                = new OreDictMaterial[0], ZL_MATERIAL = ZL_MT;
 	/** Zero-Length Array to save on Memory. */ public static final OreDictMaterialStack    [] ZL_MS                = new OreDictMaterialStack[0], ZL_MATERIALSTACK = ZL_MS;
 	/** Zero-Length Array to save on Memory. */ public static final Enchantment             [] ZL_ENCHANTMENT       = new Enchantment[0];
-	/** Zero-Length Array to save on Memory. */ public static final FluidTank               [] ZL_FLUIDTANK         = new FluidTank[0];
+	/** Zero-Length Array to save on Memory. */ public static final FluidTank				[] ZL_FLUIDTANK         = new FluidTank[0];
 	/** Zero-Length Array to save on Memory. */ public static final IFluidTank              [] ZL_IFLUIDTANK        = new IFluidTank[0];
-	/** Zero-Length Array to save on Memory. */ public static final FluidTankInfo           [] ZL_FLUIDTANKINFO     = new FluidTankInfo[0], L1_FLUIDTANKINFO_DUMMY = new FluidTankInfo[] {new FluidTankInfo(null, Integer.MAX_VALUE)};
 	/** Zero-Length Array to save on Memory. */ public static final OreDictItemData         [] ZL_OREDICTITEMDATA   = new OreDictItemData[0];
 	/** Zero-Length Array to save on Memory. */ public static final OreDictPrefix           [] ZL_OREDICTPREFIX     = new OreDictPrefix[0];
 	/** Zero-Length Array to save on Memory. */ public static final ObjectStack<?>          [] ZL_OBJECTSTACK       = new ObjectStack[0];
-	/** Zero-Length Array to save on Memory. */ public static final ForgeDirection          [] ZL_FORGEDIRECTION    = new ForgeDirection[0];
-	/** Zero-Length Array to save on Memory. */ public static final ChunkCoordinates        [] ZL_COORDS            = new ChunkCoordinates[0];
+	/** Zero-Length Array to save on Memory. */ public static final Direction				[] ZL_FORGEDIRECTION    = new Direction[0];
+	/** Zero-Length Array to save on Memory. */ public static final ChunkPos        		[] ZL_COORDS            = new ChunkPos[0];
 	/** Zero-Length Array to save on Memory. */ public static final Recipe                  [] ZL_RECIPE            = new Recipe[0];
 	/** Zero-Length Array to save on Memory. */ public static final IIconContainer          [] ZL_IICONCONTAINER    = new IIconContainer[0], L6_IICONCONTAINER  = new IIconContainer[6], L1L6_IICONCONTAINER[] = new IIconContainer[][] {L6_IICONCONTAINER};
 	
@@ -762,7 +755,7 @@ public class CS {
 	public static final FluidStack NF = null;
 	
 	/** This way it is possible to have a Call Hierarchy of NullPointers in Block based Functions, and also because most of the time I don't know what kind of Data Type the "null" stands for, when there are shitloads of Parameters for a Function */
-	public static final Block NB = Blocks.air;
+	public static final Block NB = Blocks.AIR;
 	
 	/** The Logs: Debug, Output, Error, OreDict and Material List. */
 	public static PrintStream DEB = new LogBuffer(), OUT = new LogBuffer(), ERR = new LogBuffer(), ORD = new LogBuffer(), MAT_LOG = null;
@@ -795,7 +788,7 @@ public class CS {
 	public static int ITEM_DESPAWN_TIME = 6000;
 	
 	/** Gets set when the Player dies. Only works Client Side and gets lost when the Client restarts, but not when the Client just relogs. */
-	public static ChunkCoordinates LAST_DEATH_OF_THE_PLAYER = null;
+	public static ChunkPos LAST_DEATH_OF_THE_PLAYER = null;
 	
 	/** Gets set when a TileEntity gets broken, in order to be able to access it for Drops, even though it just got deleted. */
 	public static ThreadLocal<TileEntity> LAST_BROKEN_TILEENTITY = new ThreadLocal<>();
@@ -1225,7 +1218,7 @@ public class CS {
 	;
 	
 	/** List of Visually Full Opaque Blocks. For minor Render optimisations. */
-	public static final HashSetNoNulls<Block> VISUALLY_OPAQUE_BLOCKS = new HashSetNoNulls<>(F, Blocks.bedrock, Blocks.command_block, Blocks.hardened_clay, Blocks.stained_hardened_clay, Blocks.gravel, Blocks.sand, Blocks.sandstone, Blocks.end_stone, Blocks.nether_brick, Blocks.netherrack, Blocks.obsidian, Blocks.planks, Blocks.log, Blocks.log2, Blocks.stone, Blocks.cobblestone, Blocks.mossy_cobblestone, Blocks.grass, Blocks.dirt, Blocks.clay, Blocks.stonebrick, Blocks.redstone_block, Blocks.glowstone, Blocks.redstone_lamp, Blocks.lit_redstone_lamp, Blocks.lit_redstone_ore, Blocks.pumpkin, Blocks.melon_block);
+	public static final HashSetNoNulls<Block> VISUALLY_OPAQUE_BLOCKS = new HashSetNoNulls<>(F, Blocks.BEDROCK, Blocks.COMMAND_BLOCK, Blocks.TERRACOTTA, Blocks.GRAVEL, Blocks.SAND, Blocks.SANDSTONE, Blocks.END_STONE, Blocks.NETHER_BRICKS, Blocks.NETHERRACK, Blocks.OBSIDIAN, Blocks.OAK_PLANKS, Blocks.OAK_LOG, Blocks.BIRCH_LOG, Blocks.STONE, Blocks.COBBLESTONE, Blocks.MOSSY_COBBLESTONE, Blocks.GRASS, Blocks.DIRT, Blocks.CLAY, Blocks.STONE_BRICKS, Blocks.REDSTONE_BLOCK, Blocks.GLOWSTONE, Blocks.REDSTONE_LAMP, Blocks.REDSTONE_ORE, Blocks.PUMPKIN, Blocks.MELON);
 	
 	
 	public static class GarbageGT {
@@ -1236,24 +1229,24 @@ public class CS {
 		public static ArrayListNoNulls<FluidTankGT> GARBAGE_FLUIDS = new ArrayListNoNulls<>();
 		
 		public static int trash(ItemStack aStack) {
-			if (ST.invalid(aStack) || aStack.stackSize <= 0 || BLACKLIST.contains(aStack, T)) return 0;
-			if (aStack.hasTagCompound()) {
+			if (ST.invalid(aStack) || aStack.getCount() <= 0 || BLACKLIST.contains(aStack, T)) return 0;
+			if (aStack.hasTag()) {
 				for (ItemStack tGarbage : GARBAGE_ITEMS) if (ST.equal(aStack, tGarbage)) {
-					tGarbage.stackSize = UT.Code.bindInt((long)tGarbage.stackSize + (long)aStack.stackSize);
-					return aStack.stackSize;
+					tGarbage.setCount(UT.Code.bindInt((long)tGarbage.getCount() + (long)aStack.getCount()));
+					return aStack.getCount();
 				}
 				GARBAGE_ITEMS.add(aStack.copy());
-				return aStack.stackSize;
+				return aStack.getCount();
 			}
 			ItemStack tGarbage = GARBAGE_MAP_ITEMS.get(ST.item_(aStack), ST.meta_(aStack));
 			if (ST.valid(tGarbage)) {
-				tGarbage.stackSize = UT.Code.bindInt((long)tGarbage.stackSize + (long)aStack.stackSize);
-				return aStack.stackSize;
+				tGarbage.setCount(UT.Code.bindInt((long)tGarbage.getCount() + (long)aStack.getCount()));
+				return aStack.getCount();
 			}
 			aStack = aStack.copy();
 			GARBAGE_MAP_ITEMS.put(aStack, aStack);
 			GARBAGE_ITEMS.add(aStack);
-			return aStack.stackSize;
+			return aStack.getCount();
 		}
 		public static long trash(ItemStack[] aInventory) {
 			if (aInventory == null) return 0;
@@ -1271,23 +1264,23 @@ public class CS {
 			return rTrashed;
 		}
 		public static int trash(FluidStack aFluid) {
-			if (aFluid == null || aFluid.amount <= 0) return 0;
+			if (aFluid == null || aFluid.getAmount() <= 0) return 0;
 			for (FluidTankGT tGarbage : GARBAGE_FLUIDS) if (tGarbage.contains(aFluid)) {
-				tGarbage.add(aFluid.amount);
-				return aFluid.amount;
+				tGarbage.add(aFluid.getAmount());
+				return aFluid.getAmount();
 			}
 			GARBAGE_FLUIDS.add(new FluidTankGT(aFluid.copy(), Long.MAX_VALUE).setPreventDraining().setVoidExcess());
-			return aFluid.amount;
+			return aFluid.getAmount();
 		}
 		public static int trash(IFluidTank aTank) {
 			return trash(aTank, Long.MAX_VALUE);
 		}
 		public static int trash(IFluidTank aTank, long aTrashed) {
 			if (aTank == null || aTrashed <= 0) return 0;
-			FluidStack tFluid = aTank.drain(UT.Code.bindInt(aTrashed), T);
-			if (tFluid == null || tFluid.amount <= 0) return 0;
+			FluidStack tFluid = aTank.drain(UT.Code.bindInt(aTrashed), IFluidHandler.FluidAction.EXECUTE);
+			if (tFluid.getAmount() <= 0) return 0;
 			trash(tFluid);
-			return tFluid.amount;
+			return tFluid.getAmount();
 		}
 		public static long trash(IFluidTank[] aTanks) {
 			if (aTanks == null) return 0;
@@ -1310,7 +1303,7 @@ public class CS {
 		public static void onServerSave(File aSaveLocation) {
 			File aTargetFile = new File(new File(aSaveLocation, "gregtech"), "endergarbage.items.dat");
 			if (!aTargetFile.exists()) {try {aTargetFile.createNewFile();} catch (Throwable e) {e.printStackTrace(ERR);}}
-			NBTTagCompound aNBT = UT.NBT.make();
+			CompoundNBT aNBT = UT.NBT.make();
 			for (int i = 0; i < GARBAGE_ITEMS.size(); i++) ST.save(aNBT, ""+i, GARBAGE_ITEMS.get(i));
 			try {CompressedStreamTools.write(aNBT, aTargetFile);} catch (Throwable e) {e.printStackTrace(ERR);}
 			
@@ -1325,12 +1318,12 @@ public class CS {
 			GARBAGE_ITEMS.clear();
 			File aTargetFile = new File(new File(aSaveLocation, "gregtech"), "endergarbage.items.dat");
 			if (aTargetFile.exists()) {
-				NBTTagCompound aNBT = UT.NBT.make();
+				CompoundNBT aNBT = UT.NBT.make();
 				try {aNBT = CompressedStreamTools.read(aTargetFile);} catch (Throwable e) {e.printStackTrace(ERR);}
 				for (int i = 0; i < Integer.MAX_VALUE; i++) {
-					if (!aNBT.hasKey(""+i)) break;
+					if (!aNBT.contains(""+i)) break;
 					ItemStack aStack = ST.load(aNBT, ""+i);
-					if (aStack == null || aStack.stackSize <= 0 || BLACKLIST.contains(aStack, T)) continue;
+					if (aStack == null || aStack.getCount() <= 0 || BLACKLIST.contains(aStack, T)) continue;
 					GARBAGE_ITEMS.add(aStack);
 				}
 			}
@@ -1338,10 +1331,10 @@ public class CS {
 			GARBAGE_FLUIDS.clear();
 			aTargetFile = new File(new File(aSaveLocation, "gregtech"), "endergarbage.fluids.dat");
 			if (aTargetFile.exists()) {
-				NBTTagCompound aNBT = UT.NBT.make();
+				CompoundNBT aNBT = UT.NBT.make();
 				try {aNBT = CompressedStreamTools.read(aTargetFile);} catch (Throwable e) {e.printStackTrace(ERR);}
 				for (int i = 0; i < Integer.MAX_VALUE; i++) {
-					if (!aNBT.hasKey(""+i)) break;
+					if (!aNBT.contains(""+i)) break;
 					FluidTankGT tTank = new FluidTankGT(Long.MAX_VALUE).setPreventDraining().setVoidExcess();
 					tTank.readFromNBT(aNBT, ""+i);
 					if (!tTank.has()) continue;
@@ -1464,7 +1457,7 @@ public class CS {
 		oreSmall    , oreSmallSandstone     , oreSmallNetherrack    , oreSmallEndstone  , oreSmallAtumLimestone     , oreSmallAtumSand, oreSmallGravel, oreSmallMud, oreSmallSand, oreSmallRedSand, oreSmallBedrock;
 		
 		public static BlockBaseFluid OilLight, OilMedium, OilHeavy, OilExtraHeavy, GasNatural;
-		public static BlockFluidClassic Ocean, Swamp, River;
+		public static FlowingFluidBlock Ocean, Swamp, River;
 		
 		public static BlockBase Sands, Diggables, Grass, Paths, RockOres;
 		
@@ -1496,21 +1489,21 @@ public class CS {
 		;
 		
 		public static final Set<Object> stoneOverridable = new HashSetNoNulls<>(F);
-		public static final Set<Object> breakableGlass   = new HashSetNoNulls<Object>(F, Blocks.glass, Blocks.glass_pane, Blocks.stained_glass, Blocks.stained_glass_pane);
-		public static final Set<Object> harvestableSpade = new HashSetNoNulls<Object>(F, Blocks.grass, Blocks.dirt, Blocks.mycelium, Blocks.clay, Blocks.snow);
-		public static final Set<Object> plantableGreens  = new HashSetNoNulls<Object>(F, Blocks.grass, Blocks.dirt, Blocks.farmland);
-		public static final Set<Object> plantableTrees   = new HashSetNoNulls<Object>(F, Blocks.grass, Blocks.dirt);
-		public static final Set<Object> plantableGrass   = new HashSetNoNulls<Object>(F, Blocks.grass);
+		public static final Set<Object> breakableGlass   = new HashSetNoNulls<>(F, Blocks.GLASS, Blocks.GLASS_PANE);
+		public static final Set<Object> harvestableSpade = new HashSetNoNulls<Object>(F, Blocks.GRASS, Blocks.DIRT, Blocks.MYCELIUM, Blocks.CLAY, Blocks.SNOW);
+		public static final Set<Object> plantableGreens  = new HashSetNoNulls<Object>(F, Blocks.GRASS, Blocks.DIRT, Blocks.FARMLAND);
+		public static final Set<Object> plantableTrees   = new HashSetNoNulls<Object>(F, Blocks.GRASS, Blocks.DIRT);
+		public static final Set<Object> plantableGrass   = new HashSetNoNulls<Object>(F, Blocks.GRASS);
 		
 		/** Blocks to not generate Ores in. */
 		public static ItemStackSet<ItemStackContainer> sDontGenerateOresIn = new ItemStackSet<>();
 		
-		public static final Set<Object> FLOWERS = new HashSetNoNulls<Object>(F, Blocks.yellow_flower, Blocks.red_flower);
+		public static final Set<Object> FLOWERS = new HashSetNoNulls<Object>(F, Blocks.PEONY, Blocks.POPPY);
 		
-		public static final Block[] POT_FLOWER_TILES = {Blocks.cactus, Blocks.brown_mushroom, Blocks.red_mushroom, Blocks.yellow_flower, Blocks.red_flower, Blocks.red_flower, Blocks.red_flower, Blocks.red_flower, Blocks.red_flower, Blocks.red_flower, Blocks.red_flower, Blocks.red_flower, Blocks.red_flower};
+		public static final Block[] POT_FLOWER_TILES = {Blocks.CACTUS, Blocks.BROWN_MUSHROOM, Blocks.RED_MUSHROOM, Blocks.PEONY, Blocks.POPPY, Blocks.POPPY, Blocks.POPPY, Blocks.POPPY, Blocks.POPPY, Blocks.POPPY, Blocks.POPPY, Blocks.POPPY, Blocks.POPPY};
 		public static final byte [] POT_FLOWER_METAS = {0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8};
 		
-		public static final Block[] FLOWER_TILES = {Blocks.yellow_flower, Blocks.red_flower, Blocks.red_flower, Blocks.red_flower, Blocks.red_flower, Blocks.red_flower, Blocks.red_flower, Blocks.red_flower, Blocks.red_flower, Blocks.red_flower};
+		public static final Block[] FLOWER_TILES = {Blocks.PEONY, Blocks.POPPY, Blocks.POPPY, Blocks.POPPY, Blocks.POPPY, Blocks.POPPY, Blocks.POPPY, Blocks.POPPY, Blocks.POPPY, Blocks.POPPY};
 		public static final byte [] FLOWER_METAS = {0, 0, 1, 2, 3, 4, 5, 6, 7, 8};
 	}
 	
@@ -1566,8 +1559,8 @@ public class CS {
 		public static IIconContainer[] PLANK_ICONS = new IIconContainer[300];
 		
 		static {
-			PLANKS[0] = ST.make(Blocks.planks, 1, 0);
-			Arrays.fill(PLANK_ICONS, new IconContainerCopied(Blocks.planks, 0, 0));
+			PLANKS[0] = ST.make(Blocks.OAK_PLANKS, 1, 0);
+			Arrays.fill(PLANK_ICONS, new IconContainerCopied(Blocks.OAK_PLANKS, 0, 0));
 		}
 	}
 	
@@ -1688,7 +1681,7 @@ public class CS {
 	
 	/** Configs */
 	public static class ConfigsGT {
-		public static Config
+		public static Class
 		CLIENT = null,
 		SPECIAL = null,
 		RECIPES = null,

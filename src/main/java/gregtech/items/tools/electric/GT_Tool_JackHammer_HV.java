@@ -118,7 +118,7 @@ public class GT_Tool_JackHammer_HV extends GT_Tool_MiningDrill_LV {
 			for (int i = 0; i < aDrops.size(); i++) {
 				tRecipe = RM.Hammer.findRecipe(null, null, true, Integer.MAX_VALUE, null, ZL_FS, ST.amount(1, aDrops.get(i)));
 				if (tRecipe != null) {
-					byte tStackSize = (byte)aDrops.get(i).stackSize;
+					byte tStackSize = (byte)aDrops.get(i).getCount();
 					rConversions += tStackSize;
 					aDrops.remove(i--);
 					if (tRecipe.mOutputs.length > 0) for (byte j = 0; j < tStackSize; j++) {

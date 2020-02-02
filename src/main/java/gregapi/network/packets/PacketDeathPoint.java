@@ -25,7 +25,7 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 
 import gregapi.network.INetworkHandler;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.ChunkPos;
 import net.minecraft.world.IBlockAccess;
 
 /**
@@ -36,7 +36,7 @@ public class PacketDeathPoint extends PacketCoordinates {
 		super(aDecoderType);
 	}
 	
-	public PacketDeathPoint(ChunkCoordinates aCoords) {
+	public PacketDeathPoint(ChunkPos aCoords) {
 		super(aCoords);
 	}
 	
@@ -61,6 +61,6 @@ public class PacketDeathPoint extends PacketCoordinates {
 	
 	@Override
 	public void process(IBlockAccess aWorld, INetworkHandler aNetworkHandler) {
-		LAST_DEATH_OF_THE_PLAYER = new ChunkCoordinates(mX, mY, mZ);
+		LAST_DEATH_OF_THE_PLAYER = new ChunkPos(mX, mY, mZ);
 	}
 }

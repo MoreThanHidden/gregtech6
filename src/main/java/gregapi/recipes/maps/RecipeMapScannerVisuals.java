@@ -37,7 +37,7 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.fluids.FluidStack;
 
 /**
@@ -48,7 +48,7 @@ public class RecipeMapScannerVisuals extends RecipeMap {
 		super(aRecipeList, aUnlocalizedName, aNameLocal, aNameNEI, aProgressBarDirection, aProgressBarAmount, aNEIGUIPath, aInputItemsCount, aOutputItemsCount, aMinimalInputItems, aInputFluidCount, aOutputFluidCount, aMinimalInputFluids, aMinimalInputs, aPower, aNEISpecialValuePre, aNEISpecialValueMultiplier, aNEISpecialValuePost, aShowVoltageAmperageInNEI, aNEIAllowed, aConfigAllowed, aNeedsOutputs);
 		mMappings.put(new ItemStackContainer(Items.flint_and_steel, 1, W), ST.make(Blocks.fire, 1, 0));
 		mMappings.put(new ItemStackContainer(Items.reeds, 1, W), ST.make(Blocks.reeds, 1, 0));
-		mMappings.put(new ItemStackContainer(Items.snowball, 1, W), ST.make(Blocks.snow, 1, 0));
+		mMappings.put(new ItemStackContainer(Items.snowball, 1, W), ST.make(Blocks.SNOW, 1, 0));
 		mMappings.put(new ItemStackContainer(Items.wheat_seeds, 1, W), ST.make(Blocks.wheat, 1, 0));
 		mMappings.put(new ItemStackContainer(Items.wheat, 1, W), ST.make(Blocks.wheat, 1, 7));
 		mMappings.put(new ItemStackContainer(Items.carrot, 1, W), ST.make(Blocks.carrots, 1, 7));
@@ -101,7 +101,7 @@ public class RecipeMapScannerVisuals extends RecipeMap {
 						if (tScanned.hasTagCompound() && tScanned.getTagCompound().hasKey(NBT_CANVAS_BLOCK)) {
 							rRecipe = new Recipe(F, F, F, ST.array(ST.amount(1, tScanned), ST.amount(1, tUSB)), ST.array(ST.amount(1, tUSB), ST.amount(1, tScanned)), null, null, null, null, 64, 16, 0);
 							if (!rRecipe.mOutputs[0].hasTagCompound()) rRecipe.mOutputs[0].setTagCompound(UT.NBT.make());
-							NBTTagCompound tNBT = UT.NBT.make();
+							CompoundNBT tNBT = UT.NBT.make();
 							tNBT.setInteger(NBT_CANVAS_BLOCK, tScanned.getTagCompound().getInteger(NBT_CANVAS_BLOCK));
 							tNBT.setInteger(NBT_CANVAS_META, tScanned.getTagCompound().getInteger(NBT_CANVAS_META));
 							rRecipe.mOutputs[0].getTagCompound().setTag(NBT_USB_DATA, tNBT);
@@ -159,7 +159,7 @@ public class RecipeMapScannerVisuals extends RecipeMap {
 					if (tBlock != null && tBlock != NB) {
 						rRecipe = new Recipe(F, F, F, ST.array(ST.amount(1, tScanned), ST.amount(1, tUSB)), ST.array(ST.amount(1, tUSB), ST.amount(1, tScanned)), null, null, null, null, 512, 16, 0);
 						if (!rRecipe.mOutputs[0].hasTagCompound()) rRecipe.mOutputs[0].setTagCompound(UT.NBT.make());
-						NBTTagCompound tNBT = UT.NBT.make();
+						CompoundNBT tNBT = UT.NBT.make();
 						tNBT.setInteger(NBT_CANVAS_BLOCK, Block.getIdFromBlock(tBlock));
 						tNBT.setInteger(NBT_CANVAS_META, ST.meta_(tScanned));
 						rRecipe.mOutputs[0].getTagCompound().setTag(NBT_USB_DATA, tNBT);

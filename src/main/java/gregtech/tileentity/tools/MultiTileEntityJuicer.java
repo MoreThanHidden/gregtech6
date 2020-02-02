@@ -57,7 +57,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -74,7 +74,7 @@ public class MultiTileEntityJuicer extends TileEntityBase07Paintable implements 
 	protected FluidTankGT[] mTanks = ZL_FT;
 	
 	@Override
-	public void readFromNBT2(NBTTagCompound aNBT) {
+	public void readFromNBT2(CompoundNBT aNBT) {
 		super.readFromNBT2(aNBT);
 		if (aNBT.hasKey(NBT_RECIPEMAP)) mRecipes = RecipeMap.RECIPE_MAPS.get(aNBT.getString(NBT_RECIPEMAP));
 		
@@ -83,7 +83,7 @@ public class MultiTileEntityJuicer extends TileEntityBase07Paintable implements 
 	}
 	
 	@Override
-	public void writeToNBT2(NBTTagCompound aNBT) {
+	public void writeToNBT2(CompoundNBT aNBT) {
 		super.writeToNBT2(aNBT);
 		for (int i = 0; i < mTanks.length; i++) mTanks[i].writeToNBT(aNBT, NBT_TANK+"."+i);
 	}
@@ -152,7 +152,7 @@ public class MultiTileEntityJuicer extends TileEntityBase07Paintable implements 
 			
 			ItemStack tStack = null;
 			if (aStack != null) for (FluidTankGT tTank : mTanks) if ((tStack = FL.fill(tTank, ST.amount(1, aStack), T, T, T, T)) != null) {
-				aStack.stackSize--;
+				aStack.getCount()--;
 				UT.Inventories.addStackToPlayerInventoryOrDrop(aPlayer, tStack, T);
 				return T;
 			}
@@ -308,7 +308,7 @@ public class MultiTileEntityJuicer extends TileEntityBase07Paintable implements 
 	@Override
 	public int removeFluidFromConnectedTank(byte aSide, FluidStack aFluid, boolean aOnlyRemoveIfItCanRemoveAllAtOnce) {
 		if (aFluid == NF) return 0;
-		for (FluidTankGT tTank : mTanks) if (tTank.contains(aFluid)) if (tTank.has(aOnlyRemoveIfItCanRemoveAllAtOnce ? aFluid.amount : 1)) return (int)tTank.remove(aFluid.amount);
+		for (FluidTankGT tTank : mTanks) if (tTank.contains(aFluid)) if (tTank.has(aOnlyRemoveIfItCanRemoveAllAtOnce ? aFluid.getAmount() : 1)) return (int)tTank.remove(aFluid.getAmount());
 		return 0;
 	}
 	

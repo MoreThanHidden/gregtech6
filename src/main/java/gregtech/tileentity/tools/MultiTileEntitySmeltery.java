@@ -81,7 +81,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
@@ -101,7 +101,7 @@ public class MultiTileEntitySmeltery extends TileEntityBase07Paintable implement
 	protected List<OreDictMaterialStack> mContent = new ArrayListNoNulls<>();
 	
 	@Override
-	public void readFromNBT2(NBTTagCompound aNBT) {
+	public void readFromNBT2(CompoundNBT aNBT) {
 		super.readFromNBT2(aNBT);
 		mEnergy = aNBT.getLong(NBT_ENERGY);
 		if (aNBT.hasKey(NBT_ACIDPROOF)) mAcidProof = aNBT.getBoolean(NBT_ACIDPROOF);
@@ -111,7 +111,7 @@ public class MultiTileEntitySmeltery extends TileEntityBase07Paintable implement
 	}
 	
 	@Override
-	public void writeToNBT2(NBTTagCompound aNBT) {
+	public void writeToNBT2(CompoundNBT aNBT) {
 		super.writeToNBT2(aNBT);
 		UT.NBT.setNumber(aNBT, NBT_ENERGY, mEnergy);
 		UT.NBT.setNumber(aNBT, NBT_TEMPERATURE, mTemperature);
@@ -407,8 +407,8 @@ public class MultiTileEntitySmeltery extends TileEntityBase07Paintable implement
 							if (mTemperature > 40 + C) UT.Entities.applyHeatDamage(aPlayer, Math.min(10.0F, mTemperature / 100.0F));
 							return T;
 						}
-						if (ST.equal(aStack, tOutputStack) && aStack.stackSize < aStack.getMaxStackSize()) {
-							aStack.stackSize++;
+						if (ST.equal(aStack, tOutputStack) && aStack.getCount() < aStack.getMaxStackSize()) {
+							aStack.getCount()++;
 							tLightest.mAmount-=OP.scrapGt.mAmount;
 							aPlayer.addExhaustion(0.1F);
 							if (mTemperature > 40 + C) UT.Entities.applyHeatDamage(aPlayer, Math.min(10.0F, mTemperature / 100.0F));
@@ -424,11 +424,11 @@ public class MultiTileEntitySmeltery extends TileEntityBase07Paintable implement
 							if (mTemperature >= tLightest.mMaterial.mMeltingPoint && (tTemperature < 320 || mTemperature >= tTemperature)) {
 								tFluid = tLightest.mMaterial.liquid(tLightest.mAmount, F);
 								if (!FL.Error.is(tFluid)) {
-									int tAmount = tFluid.amount;
+									int tAmount = tFluid.getAmount();
 									ItemStack tStack = FL.fill(tFluid, ST.amount(1, aStack), T, T, T, T);
 									if (ST.valid(tStack)) {
-										tLightest.mAmount -= UT.Code.units(tAmount - tFluid.amount, tLightest.mMaterial.mLiquid.amount, tLightest.mMaterial.mLiquidUnit, T);
-										aStack.stackSize--;
+										tLightest.mAmount -= UT.Code.units(tAmount - tFluid.getAmount(), tLightest.mMaterial.mLiquid.amount, tLightest.mMaterial.mLiquidUnit, T);
+										aStack.getCount()--;
 										UT.Inventories.addStackToPlayerInventoryOrDrop(aPlayer, tStack, T);
 										return T;
 									}
@@ -441,14 +441,14 @@ public class MultiTileEntitySmeltery extends TileEntityBase07Paintable implement
 							OreDictMaterialStack tFluidData = OreDictMaterial.FLUID_MAP.get(tFluid.getFluid().getName());
 							if (tFluidData != null) {
 								if (FL.equal(tFluidData.mMaterial.mLiquid, tFluid)) {
-									if (addMaterialStacks(new ArrayListNoNulls<>(F, OM.stack(tFluidData.mMaterial, UT.Code.units(tFluid.amount, tFluidData.mMaterial.mLiquid.amount, tFluidData.mMaterial.mLiquidUnit, F))), UT.Code.bind(FL.temperature(tFluid), tFluidData.mMaterial.mMeltingPoint+25, tFluidData.mMaterial.mBoilingPoint-1))) {
-										aStack.stackSize--;
+									if (addMaterialStacks(new ArrayListNoNulls<>(F, OM.stack(tFluidData.mMaterial, UT.Code.units(tFluid.getAmount(), tFluidData.mMaterial.mLiquid.amount, tFluidData.mMaterial.mLiquidUnit, F))), UT.Code.bind(FL.temperature(tFluid), tFluidData.mMaterial.mMeltingPoint+25, tFluidData.mMaterial.mBoilingPoint-1))) {
+										aStack.getCount()--;
 										UT.Inventories.addStackToPlayerInventoryOrDrop(aPlayer, tStack, T);
 										return T;
 									}
 								} else {
-									if (addMaterialStacks(new ArrayListNoNulls<>(F, OM.stack(tFluidData.mMaterial, UT.Code.units(tFluid.amount, tFluidData.mAmount, U, F))), UT.Code.bind(FL.temperature(tFluid), tFluidData.mMaterial.mMeltingPoint+25, tFluidData.mMaterial.mBoilingPoint-1))) {
-										aStack.stackSize--;
+									if (addMaterialStacks(new ArrayListNoNulls<>(F, OM.stack(tFluidData.mMaterial, UT.Code.units(tFluid.getAmount(), tFluidData.mAmount, U, F))), UT.Code.bind(FL.temperature(tFluid), tFluidData.mMaterial.mMeltingPoint+25, tFluidData.mMaterial.mBoilingPoint-1))) {
+										aStack.getCount()--;
 										UT.Inventories.addStackToPlayerInventoryOrDrop(aPlayer, tStack, T);
 										return T;
 									}
@@ -495,9 +495,9 @@ public class MultiTileEntitySmeltery extends TileEntityBase07Paintable implement
 					return 500;
 				}
 				if (UT.Inventories.addStackToPlayerInventory((PlayerEntity)aPlayer, tOutputStack)) {
-					((PlayerEntity)aPlayer).addExhaustion(0.1F * tOutputStack.stackSize);
-					tLightest.mAmount -= OP.scrapGt.mAmount * tOutputStack.stackSize;
-					return 1000 * tOutputStack.stackSize;
+					((PlayerEntity)aPlayer).addExhaustion(0.1F * tOutputStack.getCount());
+					tLightest.mAmount -= OP.scrapGt.mAmount * tOutputStack.getCount();
+					return 1000 * tOutputStack.getCount();
 				}
 				return 0;
 			}
@@ -642,7 +642,7 @@ public class MultiTileEntitySmeltery extends TileEntityBase07Paintable implement
 	@Override public boolean canDrop(int aInventorySlot) {return T;}
 	@Override public boolean allowCovers(byte aSide) {return F;}
 	
-	@Override public ItemStack[] getDefaultInventory(NBTTagCompound aNBT) {return new ItemStack[1];}
+	@Override public ItemStack[] getDefaultInventory(CompoundNBT aNBT) {return new ItemStack[1];}
 	@Override public int[] getAccessibleSlotsFromSide2(byte aSide) {return UT.Code.getAscendingArray(1);}
 	@Override public boolean canInsertItem2(int aSlot, ItemStack aStack, byte aSide) {return SIDES_TOP[aSide] && !slotHas(0);}
 	@Override public boolean canExtractItem2(int aSlot, ItemStack aStack, byte aSide) {return F;}

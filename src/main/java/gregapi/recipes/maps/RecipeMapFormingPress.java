@@ -30,7 +30,7 @@ import gregapi.recipes.Recipe.RecipeMap;
 import gregapi.util.ST;
 import gregapi.util.UT;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.fluids.FluidStack;
 
 /**
@@ -60,7 +60,7 @@ public class RecipeMapFormingPress extends RecipeMap {
 		}
 		for (ItemStack aMold : aInputs) {
 			if (IL.Shape_Mold_Credit.equal(aMold, F, T)) {
-				NBTTagCompound tNBT = aMold.getTagCompound();
+				CompoundNBT tNBT = aMold.getTagCompound();
 				if (tNBT == null) tNBT = UT.NBT.make();
 				if (!tNBT.hasKey("credit_security_id")) UT.NBT.setNumber(tNBT, "credit_security_id", System.nanoTime());
 				UT.NBT.set(aMold, tNBT);

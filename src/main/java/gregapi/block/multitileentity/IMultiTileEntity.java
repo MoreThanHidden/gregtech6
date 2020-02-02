@@ -46,9 +46,9 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.ChunkPos;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.Explosion;
@@ -67,9 +67,9 @@ public interface IMultiTileEntity extends ITileEntitySpecificPlacementBehavior {
 	public short getMultiTileEntityID();
 	public short getMultiTileEntityRegistryID();
 	/** Called by the Registry with the default NBT Parameters and the two IDs you have to save, when the TileEntity is created. aNBT may be null, take that into account if you decide to call the regular readFromNBT Function from here. */
-	public void initFromNBT(NBTTagCompound aNBT, short aMTEID, short aMTERegistry);
+	public void initFromNBT(CompoundNBT aNBT, short aMTEID, short aMTERegistry);
 	/** Writes eventual Item Data to the NBT. */
-	public NBTTagCompound writeItemNBT(NBTTagCompound aNBT);
+	public CompoundNBT writeItemNBT(CompoundNBT aNBT);
 	/** Sets the Item Display Name. Use null to reset it. */
 	public void setCustomName(String aName);
 	public String getCustomName();
@@ -131,7 +131,7 @@ public interface IMultiTileEntity extends ITileEntitySpecificPlacementBehavior {
 	public static interface IMTE_RemovedByPlayer                    extends IMultiTileEntity {public boolean removedByPlayer(World aWorld, PlayerEntity aPlayer, boolean aWillHarvest);}
 	public static interface IMTE_CanCreatureSpawn                   extends IMultiTileEntity {public boolean canCreatureSpawn(EnumCreatureType aType);}
 	public static interface IMTE_IsBed                              extends IMultiTileEntity {public boolean isBed(EntityLivingBase aPlayer);}
-	public static interface IMTE_GetBedSpawnPosition                extends IMultiTileEntity {public ChunkCoordinates getBedSpawnPosition(PlayerEntity aPlayer);}
+	public static interface IMTE_GetBedSpawnPosition                extends IMultiTileEntity {public ChunkPos getBedSpawnPosition(PlayerEntity aPlayer);}
 	public static interface IMTE_SetBedOccupied                     extends IMultiTileEntity {public void setBedOccupied(PlayerEntity aPlayer, boolean aOccupied);}
 	public static interface IMTE_GetBedDirection                    extends IMultiTileEntity {public int getBedDirection();}
 	public static interface IMTE_IsBedFoot                          extends IMultiTileEntity {public boolean isBedFoot();}

@@ -53,7 +53,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.AxisAlignedBB;
 
 /**
@@ -65,7 +65,7 @@ public class MultiTileEntityMoldCoinage extends TileEntityBase07Paintable implem
 	protected boolean[][][] mShape = new boolean[2][16][16];
 	
 	@Override
-	public void readFromNBT2(NBTTagCompound aNBT) {
+	public void readFromNBT2(CompoundNBT aNBT) {
 		super.readFromNBT2(aNBT);
 		for (int i = 0; i < mShape[0].length; i++) mShape[0][i] = UT.Code.getBitsS(aNBT.getShort("gt.coin.shape.0."+i));
 		for (int i = 0; i < mShape[1].length; i++) mShape[1][i] = UT.Code.getBitsS(aNBT.getShort("gt.coin.shape.1."+i));
@@ -73,7 +73,7 @@ public class MultiTileEntityMoldCoinage extends TileEntityBase07Paintable implem
 	}
 	
 	@Override
-	public void writeToNBT2(NBTTagCompound aNBT) {
+	public void writeToNBT2(CompoundNBT aNBT) {
 		super.writeToNBT2(aNBT);
 		UT.NBT.setBoolean(aNBT, "gt.coin.unique", mIsUnique);
 		for (int i = 0; i < mShape[0].length; i++) aNBT.setShort("gt.coin.shape.0."+i, (short)UT.Code.getBits(mShape[0][i]));
@@ -81,7 +81,7 @@ public class MultiTileEntityMoldCoinage extends TileEntityBase07Paintable implem
 	}
 	
 	@Override
-	public NBTTagCompound writeItemNBT2(NBTTagCompound aNBT) {
+	public CompoundNBT writeItemNBT2(CompoundNBT aNBT) {
 		UT.NBT.setBoolean(aNBT, "gt.coin.unique", mIsUnique);
 		for (int i = 0; i < mShape[0].length; i++) aNBT.setShort("gt.coin.shape.0."+i, (short)UT.Code.getBits(mShape[0][i]));
 		for (int i = 0; i < mShape[1].length; i++) aNBT.setShort("gt.coin.shape.1."+i, (short)UT.Code.getBits(mShape[1][i]));
@@ -119,7 +119,7 @@ public class MultiTileEntityMoldCoinage extends TileEntityBase07Paintable implem
 			if (tOutputStack == null) {
 				OreDictItemData tData = OM.anyassociation(aStack);
 				if (tData != null && tData.mPrefix == OP.plateTiny) {
-					if (!UT.Entities.hasInfiniteItems(aPlayer)) aStack.stackSize--;
+					if (!UT.Entities.hasInfiniteItems(aPlayer)) aStack.getCount()--;
 					slot(0, ST.amount(1, aStack));
 					UT.Sounds.send(SFX.MC_CLICK, this);
 					return T;
@@ -138,7 +138,7 @@ public class MultiTileEntityMoldCoinage extends TileEntityBase07Paintable implem
 			if (aRemainingDurability >= 2000) {
 				OreDictItemData tData = OM.anyassociation(slot(0));
 				if (tData != null && tData.mPrefix == OP.plateTiny) {
-					slot(0, MultiTileEntityCoin.getCoin(slot(0).stackSize, tData.mMaterial.mMaterial, mIsUnique, mShape));
+					slot(0, MultiTileEntityCoin.getCoin(slot(0).getCount(), tData.mMaterial.mMaterial, mIsUnique, mShape));
 					return 2000;
 				}
 				return 0;
@@ -253,7 +253,7 @@ public class MultiTileEntityMoldCoinage extends TileEntityBase07Paintable implem
 	@Override public boolean allowCovers            (byte aSide) {return F;}
 	
 	// Inventory Stuff
-	@Override public ItemStack[] getDefaultInventory(NBTTagCompound aNBT) {return new ItemStack[1];}
+	@Override public ItemStack[] getDefaultInventory(CompoundNBT aNBT) {return new ItemStack[1];}
 	@Override public boolean canDrop(int aInventorySlot) {return T;}
 	@Override public int getInventoryStackLimit() {return 1;}
 	

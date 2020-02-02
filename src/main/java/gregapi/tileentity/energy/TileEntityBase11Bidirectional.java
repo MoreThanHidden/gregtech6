@@ -33,7 +33,7 @@ import gregapi.util.UT;
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 
 /**
  * @author Gregorius Techneticies
@@ -44,13 +44,13 @@ public abstract class TileEntityBase11Bidirectional extends TileEntityBase10Ener
 	public TE_Behavior_Energy_Converter mConRevert = null;
 	
 	@Override
-	public void writeToNBT2(NBTTagCompound aNBT) {
+	public void writeToNBT2(CompoundNBT aNBT) {
 		super.writeToNBT2(aNBT);
 		UT.NBT.setBoolean(aNBT, NBT_REVERSED, mReversed);
 	}
 	
 	@Override
-	public void readEnergyConverter(NBTTagCompound aNBT) {
+	public void readEnergyConverter(CompoundNBT aNBT) {
 		if (aNBT.hasKey(NBT_REVERSED)) mReversed = aNBT.getBoolean(NBT_REVERSED);
 		long tMultiplier = (aNBT.hasKey(NBT_MULTIPLIER) ? aNBT.getLong(NBT_MULTIPLIER) : 1);
 		TE_Behavior_Energy_Stats

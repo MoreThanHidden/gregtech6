@@ -47,7 +47,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
@@ -65,21 +65,21 @@ public class MultiTileEntityFilterPrefix extends MultiTileEntityExtender impleme
 	public boolean mInverted = F;
 	
 	@Override
-	public void readFromNBT2(NBTTagCompound aNBT) {
+	public void readFromNBT2(CompoundNBT aNBT) {
 		if (aNBT.hasKey(NBT_INVERTED)) mInverted = aNBT.getBoolean(NBT_INVERTED);
 		mFilter = OreDictPrefix.sPrefixes.get(aNBT.getString(NBT_INV_FILTER));
 		super.readFromNBT2(aNBT);
 	}
 	
 	@Override
-	public void writeToNBT2(NBTTagCompound aNBT) {
+	public void writeToNBT2(CompoundNBT aNBT) {
 		UT.NBT.setBoolean(aNBT, NBT_INVERTED, mInverted);
 		if (mFilter != null) aNBT.setString(NBT_INV_FILTER, mFilter.mNameInternal);
 		super.writeToNBT2(aNBT);
 	}
 	
 	@Override
-	public NBTTagCompound writeItemNBT2(NBTTagCompound aNBT) {
+	public CompoundNBT writeItemNBT2(CompoundNBT aNBT) {
 		UT.NBT.setBoolean(aNBT, NBT_INVERTED, mInverted);
 		if (mFilter != null) aNBT.setString(NBT_INV_FILTER, mFilter.mNameInternal);
 		return super.writeItemNBT2(aNBT);

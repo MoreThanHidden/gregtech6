@@ -41,7 +41,7 @@ import gregapi.tileentity.delegate.DelegatorTileEntity;
 import gregapi.util.ST;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
@@ -106,10 +106,10 @@ public class MultiTileEntityEnderGarbageDump extends TileEntityBase07Paintable i
 	public ItemStack decrStackSize(int aSlot, int aDecrement) {
 		ItemStack tStack = GarbageGT.GARBAGE_ITEMS.get(aSlot);
 		if (tStack == null) return null;
-		aDecrement = Math.min(tStack.stackSize, aDecrement);
+		aDecrement = Math.min(tStack.getCount(), aDecrement);
 		if (aDecrement <= 0) return null;
 		ItemStack rStack = ST.amount(aDecrement, tStack);
-		tStack.stackSize -= aDecrement;
+		tStack.getCount() -= aDecrement;
 		updateInventory();
 		return rStack;
 	}
@@ -126,12 +126,12 @@ public class MultiTileEntityEnderGarbageDump extends TileEntityBase07Paintable i
 	
 	@Override
 	public void setInventorySlotContents(int aSlot, ItemStack aStack) {
-		GarbageGT.GARBAGE_ITEMS.get(aSlot).stackSize = (aStack == null ? 0 : aStack.stackSize);
+		GarbageGT.GARBAGE_ITEMS.get(aSlot).getCount() = (aStack == null ? 0 : aStack.getCount());
 		updateInventory();
 	}
 	
 	@Override public boolean canInsertItem2(int aSlot, ItemStack aStack, byte aSide) {return F;}
-	@Override public boolean canExtractItem2(int aSlot, ItemStack aStack, byte aSide) {return GarbageGT.GARBAGE_ITEMS.get(aSlot).stackSize > 0;}
+	@Override public boolean canExtractItem2(int aSlot, ItemStack aStack, byte aSide) {return GarbageGT.GARBAGE_ITEMS.get(aSlot).getCount() > 0;}
 	
 	@Override
 	public FluidStack tapDrain(byte aSide, int aMaxDrain, boolean aDoDrain) {
@@ -166,6 +166,6 @@ public class MultiTileEntityEnderGarbageDump extends TileEntityBase07Paintable i
 	@Override public String getTileEntityName() {return "gt.multitileentity.ender.garbage.dump";}
 	
 	@Override public int getInventoryStackLimit() {return Integer.MAX_VALUE;}
-	@Override public ItemStack[] getDefaultInventory(NBTTagCompound aNBT) {return ZL_IS;}
+	@Override public ItemStack[] getDefaultInventory(CompoundNBT aNBT) {return ZL_IS;}
 	@Override public boolean canDrop(int aInventorySlot) {return F;}
 }

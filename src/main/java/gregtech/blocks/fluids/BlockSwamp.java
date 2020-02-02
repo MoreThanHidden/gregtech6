@@ -30,7 +30,7 @@ import gregapi.data.IL;
 import gregapi.util.WD;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.ChunkPos;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -91,7 +91,7 @@ public class BlockSwamp extends BlockWaterlike {
 		boolean tDirt = F;
 		
 		byte tSwampCounter = 0;
-		ArrayListNoNulls<ChunkCoordinates> tList = new ArrayListNoNulls<>();
+		ArrayListNoNulls<ChunkPos> tList = new ArrayListNoNulls<>();
 		for (byte tSide : ALL_SIDES_BUT_TOP) {
 			tBlock = WD.block(aWorld, aX, aY, aZ, tSide);
 			if (tBlock != NB) {
@@ -101,9 +101,9 @@ public class BlockSwamp extends BlockWaterlike {
 				} else if (tBlock instanceof BlockWaterlike) {
 					if (tMeta == 0 || tBlock instanceof BlockOcean) tSwampCounter++;
 				} else if (tBlock == Blocks.water || tBlock == Blocks.flowing_water) {
-					tList.add(new ChunkCoordinates(aX+OFFSETS_X[tSide], aY+OFFSETS_Y[tSide], aZ+OFFSETS_Z[tSide]));
+					tList.add(new ChunkPos(aX+OFFSETS_X[tSide], aY+OFFSETS_Y[tSide], aZ+OFFSETS_Z[tSide]));
 					if (tMeta == 0) tSwampCounter++;
-				} else if (tBlock == Blocks.sand || tBlock == Blocks.dirt || tBlock == Blocks.grass || tBlock == Blocks.mycelium || tBlock == BlocksGT.Grass || tBlock == BlocksGT.Diggables || tBlock == BlocksGT.Sands || tBlock == BlocksGT.oreSand || tBlock == BlocksGT.oreRedSand || tBlock == BlocksGT.oreMud || tBlock == BlocksGT.oreSmallSand || tBlock == BlocksGT.oreSmallRedSand || tBlock == BlocksGT.oreSmallMud || IL.EtFu_Dirt.equal(tBlock)) {
+				} else if (tBlock == Blocks.sand || tBlock == Blocks.DIRT || tBlock == Blocks.GRASS || tBlock == Blocks.MYCELIUM || tBlock == BlocksGT.Grass || tBlock == BlocksGT.Diggables || tBlock == BlocksGT.Sands || tBlock == BlocksGT.oreSand || tBlock == BlocksGT.oreRedSand || tBlock == BlocksGT.oreMud || tBlock == BlocksGT.oreSmallSand || tBlock == BlocksGT.oreSmallRedSand || tBlock == BlocksGT.oreSmallMud || IL.EtFu_Dirt.equal(tBlock)) {
 					tDirt = T;
 				}
 			}
@@ -111,7 +111,7 @@ public class BlockSwamp extends BlockWaterlike {
 		
 		if (tDirt) for (int i = -1; i <= 1; i++) for (int j = -1; j <= 1; j++) for (int k = -1; k <= 1; k++) {
 			tBlock = aWorld.getBlock(aX+i, aY+j, aZ+k);
-			if (tBlock == Blocks.sand || tBlock == Blocks.dirt || tBlock == Blocks.grass || tBlock == Blocks.mycelium || IL.EtFu_Dirt.equal(tBlock)) {aWorld.setBlock(aX+i, aY+j, aZ+k, BlocksGT.Diggables, 0, 2); continue;}
+			if (tBlock == Blocks.sand || tBlock == Blocks.DIRT || tBlock == Blocks.GRASS || tBlock == Blocks.MYCELIUM || IL.EtFu_Dirt.equal(tBlock)) {aWorld.setBlock(aX+i, aY+j, aZ+k, BlocksGT.Diggables, 0, 2); continue;}
 			if (tBlock == BlocksGT.oreSand || tBlock == BlocksGT.oreRedSand) {BlocksGT.oreMud.placeBlock(aWorld, aX+i, aY+j, aZ+k, SIDE_UNKNOWN, ((IBlockExtendedMetaData)tBlock).getExtendedMetaData(aWorld, aX+i, aY+j, aZ+k), null, T, T); continue;}
 			if (tBlock == BlocksGT.oreSmallSand || tBlock == BlocksGT.oreSmallRedSand) {BlocksGT.oreSmallMud.placeBlock(aWorld, aX+i, aY+j, aZ+k, SIDE_UNKNOWN, ((IBlockExtendedMetaData)tBlock).getExtendedMetaData(aWorld, aX+i, aY+j, aZ+k), null, T, T); continue;}
 		}
@@ -142,7 +142,7 @@ public class BlockSwamp extends BlockWaterlike {
 			}
 		}
 		
-		for (ChunkCoordinates tCoords : tList) {
+		for (ChunkPos tCoords : tList) {
 			if (aWorld.setBlock(tCoords.posX, tCoords.posY, tCoords.posZ, this, 0, 2)) for (int i = -1; i < 2; i++) for (int j = -1; j < 2; j++) {
 				if (aWorld.blockExists(tCoords.posX+i, tCoords.posY, tCoords.posZ+j)) {
 					tBlock = aWorld.getBlock(tCoords.posX+i, tCoords.posY, tCoords.posZ+j);

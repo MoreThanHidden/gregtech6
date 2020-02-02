@@ -33,7 +33,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.World;
 
 /**
@@ -43,13 +43,13 @@ public abstract class TileEntityBase10FacingDouble extends TileEntityBase09Facin
 	public byte mSecondFacing = getDefaultSecondSide();
 	
 	@Override
-	public void readFromNBT2(NBTTagCompound aNBT) {
+	public void readFromNBT2(CompoundNBT aNBT) {
 		super.readFromNBT2(aNBT);
 		if (aNBT.hasKey(NBT_FACING + ".2nd")) mSecondFacing = aNBT.getByte(NBT_FACING + ".2nd");
 	}
 	
 	@Override
-	public void writeToNBT2(NBTTagCompound aNBT) {
+	public void writeToNBT2(CompoundNBT aNBT) {
 		super.writeToNBT2(aNBT);
 		aNBT.setByte(NBT_FACING + ".2nd", mSecondFacing);
 	}

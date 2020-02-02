@@ -121,7 +121,7 @@ public class Compat_Recipes_ThermalExpansion extends CompatMods {
 			RM.Injector     .addRecipe1(T, 16, 16, ST.make(Items.snowball, 1, W)    , FL.mul(tRedstone, 2), NF, OP.dust.mat(MT.Blizz, 1));
 			RM.Injector     .addRecipe1(T, 16, 16, OP.dustSmall.mat(MT.Snow, 1)     , FL.mul(tRedstone, 2), NF, OP.dust.mat(MT.Blizz, 1));
 			RM.Injector     .addRecipe1(T, 16, 16, OP.dustSmall.mat(MT.Ice, 1)      , FL.mul(tRedstone, 2), NF, OP.dust.mat(MT.Blizz, 1));
-			RM.Injector     .addRecipe1(T, 16, 64, ST.make(Blocks.snow, 1, W)       , FL.mul(tRedstone, 8), NF, OP.dust.mat(MT.Blizz, 4));
+			RM.Injector     .addRecipe1(T, 16, 64, ST.make(Blocks.SNOW, 1, W)       , FL.mul(tRedstone, 8), NF, OP.dust.mat(MT.Blizz, 4));
 			RM.Injector     .addRecipe1(T, 16, 64, OP.dust.mat(MT.Snow, 1)          , FL.mul(tRedstone, 8), NF, OP.dust.mat(MT.Blizz, 4));
 			RM.Injector     .addRecipe1(T, 16, 64, OP.dust.mat(MT.Ice, 1)           , FL.mul(tRedstone, 8), NF, OP.dust.mat(MT.Blizz, 4));
 			for (OreDictMaterial tMat : ANY.SiO2.mToThis)
@@ -188,9 +188,9 @@ public class Compat_Recipes_ThermalExpansion extends CompatMods {
 			RM.Canner           .addRecipe1(T, 16,   80, ST.make(MD.TE, "Frame", 1,12)                          , FL.Glowstone_TE.make(1000), NF, ST.make(MD.TE, "Light", 1, 0));
 			
 			if (IL.IE_Slag.exists())
-			RM.Mixer            .addRecipe2(T, 16,   16, IL.IE_Slag.get(2), ST.make(Blocks.dirt, 1, W), FL.Water.make(1000), NF, ST.make(Items.clay_ball, 4, 0));
-			RM.Mixer            .addRecipe2(T, 16,   16, IL.TE_Slag.get(2), ST.make(Blocks.dirt, 1, W), FL.Water.make(1000), NF, ST.make(Items.clay_ball, 4, 0));
-			RM.Mixer            .addRecipe2(T, 16,   16, IL.TE_Slag_Rich.get(1), ST.make(Blocks.dirt, 1, W), FL.Water.make(1000), NF, ST.make(Items.clay_ball, 4, 0));
+			RM.Mixer            .addRecipe2(T, 16,   16, IL.IE_Slag.get(2), ST.make(Blocks.DIRT, 1, W), FL.Water.make(1000), NF, ST.make(Items.clay_ball, 4, 0));
+			RM.Mixer            .addRecipe2(T, 16,   16, IL.TE_Slag.get(2), ST.make(Blocks.DIRT, 1, W), FL.Water.make(1000), NF, ST.make(Items.clay_ball, 4, 0));
+			RM.Mixer            .addRecipe2(T, 16,   16, IL.TE_Slag_Rich.get(1), ST.make(Blocks.DIRT, 1, W), FL.Water.make(1000), NF, ST.make(Items.clay_ball, 4, 0));
 			
 			
 			for (OreDictMaterial tMat : new OreDictMaterial[] {MT.KNO3, MT.NaNO3, MT.Niter}) {

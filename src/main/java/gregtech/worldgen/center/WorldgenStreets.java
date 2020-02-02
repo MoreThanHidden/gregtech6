@@ -37,7 +37,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.Potion;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityBeacon;
@@ -155,7 +155,7 @@ public class WorldgenStreets extends WorldgenObject {
 					WD.set(aWorld, -1, mHeight+1, -1, Blocks.beacon, 0, 3);
 					tTileEntity = WD.te(aWorld, -1, mHeight+1, -1, T);
 					if (tTileEntity instanceof TileEntityBeacon) {
-						NBTTagCompound tNBT = UT.NBT.make();
+						CompoundNBT tNBT = UT.NBT.make();
 						tTileEntity.writeToNBT(tNBT);
 						tNBT.setInteger("Primary", Potion.moveSpeed.id);
 						tNBT.setInteger("Secondary", Potion.moveSpeed.id);
@@ -166,7 +166,7 @@ public class WorldgenStreets extends WorldgenObject {
 					WD.set(aWorld, -1, mHeight+1, 0, Blocks.beacon, 0, 3);
 					tTileEntity = WD.te(aWorld, -1, mHeight+1, 0, T);
 					if (tTileEntity instanceof TileEntityBeacon) {
-						NBTTagCompound tNBT = UT.NBT.make();
+						CompoundNBT tNBT = UT.NBT.make();
 						tTileEntity.writeToNBT(tNBT);
 						tNBT.setInteger("Primary", Potion.digSpeed.id);
 						tNBT.setInteger("Secondary", Potion.digSpeed.id);
@@ -177,7 +177,7 @@ public class WorldgenStreets extends WorldgenObject {
 					WD.set(aWorld, 0, mHeight+1, -1, Blocks.beacon, 0, 3);
 					tTileEntity = WD.te(aWorld, 0, mHeight+1, -1, T);
 					if (tTileEntity instanceof TileEntityBeacon) {
-						NBTTagCompound tNBT = UT.NBT.make();
+						CompoundNBT tNBT = UT.NBT.make();
 						tTileEntity.writeToNBT(tNBT);
 						tNBT.setInteger("Primary", Potion.damageBoost.id);
 						tNBT.setInteger("Secondary", Potion.damageBoost.id);
@@ -188,7 +188,7 @@ public class WorldgenStreets extends WorldgenObject {
 					WD.set(aWorld, 0, mHeight+1, 0, Blocks.beacon, 0, 3);
 					tTileEntity = WD.te(aWorld, 0, mHeight+1, 0, T);
 					if (tTileEntity instanceof TileEntityBeacon) {
-						NBTTagCompound tNBT = UT.NBT.make();
+						CompoundNBT tNBT = UT.NBT.make();
 						tTileEntity.writeToNBT(tNBT);
 						tNBT.setInteger("Primary", Potion.resistance.id);
 						tNBT.setInteger("Secondary", Potion.regeneration.id);

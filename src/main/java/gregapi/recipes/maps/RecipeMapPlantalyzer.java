@@ -32,7 +32,7 @@ import gregapi.recipes.Recipe.RecipeMap;
 import gregapi.util.ST;
 import gregapi.util.UT;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.fluids.FluidStack;
 
 /**
@@ -51,7 +51,7 @@ public class RecipeMapPlantalyzer extends RecipeMap {
 			for (ItemStack aInput : aInputs) if (ST.valid(aInput)) {
 				if (IL.IC2_Crop_Seeds.equal(aInput, T, T)) {
 					ItemStack rOutput = ST.copy(aInput);
-					NBTTagCompound tNBT = UT.NBT.getOrCreate(rOutput);
+					CompoundNBT tNBT = UT.NBT.getOrCreate(rOutput);
 					if (tNBT.getByte("scan") >= 4) return new Recipe(F, F, F, ST.array(aInput), ST.array(aInput), null, null, null, null, 1, 16, 0);
 					tNBT.setByte("scan", (byte)4);
 					return new Recipe(F, F, F, ST.array(aInput), ST.array(rOutput), null, null, null, null, 64, 16, 0);

@@ -34,9 +34,9 @@ import gregapi.util.UT;
 import gregapi.util.WD;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.ChunkPos;
 import net.minecraft.world.World;
 
 public class Behavior_Remote extends AbstractBehaviorDefault {
@@ -46,8 +46,8 @@ public class Behavior_Remote extends AbstractBehaviorDefault {
 	public boolean onItemUseFirst(MultiItem aItem, ItemStack aStack, PlayerEntity aPlayer, World aWorld, int aX, int aY, int aZ, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (aWorld.isRemote || aPlayer == null || !aPlayer.isSneaking() || !aPlayer.canPlayerEdit(aX, aY, aZ, aSide, aStack)) return F;
 		if (!aStack.hasTagCompound()) aStack.setTagCompound(UT.NBT.make());
-		ArrayListNoNulls<ChunkCoordinates> tList = getCoordinateList(aStack.getTagCompound(), aWorld.provider.dimensionId);
-		ChunkCoordinates tCoords = new ChunkCoordinates(aX, aY, aZ);
+		ArrayListNoNulls<ChunkPos> tList = getCoordinateList(aStack.getTagCompound(), aWorld.provider.dimensionId);
+		ChunkPos tCoords = new ChunkPos(aX, aY, aZ);
 		if (tList.contains(tCoords)) {
 			UT.Entities.chat(aPlayer, "Coordinates removed!");
 			UT.Sounds.send(aWorld, SFX.IC_SCANNER, 1.0F, 1.0F, tCoords);
@@ -72,8 +72,8 @@ public class Behavior_Remote extends AbstractBehaviorDefault {
 	@Override
 	public ItemStack onItemRightClick(MultiItem aItem, ItemStack aStack, World aWorld, PlayerEntity aPlayer) {
 		if (aWorld.isRemote || aPlayer.isSneaking() || !aStack.hasTagCompound()) return aStack;
-		ArrayListNoNulls<ChunkCoordinates> tToBeKept = new ArrayListNoNulls<>();
-		for (ChunkCoordinates tCoords : getCoordinateList(aStack.getTagCompound(), aWorld.provider.dimensionId)) {
+		ArrayListNoNulls<ChunkPos> tToBeKept = new ArrayListNoNulls<>();
+		for (ChunkPos tCoords : getCoordinateList(aStack.getTagCompound(), aWorld.provider.dimensionId)) {
 			if (Math.abs(tCoords.posX - aPlayer.posX) <= 128 && Math.abs(tCoords.posY - aPlayer.posY) <= 128 && Math.abs(tCoords.posZ - aPlayer.posZ) <= 128) {
 				TileEntity tTileEntity = WD.te(aWorld, tCoords, F);
 				if (tTileEntity instanceof ITileEntityRemoteActivateable && ((ITileEntityRemoteActivateable)tTileEntity).remoteActivate()) tToBeKept.add(tCoords);
@@ -86,22 +86,22 @@ public class Behavior_Remote extends AbstractBehaviorDefault {
 		return aStack;
 	}
 	
-	public ArrayListNoNulls<ChunkCoordinates> getCoordinateList(NBTTagCompound aNBT, int aDimension) {
-		ArrayListNoNulls<ChunkCoordinates> rList = new ArrayListNoNulls<>();
+	public ArrayListNoNulls<ChunkPos> getCoordinateList(CompoundNBT aNBT, int aDimension) {
+		ArrayListNoNulls<ChunkPos> rList = new ArrayListNoNulls<>();
 		if (aNBT == null) return rList;
-		NBTTagCompound tNBT = aNBT.getCompoundTag("gt.remote.dim."+aDimension);
+		CompoundNBT tNBT = aNBT.getCompoundTag("gt.remote.dim."+aDimension);
 		if (tNBT.hasNoTags()) return rList;
 		int i = -1; while (++i < 16) {
 			if (!tNBT.hasKey("x"+i)) break;
-			rList.add(new ChunkCoordinates(tNBT.getInteger("x"+i), tNBT.getInteger("y"+i), tNBT.getInteger("z"+i)));
+			rList.add(new ChunkPos(tNBT.getInteger("x"+i), tNBT.getInteger("y"+i), tNBT.getInteger("z"+i)));
 		}
 		return rList;
 	}
 	
-	public void setCoordinateList(NBTTagCompound aNBT, int aDimension, ArrayListNoNulls<ChunkCoordinates> aList) {
-		NBTTagCompound tNBT = UT.NBT.make();
+	public void setCoordinateList(CompoundNBT aNBT, int aDimension, ArrayListNoNulls<ChunkPos> aList) {
+		CompoundNBT tNBT = UT.NBT.make();
 		for (int i = 0, j = aList.size(); i < j; i++) {
-			ChunkCoordinates tCoords = aList.get(i);
+			ChunkPos tCoords = aList.get(i);
 			tNBT.setInteger("x"+i, tCoords.posX);
 			tNBT.setInteger("y"+i, tCoords.posY);
 			tNBT.setInteger("z"+i, tCoords.posZ);

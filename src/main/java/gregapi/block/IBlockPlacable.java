@@ -19,7 +19,7 @@
 
 package gregapi.block;
 
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.World;
 
 /**
@@ -29,5 +29,5 @@ import net.minecraft.world.World;
  */
 public interface IBlockPlacable {
 	/** Places the Block at this Location with the given MetaData and NBT (of an Item for example). The NBT Tag may be null! */
-	public boolean placeBlock(World aWorld, int aX, int aY, int aZ, byte aSide, short aMetaData, NBTTagCompound aNBT, boolean aCauseBlockUpdates, boolean aForcePlacement);
+	public boolean placeBlock(World aWorld, int aX, int aY, int aZ, byte aSide, short aMetaData, CompoundNBT aNBT, boolean aCauseBlockUpdates, boolean aForcePlacement);
 }

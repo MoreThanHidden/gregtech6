@@ -67,7 +67,7 @@ public class ItemBlockMetaType extends ItemBlockBase implements IItemUpdatable {
 	
 	@Override
 	public boolean onItemUseFirst(ItemStack aStack, PlayerEntity aPlayer, World aWorld, int aX, int aY, int aZ, int aSide, float aHitX, float aHitY, float aHitZ) {
-		if (aStack.stackSize > 0 && SIDES_VALID[mBlock.mSide]) {
+		if (aStack.getCount() > 0 && SIDES_VALID[mBlock.mSide]) {
 			switch(aSide) {
 			case 0: if (aHitY <= 0.01) aY--; break;
 			case 1: if (aHitY >= 0.99) aY++; break;
@@ -88,7 +88,7 @@ public class ItemBlockMetaType extends ItemBlockBase implements IItemUpdatable {
 			if (aWorld.checkNoEntityCollision(mBlock.mBlock.getCollisionBoundingBoxFromPool(aWorld, aX, aY, aZ))) {
 				aWorld.setBlock(aX, aY, aZ, mBlock.mBlock, aMetaData, 3);
 				aWorld.playSoundEffect(aX+0.5F, aY+0.5F, aZ+0.5F, mBlock.mBlock.stepSound.func_150496_b(), (mBlock.mBlock.stepSound.getVolume() + 1.0F) / 2.0F, mBlock.mBlock.stepSound.getPitch() * 0.8F);
-				if (!aPlayer.capabilities.isCreativeMode) aStack.stackSize--;
+				if (!aPlayer.capabilities.isCreativeMode) aStack.getCount()--;
 				mInterrupt = true;
 				return false;
 			}

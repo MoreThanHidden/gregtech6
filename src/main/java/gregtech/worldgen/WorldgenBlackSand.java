@@ -59,7 +59,7 @@ public class WorldgenBlackSand extends WorldgenObject {
 				tBlock = aWorld.getBlock(tX+i, tY, tZ+j);
 				if (tBlock == BlocksGT.Sands && 0 == aWorld.getBlockMetadata(tX+i, tY, tZ+j)) {tGenerated++; continue;}
 				if (!tBlock.isOpaqueCube()) {if (tGenerated > 0) break; continue;}
-				if (tBlock == Blocks.dirt || tBlock == Blocks.gravel || tBlock == Blocks.sand || tBlock == Blocks.clay || tBlock == BlocksGT.oreSmallGravel || tBlock == BlocksGT.oreGravel || tBlock == BlocksGT.oreSmallSand || tBlock == BlocksGT.oreSand || tBlock == BlocksGT.oreSmallRedSand || tBlock == BlocksGT.oreRedSand) {
+				if (tBlock == Blocks.DIRT || tBlock == Blocks.gravel || tBlock == Blocks.sand || tBlock == Blocks.CLAY || tBlock == BlocksGT.oreSmallGravel || tBlock == BlocksGT.oreGravel || tBlock == BlocksGT.oreSmallSand || tBlock == BlocksGT.oreSand || tBlock == BlocksGT.oreSmallRedSand || tBlock == BlocksGT.oreRedSand) {
 					if (tGenerated <= 0 && (tLastBlock.getMaterial() == Material.wood || tLastBlock.getMaterial() == Material.gourd)) continue;
 				} else {
 					if (tGenerated > 0) {

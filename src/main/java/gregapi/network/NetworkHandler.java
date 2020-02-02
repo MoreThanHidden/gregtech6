@@ -42,7 +42,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.MessageToMessageCodec;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntityMP;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
@@ -119,7 +119,7 @@ public final class NetworkHandler extends MessageToMessageCodec<FMLProxyPacket, 
 		tChannel.writeAndFlush(aPacket);
 	}
 	
-	@Override public void sendToAllPlayersInRange(IPacket aPacket, World aWorld, ChunkCoordinates aCoords) {sendToAllPlayersInRange(aPacket, aWorld, aCoords.posX, aCoords.posZ);}
+	@Override public void sendToAllPlayersInRange(IPacket aPacket, World aWorld, ChunkPos aCoords) {sendToAllPlayersInRange(aPacket, aWorld, aCoords.posX, aCoords.posZ);}
 	@Override public void sendToAllPlayersInRange(IPacket aPacket, World aWorld, int aX, int aZ) {
 		if (aPacket == null) return;
 		if (aWorld != null && !aWorld.isRemote) for (Object tObject : aWorld.playerEntities) {
@@ -131,7 +131,7 @@ public final class NetworkHandler extends MessageToMessageCodec<FMLProxyPacket, 
 		}
 	}
 	
-	@Override public void sendToPlayerIfInRange(IPacket aPacket, UUID aPlayer, World aWorld, ChunkCoordinates aCoords) {sendToPlayerIfInRange(aPacket, aPlayer, aWorld, aCoords.posX, aCoords.posZ);}
+	@Override public void sendToPlayerIfInRange(IPacket aPacket, UUID aPlayer, World aWorld, ChunkPos aCoords) {sendToPlayerIfInRange(aPacket, aPlayer, aWorld, aCoords.posX, aCoords.posZ);}
 	@Override public void sendToPlayerIfInRange(IPacket aPacket, UUID aPlayer, World aWorld, int aX, int aZ) {
 		if (aPacket == null) return;
 		if (aWorld != null && !aWorld.isRemote) for (Object tObject : aWorld.playerEntities) {
@@ -148,7 +148,7 @@ public final class NetworkHandler extends MessageToMessageCodec<FMLProxyPacket, 
 		}
 	}
 	
-	@Override public void sendToAllPlayersInRangeExcept(IPacket aPacket, UUID aPlayer, World aWorld, ChunkCoordinates aCoords) {sendToAllPlayersInRangeExcept(aPacket, aPlayer, aWorld, aCoords.posX, aCoords.posZ);}
+	@Override public void sendToAllPlayersInRangeExcept(IPacket aPacket, UUID aPlayer, World aWorld, ChunkPos aCoords) {sendToAllPlayersInRangeExcept(aPacket, aPlayer, aWorld, aCoords.posX, aCoords.posZ);}
 	@Override public void sendToAllPlayersInRangeExcept(IPacket aPacket, UUID aPlayer, World aWorld, int aX, int aZ) {
 		if (aPacket == null) return;
 		if (aWorld != null && !aWorld.isRemote) for (Object tObject : aWorld.playerEntities) {

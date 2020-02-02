@@ -132,7 +132,7 @@ public class Loader_Recipes_Replace implements Runnable {
 			if (tUseProgressBar) UT.LoadingBar.step("");
 			ItemStack aOutput = tRecipe.getRecipeOutput();
 			if (ST.invalid(aOutput)) continue;
-			if (aOutput.stackSize != 1) continue;
+			if (aOutput.getCount() != 1) continue;
 			if (aOutput.getMaxDamage() <= 0) continue;
 			if (aOutput.getMaxStackSize() != 1) continue;
 			if (tRecipe instanceof ShapelessRecipes) continue;
@@ -226,14 +226,14 @@ public class Loader_Recipes_Replace implements Runnable {
 			ItemStack tMat = aRecipe.mPrefix.mat(aRecipe.mMat, 1);
 			if (tMat == null) continue;
 			INGT.func_150996_a(tMat.getItem());
-			INGT.stackSize = 1;
+			INGT.getCount() = 1;
 			ST.meta_(INGT, ST.meta_(tMat));
 			RecipeReplacer[] tReplacer = sRecipesMat;
 			if (aRecipe.mRod != null) {
 				ItemStack tRod = OP.stick.mat(aRecipe.mRod, 1);
 				if (tRod == null) continue;
 				STCK.func_150996_a(tRod.getItem());
-				STCK.stackSize = 1;
+				STCK.getCount() = 1;
 				ST.meta_(STCK, ST.meta_(tRod));
 				tReplacer = sRecipesRod;
 			}
@@ -268,7 +268,7 @@ public class Loader_Recipes_Replace implements Runnable {
 			for (int j = 0; j < 9 && j < aStacks.length; j++) aCrafting.setInventorySlotContents(j, aStacks[j]);
 			if (!aRecipe.matches(aCrafting, DW)) return null;
 			ItemStack rOutput = aRecipe.getCraftingResult(aCrafting);
-			if (rOutput == null || rOutput.stackSize <= 0) return null;
+			if (rOutput == null || rOutput.getCount() <= 0) return null;
 			return rOutput;
 		}
 		return null;
@@ -290,7 +290,7 @@ public class Loader_Recipes_Replace implements Runnable {
 		public RecipeReplacer(ItemStack[] aRecipe) {mRecipe = aRecipe; mName = "null"; mShape = ZL_STRING;}
 	}
 	
-	private static final ItemStack INGT = ST.make(Blocks.dirt, 1, 0), STCK = ST.make(Blocks.dirt, 1, 0);
+	private static final ItemStack INGT = ST.make(Blocks.DIRT, 1, 0), STCK = ST.make(Blocks.DIRT, 1, 0);
 	private static final String HAM = "h", FIL = "f", NGT = "I", PLT = "P", CRV = "C", ROD = "R", ___ = " ";
 	
 	public static final RecipeReplacer[] sRecipesMat = {

@@ -174,7 +174,7 @@ public class MultiTileEntityItemInternal extends ItemBlock implements squeek.app
 			}
 			Block tReplacedBlock = aWorld.getBlock(aX, aY, aZ);
 			
-			if (aStack.stackSize == 0 || (aPlayer != null && !aPlayer.canPlayerEdit(aX, aY, aZ, aSide, aStack))) return F;
+			if (aStack.getCount() == 0 || (aPlayer != null && !aPlayer.canPlayerEdit(aX, aY, aZ, aSide, aStack))) return F;
 			
 			MultiTileEntityContainer aMTEContainer = mBlock.mMultiTileEntityRegistry.getNewTileEntityContainer(aWorld, aX, aY, aZ, aStack);
 			
@@ -211,7 +211,7 @@ public class MultiTileEntityItemInternal extends ItemBlock implements squeek.app
 					aWorld.func_147451_t(aX, aY, aZ);
 				} catch(Throwable e) {e.printStackTrace(ERR);}
 				
-				aStack.stackSize--;
+				aStack.getCount()--;
 				return T;
 			}
 		} catch(Throwable e) {

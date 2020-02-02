@@ -53,7 +53,7 @@ import gregapi.util.WD;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerEntityMP;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.common.util.FakePlayer;
 
@@ -93,7 +93,7 @@ public abstract class TileEntityBase03MultiTileEntities extends TileEntityBase02
 	public IPacket getClientDataPacketByteArray(boolean aSendAll, byte... aByteArray)   {return aSendAll ? new PacketSyncDataByteArrayAndIDs    (getCoords(), getMultiTileEntityRegistryID(), getMultiTileEntityID(), aByteArray    ) : new PacketSyncDataByteArray (getCoords(), aByteArray    );}
 	
 	@Override
-	public final void initFromNBT(NBTTagCompound aNBT, short aMTEID, short aMTERegistry) {
+	public final void initFromNBT(CompoundNBT aNBT, short aMTEID, short aMTERegistry) {
 		// Set ID and Registry ID.
 		mMTEID = aMTEID;
 		mMTERegistry = aMTERegistry;
@@ -102,7 +102,7 @@ public abstract class TileEntityBase03MultiTileEntities extends TileEntityBase02
 	}
 	
 	@Override
-	public final void readFromNBT(NBTTagCompound aNBT) {
+	public final void readFromNBT(CompoundNBT aNBT) {
 		// Check if this is a World/Chunk Loading Process calling readFromNBT.
 		if (mMTEID == W || mMTERegistry == W) {
 			// Yes it is, so read the ID Tags first.
@@ -129,10 +129,10 @@ public abstract class TileEntityBase03MultiTileEntities extends TileEntityBase02
 		try {readFromNBT2(aNBT);} catch(Throwable e) {e.printStackTrace(ERR);}
 	}
 	
-	public void readFromNBT2(NBTTagCompound aNBT) {/**/}
+	public void readFromNBT2(CompoundNBT aNBT) {/**/}
 	
 	@Override
-	public final void writeToNBT(NBTTagCompound aNBT) {
+	public final void writeToNBT(CompoundNBT aNBT) {
 		super.writeToNBT(aNBT);
 		// write the IDs
 		aNBT.setShort(NBT_MTE_ID, mMTEID);
@@ -144,10 +144,10 @@ public abstract class TileEntityBase03MultiTileEntities extends TileEntityBase02
 		try {writeToNBT2(aNBT);} catch(Throwable e) {e.printStackTrace(ERR);}
 	}
 	
-	public void writeToNBT2(NBTTagCompound aNBT) {/**/}
+	public void writeToNBT2(CompoundNBT aNBT) {/**/}
 	
 	@Override
-	public NBTTagCompound writeItemNBT(NBTTagCompound aNBT) {
+	public CompoundNBT writeItemNBT(CompoundNBT aNBT) {
 		if (UT.Code.stringValid(mCustomName)) aNBT.setTag("display", UT.NBT.makeString(aNBT.getCompoundTag("display"), "Name", mCustomName));
 		if (UT.Code.stringValid(ERROR_MESSAGE) && isClientSide()) aNBT.setTag("display", UT.NBT.makeString(aNBT.getCompoundTag("display"), "Name", ERROR_MESSAGE));
 		if (isPainted()) {aNBT.setInteger(NBT_COLOR, getPaint()); aNBT.setBoolean(NBT_PAINTED, T);}

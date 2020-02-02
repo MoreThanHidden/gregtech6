@@ -29,7 +29,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.client.IItemRenderer;
 
@@ -39,7 +39,7 @@ import net.minecraftforge.client.IItemRenderer;
 public class RendererBlockTextured implements ISimpleBlockRenderingHandler, IItemRenderer {
 	public final int mRenderID;
 	public static RendererBlockTextured INSTANCE;
-	public static NBTTagCompound mUsedNBT = null;
+	public static CompoundNBT mUsedNBT = null;
 	
 	public RendererBlockTextured(int aRenderID) {
 		INSTANCE = this;

@@ -41,7 +41,7 @@ import gregapi.tileentity.data.ITileEntitySurface;
 import gregapi.util.UT;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.BlockFluidFinite;
 import net.minecraftforge.fluids.FluidStack;
@@ -53,19 +53,19 @@ public class MultiTileEntityFluidSpring extends TileEntityBase04MultiTileEntitie
 	public FluidStack mFluid = FL.Water.make(1);
 	
 	@Override
-	public void readFromNBT2(NBTTagCompound aNBT) {
+	public void readFromNBT2(CompoundNBT aNBT) {
 		super.readFromNBT2(aNBT);
 		if (aNBT.hasKey("gt.spring")) mFluid = FL.load(aNBT, "gt.spring");
 	}
 	
 	@Override
-	public void writeToNBT2(NBTTagCompound aNBT) {
+	public void writeToNBT2(CompoundNBT aNBT) {
 		super.writeToNBT2(aNBT);
 		FL.save(aNBT, "gt.spring", mFluid);
 	}
 	
 	@Override
-	public final NBTTagCompound writeItemNBT(NBTTagCompound aNBT) {
+	public final CompoundNBT writeItemNBT(CompoundNBT aNBT) {
 		aNBT = super.writeItemNBT(aNBT);
 		FL.save(aNBT, "gt.spring", mFluid);
 		return aNBT;
@@ -99,7 +99,7 @@ public class MultiTileEntityFluidSpring extends TileEntityBase04MultiTileEntitie
 	public void onTick(long aTimer, boolean aIsServerSide) {
 		super.onTick(aTimer, aIsServerSide);
 		if (aIsServerSide) {
-			if (rng(mFluid.amount) == 0) {
+			if (rng(mFluid.getAmount()) == 0) {
 				Block tBlock = mFluid.getFluid().getBlock(), tAbove = getBlockAtSide(SIDE_UP);
 				if (tBlock instanceof BlockFluidFinite) {
 					if (tAbove == tBlock) {

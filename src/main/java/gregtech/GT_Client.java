@@ -282,9 +282,9 @@ public class GT_Client extends GT_Proxy {
 		if (UT.Stacks.invalid(aStack)) return;
 		String tString = "note.harp";
 		for (int i = 0, j = mSoundItems.size(); i < j; i++) if (UT.Stacks.equal(mSoundItems.get(i), aStack)) {tString = mSoundNames.get(i); break;}
-		if (tString.startsWith("random.explode")) if (aStack.stackSize==3) tString = "random.fuse"; else if (aStack.stackSize==2) tString = "random.old_explode";
+		if (tString.startsWith("random.explode")) if (aStack.getCount()==3) tString = "random.fuse"; else if (aStack.getCount()==2) tString = "random.old_explode";
 		if (tString.startsWith("streaming.")) {
-			switch (aStack.stackSize) {
+			switch (aStack.getCount()) {
 			case  1: tString += "13"; break;
 			case  2: tString += "cat"; break;
 			case  3: tString += "blocks"; break;
@@ -300,7 +300,7 @@ public class GT_Client extends GT_Proxy {
 			default: tString += "wherearewenow"; break;
 			}
 		}
-		if (tString.startsWith("streaming.")) aWorld.playRecord(tString.substring(10, tString.length()), (int)aX, (int)aY, (int)aZ); else aWorld.playSound(aX, aY, aZ, tString, 3.0F, tString.startsWith("note.")?(float)Math.pow(2.0D, (aStack.stackSize - 13) / 12.0D):1.0F, false);
+		if (tString.startsWith("streaming.")) aWorld.playRecord(tString.substring(10, tString.length()), (int)aX, (int)aY, (int)aZ); else aWorld.playSound(aX, aY, aZ, tString, 3.0F, tString.startsWith("note.")?(float)Math.pow(2.0D, (aStack.getCount() - 13) / 12.0D):1.0F, false);
 	}*/
 	
 }

@@ -24,7 +24,7 @@ import static gregapi.data.CS.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 
@@ -43,13 +43,13 @@ public class EntityArrow_Potion extends EntityArrow_Material {
 	}
 	
 	@Override
-	public void writeEntityToNBT(NBTTagCompound aNBT) {
+	public void writeEntityToNBT(CompoundNBT aNBT) {
 		super.writeEntityToNBT(aNBT);
 		aNBT.setIntArray("mPotions", mPotions);
 	}
 	
 	@Override
-	public void readEntityFromNBT(NBTTagCompound aNBT) {
+	public void readEntityFromNBT(CompoundNBT aNBT) {
 		super.readEntityFromNBT(aNBT);
 		setPotions(aNBT.getIntArray("mPotions"));
 	}

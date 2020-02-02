@@ -47,7 +47,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 
 /**
  * @author Gregorius Techneticies
@@ -59,7 +59,7 @@ public abstract class MultiTileEntityPlaceable extends TileEntityBase03MultiTile
 	public byte mSize = 1;
 	
 	@Override
-	public void readFromNBT2(NBTTagCompound aNBT) {
+	public void readFromNBT2(CompoundNBT aNBT) {
 		mStack = ST.load(aNBT, NBT_VALUE);
 		if (ST.valid(mStack)) {
 			mSize = UT.Code.bindStack(ST.size(mStack));
@@ -70,7 +70,7 @@ public abstract class MultiTileEntityPlaceable extends TileEntityBase03MultiTile
 	}
 	
 	@Override
-	public void writeToNBT2(NBTTagCompound aNBT) {
+	public void writeToNBT2(CompoundNBT aNBT) {
 		super.writeToNBT2(aNBT);
 		ST.save(aNBT, NBT_VALUE, mStack);
 	}
@@ -84,27 +84,27 @@ public abstract class MultiTileEntityPlaceable extends TileEntityBase03MultiTile
 	public boolean onBlockActivated2(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (isClientSide()) return T;
 		ItemStack aStack = aPlayer.getCurrentEquippedItem();
-		if (ST.invalid(mStack) || mStack.stackSize <= 0) return setToAir();
+		if (ST.invalid(mStack) || mStack.getCount() <= 0) return setToAir();
 		if (ST.equal(aStack, mStack)) {
-			if (mStack.stackSize >= 64) return T;
-			if (mStack.stackSize + aStack.stackSize > 64) {
-				aStack.stackSize -= (64-mStack.stackSize);
-				mStack.stackSize = 64;
+			if (mStack.getCount() >= 64) return T;
+			if (mStack.getCount() + aStack.getCount() > 64) {
+				aStack.getCount() -= (64-mStack.getCount());
+				mStack.getCount() = 64;
 				mSize = ST.size(mStack);
 				updateClientData();
 				playCollect();
 				return T;
 			}
-			mStack.stackSize += aStack.stackSize;
+			mStack.getCount() += aStack.getCount();
 			mSize = ST.size(mStack);
 			updateClientData();
-			aStack.stackSize = 0;
+			aStack.getCount() = 0;
 			playCollect();
 			return T;
 		}
 		if (UT.Inventories.addStackToPlayerInventoryOrDrop(aPlayer, ST.amount(1, mStack), T, worldObj, xCoord+0.5, yCoord+0.5, zCoord+0.5)) {
 			playCollect();
-			if (--mStack.stackSize <= 0) return setToAir();
+			if (--mStack.getCount() <= 0) return setToAir();
 			mSize = ST.size(mStack);
 			updateClientData();
 		};

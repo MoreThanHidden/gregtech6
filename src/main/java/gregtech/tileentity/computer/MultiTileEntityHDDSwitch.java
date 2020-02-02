@@ -38,7 +38,7 @@ import gregapi.util.UT;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 
 /**
  * @author Gregorius Techneticies
@@ -55,21 +55,21 @@ public class MultiTileEntityHDDSwitch extends TileEntityBase08DataSwitch {
 	}
 	
 	@Override
-	public NBTTagCompound getUSBData(byte aSide, int aUSBTier) {
+	public CompoundNBT getUSBData(byte aSide, int aUSBTier) {
 		ItemStack tDrive = slot(0);
 		if (OM.is(OD_USB_DRIVES[aUSBTier], tDrive) && tDrive.hasTagCompound()) {
-			NBTTagCompound tDriveData = tDrive.getTagCompound().getCompoundTag(NBT_USB_DRIVE);
+			CompoundNBT tDriveData = tDrive.getTagCompound().getCompoundTag(NBT_USB_DRIVE);
 			if (tDriveData.getByte(NBT_USB_TIER+mMode) <= aUSBTier) return tDriveData.hasKey(NBT_USB_DATA+mMode) ? tDriveData.getCompoundTag(NBT_USB_DATA+mMode) : null;
 		}
 		return null;
 	}
 	
 	@Override
-	public boolean setUSBData(byte aSide, int aUSBTier, NBTTagCompound aData) {
+	public boolean setUSBData(byte aSide, int aUSBTier, CompoundNBT aData) {
 		ItemStack tDrive = slot(0);
 		if (OM.is(OD_USB_DRIVES[aUSBTier], tDrive)) {
 			if (!tDrive.hasTagCompound()) tDrive.setTagCompound(UT.NBT.make());
-			NBTTagCompound tDriveData = tDrive.getTagCompound().getCompoundTag(NBT_USB_DRIVE);
+			CompoundNBT tDriveData = tDrive.getTagCompound().getCompoundTag(NBT_USB_DRIVE);
 			if (aData == null || aData.hasNoTags()) {
 				tDriveData.removeTag(NBT_USB_DATA+mMode);
 				tDriveData.removeTag(NBT_USB_TIER+mMode);
@@ -106,7 +106,7 @@ public class MultiTileEntityHDDSwitch extends TileEntityBase08DataSwitch {
 	
 	@Override public String getTileEntityName() {return "gt.multitileentity.hdd.switch";}
 	
-	@Override public ItemStack[] getDefaultInventory(NBTTagCompound aNBT) {return new ItemStack[1];}
+	@Override public ItemStack[] getDefaultInventory(CompoundNBT aNBT) {return new ItemStack[1];}
 	@Override public boolean canInsertItem2(int aSlot, ItemStack aStack, byte aSide) {return OM.is(OD_USB_DRIVES[0], aStack);}
 	
 	@Override public Object getGUIClient2(int aGUIID, PlayerEntity aPlayer) {return new ContainerClientDefault(aPlayer.inventory, this, aGUIID, RES_PATH_GUI + "machines/HDDSwitch.png");}

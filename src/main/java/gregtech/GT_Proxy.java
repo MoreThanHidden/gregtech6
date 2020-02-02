@@ -376,7 +376,7 @@ public abstract class GT_Proxy extends Abstract_Proxy {
 //  public void onItemExpireEvent(ItemExpireEvent aEvent) {
 //      ItemStack aStack = aEvent.entityItem.getEntityItem();
 //      if (aStack != null) {
-//          if (aStack.stackSize <= 0) {aEvent.entityItem.setDead(); return;}
+//          if (aStack.getCount() <= 0) {aEvent.entityItem.setDead(); return;}
 //          
 //          if (!aEvent.entityItem.world.isRemote && aEvent.entityItem.onGround) {
 //              if (aStack.getItem() == Items.stick) {
@@ -384,8 +384,8 @@ public abstract class GT_Proxy extends Abstract_Proxy {
 //                  for (byte tSide : ALL_SIDES_MIDDLE_DOWN) {
 //                      if (aEvent.entityItem.world.canPlaceEntityOnSide(tRegistry.mBlock, MathHelper.floor_double(aEvent.entityItem.posX)+OFFSETS_X[tSide], MathHelper.floor_double(aEvent.entityItem.posY)+OFFSETS_Y[tSide], MathHelper.floor_double(aEvent.entityItem.posZ)+OFFSETS_Z[tSide], F, SIDE_TOP, aEvent.entityItem, aStack)) {
 //                          if (tRegistry.mBlock.placeBlock(aEvent.entityItem.world, MathHelper.floor_double(aEvent.entityItem.posX)+OFFSETS_X[tSide], MathHelper.floor_double(aEvent.entityItem.posY)+OFFSETS_Y[tSide], MathHelper.floor_double(aEvent.entityItem.posZ)+OFFSETS_Z[tSide], SIDE_UNKNOWN, (short)32756, null, T, F)) {
-//                              aStack.stackSize--;
-//                              if (aStack.stackSize <= 0) {aEvent.entityItem.setDead(); return;}
+//                              aStack.getCount()--;
+//                              if (aStack.getCount() <= 0) {aEvent.entityItem.setDead(); return;}
 //                          }
 //                      }
 //                  }
@@ -400,7 +400,7 @@ public abstract class GT_Proxy extends Abstract_Proxy {
 //                  for (byte tSide : ALL_SIDES_MIDDLE_DOWN) {
 //                      if (aEvent.entityItem.world.canPlaceEntityOnSide(tRegistry.mBlock, MathHelper.floor_double(aEvent.entityItem.posX)+OFFSETS_X[tSide], MathHelper.floor_double(aEvent.entityItem.posY)+OFFSETS_Y[tSide], MathHelper.floor_double(aEvent.entityItem.posZ)+OFFSETS_Z[tSide], F, SIDE_TOP, aEvent.entityItem, aStack)) {
 //                          if (tRegistry.mBlock.placeBlock(aEvent.entityItem.world, MathHelper.floor_double(aEvent.entityItem.posX)+OFFSETS_X[tSide], MathHelper.floor_double(aEvent.entityItem.posY)+OFFSETS_Y[tSide], MathHelper.floor_double(aEvent.entityItem.posZ)+OFFSETS_Z[tSide], SIDE_UNKNOWN, (short)32757, ST.save(null, NBT_VALUE, aStack), T, F)) {
-//                              aStack.stackSize = 0;
+//                              aStack.getCount() = 0;
 //                              aEvent.entityItem.setDead();
 //                              return;
 //                          }

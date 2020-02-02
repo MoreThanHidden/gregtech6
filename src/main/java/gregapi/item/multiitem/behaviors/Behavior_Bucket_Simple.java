@@ -80,7 +80,7 @@ public class Behavior_Bucket_Simple extends AbstractBehaviorDefault {
 				FluidStack tFluid = ((IFluidBlock)tFluidBlock).drain(aWorld, tX, tY, tZ, F);
 				if (tFluid != null) {
 					if (FL.fill(tFluid, aStack, F, T, F, T) != null) tBucket = tBucket.getItem().onItemRightClick(tBucket, aWorld, aPlayer);
-					if (FL.milk(tFluid) && tFluid.amount >= 1000) tBucket = ST.make(Items.milk_bucket, 1, 0);
+					if (FL.milk(tFluid) && tFluid.getAmount() >= 1000) tBucket = ST.make(Items.milk_bucket, 1, 0);
 				}
 			}
 		} else {
@@ -110,7 +110,7 @@ public class Behavior_Bucket_Simple extends AbstractBehaviorDefault {
 		if (aPlayer.worldObj.isRemote) return F;
 		FluidStack mFluid = FL.getFluid(aStack, T);
 		if (mFluid == null) return F;
-		if (FL.water(mFluid) && mFluid.amount >= 1000) {
+		if (FL.water(mFluid) && mFluid.getAmount() >= 1000) {
 			Block aBlock = aWorld.getBlock(aX, aY, aZ);
 			if (aBlock instanceof BlockCauldron) {
 				if (aWorld.getBlockMetadata(aX, aY, aZ) < 3) {
@@ -129,14 +129,14 @@ public class Behavior_Bucket_Simple extends AbstractBehaviorDefault {
 		if (aWasFull) {
 			if (aBucket.getItem() == Items.bucket) {
 				aBucket = ST.container(aStack, F);
-				if (aBucket == null) aStack.stackSize = 0; else aStack = aBucket;
+				if (aBucket == null) aStack.getCount() = 0; else aStack = aBucket;
 				return aStack;
 			}
 		} else {
 			FluidStack tFluid = FL.getFluid(aBucket, T);
 			if (tFluid != null) {
 				aBucket = FL.fill(tFluid, aStack, F, T, F, T);
-				if (aBucket == null) aStack.stackSize = 0; else aStack = aBucket;
+				if (aBucket == null) aStack.getCount() = 0; else aStack = aBucket;
 				return aStack;
 			}
 		}

@@ -35,7 +35,7 @@ import gregapi.util.UT;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.AxisAlignedBB;
 
 /**
@@ -45,20 +45,20 @@ public class MultiTileEntityBarometerGasCylinder extends TileEntityBase09FluidCo
 	public long mCapacity = 8000;
 	
 	@Override
-	public void readFromNBT2(NBTTagCompound aNBT) {
+	public void readFromNBT2(CompoundNBT aNBT) {
 		super.readFromNBT2(aNBT);
 		mCapacity = mTank.capacity();
 		if (aNBT.hasKey(NBT_MODE)) mTank.setCapacity(aNBT.getLong(NBT_MODE));
 	}
 	
 	@Override
-	public void writeToNBT2(NBTTagCompound aNBT) {
+	public void writeToNBT2(CompoundNBT aNBT) {
 		if (mCapacity != mTank.capacity()) UT.NBT.setNumber(aNBT, NBT_MODE, mTank.capacity());
 		super.writeToNBT2(aNBT);
 	}
 	
 	@Override
-	public NBTTagCompound writeItemNBT2(NBTTagCompound aNBT) {
+	public CompoundNBT writeItemNBT2(CompoundNBT aNBT) {
 		if (mCapacity != mTank.capacity()) UT.NBT.setNumber(aNBT, NBT_MODE, mTank.capacity());
 		return super.writeItemNBT2(aNBT);
 	}

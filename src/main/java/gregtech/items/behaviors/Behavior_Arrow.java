@@ -37,7 +37,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
@@ -67,8 +67,8 @@ public class Behavior_Arrow extends AbstractBehaviorDefault {
 		if (aEntity instanceof EntityLivingBase) {
 			Enchantments.applyBullshitA((EntityLivingBase)aEntity, aPlayer, aStack);
 			Enchantments.applyBullshitB(aPlayer, aEntity, aStack);
-			if (!UT.Entities.hasInfiniteItems(aPlayer)) aStack.stackSize--;
-			if (aStack.stackSize <= 0) aPlayer.destroyCurrentEquippedItem();
+			if (!UT.Entities.hasInfiniteItems(aPlayer)) aStack.getCount()--;
+			if (aStack.getCount() <= 0) aPlayer.destroyCurrentEquippedItem();
 			return F;
 		}
 		return F;
@@ -77,7 +77,7 @@ public class Behavior_Arrow extends AbstractBehaviorDefault {
 	@Override
 	public boolean isItemStackUsable(MultiItem aItem, ItemStack aStack) {
 		if (mEnchantment != null && mLevel > 0) {
-			NBTTagCompound tNBT = UT.NBT.getNBT(aStack);
+			CompoundNBT tNBT = UT.NBT.getNBT(aStack);
 			if (!tNBT.getBoolean("gt.u")) {
 				tNBT.setBoolean("gt.u", T);
 				UT.NBT.set(aStack, tNBT);
@@ -103,7 +103,7 @@ public class Behavior_Arrow extends AbstractBehaviorDefault {
 			tEntityArrow.setProjectileStack(aStack);
 			tEntityArrow.canBePickedUp = 1;
 			aWorld.spawnEntityInWorld(tEntityArrow);
-			if (aStack.stackSize < 100) aStack.stackSize--;
+			if (aStack.getCount() < 100) aStack.getCount()--;
 			return aStack;
 		}
 		return super.onDispense(aItem, aSource, aStack);

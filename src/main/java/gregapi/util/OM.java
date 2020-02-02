@@ -304,11 +304,11 @@ public class OM {
 	
 	public static double weight(ItemStack aStack) {
 		OreDictItemData tData = OM.anydata(aStack);
-		return tData == null ? 0 : aStack.stackSize * weight(tData.getAllMaterialStacks());
+		return tData == null ? 0 : aStack.getCount() * weight(tData.getAllMaterialStacks());
 	}
 	public static double weight_(ItemStack aStack) {
 		OreDictItemData tData = OM.anydata_(aStack);
-		return tData == null ? 0 : aStack.stackSize * weight(tData.getAllMaterialStacks());
+		return tData == null ? 0 : aStack.getCount() * weight(tData.getAllMaterialStacks());
 	}
 	
 	public static double weight(Iterable<OreDictMaterialStack> aList) {

@@ -294,7 +294,7 @@ public class EntityArrow_Material extends EntityProjectile {
 	}
 	
 	@Override
-	public void writeEntityToNBT(NBTTagCompound aNBT) {
+	public void writeEntityToNBT(CompoundNBT aNBT) {
 		super.writeEntityToNBT(aNBT);
 		aNBT.setShort("xTile", (short)mHitBlockX);
 		aNBT.setShort("yTile", (short)mHitBlockY);
@@ -310,7 +310,7 @@ public class EntityArrow_Material extends EntityProjectile {
 	}
 	
 	@Override
-	public void readEntityFromNBT(NBTTagCompound aNBT) {
+	public void readEntityFromNBT(CompoundNBT aNBT) {
 		super.readEntityFromNBT(aNBT);
 		mHitBlockX = aNBT.getShort("xTile");
 		mHitBlockY = aNBT.getShort("yTile");

@@ -274,8 +274,8 @@ public class Loader_OreProcessing implements Runnable {
 					break;
 				}
 			}
-			if (tFluid != null && tFluid.amount > 0 && tMaterial != null) {
-				RM.Smelter.addRecipe1(T, 16, (long)Math.max(FL.Lava.is(tFluid)?UT.Code.divup(tFluid.amount*EU_PER_LAVA, 16):16, (OM.weight(aEvent.mItemData.getAllMaterialStacks()) * (Math.max(tMaterial.mMaterial.mMeltingPoint, tFluid.getFluid().getTemperature())-DEF_ENV_TEMP))/1600), aEvent.mStack, NF, tFluid, ZL_IS);
+			if (tFluid != null && tFluid.getAmount() > 0 && tMaterial != null) {
+				RM.Smelter.addRecipe1(T, 16, (long)Math.max(FL.Lava.is(tFluid)?UT.Code.divup(tFluid.getAmount()*EU_PER_LAVA, 16):16, (OM.weight(aEvent.mItemData.getAllMaterialStacks()) * (Math.max(tMaterial.mMaterial.mMeltingPoint, tFluid.getFluid().getTemperature())-DEF_ENV_TEMP))/1600), aEvent.mStack, NF, tFluid, ZL_IS);
 			}
 		}
 	}
@@ -386,7 +386,7 @@ public class Loader_OreProcessing implements Runnable {
 			if (mCondition.isTrue(aEvent.mMaterial) && aEvent.mMaterial != MT.Empty) {
 				FluidStack tFluid = aEvent.mMaterial.fluid(DEF_ENV_TEMP, mMaterialAmount<0?aEvent.mPrefix.mAmount:mMaterialAmount, F);
 				ItemStack  tStack = OM.dust(aEvent.mMaterial, mMaterialAmount<0?aEvent.mPrefix.mAmount:mMaterialAmount);
-				if (tFluid == null || tFluid.amount <= 0 || FL.Error.is(tFluid)) tFluid = null;
+				if (tFluid == null || tFluid.getAmount() <= 0 || FL.Error.is(tFluid)) tFluid = null;
 				if (tStack != null || tFluid != null) {
 					RM.Canner.addRecipe1(T, 16, 16, aEvent.mStack, NF, tStack==null?tFluid:NF, aEvent.mPrefix.mat(MT.Empty, 1), tStack);
 					RM.Canner.addRecipe2(T, 16, 16, tStack, aEvent.mPrefix.mat(MT.Empty, 1), tStack==null?tFluid:NF, NF, aEvent.mStack);
@@ -409,7 +409,7 @@ public class Loader_OreProcessing implements Runnable {
 			if (mCondition.isTrue(aEvent.mMaterial)) {
 				FluidStack tFluid = aEvent.mMaterial.fluid(DEF_ENV_TEMP, mOutputMaterialAmount<0?aEvent.mPrefix.mAmount:mOutputMaterialAmount, F);
 				ItemStack  tStack = OM.dust(aEvent.mMaterial, mOutputMaterialAmount<0?aEvent.mPrefix.mAmount:mOutputMaterialAmount);
-				if (tFluid == null || tFluid.amount <= 0 || FL.Error.is(tFluid)) tFluid = null;
+				if (tFluid == null || tFluid.getAmount() <= 0 || FL.Error.is(tFluid)) tFluid = null;
 				if (tStack != null || tFluid != null) {
 					RM.Squeezer.addRecipe1(T, 16, UT.Code.units(aEvent.mPrefix.mAmount, U, 256+256*aEvent.mMaterial.mToolQuality, T), aEvent.mStack, NF, tFluid, tFluid==null?tStack:null);
 				}

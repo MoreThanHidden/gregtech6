@@ -113,7 +113,7 @@ public class MultiItemCans extends MultiItemRandom implements IItemRottable {
 	@Override
 	public ItemStack getRotten(ItemStack aStack) {
 		short tMeta = ST.meta_(aStack);
-		return tMeta < 20 ? aStack : ST.make(this, aStack.stackSize, 10+(tMeta%10), aStack.getTagCompound());
+		return tMeta < 20 ? aStack : ST.make(this, aStack.getCount(), 10+(tMeta%10), aStack.getTagCompound());
 	}
 	
 	@Override public ItemStack getRotten(ItemStack aStack, World aWorld, int aX, int aY, int aZ) {return getRotten(aStack);}

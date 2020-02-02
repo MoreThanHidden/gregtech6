@@ -43,7 +43,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.AxisAlignedBB;
 
 /**
@@ -55,7 +55,7 @@ public abstract class MultiTileEntitySensor extends TileEntityBase10FacingDouble
 	protected byte mRedstone = 0;
 	
 	@Override
-	public void readFromNBT2(NBTTagCompound aNBT) {
+	public void readFromNBT2(CompoundNBT aNBT) {
 		super.readFromNBT2(aNBT);
 		if (aNBT.hasKey(NBT_MODE)) mMode = aNBT.getByte(NBT_MODE);
 		if (aNBT.hasKey(NBT_VISUAL)) mDisplayedNumber = UT.Code.unsignS(aNBT.getShort(NBT_VISUAL));
@@ -65,7 +65,7 @@ public abstract class MultiTileEntitySensor extends TileEntityBase10FacingDouble
 	}
 	
 	@Override
-	public void writeToNBT2(NBTTagCompound aNBT) {
+	public void writeToNBT2(CompoundNBT aNBT) {
 		super.writeToNBT2(aNBT);
 		aNBT.setShort(NBT_VISUAL, (short)mDisplayedNumber);
 		aNBT.setShort(NBT_VALUE, (short)mSetNumber);
@@ -74,7 +74,7 @@ public abstract class MultiTileEntitySensor extends TileEntityBase10FacingDouble
 	}
 	
 	@Override
-	public NBTTagCompound writeItemNBT2(NBTTagCompound aNBT) {
+	public CompoundNBT writeItemNBT2(CompoundNBT aNBT) {
 		aNBT.setShort(NBT_VALUE, (short)mSetNumber);
 		aNBT.setByte(NBT_MODE, mMode);
 		return aNBT;

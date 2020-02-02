@@ -21,7 +21,7 @@ package gregapi.tileentity.behavior;
 
 import static gregapi.data.CS.*;
 
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 
 public class TE_Behavior_Active_Trinary extends TE_Behavior {
@@ -29,18 +29,18 @@ public class TE_Behavior_Active_Trinary extends TE_Behavior {
 	public byte mState = 0;
 	public boolean mActive = F;
 	
-	public TE_Behavior_Active_Trinary(TileEntity aTileEntity, NBTTagCompound aNBT) {
+	public TE_Behavior_Active_Trinary(TileEntity aTileEntity, CompoundNBT aNBT) {
 		super(aTileEntity, aNBT);
 	}
 	
 	@Override
-	public void load(NBTTagCompound aNBT) {
+	public void load(CompoundNBT aNBT) {
 		if (aNBT.hasKey(NBT_ACTIVE)) mActive = aNBT.getBoolean(NBT_ACTIVE);
 		if (aNBT.hasKey(NBT_ACTIVE_DATA)) {mData = aNBT.getLong(NBT_ACTIVE_DATA);}
 	}
 	
 	@Override
-	public void save(NBTTagCompound aNBT) {
+	public void save(CompoundNBT aNBT) {
 		if (aNBT.hasKey(NBT_ACTIVE)) mActive = aNBT.getBoolean(NBT_ACTIVE);
 		if (aNBT.hasKey(NBT_ACTIVE_DATA)) {mData = aNBT.getLong(NBT_ACTIVE_DATA);}
 	}

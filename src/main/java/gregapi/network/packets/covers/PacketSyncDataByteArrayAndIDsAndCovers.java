@@ -29,7 +29,7 @@ import gregapi.network.packets.PacketCoordinates;
 import gregapi.network.packets.ids.PacketSyncDataByteArrayAndIDs;
 import gregapi.util.UT;
 import net.minecraft.block.Block;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.ChunkPos;
 import net.minecraft.world.IBlockAccess;
 
 /**
@@ -50,7 +50,7 @@ public class PacketSyncDataByteArrayAndIDsAndCovers extends PacketSyncDataByteAr
 		mCoverMetas = aCoverData.mMetas;
 		mCoverVisuals = aCoverData.mVisuals;
 	}
-	public PacketSyncDataByteArrayAndIDsAndCovers(ChunkCoordinates aCoords, short aID1, short aID2, byte[] aData, CoverData aCoverData) {
+	public PacketSyncDataByteArrayAndIDsAndCovers(ChunkPos aCoords, short aID1, short aID2, byte[] aData, CoverData aCoverData) {
 		super(aCoords, aID1, aID2, aData);
 		mCoverIDs = aCoverData.mIDs;
 		mCoverMetas = aCoverData.mMetas;

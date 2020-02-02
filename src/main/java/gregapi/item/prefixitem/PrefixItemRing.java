@@ -50,7 +50,7 @@ public class PrefixItemRing extends PrefixItem implements IBauble {
 	@Override
 	public void onWornTick(ItemStack aStack, EntityLivingBase aPlayer) {
 		if (aPlayer.ticksExisted % 120 == 0 && !UT.Entities.isInvincible(aPlayer)) {
-			UT.Entities.applyRadioactivity(aPlayer, UT.Entities.getRadioactivityLevel(aStack), aStack.stackSize);
+			UT.Entities.applyRadioactivity(aPlayer, UT.Entities.getRadioactivityLevel(aStack), aStack.getCount());
 		}
 	}
 	
@@ -58,6 +58,6 @@ public class PrefixItemRing extends PrefixItem implements IBauble {
 	@Override public BaubleType getBaubleType(ItemStack aStack) {return BaubleType.RING;}
 	@Override public void onEquipped(ItemStack aStack, EntityLivingBase aPlayer) {/**/}
 	@Override public void onUnequipped(ItemStack aStack, EntityLivingBase aPlayer) {/**/}
-	@Override public boolean canEquip(ItemStack aStack, EntityLivingBase aPlayer) {return T;/*aStack != null && aStack.stackSize == 1;*/}
+	@Override public boolean canEquip(ItemStack aStack, EntityLivingBase aPlayer) {return T;/*aStack != null && aStack.getCount() == 1;*/}
 	@Override public boolean canUnequip(ItemStack aStack, EntityLivingBase aPlayer) {return T;}
 }

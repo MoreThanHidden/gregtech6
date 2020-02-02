@@ -37,7 +37,7 @@ import gregtech.blocks.fluids.BlockWaterlike;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
@@ -149,7 +149,7 @@ public class WorldgenHives extends WorldgenObject {
 					return placeHive(tRegistry, aWorld, tX, tY-1, tZ, DYE_INT_Green     ,   600, aRandom) || rResult;
 					for (String tName : aBiomeNames) if (BIOMES_FROZEN.contains(tName))
 					return placeHive(tRegistry, aWorld, tX, tY-1, tZ, DYE_INT_White     ,   700, aRandom) || rResult;
-					if (tContact == Blocks.mycelium)
+					if (tContact == Blocks.MYCELIUM)
 					return placeHive(tRegistry, aWorld, tX, tY-1, tZ, DYE_INT_Pink      ,   800, aRandom) || rResult;
 					if (tContact == Blocks.sand && aWorld.getBlockMetadata(tX, tY, tZ) == 1)
 					return placeHive(tRegistry, aWorld, tX, tY-1, tZ, DYE_INT_Red       ,   900, aRandom) || rResult;
@@ -157,9 +157,9 @@ public class WorldgenHives extends WorldgenObject {
 					return placeHive(tRegistry, aWorld, tX, tY-1, tZ, DYE_INT_Yellow    ,   900, aRandom) || rResult;
 					if (tContact == Blocks.gravel || tContact.getMaterial() == Material.rock)
 					return placeHive(tRegistry, aWorld, tX, tY-1, tZ, DYE_INT_LightGray ,   500, aRandom) || rResult;
-					if (tContact == Blocks.grass || tContact.getMaterial() == Material.grass)
+					if (tContact == Blocks.GRASS || tContact.getMaterial() == Material.grass)
 					return placeHive(tRegistry, aWorld, tX, tY-1, tZ, 0xffdd99          ,     0, aRandom) || rResult;
-					if (tContact == Blocks.dirt || tContact.getMaterial() == Material.ground)
+					if (tContact == Blocks.DIRT || tContact.getMaterial() == Material.ground)
 					return placeHive(tRegistry, aWorld, tX, tY-1, tZ, DYE_INT_Brown     ,     0, aRandom) || rResult;
 					
 					return placeHive(tRegistry, aWorld, tX, tY-1, tZ, DYE_INT_Gray      ,     0, aRandom) || rResult;
@@ -172,7 +172,7 @@ public class WorldgenHives extends WorldgenObject {
 	}
 	
 	public boolean placeHive(MultiTileEntityRegistry aRegistry, World aWorld, int aX, int aY, int aZ, int aColor, int aSpeciesID, Random aRandom) {
-		NBTTagCompound aBumbleTag = IItemBumbleBee.Util.getBumbleGenes(WD.envTemp(aWorld, aX, aY, aZ), aWorld.getBiomeGenForCoords(aX, aZ), !aWorld.provider.hasNoSky && aWorld.getPrecipitationHeight(aX, aZ) <= aY + 5, aRandom);
+		CompoundNBT aBumbleTag = IItemBumbleBee.Util.getBumbleGenes(WD.envTemp(aWorld, aX, aY, aZ), aWorld.getBiomeGenForCoords(aX, aZ), !aWorld.provider.hasNoSky && aWorld.getPrecipitationHeight(aX, aZ) <= aY + 5, aRandom);
 		return aRegistry.mBlock.placeBlock(aWorld, aX, aY, aZ, SIDE_UNKNOWN, (short)32755, UT.NBT.make(NBT_COLOR, aColor, NBT_INV_LIST, UT.NBT.makeInv(((IItemBumbleBee)ItemsGT.BUMBLEBEES).bumbleProductStack(NI, (short)aSpeciesID, UT.Code.units(IItemBumbleBee.Util.getWorkForce(aBumbleTag), 10000, 10, T), 0), IItemBumbleBee.Util.setBumbleTag(ST.make(ItemsGT.BUMBLEBEES, 1, aSpeciesID+1), aBumbleTag), IItemBumbleBee.Util.setBumbleTag(ST.make(ItemsGT.BUMBLEBEES, IItemBumbleBee.Util.getOffspring(aBumbleTag), aSpeciesID), aBumbleTag)), NBT_PAINTED, T), F, T);
 	}
 }

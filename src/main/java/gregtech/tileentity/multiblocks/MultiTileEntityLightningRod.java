@@ -39,7 +39,7 @@ import gregapi.util.UT;
 import gregapi.util.WD;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 
 /**
  * @author Gregorius Techneticies
@@ -52,7 +52,7 @@ public class MultiTileEntityLightningRod extends TileEntityBase10MultiBlockBase 
 	public static List<MultiTileEntityLightningRod> ALL_LIGHTNING_RODS = new ArrayListNoNulls<>();
 	
 	@Override
-	public void readFromNBT2(NBTTagCompound aNBT) {
+	public void readFromNBT2(CompoundNBT aNBT) {
 		super.readFromNBT2(aNBT);
 		mEnergy = aNBT.getLong(NBT_ENERGY);
 		mCapacity = aNBT.getLong(NBT_CAPACITY);
@@ -60,7 +60,7 @@ public class MultiTileEntityLightningRod extends TileEntityBase10MultiBlockBase 
 	}
 	
 	@Override
-	public void writeToNBT2(NBTTagCompound aNBT) {
+	public void writeToNBT2(CompoundNBT aNBT) {
 		super.writeToNBT2(aNBT);
 		UT.NBT.setNumber(aNBT, NBT_ENERGY, mEnergy);
 	}

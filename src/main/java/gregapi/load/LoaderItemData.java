@@ -411,7 +411,7 @@ public class LoaderItemData implements Runnable {
 		OM.reg("bucketMilk"                         , ST.make(Items.milk_bucket, 1, W));
 		OM.reg("bottleMilk"                         , ST.make(MD.MFR, "milkbottle", 1, 0));
 		OM.reg("glowstone"                          , ST.make(Blocks.glowstone, 1, W));
-		OM.reg("dirt"                               , ST.make(Blocks.dirt, 1, W));
+		OM.reg("dirt"                               , ST.make(Blocks.DIRT, 1, W));
 		OM.reg("sand"                               , ST.make(Blocks.sand, 1, W));
 		OM.reg("gravel"                             , ST.make(Blocks.gravel, 1, W));
 		OM.reg("soulsand"                           , ST.make(Blocks.soul_sand, 1, W));
@@ -491,7 +491,7 @@ public class LoaderItemData implements Runnable {
 		OM.reg("foodCarrotjuice"                    , ST.make(MD.AA, "itemFood", 1, 2));
 		OM.reg("foodBaconcooked"                    , ST.make(MD.AA, "itemFood", 1,20));
 		OM.reg(OD.slimeballRice                     , ST.make(MD.AA, "itemMisc", 1,12));
-		OM.reg("blockClay"                          , ST.make(Blocks.clay, 1, W));
+		OM.reg("blockClay"                          , ST.make(Blocks.CLAY, 1, W));
 		OM.reg(OD.craftingBook                      , ST.make(Items.book, 1, W));
 		OM.reg(OD.craftingBook                      , ST.make(Items.writable_book, 1, W));
 		OM.reg(OD.craftingBook                      , ST.make(Items.written_book, 1, W));
@@ -1772,13 +1772,13 @@ public class LoaderItemData implements Runnable {
 		OM.data(ST.make(Blocks.ice, 1, W)                           , MT.Ice                ,  U * 1);
 		OM.data(ST.make(Blocks.packed_ice, 1, W)                    , MT.Ice                ,  U * 2);
 		OM.data(ST.make(Items.snowball, 1, W)                       , MT.Snow               ,  U4);
-		OM.data(ST.make(Blocks.snow, 1, W)                          , MT.Snow               ,  U * 1);
-		OM.data(ST.make(Blocks.snow_layer, 1, W)                    , MT.Snow               ,     -1);
+		OM.data(ST.make(Blocks.SNOW, 1, W)                          , MT.Snow               ,  U * 1);
+		OM.data(ST.make(Blocks.SNOW_layer, 1, W)                    , MT.Snow               ,     -1);
 		OM.data(ST.make(Blocks.redstone_lamp, 1, W)                 , ANY.Glowstone         ,  U * 4, MT.Redstone, U * 4);
 		OM.data(ST.make(Blocks.lit_redstone_lamp, 1, W)             , ANY.Glowstone         ,  U * 4, MT.Redstone, U * 4);
 		OM.data(ST.make(Items.bone                      , 1, W)     , MT.Bone               ,  U * 2);
 		OM.data(ST.make(Items.clay_ball                 , 1, W)     , MT.Clay               ,  U * 1);
-		OM.data(ST.make(Blocks.clay                     , 1, W)     , MT.Clay               ,  U * 4);
+		OM.data(ST.make(Blocks.CLAY                     , 1, W)     , MT.Clay               ,  U * 4);
 		OM.data(ST.make(Blocks.hardened_clay            , 1, W)     , MT.Ceramic            ,  U * 4);
 		OM.data(ST.make(Blocks.stained_hardened_clay    , 1, W)     , MT.Ceramic            ,  U * 4);
 		OM.data(ST.make(Blocks.flower_pot               , 1, W)     , MT.Ceramic            ,  U * 3);

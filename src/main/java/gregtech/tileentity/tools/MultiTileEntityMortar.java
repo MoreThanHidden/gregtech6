@@ -48,7 +48,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.AxisAlignedBB;
 
 /**
@@ -62,7 +62,7 @@ public class MultiTileEntityMortar extends TileEntityBase07Paintable implements 
 	public static final OreDictMaterial MORTAR_MATERIALS[] = {ANY.Steel, ANY.Sapphire, ANY.Diamond};
 	
 	@Override
-	public void readFromNBT2(NBTTagCompound aNBT) {
+	public void readFromNBT2(CompoundNBT aNBT) {
 		super.readFromNBT2(aNBT);
 		if (aNBT.hasKey(NBT_RECIPEMAP)) mRecipes = RecipeMap.RECIPE_MAPS.get(aNBT.getString(NBT_RECIPEMAP));
 		if (aNBT.hasKey(NBT_DESIGN)) mStyle = aNBT.getByte(NBT_DESIGN);

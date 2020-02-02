@@ -117,10 +117,10 @@ public class MultiTileEntityMiniPortalErebus extends MultiTileEntityMiniPortal {
 	public boolean onBlockActivated2(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (isServerSide()) {
 			ItemStack aStack = aPlayer.inventory.getCurrentItem();
-			if (ST.valid(aStack) && aStack.stackSize > 0 && (IL.ERE_Gaean_Gem.equal(aStack, F, T) || IL.ERE_Gaean_Staff.equal(aStack, F, T))) {
+			if (ST.valid(aStack) && aStack.getCount() > 0 && (IL.ERE_Gaean_Gem.equal(aStack, F, T) || IL.ERE_Gaean_Staff.equal(aStack, F, T))) {
 				setPortalActive();
 				if (mTarget != null) UT.Entities.sendchat(aPlayer, "X: " + mTarget.xCoord + "   Y: " + mTarget.yCoord + "   Z: " + mTarget.zCoord);
-				if (!UT.Entities.hasInfiniteItems(aPlayer)) aStack.stackSize--;
+				if (!UT.Entities.hasInfiniteItems(aPlayer)) aStack.getCount()--;
 				
 			}
 		}

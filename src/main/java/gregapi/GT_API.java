@@ -718,8 +718,8 @@ public class GT_API extends Abstract_Mod {
 		// Register the GUI Handler.
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, api_proxy);
 		// Fixing vanilla Oak Plank Slab Recipe.
-		CR.remove(ST.make(Blocks.planks, 1, 0), ST.make(Blocks.planks, 1, 1), ST.make(Blocks.planks, 1, 2));
-		CR.shaped(ST.make(Blocks.wooden_slab, 6, 0), CR.NONE, "WWW", 'W', ST.make(Blocks.planks, 1, 0));
+		CR.remove(ST.make(Blocks.OAK_PLANKS, 1, 0), ST.make(Blocks.OAK_PLANKS, 1, 1), ST.make(Blocks.OAK_PLANKS, 1, 2));
+		CR.shaped(ST.make(Blocks.wooden_slab, 6, 0), CR.NONE, "WWW", 'W', ST.make(Blocks.OAK_PLANKS, 1, 0));
 		// Preventing a Water Dupe by registering this Recipe early so it won't be overridden
 		RM.Canner.addRecipe1(T, 16, 16, ST.make(Items.glass_bottle, 1, 0), FL.Water.make(250), NF, ST.make(Items.potionitem, 1, 0));
 		RM.Canner.addRecipe1(T, 16, 16, ST.make(Items.potionitem, 1, 0), ST.make(Items.glass_bottle, 1, 0));

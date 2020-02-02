@@ -50,7 +50,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 
@@ -63,7 +63,7 @@ public class MultiTileEntityRock extends TileEntityBase03MultiTileEntities imple
 	public float mMinX = PX_P[5], mMinZ = PX_P[5], mMaxX = PX_N[5], mMaxY = PX_P[2], mMaxZ = PX_N[5];
 	
 	@Override
-	public void readFromNBT2(NBTTagCompound aNBT) {
+	public void readFromNBT2(CompoundNBT aNBT) {
 		Random tRandom = new Random(xCoord^yCoord^zCoord);
 		mMinX = PX_P[4 + tRandom.nextInt(4)];
 		mMinZ = PX_P[4 + tRandom.nextInt(4)];
@@ -76,7 +76,7 @@ public class MultiTileEntityRock extends TileEntityBase03MultiTileEntities imple
 	}
 	
 	@Override
-	public void writeToNBT2(NBTTagCompound aNBT) {
+	public void writeToNBT2(CompoundNBT aNBT) {
 		super.writeToNBT2(aNBT);
 		ST.save(aNBT, NBT_VALUE, mRock);
 	}

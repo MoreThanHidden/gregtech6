@@ -63,7 +63,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.fluids.Fluid;
@@ -83,7 +83,7 @@ public class MultiTileEntityMixingBowl extends TileEntityBase07Paintable impleme
 	protected FluidTankGT[] mTanksInput = ZL_FT, mTanksOutput = ZL_FT;
 
 	@Override
-	public void readFromNBT2(NBTTagCompound aNBT) {
+	public void readFromNBT2(CompoundNBT aNBT) {
 		super.readFromNBT2(aNBT);
 		if (aNBT.hasKey(NBT_RECIPEMAP)) mRecipes = RecipeMap.RECIPE_MAPS.get(aNBT.getString(NBT_RECIPEMAP));
 
@@ -96,7 +96,7 @@ public class MultiTileEntityMixingBowl extends TileEntityBase07Paintable impleme
 	}
 
 	@Override
-	public void writeToNBT2(NBTTagCompound aNBT) {
+	public void writeToNBT2(CompoundNBT aNBT) {
 		super.writeToNBT2(aNBT);
 		for (int i = 0; i < mTanksInput .length; i++) mTanksInput [i].writeToNBT(aNBT, NBT_TANK+".in." +i);
 		for (int i = 0; i < mTanksOutput.length; i++) mTanksOutput[i].writeToNBT(aNBT, NBT_TANK+".out."+i);
@@ -202,7 +202,7 @@ public class MultiTileEntityMixingBowl extends TileEntityBase07Paintable impleme
 
 	protected boolean canOutput(Recipe aRecipe) {
 		if (slot(6) != null) {
-			if (aRecipe.mNeedsEmptyOutput || (aRecipe.mOutputs.length > 0 && aRecipe.mOutputs[0] != null && (!ST.equal(slot(6), aRecipe.mOutputs[0], F) || slot(6).stackSize + aRecipe.mOutputs[0].stackSize > slot(6).getMaxStackSize()))) {
+			if (aRecipe.mNeedsEmptyOutput || (aRecipe.mOutputs.length > 0 && aRecipe.mOutputs[0] != null && (!ST.equal(slot(6), aRecipe.mOutputs[0], F) || slot(6).getCount() + aRecipe.mOutputs[0].getCount() > slot(6).getMaxStackSize()))) {
 				return F;
 			}
 		}
@@ -249,7 +249,7 @@ public class MultiTileEntityMixingBowl extends TileEntityBase07Paintable impleme
 			FluidStack tFluid = FL.getFluid(ST.amount(1, aStack), T);
 			
 			if (aStack != null && tFluid != null && FL.fillAll_(this, SIDE_ANY, tFluid, T)) {
-				aStack.stackSize--;
+				aStack.getCount()--;
 				UT.Inventories.addStackToPlayerInventoryOrDrop(aPlayer, tStack, T);
 				return T;
 			}
@@ -258,23 +258,23 @@ public class MultiTileEntityMixingBowl extends TileEntityBase07Paintable impleme
 					if (ST.move(aPlayer.inventory, this, aPlayer.inventory.currentItem, i) > 0) return T;
 				}
 				if (aStack != null) for (FluidTankGT tTank : mTanksOutput) if ((tStack = FL.fill(tTank, ST.amount(1, aStack), T, T, T, T)) != null) {
-					aStack.stackSize--;
+					aStack.getCount()--;
 					UT.Inventories.addStackToPlayerInventoryOrDrop(aPlayer, tStack, T);
 					return T;
 				}
 				if (aStack != null) for (FluidTankGT tTank : mTanksInput) if ((tStack = FL.fill(tTank, ST.amount(1, aStack), T, T, T, T)) != null) {
-					aStack.stackSize--;
+					aStack.getCount()--;
 					UT.Inventories.addStackToPlayerInventoryOrDrop(aPlayer, tStack, T);
 					return T;
 				}
 			} else {
 				if (aStack != null) for (FluidTankGT tTank : mTanksOutput) if ((tStack = FL.fill(tTank, ST.amount(1, aStack), T, T, T, T)) != null) {
-					aStack.stackSize--;
+					aStack.getCount()--;
 					UT.Inventories.addStackToPlayerInventoryOrDrop(aPlayer, tStack, T);
 					return T;
 				}
 				if (aStack != null) for (FluidTankGT tTank : mTanksInput) if ((tStack = FL.fill(tTank, ST.amount(1, aStack), T, T, T, T)) != null) {
-					aStack.stackSize--;
+					aStack.getCount()--;
 					UT.Inventories.addStackToPlayerInventoryOrDrop(aPlayer, tStack, T);
 					return T;
 				}
@@ -443,7 +443,7 @@ public class MultiTileEntityMixingBowl extends TileEntityBase07Paintable impleme
 	@Override public boolean attachCoversFirst      (byte aSide) {return F;}
 
 	// Inventory Stuff
-	@Override public ItemStack[] getDefaultInventory(NBTTagCompound aNBT) {return new ItemStack[7];}
+	@Override public ItemStack[] getDefaultInventory(CompoundNBT aNBT) {return new ItemStack[7];}
 	@Override public boolean canDrop(int aInventorySlot) {return T;}
 
 	private static final int[] ACCESSIBLE_SLOTS = new int[] {0, 1, 2, 3, 4, 5, 6};
@@ -467,8 +467,8 @@ public class MultiTileEntityMixingBowl extends TileEntityBase07Paintable impleme
 	@Override
 	public int removeFluidFromConnectedTank(byte aSide, FluidStack aFluid, boolean aOnlyRemoveIfItCanRemoveAllAtOnce) {
 		if (aFluid == NF) return 0;
-		for (FluidTankGT tTank : mTanksInput ) if (tTank.contains(aFluid)) if (tTank.has(aOnlyRemoveIfItCanRemoveAllAtOnce ? aFluid.amount : 1)) return (int)tTank.remove(aFluid.amount);
-		for (FluidTankGT tTank : mTanksOutput) if (tTank.contains(aFluid)) if (tTank.has(aOnlyRemoveIfItCanRemoveAllAtOnce ? aFluid.amount : 1)) return (int)tTank.remove(aFluid.amount);
+		for (FluidTankGT tTank : mTanksInput ) if (tTank.contains(aFluid)) if (tTank.has(aOnlyRemoveIfItCanRemoveAllAtOnce ? aFluid.getAmount() : 1)) return (int)tTank.remove(aFluid.getAmount());
+		for (FluidTankGT tTank : mTanksOutput) if (tTank.contains(aFluid)) if (tTank.has(aOnlyRemoveIfItCanRemoveAllAtOnce ? aFluid.getAmount() : 1)) return (int)tTank.remove(aFluid.getAmount());
 		return 0;
 	}
 

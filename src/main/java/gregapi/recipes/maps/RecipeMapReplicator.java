@@ -36,7 +36,7 @@ import gregapi.util.OM;
 import gregapi.util.ST;
 import gregapi.util.UT;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -57,7 +57,7 @@ public class RecipeMapReplicator extends RecipeMap {
 		if (rRecipe != null || aInputs == null || aFluids == null || GAPI_POST.mFinishedServerStarted <= 0) return rRecipe;
 		
 		ItemStack tUSB = null;
-		NBTTagCompound tData = null;
+		CompoundNBT tData = null;
 		for (ItemStack aInput : aInputs) if (aInput != null) {
 			if (tData == null) {
 				if (OM.is_(OD_USB_STICKS[3], aInput)) {

@@ -116,19 +116,19 @@ public class MultiTileEntityMiniPortalTropics extends MultiTileEntityMiniPortal 
 	public boolean onBlockActivated2(PlayerEntity aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (isServerSide()) {
 			ItemStack aStack = aPlayer.inventory.getCurrentItem();
-			if (ST.valid(aStack) && aStack.stackSize > 0 && ST.equal(aStack, MD.TROPIC, "cocktail")) {
+			if (ST.valid(aStack) && aStack.getCount() > 0 && ST.equal(aStack, MD.TROPIC, "cocktail")) {
 				setPortalActive();
 				if (mTarget != null) UT.Entities.sendchat(aPlayer, "X: " + mTarget.xCoord + "   Y: " + mTarget.yCoord + "   Z: " + mTarget.zCoord);
-				if (!UT.Entities.hasInfiniteItems(aPlayer)) aStack.stackSize--;
+				if (!UT.Entities.hasInfiniteItems(aPlayer)) aStack.getCount()--;
 			}
 		}
 		return T;
 	}
 	
-	@Override public float getBlockHardness() {return Blocks.planks.getBlockHardness(worldObj, xCoord, yCoord, zCoord);}
-	@Override public float getExplosionResistance2() {return Blocks.planks.getExplosionResistance(null);}
+	@Override public float getBlockHardness() {return Blocks.OAK_PLANKS.getBlockHardness(worldObj, xCoord, yCoord, zCoord);}
+	@Override public float getExplosionResistance2() {return Blocks.OAK_PLANKS.getExplosionResistance(null);}
 	
-	public ITexture sTropicsPortal = BlockTextureCopied.get(ST.block(MD.TROPIC, "tile.portal", Blocks.portal), SIDE_ANY, 0, UNCOLOURED, F, T, T), sTropicsPortalFrame = BlockTextureCopied.get(ST.block(MD.TROPIC, "tile.bambooBundle", Blocks.planks), SIDE_FRONT, 0, UNCOLOURED, F, F, F), sTropicsPortalInactive = BlockTextureCopied.get(Blocks.water, SIDE_TOP, 0, 0x0088ffcc, F, T, T);
+	public ITexture sTropicsPortal = BlockTextureCopied.get(ST.block(MD.TROPIC, "tile.portal", Blocks.portal), SIDE_ANY, 0, UNCOLOURED, F, T, T), sTropicsPortalFrame = BlockTextureCopied.get(ST.block(MD.TROPIC, "tile.bambooBundle", Blocks.OAK_PLANKS), SIDE_FRONT, 0, UNCOLOURED, F, F, F), sTropicsPortalInactive = BlockTextureCopied.get(Blocks.water, SIDE_TOP, 0, 0x0088ffcc, F, T, T);
 	@Override public ITexture getPortalTexture() {return sTropicsPortal;}
 	@Override public ITexture getFrameTexture() {return sTropicsPortalFrame;}
 	@Override public ITexture getInactiveTexture() {return sTropicsPortalInactive;}

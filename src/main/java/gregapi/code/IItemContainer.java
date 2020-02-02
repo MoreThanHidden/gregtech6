@@ -22,7 +22,7 @@ package gregapi.code;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 
 public interface IItemContainer {
 	public Item item();
@@ -35,9 +35,9 @@ public interface IItemContainer {
 	public ItemStack getAlmostBroken(long aAmount, Object... aReplacements);
 	public ItemStack getWithMeta(long aAmount, long aMetaValue, Object... aReplacements);
 	public ItemStack getWithDamage(long aAmount, long aMetaValue, Object... aReplacements);
-	public ItemStack getWithNBT(long aAmount, NBTTagCompound aNBT, Object... aReplacements);
+	public ItemStack getWithNBT(long aAmount, CompoundNBT aNBT, Object... aReplacements);
 	public ItemStack getWithName(long aAmount, String aDisplayName, Object... aReplacements);
-	public ItemStack getWithNameAndNBT(long aAmount, String aDisplayName, NBTTagCompound aNBT, Object... aReplacements);
+	public ItemStack getWithNameAndNBT(long aAmount, String aDisplayName, CompoundNBT aNBT, Object... aReplacements);
 	public ItemStack getWithCharge(long aAmount, long aEnergy, Object... aReplacements);
 	public IItemContainer set(Item aItem);
 	public IItemContainer set(ItemStack aStack);

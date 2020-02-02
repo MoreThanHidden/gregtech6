@@ -51,7 +51,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
@@ -86,7 +86,7 @@ public class ItemFluidDisplay extends Item implements IFluidContainerItem, IItem
 	@Override
 	@SuppressWarnings("unchecked")
 	public void addInformation(ItemStack aStack, PlayerEntity aPlayer, @SuppressWarnings("rawtypes") List aList, boolean aF3_H) {
-		NBTTagCompound aNBT = aStack.getTagCompound();
+		CompoundNBT aNBT = aStack.getTagCompound();
 		Fluid aFluid = FluidRegistry.getFluid(ST.meta_(aStack));
 		if (aFluid == null) {
 			aList.add(LH.Chat.BLINKING_RED + "CLIENTSIDE FLUID IS NULL!!!" + LH.Chat.GRAY);
@@ -321,7 +321,7 @@ public class ItemFluidDisplay extends Item implements IFluidContainerItem, IItem
 	
 	@Override
 	public void updateItemStack(ItemStack aStack) {
-		NBTTagCompound aNBT = aStack.getTagCompound();
+		CompoundNBT aNBT = aStack.getTagCompound();
 		if (aNBT != null && aNBT.hasKey("f")) {
 			String aName = aNBT.getString("f");
 			if (UT.Code.stringInvalid(aName)) return;
@@ -344,7 +344,7 @@ public class ItemFluidDisplay extends Item implements IFluidContainerItem, IItem
 		Fluid tFluid = FluidRegistry.getFluid(ST.meta_(aStack));
 		if (tFluid == null) return null;
 		FluidStack rFluid = null;
-		NBTTagCompound aNBT = aStack.getTagCompound();
+		CompoundNBT aNBT = aStack.getTagCompound();
 		if (aNBT != null) {
 			long tAmount = aNBT.getLong("a");
 			if (tAmount > 0) rFluid = FL.make(tFluid, tAmount);

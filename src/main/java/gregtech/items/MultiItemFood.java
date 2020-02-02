@@ -123,11 +123,11 @@ public class MultiItemFood extends MultiItemRandom implements IItemRottable {
 		RM.add_smelting(IL.Clay_Ball_Brown.get(1), ST.make(Items.brick, 1, 0));
 		CR.remove(ST.make(Items.clay_ball, 1, 0), ST.make(Items.clay_ball, 1, 0), NI, ST.make(Items.clay_ball, 1, 0), ST.make(Items.clay_ball, 1, 0));
 		CR.shaped       (ST.make(BlocksGT.Diggables , 1, 0) , CR.DEF_NAC_NCC, "XX", "XX", 'X', IL.Mud_Ball);
-		CR.shaped       (ST.make(Blocks.clay        , 1, 0) , CR.DEF_NAC_NCC, "XX", "XX", 'X', ST.make(Items.clay_ball, 1, W));
+		CR.shaped       (ST.make(Blocks.CLAY        , 1, 0) , CR.DEF_NAC_NCC, "XX", "XX", 'X', ST.make(Items.clay_ball, 1, W));
 		CR.shaped       (ST.make(BlocksGT.Diggables , 1, 1) , CR.DEF_NAC_NCC, "XX", "XX", 'X', IL.Clay_Ball_Brown);
 		CR.shapeless    (IL.Mud_Ball.get(4)                 , CR.DEF_NAC_NCC, new Object[] {ST.make(BlocksGT.Diggables  , 1, 0)});
 		CR.shapeless    (IL.Clay_Ball_Brown.get(4)          , CR.DEF_NAC_NCC, new Object[] {ST.make(BlocksGT.Diggables  , 1, 1)});
-		CR.shapeless    (ST.make(Items.clay_ball, 4, 0)     , CR.DEF_NAC_NCC, new Object[] {ST.make(Blocks.clay         , 1, W)});
+		CR.shapeless    (ST.make(Items.clay_ball, 4, 0)     , CR.DEF_NAC_NCC, new Object[] {ST.make(Blocks.CLAY         , 1, W)});
 
 
 		IL.Comb_Honey.set(          addItem(tLastID = 30000, "Honey Comb"           , "", OD.beeComb, OD.materialHoneycomb, "foodFilledhoneycomb", TC.stack(TC.LIMUS, 1), TC.stack(TC.FAMES, 1), TC.stack(TC.SANO, 1)));
@@ -725,25 +725,25 @@ public class MultiItemFood extends MultiItemRandom implements IItemRottable {
 	@Override
 	public ItemStack getRotten(ItemStack aStack) {
 		short aMeta = ST.meta_(aStack);
-		if (UT.Code.inside(    0,   999, aMeta)) return (IL.ENVM_Rotten_Food.exists()?IL.ENVM_Rotten_Food:IL.Remains_Plant).get(aStack.stackSize);
-		if (UT.Code.inside( 1100,  1999, aMeta)) return ST.make(Items.rotten_flesh, aStack.stackSize, 0);
+		if (UT.Code.inside(    0,   999, aMeta)) return (IL.ENVM_Rotten_Food.exists()?IL.ENVM_Rotten_Food:IL.Remains_Plant).get(aStack.getCount());
+		if (UT.Code.inside( 1100,  1999, aMeta)) return ST.make(Items.rotten_flesh, aStack.getCount(), 0);
 		if (UT.Code.inside(13000, 13999, aMeta)) return null;
 		if (UT.Code.inside(31000, 31999, aMeta)) return aStack;
 
 		switch(aMeta) {
-		case 12000: return ST.make(this, aStack.stackSize, 12002, aStack.getTagCompound());
-		case 12001: return ST.make(this, aStack.stackSize, 12002, aStack.getTagCompound());
-		case 12002: return ST.make(this, aStack.stackSize, 12003, aStack.getTagCompound());
-		case 12004: return ST.make(this, aStack.stackSize, 12002, aStack.getTagCompound());
-		case 12005: return ST.make(this, aStack.stackSize, 12002, aStack.getTagCompound());
-		case 12006: return ST.make(this, aStack.stackSize, 12002, aStack.getTagCompound());
-		case 12007: return ST.make(this, aStack.stackSize, 12002, aStack.getTagCompound());
-		case 32700: return (IL.ENVM_Rotten_Food.exists()?IL.ENVM_Rotten_Food:IL.Remains_Plant).get(aStack.stackSize);
-		case 32701: return (IL.ENVM_Rotten_Food.exists()?IL.ENVM_Rotten_Food:IL.Remains_Plant).get(aStack.stackSize);
-		case 32105: case 32107: return OP.ingot.mat(MT.MeatRotten, aStack.stackSize);
-		case 32113: case 32115: return OP.ingot.mat(MT.FishRotten, aStack.stackSize);
+		case 12000: return ST.make(this, aStack.getCount(), 12002, aStack.getTagCompound());
+		case 12001: return ST.make(this, aStack.getCount(), 12002, aStack.getTagCompound());
+		case 12002: return ST.make(this, aStack.getCount(), 12003, aStack.getTagCompound());
+		case 12004: return ST.make(this, aStack.getCount(), 12002, aStack.getTagCompound());
+		case 12005: return ST.make(this, aStack.getCount(), 12002, aStack.getTagCompound());
+		case 12006: return ST.make(this, aStack.getCount(), 12002, aStack.getTagCompound());
+		case 12007: return ST.make(this, aStack.getCount(), 12002, aStack.getTagCompound());
+		case 32700: return (IL.ENVM_Rotten_Food.exists()?IL.ENVM_Rotten_Food:IL.Remains_Plant).get(aStack.getCount());
+		case 32701: return (IL.ENVM_Rotten_Food.exists()?IL.ENVM_Rotten_Food:IL.Remains_Plant).get(aStack.getCount());
+		case 32105: case 32107: return OP.ingot.mat(MT.MeatRotten, aStack.getCount());
+		case 32113: case 32115: return OP.ingot.mat(MT.FishRotten, aStack.getCount());
 
-		default: return ST.food(aStack) > 0 ? IL.ENVM_Rotten_Food.exists() ? IL.ENVM_Rotten_Food.get(aStack.stackSize) : null : aStack;
+		default: return ST.food(aStack) > 0 ? IL.ENVM_Rotten_Food.exists() ? IL.ENVM_Rotten_Food.get(aStack.getCount()) : null : aStack;
 		}
 	}
 

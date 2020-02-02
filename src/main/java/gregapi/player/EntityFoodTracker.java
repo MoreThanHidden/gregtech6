@@ -27,7 +27,7 @@ import gregapi.data.CS.PotionsGT;
 import gregapi.util.UT;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
@@ -47,8 +47,8 @@ public class EntityFoodTracker implements IExtendedEntityProperties {
 	}
 	
 	@Override
-	public void saveNBTData(NBTTagCompound aNBT) {
-		NBTTagCompound tNBT = UT.NBT.make();
+	public void saveNBTData(CompoundNBT aNBT) {
+		CompoundNBT tNBT = UT.NBT.make();
 		if (mAlcohol        != 0) tNBT.setByte("a", mAlcohol);
 		if (mCaffeine       != 0) tNBT.setByte("c", mCaffeine);
 		if (mSugar          != 0) tNBT.setByte("s", mSugar);
@@ -58,9 +58,9 @@ public class EntityFoodTracker implements IExtendedEntityProperties {
 	}
 	
 	@Override
-	public void loadNBTData(NBTTagCompound aNBT) {
+	public void loadNBTData(CompoundNBT aNBT) {
 		if (!aNBT.hasKey("gt.properties.food")) return;
-		NBTTagCompound tNBT = aNBT.getCompoundTag("gt.properties.food");
+		CompoundNBT tNBT = aNBT.getCompoundTag("gt.properties.food");
 		mAlcohol        = tNBT.getByte("a");
 		mCaffeine       = tNBT.getByte("c");
 		mDehydration    = tNBT.getByte("d");

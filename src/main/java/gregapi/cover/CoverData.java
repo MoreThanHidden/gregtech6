@@ -27,7 +27,7 @@ import gregapi.tileentity.delegate.DelegatorTileEntity;
 import gregapi.util.ST;
 import gregapi.util.UT;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.AxisAlignedBB;
 
 /**
@@ -36,16 +36,16 @@ import net.minecraft.util.AxisAlignedBB;
 public class CoverData {
 	public short mIDs[], mMetas[], mVisuals[], mValues[];
 	public boolean mVisualsToSync[] = new boolean[] {F,F,F,F,F,F}, mStopped = F;
-	public NBTTagCompound mNBTs[];
+	public CompoundNBT mNBTs[];
 	public ICover mBehaviours[] = new ICover[6];
 	public ITileEntityCoverable mTileEntity = null;
 	
 	public CoverData(ITileEntityCoverable aTileEntity) {
-		mIDs = new short[6]; mMetas = new short[6]; mVisuals = new short[6]; mValues = new short[6]; mNBTs = new NBTTagCompound[6];
+		mIDs = new short[6]; mMetas = new short[6]; mVisuals = new short[6]; mValues = new short[6]; mNBTs = new CompoundNBT[6];
 		mTileEntity = aTileEntity;
 	}
 	
-	public CoverData(short[] aIDs, short[] aMetas, short[] aVisuals, short[] aValues, NBTTagCompound[] aNBTs, boolean aStopped, ITileEntityCoverable aTileEntity) {
+	public CoverData(short[] aIDs, short[] aMetas, short[] aVisuals, short[] aValues, CompoundNBT[] aNBTs, boolean aStopped, ITileEntityCoverable aTileEntity) {
 		mVisuals = aVisuals; mValues = aValues; mNBTs = aNBTs;
 		for (int i = 0; i < mNBTs.length;i++) if (mNBTs[i] != null && mNBTs[i].hasNoTags()) mNBTs[i] = null;
 		setIDs(aIDs, aMetas);
@@ -54,17 +54,17 @@ public class CoverData {
 		try {for (byte tSide : ALL_SIDES_VALID) if (mBehaviours[tSide] != null) mBehaviours[tSide].onCoverLoaded(tSide, this);} catch(Throwable e) {e.printStackTrace(ERR); mTileEntity.setError("Cover Loaded:" + e);}
 	}
 	
-	public CoverData(ITileEntityCoverable aTileEntity, NBTTagCompound aNBT) {
+	public CoverData(ITileEntityCoverable aTileEntity, CompoundNBT aNBT) {
 		this( new short[] {aNBT.getShort("a"), aNBT.getShort("b"), aNBT.getShort("c"), aNBT.getShort("d"), aNBT.getShort("e"), aNBT.getShort("f")}
 			, new short[] {aNBT.getShort("g"), aNBT.getShort("h"), aNBT.getShort("i"), aNBT.getShort("j"), aNBT.getShort("k"), aNBT.getShort("l")}
 			, new short[] {aNBT.getShort("m"), aNBT.getShort("n"), aNBT.getShort("o"), aNBT.getShort("p"), aNBT.getShort("q"), aNBT.getShort("r")}
 			, new short[] {aNBT.getShort("0"), aNBT.getShort("1"), aNBT.getShort("2"), aNBT.getShort("3"), aNBT.getShort("4"), aNBT.getShort("5")}
-			, new NBTTagCompound[] {aNBT.getCompoundTag("s"), aNBT.getCompoundTag("t"), aNBT.getCompoundTag("u"), aNBT.getCompoundTag("v"), aNBT.getCompoundTag("w"), aNBT.getCompoundTag("x")}
+			, new CompoundNBT[] {aNBT.getCompoundTag("s"), aNBT.getCompoundTag("t"), aNBT.getCompoundTag("u"), aNBT.getCompoundTag("v"), aNBT.getCompoundTag("w"), aNBT.getCompoundTag("x")}
 			, aNBT.getBoolean("y")
 			, aTileEntity);
 	}
 	
-	public NBTTagCompound writeToNBT(NBTTagCompound aNBT, boolean aIncludeVisuals) {
+	public CompoundNBT writeToNBT(CompoundNBT aNBT, boolean aIncludeVisuals) {
 		byte i = 0;
 		if (mIDs[  i] != 0) {
 			aNBT.setShort("a", mIDs[i]);
@@ -122,10 +122,10 @@ public class CoverData {
 		return aStack == null ? set(aSide, (short)0, (short)0, null) : set(aSide, ST.id(aStack), ST.meta_(aStack), aStack.getTagCompound());
 	}
 	
-	public CoverData set(byte aSide, short aID, short aMeta, NBTTagCompound aNBT) {
+	public CoverData set(byte aSide, short aID, short aMeta, CompoundNBT aNBT) {
 		mIDs[aSide] = aID; mMetas[aSide] = aMeta;
 		if (aID == 0) mBehaviours[aSide] = null; else mBehaviours[aSide] = CoverRegistry.get(aID, aMeta);
-		mNBTs[aSide] = (NBTTagCompound)(aNBT==null||aNBT.hasNoTags()?null:aNBT.copy());
+		mNBTs[aSide] = (CompoundNBT)(aNBT==null||aNBT.hasNoTags()?null:aNBT.copy());
 		return this;
 	}
 	

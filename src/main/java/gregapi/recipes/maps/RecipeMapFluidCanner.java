@@ -53,7 +53,7 @@ public class RecipeMapFluidCanner extends RecipeMap {
 		for (ItemStack tInput : aInputs) if (ST.valid(tInput)) {
 			FluidStack tFluid = FL.getFluid(tInput, T);
 			if (tFluid != null) {
-				return FL.Error.is(tFluid) ? null : new Recipe(F, F, F, ST.array(ST.amount(1, tInput)), ST.array(ST.container(tInput, T)), null, null, ZL_FS, FL.array(tFluid), Math.max(tFluid.amount / 64, 16), 16, 0);
+				return FL.Error.is(tFluid) ? null : new Recipe(F, F, F, ST.array(ST.amount(1, tInput)), ST.array(ST.container(tInput, T)), null, null, ZL_FS, FL.array(tFluid), Math.max(tFluid.getAmount() / 64, 16), 16, 0);
 			} else if (aFluids != null && aFluids.length > 0 && aFluids[0] != null && !FL.Error.is(aFluids[0])) {
 				if ((MD.GC.mLoaded || MD.GC_GALAXYSPACE.mLoaded) && FL.Liquid_Oxygen.is(aFluids[0])) {
 					if (IL.GC_OxyTank_1.equal(tInput, T, T) || IL.GC_OxyTank_2.equal(tInput, T, T) || IL.GC_OxyTank_3.equal(tInput, T, T) || IL.GC_OxyTank_4.equal(tInput, T, T) || IL.GC_OxyTank_5.equal(tInput, T, T) || IL.GC_OxyTank_6.equal(tInput, T, T) || IL.GC_OxyTank_Env.equal(tInput, T, T)) {
@@ -63,7 +63,7 @@ public class RecipeMapFluidCanner extends RecipeMap {
 				}
 				ItemStack tOutput = FL.fill(aFluids[0], tInput, F, T, F, F);
 				tFluid = FL.getFluid(tOutput, T);
-				if (tFluid != null) return new Recipe(F, F, F, ST.array(ST.amount(1, tInput)), ST.array(tOutput), null, null, FL.array(tFluid), ZL_FS, Math.max(tFluid.amount / 64, 16), 16, 0);
+				if (tFluid != null) return new Recipe(F, F, F, ST.array(ST.amount(1, tInput)), ST.array(tOutput), null, null, FL.array(tFluid), ZL_FS, Math.max(tFluid.getAmount() / 64, 16), 16, 0);
 			}
 		}
 		return rRecipe;

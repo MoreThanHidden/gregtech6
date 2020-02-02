@@ -34,7 +34,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 
 /**
@@ -60,7 +60,7 @@ public abstract class MultiTileEntitySensorTE extends MultiTileEntitySensor impl
 	public int mIndex = 0, mCurrentValue = 0, mCurrentMax = 0;
 	
 	@Override
-	public void readFromNBT2(NBTTagCompound aNBT) {
+	public void readFromNBT2(CompoundNBT aNBT) {
 		super.readFromNBT2(aNBT);
 		mCurrentMax = aNBT.getInteger("gt.sensor.max");
 		mCurrentValue = aNBT.getInteger("gt.sensor.value");
@@ -75,7 +75,7 @@ public abstract class MultiTileEntitySensorTE extends MultiTileEntitySensor impl
 	}
 	
 	@Override
-	public void writeToNBT2(NBTTagCompound aNBT) {
+	public void writeToNBT2(CompoundNBT aNBT) {
 		super.writeToNBT2(aNBT);
 		UT.NBT.setNumber(aNBT, "gt.sensor.max", mCurrentMax);
 		UT.NBT.setNumber(aNBT, "gt.sensor.value", mCurrentValue);
@@ -84,7 +84,7 @@ public abstract class MultiTileEntitySensorTE extends MultiTileEntitySensor impl
 	}
 	
 	@Override
-	public NBTTagCompound writeItemNBT2(NBTTagCompound aNBT) {
+	public CompoundNBT writeItemNBT2(CompoundNBT aNBT) {
 		aNBT = super.writeItemNBT2(aNBT);
 		if (mIndex != 0) aNBT.setInteger("gt.sensor.index", mIndex);
 		if (mValues.length > 1) aNBT.setIntArray("gt.sensor.array", new int[mValues.length]);

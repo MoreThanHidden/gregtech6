@@ -64,7 +64,7 @@ public class WorldgenBushes extends WorldgenObject {
 			if (tContact == NB || tContact.isAir(aWorld, tX, tY, tZ)) {temp = T; continue;}
 			if (!BlocksGT.plantableGreens.contains(tContact)) {temp = F; continue;}
 			if (!temp || !WD.easyRep(aWorld, tX, tY+1, tZ)) return F;
-			if (tContact == Blocks.grass) WD.set(aChunk, tX-aMinX, tY, tZ-aMinZ, Blocks.dirt, 0);
+			if (tContact == Blocks.GRASS) WD.set(aChunk, tX-aMinX, tY, tZ-aMinZ, Blocks.DIRT, 0);
 			
 			int tStage = aRandom.nextInt(4);
 			ItemStack tBerry = UT.Code.select(new ItemStackContainer(IL.Food_Candleberry.get(1)), BushesGT.MAP.keySet().toArray(ZL_ISC)).toStack();

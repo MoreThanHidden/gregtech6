@@ -25,7 +25,7 @@ import gregapi.util.ST;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 
 /**
  * @author Gregorius Techneticies
@@ -57,7 +57,7 @@ public class CoverRegistry {
 		put(new ItemStackContainer(aBlock, 1, aMetaData), aCover);
 	}
 	
-	public static CoverData coverdata(ITileEntityCoverable aTileEntity, NBTTagCompound aNBT) {
+	public static CoverData coverdata(ITileEntityCoverable aTileEntity, CompoundNBT aNBT) {
 		return aNBT == null ? new CoverData(aTileEntity) : new CoverData(aTileEntity, aNBT);
 	}
 }

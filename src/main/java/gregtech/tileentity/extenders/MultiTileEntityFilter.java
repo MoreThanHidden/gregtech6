@@ -48,7 +48,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -66,21 +66,21 @@ public class MultiTileEntityFilter extends MultiTileEntityExtender implements IT
 	public boolean mInverted = F;
 	
 	@Override
-	public void readFromNBT2(NBTTagCompound aNBT) {
+	public void readFromNBT2(CompoundNBT aNBT) {
 		super.readFromNBT2(aNBT);
 		if (aNBT.hasKey(NBT_INVERTED)) mInverted = aNBT.getBoolean(NBT_INVERTED);
 		for (int i = 0; i < mFilter.length; i++) mFilter[i] = ST.load(aNBT, NBT_INV_FILTER+"."+i);
 	}
 	
 	@Override
-	public void writeToNBT2(NBTTagCompound aNBT) {
+	public void writeToNBT2(CompoundNBT aNBT) {
 		super.writeToNBT2(aNBT);
 		UT.NBT.setBoolean(aNBT, NBT_INVERTED, mInverted);
 		for (int i = 0; i < mFilter.length; i++) ST.save(aNBT, NBT_INV_FILTER+"."+i, mFilter[i]);
 	}
 	
 	@Override
-	public NBTTagCompound writeItemNBT2(NBTTagCompound aNBT) {
+	public CompoundNBT writeItemNBT2(CompoundNBT aNBT) {
 		UT.NBT.setBoolean(aNBT, NBT_INVERTED, mInverted);
 		for (int i = 0; i < mFilter.length; i++) ST.save(aNBT, NBT_INV_FILTER+"."+i, mFilter[i]);
 		return super.writeItemNBT2(aNBT);
@@ -90,7 +90,7 @@ public class MultiTileEntityFilter extends MultiTileEntityExtender implements IT
 	@Override public Object getGUIServer2(int aGUIID, PlayerEntity aPlayer) {return new MultiTileEntityGUICommonFilter(aPlayer.inventory, this, aGUIID);}
 	@Override public int getSizeInventoryGUI() {return mFilter==null?0:mFilter.length;}
 	@Override public ItemStack getStackInSlotGUI(int aSlot) {return mFilter[aSlot];}
-	@Override public ItemStack decrStackSizeGUI(int aSlot, int aDecrement) {mInventoryChanged = T; if (mFilter[aSlot] != null) {if (mFilter[aSlot].stackSize <= aDecrement) {ItemStack tStack = mFilter[aSlot]; mFilter[aSlot] = null; return tStack;} ItemStack rStack = mFilter[aSlot].splitStack(aDecrement); if (mFilter[aSlot].stackSize <= 0) mFilter[aSlot] = null; return rStack;} return null;}
+	@Override public ItemStack decrStackSizeGUI(int aSlot, int aDecrement) {mInventoryChanged = T; if (mFilter[aSlot] != null) {if (mFilter[aSlot].getCount() <= aDecrement) {ItemStack tStack = mFilter[aSlot]; mFilter[aSlot] = null; return tStack;} ItemStack rStack = mFilter[aSlot].splitStack(aDecrement); if (mFilter[aSlot].getCount() <= 0) mFilter[aSlot] = null; return rStack;} return null;}
 	@Override public ItemStack getStackInSlotOnClosingGUI(int aSlot) {ItemStack rStack = mFilter[aSlot]; mFilter[aSlot] = null; return rStack;}
 	@Override public void setInventorySlotContentsGUI(int aSlot, ItemStack aStack) {mInventoryChanged = T; mFilter[aSlot] = OM.get(aStack);}
 	@Override public int getInventoryStackLimitGUI(int aSlot) {return 1;}

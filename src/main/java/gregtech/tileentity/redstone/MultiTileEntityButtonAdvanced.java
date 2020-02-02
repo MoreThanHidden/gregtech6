@@ -45,7 +45,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.AxisAlignedBB;
 
 /**
@@ -57,7 +57,7 @@ public class MultiTileEntityButtonAdvanced extends TileEntityBase09FacingSingle 
 	public long mLength = 0, mMaxLength = 20;
 	
 	@Override
-	public void readFromNBT2(NBTTagCompound aNBT) {
+	public void readFromNBT2(CompoundNBT aNBT) {
 		super.readFromNBT2(aNBT);
 		mInverted = aNBT.getBoolean(NBT_MODE);
 		mLampMode = aNBT.getBoolean(NBT_MODE+".lamp");
@@ -71,7 +71,7 @@ public class MultiTileEntityButtonAdvanced extends TileEntityBase09FacingSingle 
 	}
 	
 	@Override
-	public void writeToNBT2(NBTTagCompound aNBT) {
+	public void writeToNBT2(CompoundNBT aNBT) {
 		super.writeToNBT2(aNBT);
 		UT.NBT.setBoolean(aNBT, NBT_MODE, mInverted);
 		UT.NBT.setBoolean(aNBT, NBT_MODE+".lamp", mLampMode);
@@ -85,7 +85,7 @@ public class MultiTileEntityButtonAdvanced extends TileEntityBase09FacingSingle 
 	}
 	
 	@Override
-	public NBTTagCompound writeItemNBT2(NBTTagCompound aNBT) {
+	public CompoundNBT writeItemNBT2(CompoundNBT aNBT) {
 		UT.NBT.setBoolean(aNBT, NBT_MODE, mInverted);
 		UT.NBT.setBoolean(aNBT, NBT_MODE+".lamp", mLampMode);
 		UT.NBT.setBoolean(aNBT, NBT_VISUAL, mGlowInverted);

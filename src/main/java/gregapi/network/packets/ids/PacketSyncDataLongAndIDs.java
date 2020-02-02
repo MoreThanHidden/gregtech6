@@ -26,7 +26,7 @@ import gregapi.block.IBlockSyncData.IBlockSyncDataAndIDs;
 import gregapi.network.INetworkHandler;
 import gregapi.network.packets.PacketCoordinates;
 import net.minecraft.block.Block;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.ChunkPos;
 import net.minecraft.world.IBlockAccess;
 
 /**
@@ -48,7 +48,7 @@ public class PacketSyncDataLongAndIDs extends PacketCoordinates {
 		mID1 = aID1;
 		mID2 = aID2;
 	}
-	public PacketSyncDataLongAndIDs(ChunkCoordinates aCoords, short aID1, short aID2, long aData) {
+	public PacketSyncDataLongAndIDs(ChunkPos aCoords, short aID1, short aID2, long aData) {
 		super(aCoords);
 		mData = aData;
 		mID1 = aID1;

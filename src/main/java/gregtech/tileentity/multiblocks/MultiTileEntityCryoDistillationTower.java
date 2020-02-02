@@ -146,7 +146,7 @@ public class MultiTileEntityCryoDistillationTower extends TileEntityBase10MultiB
 	public void doOutputFluids() {
 		for (IFluidTank tTank : mTanksOutput) {
 			FluidStack tFluid = tTank.getFluid();
-			if (tFluid != null && tFluid.amount > 0) {
+			if (tFluid != null && tFluid.getAmount() > 0) {
 				DelegatorTileEntity<TileEntity> tDelegator = null;
 				
 				if (FL.is(tFluid, "helium")) {

@@ -40,7 +40,7 @@ import gregtech.tileentity.misc.MultiTileEntityCFoam;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
@@ -68,11 +68,11 @@ public class Behavior_Spray_Foam extends AbstractBehaviorDefault {
 	
 	@Override
 	public boolean onItemUseFirst(MultiItem aItem, ItemStack aStack, PlayerEntity aPlayer, World aWorld, int aX, int aY, int aZ, byte aSide, float hitX, float hitY, float hitZ) {
-		if (aWorld.isRemote || aStack.stackSize != 1 || aPlayer.isSneaking() || !aPlayer.canPlayerEdit(aX, aY, aZ, aSide, aStack)) return F;
+		if (aWorld.isRemote || aStack.getCount() != 1 || aPlayer.isSneaking() || !aPlayer.canPlayerEdit(aX, aY, aZ, aSide, aStack)) return F;
 		
 		boolean rOutput = F;
 		
-		NBTTagCompound tNBT = aStack.getTagCompound();
+		CompoundNBT tNBT = aStack.getTagCompound();
 		if (tNBT == null) tNBT = UT.NBT.make();
 		long tUses = tNBT.getLong("gt.remaining");
 		
@@ -94,7 +94,7 @@ public class Behavior_Spray_Foam extends AbstractBehaviorDefault {
 			tUses = 0;
 			tNBT.removeTag(NBT_MODE);
 			if (mEmpty == null) {
-				aStack.stackSize--;
+				aStack.getCount()--;
 			} else {
 				aStack.func_150996_a(mEmpty.getItem());
 				ST.meta_(aStack, ST.meta_(mEmpty));
@@ -179,7 +179,7 @@ public class Behavior_Spray_Foam extends AbstractBehaviorDefault {
 	}
 	
 	public void setMode(ItemStack aStack, long aMode) {
-		NBTTagCompound aNBT = aStack.getTagCompound();
+		CompoundNBT aNBT = aStack.getTagCompound();
 		if (aNBT == null) aNBT = UT.NBT.make();
 		UT.NBT.set(aStack, UT.NBT.setNumber(aNBT, NBT_MODE, aMode));
 	}
@@ -207,7 +207,7 @@ public class Behavior_Spray_Foam extends AbstractBehaviorDefault {
 	@Override
 	public List<String> getAdditionalToolTips(MultiItem aItem, List<String> aList, ItemStack aStack) {
 		aList.add(LH.get("gt.behaviour.foamspray."+mColor+".tooltip"));
-		NBTTagCompound tNBT = aStack.getTagCompound();
+		CompoundNBT tNBT = aStack.getTagCompound();
 		long tRemaining = (ST.equal(aStack, mFull, T)?mUses:tNBT==null?0:tNBT.getLong("gt.remaining"));
 		aList.add(LH.get("gt.behaviour.foamspray.uses") + " " + (tRemaining / 10) + "." + (tRemaining % 10));
 		aList.add(LH.get("gt.behaviour.unstackable"));

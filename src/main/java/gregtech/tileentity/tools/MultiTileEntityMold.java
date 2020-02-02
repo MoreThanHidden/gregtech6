@@ -72,7 +72,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.stats.Achievement;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
@@ -105,7 +105,7 @@ public class MultiTileEntityMold extends TileEntityBase07Paintable implements IT
 	protected OreDictMaterialStack mContent = null;
 	
 	@Override
-	public void readFromNBT2(NBTTagCompound aNBT) {
+	public void readFromNBT2(CompoundNBT aNBT) {
 		super.readFromNBT2(aNBT);
 		if (aNBT.hasKey("gt.mold")) mShape = aNBT.getInteger("gt.mold");
 		if (aNBT.hasKey(NBT_MODE)) mUseRedstone = aNBT.getBoolean(NBT_MODE);
@@ -116,7 +116,7 @@ public class MultiTileEntityMold extends TileEntityBase07Paintable implements IT
 	}
 	
 	@Override
-	public void writeToNBT2(NBTTagCompound aNBT) {
+	public void writeToNBT2(CompoundNBT aNBT) {
 		super.writeToNBT2(aNBT);
 		aNBT.setByte(NBT_CONNECTION, mAutoPullDirections);
 		UT.NBT.setBoolean(aNBT, NBT_MODE, mUseRedstone);
@@ -126,7 +126,7 @@ public class MultiTileEntityMold extends TileEntityBase07Paintable implements IT
 	}
 	
 	@Override
-	public NBTTagCompound writeItemNBT2(NBTTagCompound aNBT) {
+	public CompoundNBT writeItemNBT2(CompoundNBT aNBT) {
 		aNBT.setInteger("gt.mold", mShape);
 		aNBT.setByte(NBT_CONNECTION, mAutoPullDirections);
 		UT.NBT.setBoolean(aNBT, NBT_MODE, mUseRedstone);
@@ -308,9 +308,9 @@ public class MultiTileEntityMold extends TileEntityBase07Paintable implements IT
 				if (aCauseDamage) UT.Entities.applyTemperatureDamage(aPlayer, mTemperature, 1);
 				return T;
 			}
-			if (ST.equal(aStack, tOutputStack) && aStack.stackSize < aStack.getMaxStackSize()) {
-				int tDifference = Math.min(tOutputStack.stackSize, aStack.getMaxStackSize() - aStack.stackSize);
-				aStack.stackSize+=tDifference;
+			if (ST.equal(aStack, tOutputStack) && aStack.getCount() < aStack.getMaxStackSize()) {
+				int tDifference = Math.min(tOutputStack.getCount(), aStack.getMaxStackSize() - aStack.getCount());
+				aStack.getCount()+=tDifference;
 				decrStackSize(0, tDifference);
 				if (aCauseDamage) UT.Entities.applyTemperatureDamage(aPlayer, mTemperature, 1);
 				return T;
@@ -480,7 +480,7 @@ public class MultiTileEntityMold extends TileEntityBase07Paintable implements IT
 				} else if (tMaterial == MT.Ice) {
 					mTextureMolten = BlockTextureCopied.get(Blocks.packed_ice);
 				} else if (tMaterial == MT.Snow) {
-					mTextureMolten = BlockTextureCopied.get(Blocks.snow);
+					mTextureMolten = BlockTextureCopied.get(Blocks.SNOW);
 				} else {
 					mTextureMolten = BlockTextureDefault.get(tMaterial, OP.blockSolid.mIconIndexBlock, STATE_SOLID, tMaterial.contains(TD.Properties.GLOWING));
 				}
@@ -626,7 +626,7 @@ public class MultiTileEntityMold extends TileEntityBase07Paintable implements IT
 	@Override public Collection<TagData> getEnergyTypes(byte aSide) {return TD.Energy.CU.AS_LIST;}
 	
 	// Inventory Stuff
-	@Override public ItemStack[] getDefaultInventory(NBTTagCompound aNBT) {return new ItemStack[1];}
+	@Override public ItemStack[] getDefaultInventory(CompoundNBT aNBT) {return new ItemStack[1];}
 	@Override public boolean canDrop(int aInventorySlot) {return T;}
 	
 	private static final int[] ACCESSIBLE_SLOTS = UT.Code.getAscendingArray(1);
@@ -642,10 +642,10 @@ public class MultiTileEntityMold extends TileEntityBase07Paintable implements IT
 	
 	@Override
 	public int fill(ForgeDirection aDirection, FluidStack aFluid, boolean aDoFill) {
-		if (aFluid == null || aFluid.amount <= 0 || FL.gas(aFluid) || mContent != null || slot(0) != null) return 0;
+		if (aFluid == null || aFluid.getAmount() <= 0 || FL.gas(aFluid) || mContent != null || slot(0) != null) return 0;
 		OreDictMaterialStack aFluidRatio = OreDictMaterial.FLUID_MAP.get(aFluid.getFluid().getName()), aMaterial = null;
 		if (aFluidRatio == null || aFluidRatio.mAmount <= 0) return 0;
-		aMaterial = OM.stack(aFluidRatio.mMaterial, UT.Code.units(aFluid.amount, aFluidRatio.mAmount, U, F));
+		aMaterial = OM.stack(aFluidRatio.mMaterial, UT.Code.units(aFluid.getAmount(), aFluidRatio.mAmount, U, F));
 		if (aMaterial == null || aMaterial.mAmount <= 0) return 0;
 		OreDictPrefix tPrefix = getMoldRecipe(mShape);
 		if (tPrefix == OP.plate && aMaterial.mMaterial == MT.Glass) tPrefix = OP.plateGem;

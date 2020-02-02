@@ -36,7 +36,7 @@ import gregapi.tileentity.multiblocks.TileEntityBase10MultiBlockBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.fluids.IFluidTank;
@@ -50,7 +50,7 @@ public abstract class MultiTileEntityTank extends TileEntityBase10MultiBlockBase
 	public boolean mGasProof = F, mAcidProof = F, mPlasmaProof = F;
 	
 	@Override
-	public void readFromNBT2(NBTTagCompound aNBT) {
+	public void readFromNBT2(CompoundNBT aNBT) {
 		super.readFromNBT2(aNBT);
 		if (aNBT.hasKey(NBT_DESIGN)) mTankWalls = aNBT.getShort(NBT_DESIGN);
 		if (aNBT.hasKey(NBT_GASPROOF)) mGasProof = aNBT.getBoolean(NBT_GASPROOF);
@@ -61,7 +61,7 @@ public abstract class MultiTileEntityTank extends TileEntityBase10MultiBlockBase
 	}
 	
 	@Override
-	public void writeToNBT2(NBTTagCompound aNBT) {
+	public void writeToNBT2(CompoundNBT aNBT) {
 		super.writeToNBT2(aNBT);
 		mTank.writeToNBT(aNBT, NBT_TANK);
 	}

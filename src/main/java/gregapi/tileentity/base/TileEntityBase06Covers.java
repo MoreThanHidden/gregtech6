@@ -77,7 +77,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
@@ -90,22 +90,22 @@ public abstract class TileEntityBase06Covers extends TileEntityBase05Inventories
 	public CoverData mCovers = null;
 	
 	@Override
-	public void readFromNBT2(NBTTagCompound aNBT) {
+	public void readFromNBT2(CompoundNBT aNBT) {
 		super.readFromNBT2(aNBT);
 		if (aNBT.hasKey(NBT_COVERS)) mCovers = CoverRegistry.coverdata(this, aNBT.getCompoundTag(NBT_COVERS));
 	}
 	
 	@Override
-	public void writeToNBT2(NBTTagCompound aNBT) {
+	public void writeToNBT2(CompoundNBT aNBT) {
 		super.writeToNBT2(aNBT);
 		if (hasCovers()) aNBT.setTag(NBT_COVERS, mCovers.writeToNBT(UT.NBT.make(), T));
 	}
 	
 	/** Writes eventual Item Data to the NBT. */
-	public NBTTagCompound writeItemNBT2(NBTTagCompound aNBT) {return aNBT;}
+	public CompoundNBT writeItemNBT2(CompoundNBT aNBT) {return aNBT;}
 	
 	@Override
-	public final NBTTagCompound writeItemNBT(NBTTagCompound aNBT) {
+	public final CompoundNBT writeItemNBT(CompoundNBT aNBT) {
 		aNBT = super.writeItemNBT(writeItemNBT2(aNBT));
 		if (hasCovers()) aNBT.setTag(NBT_COVERS, mCovers.writeToNBT(UT.NBT.make(), F));
 		return aNBT;
@@ -144,16 +144,16 @@ public abstract class TileEntityBase06Covers extends TileEntityBase05Inventories
 		}
 		if (attachCoversFirst(aSide)) {
 			ItemStack aStack = aPlayer.getCurrentEquippedItem();
-			if (aStack != null && aStack.stackSize > 0 && setCoverItem(tSide, aStack, aPlayer, F, T)) {
-				if (!UT.Entities.hasInfiniteItems(aPlayer)) aStack.stackSize--;
+			if (aStack != null && aStack.getCount() > 0 && setCoverItem(tSide, aStack, aPlayer, F, T)) {
+				if (!UT.Entities.hasInfiniteItems(aPlayer)) aStack.getCount()--;
 				return T;
 			}
 			return onBlockActivated3(aPlayer, aSide, aHitX, aHitY, aHitZ);
 		}
 		if (onBlockActivated3(aPlayer, aSide, aHitX, aHitY, aHitZ)) return T;
 		ItemStack aStack = aPlayer.getCurrentEquippedItem();
-		if (aStack != null && aStack.stackSize > 0 && setCoverItem(tSide, aStack, aPlayer, F, T)) {
-			if (!UT.Entities.hasInfiniteItems(aPlayer)) aStack.stackSize--;
+		if (aStack != null && aStack.getCount() > 0 && setCoverItem(tSide, aStack, aPlayer, F, T)) {
+			if (!UT.Entities.hasInfiniteItems(aPlayer)) aStack.getCount()--;
 			return T;
 		}
 		return F;

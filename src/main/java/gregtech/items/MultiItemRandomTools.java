@@ -55,7 +55,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.ChunkPos;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
@@ -403,7 +403,7 @@ public class MultiItemRandomTools extends MultiItemRandom implements IItemRottab
 		if (aRenderPass == 0) return getIconIndex(aStack);
 		PlayerEntity aPlayer = GT_API.api_proxy.getThePlayer();
 		if (aPlayer == null) return getIconIndex(aStack);
-		ChunkCoordinates aTarget;
+		ChunkPos aTarget;
 		switch(ST.meta_(aStack)) {
 		case 11000: return Textures.ItemIcons.COMPASS[UT.Code.roundDown(0.5+Textures.ItemIcons.COMPASS.length*(361260+aPlayer.rotationYaw)/360)%Textures.ItemIcons.COMPASS.length].getIcon(0);
 		case 11001: return Textures.ItemIcons.COMPASS[UT.Code.roundDown(0.5+Textures.ItemIcons.COMPASS.length*(361260-aPlayer.rotationYaw)/360)%Textures.ItemIcons.COMPASS.length].getIcon(0);
@@ -420,7 +420,7 @@ public class MultiItemRandomTools extends MultiItemRandom implements IItemRottab
 		if (aRenderPass == 0) return getIconFromDamage(aMetaData);
 		PlayerEntity aPlayer = GT_API.api_proxy.getThePlayer();
 		if (aPlayer == null) return getIconFromDamage(aMetaData);
-		ChunkCoordinates aTarget;
+		ChunkPos aTarget;
 		switch(aMetaData) {
 		case 11000: return Textures.ItemIcons.COMPASS[UT.Code.roundDown(0.5+Textures.ItemIcons.COMPASS.length*(361260+aPlayer.rotationYaw)/360)%Textures.ItemIcons.COMPASS.length].getIcon(0);
 		case 11001: return Textures.ItemIcons.COMPASS[UT.Code.roundDown(0.5+Textures.ItemIcons.COMPASS.length*(361260-aPlayer.rotationYaw)/360)%Textures.ItemIcons.COMPASS.length].getIcon(0);
@@ -466,16 +466,16 @@ public class MultiItemRandomTools extends MultiItemRandom implements IItemRottab
 	@Override
 	public ItemStack getRotten(ItemStack aStack) {
 		switch(ST.meta_(aStack)) {
-		case 2002: return ST.make(this, aStack.stackSize, 2011, aStack.getTagCompound());
-		case 2102: return ST.make(this, aStack.stackSize, 2111, aStack.getTagCompound());
-		case 2202: return ST.make(this, aStack.stackSize, 2211, aStack.getTagCompound());
-		case 2302: return ST.make(this, aStack.stackSize, 2311, aStack.getTagCompound());
-		case 2402: return ST.make(this, aStack.stackSize, 2411, aStack.getTagCompound());
-		case 2502: return ST.make(this, aStack.stackSize, 2511, aStack.getTagCompound());
-		case 2602: return ST.make(this, aStack.stackSize, 2611, aStack.getTagCompound());
-		case 2702: return ST.make(this, aStack.stackSize, 2711, aStack.getTagCompound());
-		case 2802: return ST.make(this, aStack.stackSize, 2811, aStack.getTagCompound());
-		case 2902: return ST.make(this, aStack.stackSize, 2911, aStack.getTagCompound());
+		case 2002: return ST.make(this, aStack.getCount(), 2011, aStack.getTagCompound());
+		case 2102: return ST.make(this, aStack.getCount(), 2111, aStack.getTagCompound());
+		case 2202: return ST.make(this, aStack.getCount(), 2211, aStack.getTagCompound());
+		case 2302: return ST.make(this, aStack.getCount(), 2311, aStack.getTagCompound());
+		case 2402: return ST.make(this, aStack.getCount(), 2411, aStack.getTagCompound());
+		case 2502: return ST.make(this, aStack.getCount(), 2511, aStack.getTagCompound());
+		case 2602: return ST.make(this, aStack.getCount(), 2611, aStack.getTagCompound());
+		case 2702: return ST.make(this, aStack.getCount(), 2711, aStack.getTagCompound());
+		case 2802: return ST.make(this, aStack.getCount(), 2811, aStack.getTagCompound());
+		case 2902: return ST.make(this, aStack.getCount(), 2911, aStack.getTagCompound());
 		}
 		return aStack;
 	}

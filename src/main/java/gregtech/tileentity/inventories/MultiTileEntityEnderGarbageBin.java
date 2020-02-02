@@ -40,7 +40,7 @@ import gregapi.tileentity.base.TileEntityBase07Paintable;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.fluids.IFluidTank;
@@ -138,7 +138,7 @@ public class MultiTileEntityEnderGarbageBin extends TileEntityBase07Paintable im
 	
 	@Override public String getTileEntityName() {return "gt.multitileentity.ender.garbage.bin";}
 	
-	@Override public ItemStack[] getDefaultInventory(NBTTagCompound aNBT) {return new ItemStack[9];}
+	@Override public ItemStack[] getDefaultInventory(CompoundNBT aNBT) {return new ItemStack[9];}
 	@Override public boolean canDrop(int aInventorySlot) {return F;}
 	
 	@Override public int getLightOpacity() {return LIGHT_OPACITY_WATER;}

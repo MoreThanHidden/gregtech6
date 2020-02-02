@@ -32,7 +32,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -104,13 +104,13 @@ public class PrefixBlockFallingEntity extends EntityFallingBlock {
 	}
 	
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound aNBT) {
+	protected void writeEntityToNBT(CompoundNBT aNBT) {
 		super.writeEntityToNBT(aNBT);
 		aNBT.setShort("MetaData", ST.meta_(mStack));
 	}
 	
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound aNBT) {
+	protected void readEntityFromNBT(CompoundNBT aNBT) {
 		super.readEntityFromNBT(aNBT);
 		mBlock = (IBlockPlacable)super.func_145805_f();
 		mStack = ST.make(super.func_145805_f(), 1, aNBT.getShort("MetaData"));

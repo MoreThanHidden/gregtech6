@@ -449,7 +449,7 @@ public abstract class GT_API_Proxy extends Abstract_Proxy {
 						if (aData != null) {
 							if (aData.mPrefix != null) for (IOreDictListenerItem tListener : aData.mPrefix.mListenersItem) {
 								rStack = tListener.onTickWorld(aData.mPrefix, aData.mMaterial.mMaterial, rStack, (EntityItem)aEntity);
-								if (!ST.equal(rStack, aStack) || rStack.stackSize != aStack.stackSize) {
+								if (!ST.equal(rStack, aStack) || rStack.getCount() != aStack.getCount()) {
 									((EntityItem)aEntity).delayBeforeCanPickup = 40;
 									tBreak = T;
 									break;
@@ -459,14 +459,14 @@ public abstract class GT_API_Proxy extends Abstract_Proxy {
 								if (tBreak) break;
 								for (IOreDictListenerItem tListener : tMaterial.mMaterial.mListenersItem) {
 									rStack = tListener.onTickWorld(aData.mPrefix, tMaterial.mMaterial, rStack, (EntityItem)aEntity);
-									if (!ST.equal(rStack, aStack) || rStack.stackSize != aStack.stackSize) {
+									if (!ST.equal(rStack, aStack) || rStack.getCount() != aStack.getCount()) {
 										((EntityItem)aEntity).delayBeforeCanPickup = 40;
 										tBreak = T;
 										break;
 									}
 								}
 							}
-							if (rStack == null || rStack.stackSize <= 0) {
+							if (rStack == null || rStack.getCount() <= 0) {
 								((EntityItem)aEntity).setEntityItemStack(NI);
 								((EntityItem)aEntity).setDead();
 							} else {
@@ -568,16 +568,16 @@ public abstract class GT_API_Proxy extends Abstract_Proxy {
 									FluidStack tFluid = ((IFluidContainerItem)tStack.getItem()).getFluid(tStack);
 									if (tFluid != null && !FL.Potion_Tainted.is(tFluid) && FluidsGT.POTION.contains(tFluid.getFluid().getName())) {
 										((IFluidContainerItem)tStack.getItem()).drain(tStack, Integer.MAX_VALUE, T);
-										((IFluidContainerItem)tStack.getItem()).fill(tStack, FL.Potion_Tainted.make(tFluid.amount), T);
+										((IFluidContainerItem)tStack.getItem()).fill(tStack, FL.Potion_Tainted.make(tFluid.getAmount()), T);
 									}
 								}
 								ItemStack tRotten = RottingUtil.rotting(tStack, aEvent.player.worldObj, UT.Code.roundDown(aEvent.player.posX), UT.Code.roundDown(aEvent.player.posY), UT.Code.roundDown(aEvent.player.posZ));
-								if (ST.invalid(tRotten)) {tStack.stackSize = 0; aEvent.player.inventory.setInventorySlotContents(i, null); continue;}
+								if (ST.invalid(tRotten)) {tStack.getCount() = 0; aEvent.player.inventory.setInventorySlotContents(i, null); continue;}
 								if (tStack != tRotten) ST.set(tStack, tRotten);
 							}
 							OreDictItemData tData = OM.anydata_(tStack);
 							if (!UT.Entities.isInvincible(aEvent.player)) {
-								UT.Entities.applyRadioactivity(aEvent.player, UT.Entities.getRadioactivityLevel(tStack), tStack.stackSize);
+								UT.Entities.applyRadioactivity(aEvent.player, UT.Entities.getRadioactivityLevel(tStack), tStack.getCount());
 								float tHeat = UT.Entities.getHeatDamageFromItem(tStack);
 								if (tHeat != 0.0F) if (tHeat > 0) UT.Entities.applyHeatDamage(aEvent.player, tHeat); else UT.Entities.applyFrostDamage(aEvent.player, -tHeat);
 							}
@@ -591,7 +591,7 @@ public abstract class GT_API_Proxy extends Abstract_Proxy {
 									if (tData.mMaterial.mMaterial == MT.Craponite) ST.name_(tStack, tData.mPrefix.mMaterialPre + MT.Diamond  .mNameLocal + tData.mPrefix.mMaterialPost);
 								}
 							}
-							if (tHungerEffect) tCount+=(tStack.stackSize * 64) / Math.max(1, tStack.getMaxStackSize());
+							if (tHungerEffect) tCount+=(tStack.getCount() * 64) / Math.max(1, tStack.getMaxStackSize());
 							if (INVENTORY_UNIFICATION) OM.set_(tStack);
 							ST.update(tStack, aEvent.player.worldObj, UT.Code.roundDown(aEvent.player.posX), UT.Code.roundDown(aEvent.player.posY), UT.Code.roundDown(aEvent.player.posZ));
 							if (tStack.hasTagCompound() && tStack.getTagCompound().hasNoTags()) tStack.setTagCompound(null);
@@ -646,7 +646,7 @@ public abstract class GT_API_Proxy extends Abstract_Proxy {
 					
 					for (int i = 0; i < 4; i++) if ((tStack = aEvent.player.inventory.armorInventory[i]) != null) {
 						if (!UT.Entities.isInvincible(aEvent.player)) {
-							UT.Entities.applyRadioactivity(aEvent.player, UT.Entities.getRadioactivityLevel(tStack), tStack.stackSize);
+							UT.Entities.applyRadioactivity(aEvent.player, UT.Entities.getRadioactivityLevel(tStack), tStack.getCount());
 							float tHeat = UT.Entities.getHeatDamageFromItem(tStack);
 							if (tHeat != 0.0F) if (tHeat > 0) UT.Entities.applyHeatDamage(aEvent.player, tHeat); else UT.Entities.applyFrostDamage(aEvent.player, -tHeat);
 						}
@@ -689,7 +689,7 @@ public abstract class GT_API_Proxy extends Abstract_Proxy {
 			tInv[tSlot] = null;
 		}
 		
-		if (ST.food(tCompare) <= 0 && aEvent.original.getItemUseAction() != EnumAction.eat && aEvent.original.getItemUseAction() != EnumAction.drink && (tInv[tSlot] == null || tInv[tSlot].stackSize == 0)) {
+		if (ST.food(tCompare) <= 0 && aEvent.original.getItemUseAction() != EnumAction.eat && aEvent.original.getItemUseAction() != EnumAction.drink && (tInv[tSlot] == null || tInv[tSlot].getCount() == 0)) {
 			if (tSlot < 9) {
 				if (ST.equal(tCompare, tInv[tSlot+27], T)) {
 				if (ST.equal(tCompare, tInv[tSlot+18], T)) {
@@ -728,7 +728,7 @@ public abstract class GT_API_Proxy extends Abstract_Proxy {
 			}
 		}
 		
-		NBTTagCompound tNBT = aEvent.item.getTagCompound();
+		CompoundNBT tNBT = aEvent.item.getTagCompound();
 		if (tNBT != null && tNBT.hasKey(NBT_EFFECTS)) {
 			tNBT = tNBT.getCompoundTag(NBT_EFFECTS);
 			int tID = tNBT.getInteger("id"), tTime = tNBT.getInteger("time"), tLevel = tNBT.getInteger("lvl"), tChance = tNBT.getInteger("chance");
@@ -762,7 +762,7 @@ public abstract class GT_API_Proxy extends Abstract_Proxy {
 	public void onPlayerInteraction(PlayerInteractEvent aEvent) {
 		if (aEvent.entityPlayer == null || aEvent.entityPlayer.worldObj == null || aEvent.action == null || aEvent.world.provider == null) return;
 		
-		PLAYER_LAST_CLICKED.put(aEvent.entityPlayer, new ChunkCoordinates(aEvent.x, aEvent.y, aEvent.z));
+		PLAYER_LAST_CLICKED.put(aEvent.entityPlayer, new ChunkPos(aEvent.x, aEvent.y, aEvent.z));
 		
 		ItemStack aStack = aEvent.entityPlayer.inventory.getCurrentItem();
 //      Block aBlock = aEvent.world.getBlock(aEvent.x, aEvent.y, aEvent.z);
@@ -783,7 +783,7 @@ public abstract class GT_API_Proxy extends Abstract_Proxy {
 		if (aEvent.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
 			if (aTileEntity instanceof TileEntityJukebox) {
 				ItemStack tStack = ((TileEntityJukebox)aTileEntity).func_145856_a();
-				if (tStack != null) tStack.stackSize = 1;
+				if (tStack != null) tStack.getCount() = 1;
 				return;
 			}
 			if (ST.valid(aStack)) {
@@ -883,7 +883,7 @@ public abstract class GT_API_Proxy extends Abstract_Proxy {
 	
 	@SubscribeEvent
 	public void onUseHoeEvent(net.minecraftforge.event.entity.player.UseHoeEvent aEvent) {
-		if (aEvent.world.getBlock(aEvent.x, aEvent.y, aEvent.z) == Blocks.dirt && aEvent.world.getBlockMetadata(aEvent.x, aEvent.y, aEvent.z) != 0) aEvent.setCanceled(T);
+		if (aEvent.world.getBlock(aEvent.x, aEvent.y, aEvent.z) == Blocks.DIRT && aEvent.world.getBlockMetadata(aEvent.x, aEvent.y, aEvent.z) != 0) aEvent.setCanceled(T);
 	}
 	
 	@SubscribeEvent
@@ -892,8 +892,8 @@ public abstract class GT_API_Proxy extends Abstract_Proxy {
 		Iterator<ItemStack> aDrops = aEvent.drops.iterator();
 		while (aDrops.hasNext()) if (ItemsGT.ILLEGAL_DROPS.contains(aDrops.next(), T)) aDrops.remove();
 		
-		if (aEvent.block == Blocks.dirt && aEvent.blockMetadata == 1) for (int i = 0, j = aEvent.drops.size(); i < j; i++) if (ST.block(aEvent.drops.get(0)) == Blocks.dirt) {
-			aEvent.drops.set(i, ST.make(Blocks.dirt, aEvent.drops.get(i).stackSize, 1));
+		if (aEvent.block == Blocks.DIRT && aEvent.blockMetadata == 1) for (int i = 0, j = aEvent.drops.size(); i < j; i++) if (ST.block(aEvent.drops.get(0)) == Blocks.DIRT) {
+			aEvent.drops.set(i, ST.make(Blocks.DIRT, aEvent.drops.get(i).getCount(), 1));
 		}
 		
 		if (aEvent.harvester != null) {
@@ -907,7 +907,7 @@ public abstract class GT_API_Proxy extends Abstract_Proxy {
 				if (tFireAspect) for (ItemStack tDrop : aEvent.drops) {
 					ItemStack tSmeltingOutput = RM.get_smelting(tDrop, F, null);
 					if (tSmeltingOutput != null) {
-						tDrop.stackSize *= tSmeltingOutput.stackSize;
+						tDrop.getCount() *= tSmeltingOutput.getCount();
 						ST.set(tDrop, tSmeltingOutput, F, T);
 					}
 				}
@@ -995,7 +995,7 @@ public abstract class GT_API_Proxy extends Abstract_Proxy {
 		if (ST.valid(aStack)) {
 			if (aStack.getItem() instanceof MultiTileEntityItemInternal) {
 				long tExtraLife = ((MultiTileEntityItemInternal)aStack.getItem()).onDespawn(aEvent.entityItem, aStack);
-				if (aStack.stackSize <= 0) {
+				if (aStack.getCount() <= 0) {
 					aEvent.extraLife = 0;
 					aEvent.entityItem.setDead();
 					aEvent.setCanceled(T);
@@ -1009,7 +1009,7 @@ public abstract class GT_API_Proxy extends Abstract_Proxy {
 				}
 			}
 			GarbageGT.trash(aStack);
-			aStack.stackSize = 0;
+			aStack.getCount() = 0;
 			aEvent.extraLife = 0;
 			aEvent.entityItem.setEntityItemStack(aStack);
 			aEvent.entityItem.setDead();
@@ -1034,7 +1034,7 @@ public abstract class GT_API_Proxy extends Abstract_Proxy {
 	public void onEntitySpawningEvent(EntityJoinWorldEvent aEvent) {
 		if (aEvent.entity instanceof EntityItem && !aEvent.entity.worldObj.isRemote) {
 			ItemStack aStack = ST.update(OM.get(((EntityItem)aEvent.entity).getEntityItem()), aEvent.entity.worldObj, UT.Code.roundDown(aEvent.entity.posX), UT.Code.roundDown(aEvent.entity.posY), UT.Code.roundDown(aEvent.entity.posZ));
-			if (ST.valid(aStack) && aStack.stackSize > 0) {
+			if (ST.valid(aStack) && aStack.getCount() > 0) {
 				if (ST.meta(aStack) == W) ST.meta(aStack, 0);
 				if (((EntityItem)aEvent.entity).lifespan > 1200) {
 					if (aStack.getItem() == Items.egg || aStack.getItem() == Items.feather || aStack.getItem() == Items.apple) {
@@ -1096,8 +1096,8 @@ public abstract class GT_API_Proxy extends Abstract_Proxy {
 			
 			tArrowEntity.canBePickedUp = 1;
 			
-			if (!UT.Entities.hasInfiniteItems(aEvent.entityPlayer)) aArrow.stackSize--;
-			if (aArrow.stackSize == 0) UT.Inventories.removeNullStacksFromInventory(aEvent.entityPlayer.inventory);
+			if (!UT.Entities.hasInfiniteItems(aEvent.entityPlayer)) aArrow.getCount()--;
+			if (aArrow.getCount() == 0) UT.Inventories.removeNullStacksFromInventory(aEvent.entityPlayer.inventory);
 			
 			if (!aEvent.entityPlayer.worldObj.isRemote) aEvent.entityPlayer.worldObj.spawnEntityInWorld(tArrowEntity);
 			

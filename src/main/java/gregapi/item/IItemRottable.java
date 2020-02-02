@@ -40,14 +40,14 @@ public interface IItemRottable {
 	
 	public static class RottingUtil {
 		public static ItemStack rotting(ItemStack aStack) {
-			if (aStack.getItem() == Items.milk_bucket) return IL.ENVM_Spoiled_Milk_Bucket.exists()?IL.ENVM_Spoiled_Milk_Bucket.get(aStack.stackSize):ST.make(Items.bucket, aStack.stackSize, 0);
+			if (aStack.getItem() == Items.milk_bucket) return IL.ENVM_Spoiled_Milk_Bucket.exists()?IL.ENVM_Spoiled_Milk_Bucket.get(aStack.getCount()):ST.make(Items.bucket, aStack.getCount(), 0);
 			if (aStack.getItem() instanceof IItemRottable) return ((IItemRottable)aStack.getItem()).getRotten(aStack);
 			if (aStack.getItem() instanceof IFluidContainerItem) return rotting(aStack, (IFluidContainerItem)aStack.getItem());
 			return aStack;
 		}
 		
 		public static ItemStack rotting(ItemStack aStack, World aWorld, int aX, int aY, int aZ) {
-			if (aStack.getItem() == Items.milk_bucket) return IL.ENVM_Spoiled_Milk_Bucket.exists()?IL.ENVM_Spoiled_Milk_Bucket.get(aStack.stackSize):ST.make(Items.bucket, aStack.stackSize, 0);
+			if (aStack.getItem() == Items.milk_bucket) return IL.ENVM_Spoiled_Milk_Bucket.exists()?IL.ENVM_Spoiled_Milk_Bucket.get(aStack.getCount()):ST.make(Items.bucket, aStack.getCount(), 0);
 			if (aStack.getItem() instanceof IItemRottable) return ((IItemRottable)aStack.getItem()).getRotten(aStack, aWorld, aX, aY, aZ);
 			if (aStack.getItem() instanceof IFluidContainerItem) return rotting(aStack, (IFluidContainerItem)aStack.getItem());
 			return aStack;
@@ -60,13 +60,13 @@ public interface IItemRottable {
 					//
 				} else if (FluidsGT.WATER.contains(tFluid.getFluid().getName())) {
 					aItem.drain(aStack, Integer.MAX_VALUE, T);
-					aItem.fill(aStack, FL.Dirty_Water.make(tFluid.amount), T);
+					aItem.fill(aStack, FL.Dirty_Water.make(tFluid.getAmount()), T);
 				} else if (FluidsGT.MILK.contains(tFluid.getFluid().getName())) {
 					aItem.drain(aStack, Integer.MAX_VALUE, T);
-					aItem.fill(aStack, FL.Milk_Spoiled.make(tFluid.amount), T);
+					aItem.fill(aStack, FL.Milk_Spoiled.make(tFluid.getAmount()), T);
 				} else if (FluidsGT.FOOD.contains(tFluid.getFluid().getName())) {
 					aItem.drain(aStack, Integer.MAX_VALUE, T);
-					aItem.fill(aStack, FL.Rotten_Drink.make(tFluid.amount), T);
+					aItem.fill(aStack, FL.Rotten_Drink.make(tFluid.getAmount()), T);
 				}
 			}
 			return aStack;

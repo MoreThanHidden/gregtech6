@@ -22,7 +22,7 @@ package gregapi.block.multitileentity;
 import static gregapi.data.CS.*;
 
 import gregapi.util.UT;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 
 /**
@@ -32,12 +32,12 @@ public class MultiTileEntityClassContainer {
 	public final Class<? extends TileEntity> mClass;
 	public final MultiTileEntityBlock mBlock;
 	public final TileEntity mCanonicalTileEntity;
-	public final NBTTagCompound mParameters;
+	public final CompoundNBT mParameters;
 	public final byte mBlockMetaData, mStackSize;
 	public final short mID, mCreativeTabID;
 	public final boolean mHidden;
 	
-	public MultiTileEntityClassContainer(int aID, int aCreativeTabID, Class<? extends TileEntity> aClass, int aBlockMetaData, int aStackSize, MultiTileEntityBlock aBlock, NBTTagCompound aParameters) {
+	public MultiTileEntityClassContainer(int aID, int aCreativeTabID, Class<? extends TileEntity> aClass, int aBlockMetaData, int aStackSize, MultiTileEntityBlock aBlock, CompoundNBT aParameters) {
 		if (!IMultiTileEntity.class.isAssignableFrom(aClass)) throw new IllegalArgumentException("MultiTileEntities must implement the Interface IMultiTileEntity!");
 		mBlockMetaData = (byte)aBlockMetaData;
 		mStackSize = (byte)aStackSize;

@@ -33,7 +33,7 @@ import gregapi.util.UT;
 import gregapi.util.WD;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
@@ -46,7 +46,7 @@ public class Behavior_Key extends AbstractBehaviorDefault {
 		
 		DelegatorTileEntity<TileEntity> aTileEntity = WD.te(aWorld, aX, aY, aZ, aSide, T);
 		if (aTileEntity.mTileEntity instanceof ITileEntityKeyInteractable) {
-			NBTTagCompound tNBT = aStack.getTagCompound();
+			CompoundNBT tNBT = aStack.getTagCompound();
 			if (tNBT == null) tNBT = UT.NBT.make();
 			if (!tNBT.hasKey(NBT_KEY)) tNBT.setLong(NBT_KEY, System.nanoTime());
 			UT.NBT.set(aStack, tNBT);
@@ -60,7 +60,7 @@ public class Behavior_Key extends AbstractBehaviorDefault {
 	@Override
 	public List<String> getAdditionalToolTips(MultiItem aItem, List<String> aList, ItemStack aStack) {
 		aList.add(LH.get("gt.behaviour.key"));
-		NBTTagCompound tNBT = aStack.getTagCompound();
+		CompoundNBT tNBT = aStack.getTagCompound();
 		if (tNBT != null && tNBT.hasKey(NBT_KEY)) aList.add("Key ID: " + tNBT.getLong(NBT_KEY)); else aList.add("*BLANK*");
 		return aList;
 	}

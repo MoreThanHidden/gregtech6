@@ -30,7 +30,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.profiler.Profiler;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
@@ -67,7 +67,7 @@ public class DummyWorld extends World {
 	public DummyWorld() {
 		this(
 		new ISaveHandler() {
-			@Override public void saveWorldInfoWithPlayer(WorldInfo var1, NBTTagCompound var2) {/*Do nothing*/}
+			@Override public void saveWorldInfoWithPlayer(WorldInfo var1, CompoundNBT var2) {/*Do nothing*/}
 			@Override public void saveWorldInfo(WorldInfo var1) {/*Do nothing*/}
 			@Override public WorldInfo loadWorldInfo() {return null;}
 			@Override public IPlayerFileData getSaveHandler() {return null;}
@@ -121,7 +121,7 @@ public class DummyWorld extends World {
 	
 	@Override
 	public Block getBlock(int aX, int aY, int aZ) {
-		if (aX >= 16 && aZ >= 16 && aX < 32 && aZ < 32) return aY == 64?Blocks.grass:NB;
+		if (aX >= 16 && aZ >= 16 && aX < 32 && aZ < 32) return aY == 64?Blocks.GRASS:NB;
 		return NB;
 	}
 	

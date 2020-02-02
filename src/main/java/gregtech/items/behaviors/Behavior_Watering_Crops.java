@@ -47,7 +47,7 @@ public class Behavior_Watering_Crops extends AbstractBehaviorDefault {
 			TileEntity tTileEntity = WD.te(aWorld, aX, aY, aZ, F);
 			try {if (tTileEntity instanceof ICropTile) {
 				int tHydration = ((ICropTile)tTileEntity).getHydrationStorage();
-				int tDrained = Math.min((200-tHydration)/10, mFluid.amount);
+				int tDrained = Math.min((200-tHydration)/10, mFluid.getAmount());
 				if (tDrained > 0) {
 					((IFluidContainerItem)aItem).drain(aStack, tDrained, T);
 					((ICropTile)tTileEntity).setHydrationStorage(tHydration + tDrained*10);

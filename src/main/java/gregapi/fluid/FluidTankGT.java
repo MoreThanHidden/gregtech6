@@ -23,7 +23,7 @@ import static gregapi.data.CS.*;
 
 import gregapi.data.FL;
 import gregapi.util.UT;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
@@ -35,28 +35,28 @@ public class FluidTankGT implements IFluidTank {
 	private boolean mPreventDraining = F, mVoidExcess = F, mChangedFluids = F;
 	public final FluidTankGT[] AS_ARRAY = new FluidTankGT[] {this};
 	
-	public FluidTankGT(FluidStack aFluid) {mFluid = aFluid; if (aFluid != null) {mCapacity = aFluid.amount; mAmount = aFluid.amount;}}
-	public FluidTankGT(FluidStack aFluid, long aCapacity) {mFluid = aFluid; mCapacity = aCapacity; mAmount = (aFluid == null ? 0 : aFluid.amount);}
+	public FluidTankGT(FluidStack aFluid) {mFluid = aFluid; if (aFluid != null) {mCapacity = aFluid.getAmount(); mAmount = aFluid.getAmount();}}
+	public FluidTankGT(FluidStack aFluid, long aCapacity) {mFluid = aFluid; mCapacity = aCapacity; mAmount = (aFluid == null ? 0 : aFluid.getAmount());}
 	public FluidTankGT(long aCapacity) {mCapacity = aCapacity;}
 	public FluidTankGT(Fluid aFluid, long aAmount) {this(FL.make(aFluid, aAmount)); mAmount = aAmount;}
 	public FluidTankGT(Fluid aFluid, long aAmount, long aCapacity) {this(FL.make(aFluid, aAmount), aCapacity); mAmount = aAmount;}
-	public FluidTankGT(NBTTagCompound aNBT, long aCapacity) {mCapacity = aCapacity; if (aNBT != null && !aNBT.hasNoTags()) {mFluid = FL.load_(aNBT); mAmount = (isEmpty() ? 0 : aNBT.hasKey("LAmount") ? aNBT.getLong("LAmount") : mFluid.amount);}}
+	public FluidTankGT(CompoundNBT aNBT, long aCapacity) {mCapacity = aCapacity; if (aNBT != null && !aNBT.hasNoTags()) {mFluid = FL.load_(aNBT); mAmount = (isEmpty() ? 0 : aNBT.hasKey("LAmount") ? aNBT.getLong("LAmount") : mFluid.getAmount());}}
 	
-	public FluidTankGT readFromNBT(NBTTagCompound aNBT, String aKey) {
+	public FluidTankGT readFromNBT(CompoundNBT aNBT, String aKey) {
 		if (aNBT.hasKey(aKey)) {
 			aNBT = aNBT.getCompoundTag(aKey);
 			if (aNBT != null && !aNBT.hasNoTags()) {
 				mFluid = FL.load_(aNBT);
-				mAmount = (isEmpty() ? 0 : aNBT.hasKey("LAmount") ? aNBT.getLong("LAmount") : mFluid.amount);
+				mAmount = (isEmpty() ? 0 : aNBT.hasKey("LAmount") ? aNBT.getLong("LAmount") : mFluid.getAmount());
 			}
 		}
 		return this;
 	}
 	
-	public NBTTagCompound writeToNBT(NBTTagCompound aNBT, String aKey) {
+	public CompoundNBT writeToNBT(CompoundNBT aNBT, String aKey) {
 		if (mFluid != null && (mPreventDraining || mAmount > 0)) {
-			NBTTagCompound tNBT = UT.NBT.make();
-			mFluid.amount = UT.Code.bindInt(mAmount);
+			CompoundNBT tNBT = UT.NBT.make();
+			mFluid.getAmount() = UT.Code.bindInt(mAmount);
 			aNBT.setTag(aKey, mFluid.writeToNBT(tNBT));
 			if (mAmount > Integer.MAX_VALUE) tNBT.setLong("LAmount", mAmount);
 		} else {
@@ -65,11 +65,11 @@ public class FluidTankGT implements IFluidTank {
 		return aNBT;
 	}
 	
-	public NBTTagCompound writeToNBT(String aKey) {
-		NBTTagCompound aNBT = UT.NBT.make();
+	public CompoundNBT writeToNBT(String aKey) {
+		CompoundNBT aNBT = UT.NBT.make();
 		if (mFluid != null && (mPreventDraining || mAmount > 0)) {
-			NBTTagCompound tNBT = UT.NBT.make();
-			mFluid.amount = UT.Code.bindInt(mAmount);
+			CompoundNBT tNBT = UT.NBT.make();
+			mFluid.getAmount() = UT.Code.bindInt(mAmount);
 			aNBT.setTag(aKey, mFluid.writeToNBT(tNBT));
 			if (mAmount > Integer.MAX_VALUE) tNBT.setLong("LAmount", mAmount);
 		} else {
@@ -78,16 +78,16 @@ public class FluidTankGT implements IFluidTank {
 		return aNBT;
 	}
 	
-	public static NBTTagCompound writeToNBT(String aKey, FluidStack aFluid) {
-		NBTTagCompound rNBT = UT.NBT.make();
-		if (aFluid != null && aFluid.amount > 0) {
+	public static CompoundNBT writeToNBT(String aKey, FluidStack aFluid) {
+		CompoundNBT rNBT = UT.NBT.make();
+		if (aFluid != null && aFluid.getAmount() > 0) {
 			rNBT.setTag(aKey, aFluid.writeToNBT(UT.NBT.make()));
 		}
 		return rNBT;
 	}
 	
-	public static NBTTagCompound writeToNBT(NBTTagCompound aNBT, String aKey, FluidStack aFluid) {
-		if (aFluid != null && aFluid.amount > 0) {
+	public static CompoundNBT writeToNBT(CompoundNBT aNBT, String aKey, FluidStack aFluid) {
+		if (aFluid != null && aFluid.getAmount() > 0) {
 			aNBT.setTag(aKey, aFluid.writeToNBT(UT.NBT.make()));
 		} else {
 			aNBT.removeTag(aKey);
@@ -160,38 +160,38 @@ public class FluidTankGT implements IFluidTank {
 			if (isEmpty()) {
 				mFluid = aFluid.copy();
 				mChangedFluids = T;
-				mAmount = Math.min(mCapacity, aFluid.amount);
-				return mVoidExcess ? aFluid.amount : (int)mAmount;
+				mAmount = Math.min(mCapacity, aFluid.getAmount());
+				return mVoidExcess ? aFluid.getAmount() : (int)mAmount;
 			}
 			if (!contains(aFluid)) return 0;
 			long tFilled = mCapacity - mAmount;
-			if (aFluid.amount < tFilled) {
-				mAmount += aFluid.amount;
-				tFilled = aFluid.amount;
+			if (aFluid.getAmount() < tFilled) {
+				mAmount += aFluid.getAmount();
+				tFilled = aFluid.getAmount();
 			} else mAmount = mCapacity;
-			return mVoidExcess ? aFluid.amount : (int)tFilled;
+			return mVoidExcess ? aFluid.getAmount() : (int)tFilled;
 		}
-		return UT.Code.bindInt(isEmpty() ? mVoidExcess ? aFluid.amount : Math.min(mCapacity, aFluid.amount) : contains(aFluid) ? mVoidExcess ? aFluid.amount : Math.min(mCapacity - mAmount, aFluid.amount) : 0);
+		return UT.Code.bindInt(isEmpty() ? mVoidExcess ? aFluid.getAmount() : Math.min(mCapacity, aFluid.getAmount()) : contains(aFluid) ? mVoidExcess ? aFluid.getAmount() : Math.min(mCapacity - mAmount, aFluid.getAmount()) : 0);
 	}
 	
-	public boolean canFillAll(FluidStack aFluid) {return aFluid == null || aFluid.amount <= 0 || (isEmpty() ? mVoidExcess || aFluid.amount <= mCapacity : contains(aFluid) && (mVoidExcess || mAmount + aFluid.amount <= mCapacity));}
+	public boolean canFillAll(FluidStack aFluid) {return aFluid == null || aFluid.getAmount() <= 0 || (isEmpty() ? mVoidExcess || aFluid.getAmount() <= mCapacity : contains(aFluid) && (mVoidExcess || mAmount + aFluid.getAmount() <= mCapacity));}
 	public boolean canFillAll(long aAmount) {return aAmount <= 0 || mVoidExcess || mAmount + aAmount <= mCapacity;}
 	
 	public boolean fillAll(FluidStack aFluid) {
-		if (aFluid == null || aFluid.amount <= 0) return T;
+		if (aFluid == null || aFluid.getAmount() <= 0) return T;
 		if (isEmpty()) {
-			if (aFluid.amount <= mCapacity || mVoidExcess) {
+			if (aFluid.getAmount() <= mCapacity || mVoidExcess) {
 				mFluid = aFluid.copy();
 				mChangedFluids = T;
-				mAmount = aFluid.amount;
+				mAmount = aFluid.getAmount();
 				if (mAmount > mCapacity) mAmount = mCapacity;
 				return T;
 			}
 			return F;
 		}
 		if (contains(aFluid)) {
-			if (mAmount + aFluid.amount <= mCapacity) {
-				mAmount += aFluid.amount;
+			if (mAmount + aFluid.getAmount() <= mCapacity) {
+				mAmount += aFluid.getAmount();
 				return T;
 			}
 			if (mVoidExcess) {
@@ -205,20 +205,20 @@ public class FluidTankGT implements IFluidTank {
 	public boolean fillAll(FluidStack aFluid, int aMultiplier) {
 		if (aMultiplier <= 0) return T;
 		if (aMultiplier == 1) return fillAll(aFluid);
-		if (aFluid == null || aFluid.amount <= 0) return T;
+		if (aFluid == null || aFluid.getAmount() <= 0) return T;
 		if (isEmpty()) {
-			if (aFluid.amount * aMultiplier <= mCapacity || mVoidExcess) {
+			if (aFluid.getAmount() * aMultiplier <= mCapacity || mVoidExcess) {
 				mFluid = aFluid.copy();
 				mChangedFluids = T;
-				mAmount = aFluid.amount * aMultiplier;
+				mAmount = aFluid.getAmount() * aMultiplier;
 				if (mAmount > mCapacity) mAmount = mCapacity;
 				return T;
 			}
 			return F;
 		}
 		if (contains(aFluid)) {
-			if (mAmount + aFluid.amount * aMultiplier <= mCapacity) {
-				mAmount += aFluid.amount * aMultiplier;
+			if (mAmount + aFluid.getAmount() * aMultiplier <= mCapacity) {
+				mAmount += aFluid.getAmount() * aMultiplier;
 				return T;
 			}
 			if (mVoidExcess) {
@@ -230,7 +230,7 @@ public class FluidTankGT implements IFluidTank {
 	}
 	
 	public FluidTankGT setEmpty() {mFluid = null; mChangedFluids = T; mAmount = 0; return this;}
-	public FluidTankGT setFluid(FluidStack aFluid) {mFluid = aFluid; mChangedFluids = T; mAmount = (aFluid == null ? 0 : aFluid.amount); return this;}
+	public FluidTankGT setFluid(FluidStack aFluid) {mFluid = aFluid; mChangedFluids = T; mAmount = (aFluid == null ? 0 : aFluid.getAmount()); return this;}
 	public FluidTankGT setFluid(FluidStack aFluid, long aAmount) {mFluid = aFluid; mChangedFluids = T; mAmount = (aFluid == null ? 0 : aAmount); return this;}
 	public FluidTankGT setCapacity(long aCapacity) {mCapacity = UT.Code.bindInt(aCapacity); return this;}
 	public FluidTankGT setPreventDraining() {return setPreventDraining(T);}
@@ -269,7 +269,7 @@ public class FluidTankGT implements IFluidTank {
 	public FluidStack get() {return mFluid;}
 	public FluidStack get(long aMax) {return isEmpty() || aMax <= 0 ? null : new FluidStack(mFluid, UT.Code.bindInt(mAmount < aMax ? mAmount : aMax));}
 	
-	@Override public FluidStack getFluid() {if (mFluid != null) mFluid.amount = UT.Code.bindInt(mAmount); return mFluid;}
+	@Override public FluidStack getFluid() {if (mFluid != null) mFluid.getAmount() = UT.Code.bindInt(mAmount); return mFluid;}
 	@Override public int getFluidAmount() {return UT.Code.bindInt(mAmount);}
 	@Override public int getCapacity() {return UT.Code.bindInt(mCapacity);}
 	@Override public FluidTankInfo getInfo() {return new FluidTankInfo(isEmpty() ? null : mFluid.copy(), UT.Code.bindInt(mCapacity));}

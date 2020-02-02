@@ -125,8 +125,8 @@ public class Compat_Recipes_IndustrialCraft extends CompatMods {
 			if (D1) e.printStackTrace(ERR);
 		}
 		
-		RM.ic2_compressor(ST.make(Items.snowball, 4, W), ST.make(Blocks.snow, 1, 0));
-		RM.ic2_compressor(ST.make(Blocks.snow, 1, W), ST.make(Blocks.ice, 1, 0));
+		RM.ic2_compressor(ST.make(Items.snowball, 4, W), ST.make(Blocks.SNOW, 1, 0));
+		RM.ic2_compressor(ST.make(Blocks.SNOW, 1, W), ST.make(Blocks.ice, 1, 0));
 		RM.ic2_compressor(ST.make(Blocks.ice, 2, W), ST.make(Blocks.packed_ice, 1, 0));
 		
 		RM.ic2_compressor(OP.ingot          .mat(MT.Cu, 9), OP.plateDense.mat(MT.Cu, 1));
@@ -153,7 +153,7 @@ public class Compat_Recipes_IndustrialCraft extends CompatMods {
 		RM.Massfab      .addRecipe1(T, 1, 32768, IL.IC2_Scrapbox                     .get( 4), ST.make(MD.IC2, "item.itemMatter", 1, 0));
 		RM.Massfab      .addRecipe1(T, 1, 32768, ST.make(MD.IC2, "item.itemScrapMetal", 2, 0), ST.make(MD.IC2, "item.itemMatter", 1, 0));
 		
-		RM.Shredder     .addRecipe1(T, 16,   16, IL.IC2_Plantball.get(1)        , ST.make(Blocks.dirt, 1, 0));
+		RM.Shredder     .addRecipe1(T, 16,   16, IL.IC2_Plantball.get(1)        , ST.make(Blocks.DIRT, 1, 0));
 		RM.Shredder     .addRecipe1(T, 16,   16, 300, ST.mkic("weed", 1)        , IL.IC2_Plantball.get(1));
 		RM.Shredder     .addRecipe1(T, 16,   16, 600, ST.make(Blocks.vine, 1, W), IL.IC2_Plantball.get(1));
 		
@@ -351,7 +351,7 @@ public class Compat_Recipes_IndustrialCraft extends CompatMods {
 		RM.Compressor   .addRecipe1(T, 16,  256, OP.plateGem.mat(MT.Sodalite, 9)                    , OP.plateDense.mat(MT.Sodalite, 1));
 		RM.Compressor   .addRecipe1(T, 16,  768, OP.plate.mat(MT.Obsidian, 9)                       , OP.plateDense.mat(MT.Obsidian, 1));
 		
-		RM.Shredder     .addRecipe1(T, 16,   16, IL.IC2_Biochaff.get(1)                             , ST.make(Blocks.dirt, 1, 0));
+		RM.Shredder     .addRecipe1(T, 16,   16, IL.IC2_Biochaff.get(1)                             , ST.make(Blocks.DIRT, 1, 0));
 		RM.Shredder     .addRecipe1(T, 16,   16, IL.IC2_Plantball.get(1)                            , IL.IC2_Biochaff.get(1));
 		RM.Shredder     .addRecipe1(T, 16,   16, 300, ST.mkic("weed", 1)                            , IL.IC2_Biochaff.get(1));
 		RM.Shredder     .addRecipe1(T, 16,   16, 600, ST.make(Blocks.vine, 1, W)                    , IL.IC2_Biochaff.get(1));
@@ -405,7 +405,7 @@ public class Compat_Recipes_IndustrialCraft extends CompatMods {
 		RM.pulverizing(ST.make(Blocks.red_mushroom, 1, W), IL.IC2_Grin_Powder.get(1));
 		RM.pulverizing(ST.make(Items.spider_eye, 1, W), IL.IC2_Grin_Powder.get(2));
 		RM.pulverizing(ST.make(Items.clay_ball, 1, W), OM.dust(MT.Clay, U));
-		RM.pulverizing(ST.make(Blocks.clay, 1, W), OM.dust(MT.Clay, U*4));
+		RM.pulverizing(ST.make(Blocks.CLAY, 1, W), OM.dust(MT.Clay, U*4));
 		RM.pulverizing(IL.Clay_Ball_Brown.get(1), OM.dust(MT.ClayBrown, U));
 		RM.pulverizing(ST.make(BlocksGT.Diggables, 1, 1), OM.dust(MT.ClayBrown, U*4));
 		

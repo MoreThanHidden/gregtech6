@@ -41,7 +41,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 
@@ -53,7 +53,7 @@ public class MultiTileEntityStick extends TileEntityBase03MultiTileEntities impl
 	public float mMinX = PX_P[2], mMinZ = PX_P[7], mMaxX = PX_N[2], mMaxZ = PX_N[7];
 	
 	@Override
-	public void readFromNBT2(NBTTagCompound aNBT) {
+	public void readFromNBT2(CompoundNBT aNBT) {
 		Random tRandom = new Random(xCoord^yCoord^zCoord);
 		if (tRandom.nextInt(1000000) < 500000) {
 			mMinX = PX_P[tRandom.nextInt(15)];

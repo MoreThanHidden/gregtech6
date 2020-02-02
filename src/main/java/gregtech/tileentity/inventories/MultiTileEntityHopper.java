@@ -49,7 +49,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
@@ -61,21 +61,21 @@ public class MultiTileEntityHopper extends TileEntityBase09FacingSingle implemen
 	public boolean mCheckNextTick = T, mExactMode = F, mMovedLastTick = T;
 	
 	@Override
-	public void readFromNBT2(NBTTagCompound aNBT) {
+	public void readFromNBT2(CompoundNBT aNBT) {
 		super.readFromNBT2(aNBT);
 		mMode = aNBT.getByte(NBT_MODE);
 		mExactMode = aNBT.getBoolean(NBT_MODE+".a");
 	}
 	
 	@Override
-	public void writeToNBT2(NBTTagCompound aNBT) {
+	public void writeToNBT2(CompoundNBT aNBT) {
 		super.writeToNBT2(aNBT);
 		if (mMode != 0) aNBT.setByte(NBT_MODE, mMode);
 		UT.NBT.setBoolean(aNBT, NBT_MODE+".a", mExactMode);
 	}
 	
 	@Override
-	public NBTTagCompound writeItemNBT2(NBTTagCompound aNBT) {
+	public CompoundNBT writeItemNBT2(CompoundNBT aNBT) {
 		aNBT = super.writeItemNBT2(aNBT);
 		if (mMode != 0) aNBT.setByte(NBT_MODE, mMode);
 		UT.NBT.setBoolean(aNBT, NBT_MODE+".a", mExactMode);
@@ -185,7 +185,7 @@ public class MultiTileEntityHopper extends TileEntityBase09FacingSingle implemen
 						for (int i = 0, j = getSizeInventory(); i < j; i++) if (!slotHas(i)) {
 							slot(i, WD.suck(tDelegator));
 							if (slotHas(i)) {
-								tMovedItems += slot(i).stackSize;
+								tMovedItems += slot(i).getCount();
 								updateInventory();
 							}
 							break;
@@ -199,13 +199,13 @@ public class MultiTileEntityHopper extends TileEntityBase09FacingSingle implemen
 					for (int i = 0, k = getSizeInventory(), l = getInventoryStackLimit(); i < k; i++) for (int j = i+1; j < k; j++) if (slotHas(j)) {
 						int tMaxSize = Math.min(l, slot(j).getMaxStackSize());
 						if (slotHas(i)) {
-							if (slot(i).stackSize < tMaxSize && ST.equal(slot(i), slot(j))) {
+							if (slot(i).getCount() < tMaxSize && ST.equal(slot(i), slot(j))) {
 								tMovedItems += ST.move(this, j, i);
-								if (slot(i).stackSize >= tMaxSize) break;
+								if (slot(i).getCount() >= tMaxSize) break;
 							}
 						} else {
 							tMovedItems += ST.move(this, j, i);
-							if (slotHas(i) && slot(i).stackSize >= tMaxSize) break;
+							if (slotHas(i) && slot(i).getCount() >= tMaxSize) break;
 						}
 					}
 				}

@@ -113,15 +113,15 @@ public class LoaderItemList implements Runnable {
 		ItemsGT.AMMO_ITEMS.add(ST.make(MD.TG, "TechgunsAmmo"                    , 1,106));
 		ItemsGT.AMMO_ITEMS.add(ST.make(MD.TG, "TechgunsAmmo"                    , 1,107));
 		
-		ItemsGT.SHOW_RESISTANCE.add(ST.make(Blocks.dirt                         , 1, W));
-		ItemsGT.SHOW_RESISTANCE.add(ST.make(Blocks.grass                        , 1, W));
-		ItemsGT.SHOW_RESISTANCE.add(ST.make(Blocks.mycelium                     , 1, W));
+		ItemsGT.SHOW_RESISTANCE.add(ST.make(Blocks.DIRT                         , 1, W));
+		ItemsGT.SHOW_RESISTANCE.add(ST.make(Blocks.GRASS                        , 1, W));
+		ItemsGT.SHOW_RESISTANCE.add(ST.make(Blocks.MYCELIUM                     , 1, W));
 		ItemsGT.SHOW_RESISTANCE.add(ST.make(Blocks.gravel                       , 1, W));
 		ItemsGT.SHOW_RESISTANCE.add(ST.make(Blocks.sand                         , 1, W));
 		ItemsGT.SHOW_RESISTANCE.add(ST.make(Blocks.netherrack                   , 1, W));
 		ItemsGT.SHOW_RESISTANCE.add(ST.make(Blocks.nether_brick                 , 1, W));
 		ItemsGT.SHOW_RESISTANCE.add(ST.make(Blocks.end_stone                    , 1, W));
-		ItemsGT.SHOW_RESISTANCE.add(ST.make(Blocks.snow                         , 1, W));
+		ItemsGT.SHOW_RESISTANCE.add(ST.make(Blocks.SNOW                         , 1, W));
 		ItemsGT.SHOW_RESISTANCE.add(ST.make(Blocks.ice                          , 1, W));
 		ItemsGT.SHOW_RESISTANCE.add(ST.make(Blocks.packed_ice                   , 1, W));
 		ItemsGT.SHOW_RESISTANCE.add(ST.make(Blocks.glowstone                    , 1, W));
@@ -130,12 +130,12 @@ public class LoaderItemList implements Runnable {
 		ItemsGT.SHOW_RESISTANCE.add(ST.make(Blocks.wool                         , 1, W));
 		ItemsGT.SHOW_RESISTANCE.add(ST.make(Blocks.glass                        , 1, W));
 		ItemsGT.SHOW_RESISTANCE.add(ST.make(Blocks.stained_glass                , 1, W));
-		ItemsGT.SHOW_RESISTANCE.add(ST.make(Blocks.clay                         , 1, W));
+		ItemsGT.SHOW_RESISTANCE.add(ST.make(Blocks.CLAY                         , 1, W));
 		ItemsGT.SHOW_RESISTANCE.add(ST.make(Blocks.hardened_clay                , 1, W));
 		ItemsGT.SHOW_RESISTANCE.add(ST.make(Blocks.stained_hardened_clay        , 1, W));
 		ItemsGT.SHOW_RESISTANCE.add(ST.make(Blocks.leaves                       , 1, W));
 		ItemsGT.SHOW_RESISTANCE.add(ST.make(Blocks.leaves2                      , 1, W));
-		ItemsGT.SHOW_RESISTANCE.add(ST.make(Blocks.planks                       , 1, W));
+		ItemsGT.SHOW_RESISTANCE.add(ST.make(Blocks.OAK_PLANKS                       , 1, W));
 		ItemsGT.SHOW_RESISTANCE.add(ST.make(Blocks.log                          , 1, W));
 		ItemsGT.SHOW_RESISTANCE.add(ST.make(Blocks.log2                         , 1, W));
 		ItemsGT.SHOW_RESISTANCE.add(ST.make(Blocks.sandstone                    , 1, W));

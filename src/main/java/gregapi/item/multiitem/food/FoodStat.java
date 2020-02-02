@@ -129,7 +129,7 @@ public class FoodStat implements IFoodStat {
 	@Override
 	public void onEaten(Item aItem, ItemStack aStack, PlayerEntity aPlayer, boolean aConsumeItem) {
 		if (aConsumeItem && !UT.Entities.hasInfiniteItems(aPlayer)) {
-			aStack.stackSize--;
+			aStack.getCount()--;
 			ItemStack tStack = OM.get(ST.copy(mEmptyContainer));
 			if (tStack == null && mAutoDetectEmpty) tStack = ST.container(aStack, F);
 			UT.Inventories.addStackToPlayerInventoryOrDrop(aPlayer, tStack, F);

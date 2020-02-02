@@ -48,7 +48,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
@@ -63,7 +63,7 @@ public class MultiTileEntityCertificate extends TileEntityBase09FacingSingle imp
 	public void onServerSave(File aSaveLocation) {
 		File aTargetFile = new File(new File(aSaveLocation, "gregtech"), "certificates.support.dat");
 		if (!aTargetFile.exists()) {try {aTargetFile.createNewFile();} catch (Throwable e) {e.printStackTrace(ERR);}}
-		NBTTagCompound aNBT = UT.NBT.make();
+		CompoundNBT aNBT = UT.NBT.make();
 		for (int i = 0; i < ALREADY_RECEIVED.size(); i++) aNBT.setString(""+i, ALREADY_RECEIVED.get(i));
 		try {CompressedStreamTools.write(aNBT, aTargetFile);} catch (Throwable e) {e.printStackTrace(ERR);}
 	}
@@ -73,7 +73,7 @@ public class MultiTileEntityCertificate extends TileEntityBase09FacingSingle imp
 		ALREADY_RECEIVED.clear();
 		File aTargetFile = new File(new File(aSaveLocation, "gregtech"), "certificates.support.dat");
 		if (aTargetFile.exists()) {
-			NBTTagCompound aNBT = null;
+			CompoundNBT aNBT = null;
 			try {aNBT = CompressedStreamTools.read(aTargetFile);} catch (Throwable e) {e.printStackTrace(ERR);}
 			if (aNBT != null) for (int i = 0; i < Integer.MAX_VALUE; i++) {
 				if (!aNBT.hasKey(""+i)) break;
@@ -92,7 +92,7 @@ public class MultiTileEntityCertificate extends TileEntityBase09FacingSingle imp
 	}
 	
 	public static ItemStack getCertificate(int aAmount, String aName) {
-		NBTTagCompound tNBT = UT.NBT.make();
+		CompoundNBT tNBT = UT.NBT.make();
 		if (UT.Code.stringValid(aName)) tNBT.setTag("display", UT.NBT.makeString(tNBT.getCompoundTag("display"), "Name", aName));
 		return MTE_REGISTRY.getItem(INSTANCE.getMultiTileEntityID(), aAmount, tNBT);
 	}
@@ -100,7 +100,7 @@ public class MultiTileEntityCertificate extends TileEntityBase09FacingSingle imp
 	public boolean mSilver = F, mGold = F;
 	
 	@Override
-	public void readFromNBT2(NBTTagCompound aNBT) {
+	public void readFromNBT2(CompoundNBT aNBT) {
 		super.readFromNBT2(aNBT);
 		String tName = getCustomName();
 		if (UT.Code.stringValid(tName)) {

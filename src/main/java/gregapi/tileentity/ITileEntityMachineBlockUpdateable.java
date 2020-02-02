@@ -30,7 +30,7 @@ import gregapi.util.WD;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.ChunkPos;
 import net.minecraft.world.World;
 
 /**
@@ -38,7 +38,7 @@ import net.minecraft.world.World;
  */
 public interface ITileEntityMachineBlockUpdateable {
 	/** Called whenever a Machine Block adjacent to this Block got updated. The Coords are the Coords of the Block that changed. */
-	public void onMachineBlockUpdate(ChunkCoordinates aCoords, Block aBlock, byte aMeta, boolean aRemoved);
+	public void onMachineBlockUpdate(ChunkPos aCoords, Block aBlock, byte aMeta, boolean aRemoved);
 	
 	/** Utility for the Multi-Block-Updates */
 	public static class Util {
@@ -60,7 +60,7 @@ public interface ITileEntityMachineBlockUpdateable {
 		 * You should call this Function in @Block.breakBlock and in @Block.onBlockAdded of your Machine.
 		 */
 		public static boolean causeMachineUpdate(World aWorld, int aX, int aY, int aZ, Block aBlock, byte aMeta, boolean aRemoved) {
-			if (!aWorld.isRemote) new Thread(new MachineBlockUpdateRunnable(aWorld, new ChunkCoordinates(aX, aY, aZ), aBlock, aMeta, aRemoved), "Machine Block Updating").start();
+			if (!aWorld.isRemote) new Thread(new MachineBlockUpdateRunnable(aWorld, new ChunkPos(aX, aY, aZ), aBlock, aMeta, aRemoved), "Machine Block Updating").start();
 			return T;
 		}
 		/**
@@ -68,7 +68,7 @@ public interface ITileEntityMachineBlockUpdateable {
 		 * This update will cause surrounding MultiBlock Machines to update their Configuration.
 		 * You should call this Function in @Block.breakBlock and in @Block.onBlockAdded of your Machine.
 		 */
-		public static boolean causeMachineUpdate(World aWorld, ChunkCoordinates aCoords, Block aBlock, byte aMeta, boolean aRemoved) {
+		public static boolean causeMachineUpdate(World aWorld, ChunkPos aCoords, Block aBlock, byte aMeta, boolean aRemoved) {
 			if (!aWorld.isRemote) new Thread(new MachineBlockUpdateRunnable(aWorld, aCoords, aBlock, aMeta, aRemoved), "Machine Block Updating").start();
 			return T;
 		}
@@ -108,13 +108,13 @@ public interface ITileEntityMachineBlockUpdateable {
 		}
 		
 		private static class MachineBlockUpdateRunnable implements Runnable {
-			private final ChunkCoordinates mCoords;
+			private final ChunkPos mCoords;
 			private final World mWorld;
 			private final Block mBlock;
 			private final byte mMeta;
 			private final boolean mRemoved;
 			
-			public MachineBlockUpdateRunnable(World aWorld, ChunkCoordinates aCoords, Block aBlock, byte aMeta, boolean aRemoved) {
+			public MachineBlockUpdateRunnable(World aWorld, ChunkPos aCoords, Block aBlock, byte aMeta, boolean aRemoved) {
 				mWorld = aWorld; mCoords = aCoords; mBlock = aBlock; mMeta = aMeta; mRemoved = aRemoved;
 			}
 			
@@ -123,17 +123,17 @@ public interface ITileEntityMachineBlockUpdateable {
 				try {stepToUpdateMachine(mWorld, mCoords, new HashSetNoNulls<>(F, mCoords));} catch(Throwable e) {/**/}
 			}
 			
-			private void stepToUpdateMachine(World aWorld, ChunkCoordinates aCoords, HashSetNoNulls<ChunkCoordinates> aSet) {
+			private void stepToUpdateMachine(World aWorld, ChunkPos aCoords, HashSetNoNulls<ChunkPos> aSet) {
 				TileEntity tTileEntity = WD.te(aWorld, aCoords, T);
 				if (tTileEntity != null && tTileEntity instanceof ITileEntityMachineBlockUpdateable) ((ITileEntityMachineBlockUpdateable)tTileEntity).onMachineBlockUpdate(mCoords, mBlock, mMeta, mRemoved);
 				if (aSet.size() < 5 || (tTileEntity != null && tTileEntity instanceof ITileEntityMachineBlockUpdateable) || isMachineBlock(aWorld.getBlock(aCoords.posX, aCoords.posY, aCoords.posZ), aWorld.getBlockMetadata(aCoords.posX, aCoords.posY, aCoords.posZ))) {
-					ChunkCoordinates tCoords;
-					if (aSet.add(tCoords = new ChunkCoordinates(aCoords.posX + 1, aCoords.posY, aCoords.posZ))) stepToUpdateMachine(aWorld, tCoords, aSet);
-					if (aSet.add(tCoords = new ChunkCoordinates(aCoords.posX - 1, aCoords.posY, aCoords.posZ))) stepToUpdateMachine(aWorld, tCoords, aSet);
-					if (aSet.add(tCoords = new ChunkCoordinates(aCoords.posX, aCoords.posY + 1, aCoords.posZ))) stepToUpdateMachine(aWorld, tCoords, aSet);
-					if (aSet.add(tCoords = new ChunkCoordinates(aCoords.posX, aCoords.posY - 1, aCoords.posZ))) stepToUpdateMachine(aWorld, tCoords, aSet);
-					if (aSet.add(tCoords = new ChunkCoordinates(aCoords.posX, aCoords.posY, aCoords.posZ + 1))) stepToUpdateMachine(aWorld, tCoords, aSet);
-					if (aSet.add(tCoords = new ChunkCoordinates(aCoords.posX, aCoords.posY, aCoords.posZ - 1))) stepToUpdateMachine(aWorld, tCoords, aSet);
+					ChunkPos tCoords;
+					if (aSet.add(tCoords = new ChunkPos(aCoords.posX + 1, aCoords.posY, aCoords.posZ))) stepToUpdateMachine(aWorld, tCoords, aSet);
+					if (aSet.add(tCoords = new ChunkPos(aCoords.posX - 1, aCoords.posY, aCoords.posZ))) stepToUpdateMachine(aWorld, tCoords, aSet);
+					if (aSet.add(tCoords = new ChunkPos(aCoords.posX, aCoords.posY + 1, aCoords.posZ))) stepToUpdateMachine(aWorld, tCoords, aSet);
+					if (aSet.add(tCoords = new ChunkPos(aCoords.posX, aCoords.posY - 1, aCoords.posZ))) stepToUpdateMachine(aWorld, tCoords, aSet);
+					if (aSet.add(tCoords = new ChunkPos(aCoords.posX, aCoords.posY, aCoords.posZ + 1))) stepToUpdateMachine(aWorld, tCoords, aSet);
+					if (aSet.add(tCoords = new ChunkPos(aCoords.posX, aCoords.posY, aCoords.posZ - 1))) stepToUpdateMachine(aWorld, tCoords, aSet);
 				}
 			}
 		}

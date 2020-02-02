@@ -27,8 +27,8 @@ import gregapi.util.UT;
 import gregapi.util.WD;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
@@ -43,10 +43,10 @@ public interface IItemBumbleBee {
 	/** @return 0 for no Chance, 10000 for a 100% Chance. */
 	public int bumbleProductChance(ItemStack aBumbleBee, short aMetaData, int aProductIndex);
 	/** @return The Coordinates of where the Bumbles fly to for this product, or the Coords of the passed Hive, if the Environment allows the production of this specific Product. This is usually for checking for specific Flowers for this Product. */
-	public ChunkCoordinates bumbleCanProduct(World aWorld, int aX, int aY, int aZ, ItemStack aBumbleBee, short aMetaData, int aProductIndex);
+	public ChunkPos bumbleCanProduct(World aWorld, int aX, int aY, int aZ, ItemStack aBumbleBee, short aMetaData, int aProductIndex);
 	
 	/** @return The Coordinates of where the Bumbles fly to for this product, or the Coords of the passed Hive, if the Environment allows the Bumblebee Species to be active at this point in time. This is used for the Main checks. */
-	public ChunkCoordinates bumbleCanProduce(World aWorld, int aX, int aY, int aZ, ItemStack aBumbleBee, short aMetaData, int aDistance);
+	public ChunkPos bumbleCanProduce(World aWorld, int aX, int aY, int aZ, ItemStack aBumbleBee, short aMetaData, int aDistance);
 	
 	/** @return 0 = Drone, 1 = Princess, 2 = Queen, 4 = Dead, 5 = Scanned Drone, 6 = Scanned Princess, 7 = Scanned Queen, 9 = Dead Scanned */
 	public byte bumbleType(ItemStack aBumbleBee);
@@ -94,19 +94,19 @@ public interface IItemBumbleBee {
 	public boolean bumbleEqual(ItemStack aBumbleBeeA, short aMetaDataA, ItemStack aBumbleBeeB, short aMetaDataB);
 	
 	public static class Util {
-		public static NBTTagCompound getBumbleTag(ItemStack aBumbleBee) {
-			NBTTagCompound aNBT = UT.NBT.getOrCreate(aBumbleBee), rBumbleTag = aNBT.getCompoundTag("gt.bumble");
+		public static CompoundNBT getBumbleTag(ItemStack aBumbleBee) {
+			CompoundNBT aNBT = UT.NBT.getOrCreate(aBumbleBee), rBumbleTag = aNBT.getCompoundTag("gt.bumble");
 			aNBT.setTag("gt.bumble", rBumbleTag);
 			return rBumbleTag;
 		}
 		
-		public static ItemStack setBumbleTag(ItemStack aBumbleBee, NBTTagCompound aBumbleTag) {
+		public static ItemStack setBumbleTag(ItemStack aBumbleBee, CompoundNBT aBumbleTag) {
 			UT.NBT.getOrCreate(aBumbleBee).setTag("gt.bumble", aBumbleTag);
 			return aBumbleBee;
 		}
 		
-		public static NBTTagCompound getBumbleGenes(ItemStack aBumblePrincess, ItemStack aBumbleDrone, Random aRandom) {
-			NBTTagCompound rBumbleTag = UT.NBT.make(), tBumbleTagA = getBumbleTag(aBumblePrincess), tBumbleTagB = getBumbleTag(aBumbleDrone);
+		public static CompoundNBT getBumbleGenes(ItemStack aBumblePrincess, ItemStack aBumbleDrone, Random aRandom) {
+			CompoundNBT rBumbleTag = UT.NBT.make(), tBumbleTagA = getBumbleTag(aBumblePrincess), tBumbleTagB = getBumbleTag(aBumbleDrone);
 			if (tBumbleTagA == null || tBumbleTagA.hasNoTags()) tBumbleTagA = getBumbleGenes(aRandom);
 			if (tBumbleTagB == null || tBumbleTagB.hasNoTags()) tBumbleTagB = getBumbleGenes(aRandom);
 			setHumidityMin      (rBumbleTag, getHumidityMin     (aRandom.nextBoolean()?tBumbleTagA:tBumbleTagB));
@@ -126,9 +126,9 @@ public interface IItemBumbleBee {
 			return rBumbleTag;
 		}
 		
-		public static NBTTagCompound getBumbleGenes(Random aRandom) {return getBumbleGenes(WD.envTemp(BiomeGenBase.plains), BiomeGenBase.plains, T, aRandom);}
-		public static NBTTagCompound getBumbleGenes(long aTemperature, BiomeGenBase aBiome, boolean aHasSky, Random aRandom) {
-			NBTTagCompound rBumbleTag = UT.NBT.make();
+		public static CompoundNBT getBumbleGenes(Random aRandom) {return getBumbleGenes(WD.envTemp(BiomeGenBase.plains), BiomeGenBase.plains, T, aRandom);}
+		public static CompoundNBT getBumbleGenes(long aTemperature, BiomeGenBase aBiome, boolean aHasSky, Random aRandom) {
+			CompoundNBT rBumbleTag = UT.NBT.make();
 			setHumidityMin(rBumbleTag, aBiome.rainfall - 0.05F - aRandom.nextInt(21)/100.0F);
 			setHumidityMax(rBumbleTag, aBiome.rainfall + 0.05F + aRandom.nextInt(21)/100.0F);
 			setTemperatureMin(rBumbleTag, aTemperature - 5 - aRandom.nextInt(11));
@@ -149,34 +149,34 @@ public interface IItemBumbleBee {
 			return rBumbleTag;
 		}
 		
-		public static void setHumidityMin       (NBTTagCompound aBumbleTag, float aHumidity)        {aBumbleTag.setFloat("minhum", Math.max(0, aHumidity));}
-		public static void setHumidityMax       (NBTTagCompound aBumbleTag, float aHumidity)        {aBumbleTag.setFloat("maxhum", Math.max(0, aHumidity));}
-		public static void setTemperatureMin    (NBTTagCompound aBumbleTag, long aTemperature)      {UT.NBT.setNumber( aBumbleTag, "mintemp"    , aTemperature);}
-		public static void setTemperatureMax    (NBTTagCompound aBumbleTag, long aTemperature)      {UT.NBT.setNumber( aBumbleTag, "maxtemp"    , aTemperature);}
-		public static void setOffspring         (NBTTagCompound aBumbleTag, long aOffspring)        {UT.NBT.setNumber( aBumbleTag, "offspring"  , UT.Code.bindStack(aOffspring));}
-		public static void setAggressiveness    (NBTTagCompound aBumbleTag, long aAggressiveness)   {UT.NBT.setNumber( aBumbleTag, "aggro"      , UT.Code.bind(1, 10000, aAggressiveness));}
-		public static void setWorkForce         (NBTTagCompound aBumbleTag, long aWorkForce)        {UT.NBT.setNumber( aBumbleTag, "work"       , UT.Code.bind(1, 10000, aWorkForce));}
-		public static void setLifeSpan          (NBTTagCompound aBumbleTag, long aLifeSpan)         {UT.NBT.setNumber( aBumbleTag, "life"       , UT.Code.bind(1200, 144000, aLifeSpan));}
-		public static void setRainproof         (NBTTagCompound aBumbleTag, boolean aRainproof)     {UT.NBT.setBoolean(aBumbleTag, "rain"       , aRainproof);}
-		public static void setStormproof        (NBTTagCompound aBumbleTag, boolean aStormproof)    {UT.NBT.setBoolean(aBumbleTag, "storm"      , aStormproof);}
-		public static void setDayActive         (NBTTagCompound aBumbleTag, boolean aDayActive)     {UT.NBT.setBoolean(aBumbleTag, "day"        , aDayActive);}
-		public static void setNightActive       (NBTTagCompound aBumbleTag, boolean aNightActive)   {UT.NBT.setBoolean(aBumbleTag, "night"      , aNightActive);}
-		public static void setOutsideActive     (NBTTagCompound aBumbleTag, boolean aOutsideActive) {UT.NBT.setBoolean(aBumbleTag, "outside"    , aOutsideActive);}
-		public static void setInsideActive      (NBTTagCompound aBumbleTag, boolean aInsideActive)  {UT.NBT.setBoolean(aBumbleTag, "inside"     , aInsideActive);}
+		public static void setHumidityMin       (CompoundNBT aBumbleTag, float aHumidity)        {aBumbleTag.setFloat("minhum", Math.max(0, aHumidity));}
+		public static void setHumidityMax       (CompoundNBT aBumbleTag, float aHumidity)        {aBumbleTag.setFloat("maxhum", Math.max(0, aHumidity));}
+		public static void setTemperatureMin    (CompoundNBT aBumbleTag, long aTemperature)      {UT.NBT.setNumber( aBumbleTag, "mintemp"    , aTemperature);}
+		public static void setTemperatureMax    (CompoundNBT aBumbleTag, long aTemperature)      {UT.NBT.setNumber( aBumbleTag, "maxtemp"    , aTemperature);}
+		public static void setOffspring         (CompoundNBT aBumbleTag, long aOffspring)        {UT.NBT.setNumber( aBumbleTag, "offspring"  , UT.Code.bindStack(aOffspring));}
+		public static void setAggressiveness    (CompoundNBT aBumbleTag, long aAggressiveness)   {UT.NBT.setNumber( aBumbleTag, "aggro"      , UT.Code.bind(1, 10000, aAggressiveness));}
+		public static void setWorkForce         (CompoundNBT aBumbleTag, long aWorkForce)        {UT.NBT.setNumber( aBumbleTag, "work"       , UT.Code.bind(1, 10000, aWorkForce));}
+		public static void setLifeSpan          (CompoundNBT aBumbleTag, long aLifeSpan)         {UT.NBT.setNumber( aBumbleTag, "life"       , UT.Code.bind(1200, 144000, aLifeSpan));}
+		public static void setRainproof         (CompoundNBT aBumbleTag, boolean aRainproof)     {UT.NBT.setBoolean(aBumbleTag, "rain"       , aRainproof);}
+		public static void setStormproof        (CompoundNBT aBumbleTag, boolean aStormproof)    {UT.NBT.setBoolean(aBumbleTag, "storm"      , aStormproof);}
+		public static void setDayActive         (CompoundNBT aBumbleTag, boolean aDayActive)     {UT.NBT.setBoolean(aBumbleTag, "day"        , aDayActive);}
+		public static void setNightActive       (CompoundNBT aBumbleTag, boolean aNightActive)   {UT.NBT.setBoolean(aBumbleTag, "night"      , aNightActive);}
+		public static void setOutsideActive     (CompoundNBT aBumbleTag, boolean aOutsideActive) {UT.NBT.setBoolean(aBumbleTag, "outside"    , aOutsideActive);}
+		public static void setInsideActive      (CompoundNBT aBumbleTag, boolean aInsideActive)  {UT.NBT.setBoolean(aBumbleTag, "inside"     , aInsideActive);}
 		
-		public static float getHumidityMin      (NBTTagCompound aBumbleTag) {return Math.max(0, aBumbleTag.getFloat("minhum"));}
-		public static float getHumidityMax      (NBTTagCompound aBumbleTag) {return Math.max(0, aBumbleTag.getFloat("maxhum"));}
-		public static long getTemperatureMin    (NBTTagCompound aBumbleTag) {return aBumbleTag.getLong("mintemp");}
-		public static long getTemperatureMax    (NBTTagCompound aBumbleTag) {return aBumbleTag.getLong("maxtemp");}
-		public static long getOffspring         (NBTTagCompound aBumbleTag) {return UT.Code.bindStack(aBumbleTag.getLong("offspring"));}
-		public static long getAggressiveness    (NBTTagCompound aBumbleTag) {return UT.Code.bind(  100,  10000, aBumbleTag.getLong("aggro"));}
-		public static long getWorkForce         (NBTTagCompound aBumbleTag) {return UT.Code.bind(    1,  10000, aBumbleTag.getLong("work"));}
-		public static long getLifeSpan          (NBTTagCompound aBumbleTag) {return UT.Code.bind( 1200, 144000, aBumbleTag.getLong("life"));}
-		public static boolean getRainproof      (NBTTagCompound aBumbleTag) {return aBumbleTag.getBoolean("rain");}
-		public static boolean getStormproof     (NBTTagCompound aBumbleTag) {return aBumbleTag.getBoolean("storm");}
-		public static boolean getDayActive      (NBTTagCompound aBumbleTag) {return aBumbleTag.getBoolean("day");}
-		public static boolean getNightActive    (NBTTagCompound aBumbleTag) {return aBumbleTag.getBoolean("night");}
-		public static boolean getOutsideActive  (NBTTagCompound aBumbleTag) {return aBumbleTag.getBoolean("outside");}
-		public static boolean getInsideActive   (NBTTagCompound aBumbleTag) {return aBumbleTag.getBoolean("inside");}
+		public static float getHumidityMin      (CompoundNBT aBumbleTag) {return Math.max(0, aBumbleTag.getFloat("minhum"));}
+		public static float getHumidityMax      (CompoundNBT aBumbleTag) {return Math.max(0, aBumbleTag.getFloat("maxhum"));}
+		public static long getTemperatureMin    (CompoundNBT aBumbleTag) {return aBumbleTag.getLong("mintemp");}
+		public static long getTemperatureMax    (CompoundNBT aBumbleTag) {return aBumbleTag.getLong("maxtemp");}
+		public static long getOffspring         (CompoundNBT aBumbleTag) {return UT.Code.bindStack(aBumbleTag.getLong("offspring"));}
+		public static long getAggressiveness    (CompoundNBT aBumbleTag) {return UT.Code.bind(  100,  10000, aBumbleTag.getLong("aggro"));}
+		public static long getWorkForce         (CompoundNBT aBumbleTag) {return UT.Code.bind(    1,  10000, aBumbleTag.getLong("work"));}
+		public static long getLifeSpan          (CompoundNBT aBumbleTag) {return UT.Code.bind( 1200, 144000, aBumbleTag.getLong("life"));}
+		public static boolean getRainproof      (CompoundNBT aBumbleTag) {return aBumbleTag.getBoolean("rain");}
+		public static boolean getStormproof     (CompoundNBT aBumbleTag) {return aBumbleTag.getBoolean("storm");}
+		public static boolean getDayActive      (CompoundNBT aBumbleTag) {return aBumbleTag.getBoolean("day");}
+		public static boolean getNightActive    (CompoundNBT aBumbleTag) {return aBumbleTag.getBoolean("night");}
+		public static boolean getOutsideActive  (CompoundNBT aBumbleTag) {return aBumbleTag.getBoolean("outside");}
+		public static boolean getInsideActive   (CompoundNBT aBumbleTag) {return aBumbleTag.getBoolean("inside");}
 	}
 }

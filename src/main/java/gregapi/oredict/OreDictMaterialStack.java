@@ -26,7 +26,7 @@ import java.util.List;
 import gregapi.code.ArrayListNoNulls;
 import gregapi.data.MT;
 import gregapi.util.UT;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 
 /**
  * @author Gregorius Techneticies
@@ -99,8 +99,8 @@ public final class OreDictMaterialStack implements Cloneable {
 		return aList;
 	}
 	
-	public NBTTagCompound save() {
-		NBTTagCompound rNBT = UT.NBT.make();
+	public CompoundNBT save() {
+		CompoundNBT rNBT = UT.NBT.make();
 		UT.NBT.setNumber(rNBT, "a", mAmount);
 		if (mMaterial.mID < 0) {
 			rNBT.setString("m", mMaterial.mNameInternal);
@@ -110,21 +110,21 @@ public final class OreDictMaterialStack implements Cloneable {
 		return rNBT;
 	}
 	
-	public void save(String aTagName, NBTTagCompound aNBT) {
+	public void save(String aTagName, CompoundNBT aNBT) {
 		aNBT.setTag(aTagName, save());
 	}
 	
-	public static OreDictMaterialStack load(NBTTagCompound aNBT) {
+	public static OreDictMaterialStack load(CompoundNBT aNBT) {
 		if (aNBT.hasKey("i")) return new OreDictMaterialStack(OreDictMaterial.MATERIAL_ARRAY[aNBT.getShort("i")], aNBT.getLong("a"));
 		return new OreDictMaterialStack(OreDictMaterial.get(aNBT.getString("m")), aNBT.getLong("a"));
 	}
 	
-	public static OreDictMaterialStack load(String aTagName, NBTTagCompound aNBT) {
+	public static OreDictMaterialStack load(String aTagName, CompoundNBT aNBT) {
 		return load(aNBT.getCompoundTag(aTagName));
 	}
 	
-	public static NBTTagCompound saveList(List<OreDictMaterialStack> aList) {
-		NBTTagCompound rNBT = UT.NBT.make();
+	public static CompoundNBT saveList(List<OreDictMaterialStack> aList) {
+		CompoundNBT rNBT = UT.NBT.make();
 		if (aList == null) return rNBT;
 		int l = 0;
 		for (int i = 0, j = aList.size(); i < j; i++) {
@@ -138,11 +138,11 @@ public final class OreDictMaterialStack implements Cloneable {
 		return rNBT;
 	}
 	
-	public static void saveList(String aTagName, NBTTagCompound aNBT, List<OreDictMaterialStack> aList) {
+	public static void saveList(String aTagName, CompoundNBT aNBT, List<OreDictMaterialStack> aList) {
 		aNBT.setTag(aTagName, saveList(aList));
 	}
 	
-	public static List<OreDictMaterialStack> loadList(NBTTagCompound aNBT) {
+	public static List<OreDictMaterialStack> loadList(CompoundNBT aNBT) {
 		ArrayListNoNulls<OreDictMaterialStack> rList = new ArrayListNoNulls<>();
 		if (aNBT == null) return rList;
 		for (int i = 0, j = aNBT.getInteger("size"); i < j; i++) {
@@ -152,7 +152,7 @@ public final class OreDictMaterialStack implements Cloneable {
 		return rList;
 	}
 	
-	public static List<OreDictMaterialStack> loadList(String aTagName, NBTTagCompound aNBT) {
+	public static List<OreDictMaterialStack> loadList(String aTagName, CompoundNBT aNBT) {
 		return loadList(aNBT.getCompoundTag(aTagName));
 	}
 }

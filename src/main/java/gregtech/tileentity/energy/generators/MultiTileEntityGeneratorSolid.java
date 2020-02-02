@@ -49,7 +49,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.AxisAlignedBB;
 
 /**
@@ -67,7 +67,7 @@ public class MultiTileEntityGeneratorSolid extends TileEntityBase09FacingSingle 
 	protected ItemStack mOutput1 = null;
 	
 	@Override
-	public void readFromNBT2(NBTTagCompound aNBT) {
+	public void readFromNBT2(CompoundNBT aNBT) {
 		super.readFromNBT2(aNBT);
 		mEnergy = aNBT.getLong(NBT_ENERGY);
 		mBurning = aNBT.getBoolean(NBT_ACTIVE);
@@ -79,7 +79,7 @@ public class MultiTileEntityGeneratorSolid extends TileEntityBase09FacingSingle 
 	}
 	
 	@Override
-	public void writeToNBT2(NBTTagCompound aNBT) {
+	public void writeToNBT2(CompoundNBT aNBT) {
 		super.writeToNBT2(aNBT);
 		UT.NBT.setNumber(aNBT, NBT_ENERGY, mEnergy);
 		UT.NBT.setBoolean(aNBT, NBT_ACTIVE, mBurning);
@@ -160,14 +160,14 @@ public class MultiTileEntityGeneratorSolid extends TileEntityBase09FacingSingle 
 					return T;
 				}
 			} else if (ST.equal(aStack, slot(0))) {
-				int tDifference = Math.min(aStack.stackSize, slot(0).getMaxStackSize() - slot(0).stackSize);
-				aStack.stackSize-=tDifference;
-				slot(0).stackSize+=tDifference;
+				int tDifference = Math.min(aStack.getCount(), slot(0).getMaxStackSize() - slot(0).getCount());
+				aStack.getCount()-=tDifference;
+				slot(0).getCount()+=tDifference;
 				return T;
 			} else if (ST.equal(aStack, slot(1))) {
-				int tDifference = Math.min(slot(1).stackSize, aStack.getMaxStackSize() - aStack.stackSize);
-				aStack.stackSize+=tDifference;
-				slot(1).stackSize-=tDifference;
+				int tDifference = Math.min(slot(1).getCount(), aStack.getMaxStackSize() - aStack.getCount());
+				aStack.getCount()+=tDifference;
+				slot(1).getCount()-=tDifference;
 				removeAllDroppableNullStacks();
 				if (mBurning) UT.Entities.applyHeatDamage(aPlayer, Math.max(1.0F, Math.min(5.0F, mRate / 20.0F)));
 				return T;
@@ -186,7 +186,7 @@ public class MultiTileEntityGeneratorSolid extends TileEntityBase09FacingSingle 
 		if (aTool.equals(TOOL_igniter       ) && (aSide == mFacing || aPlayer == null)) {mBurning = T; return 10000;}
 		if (aTool.equals(TOOL_extinguisher  ) && (aSide == mFacing || aPlayer == null)) {mBurning = F; return 10000;}
 		if (aTool.equals(TOOL_shovel        ) &&  aSide == mFacing && slotHas(1)) {
-			long rDamage = 1000 * slot(1).stackSize;
+			long rDamage = 1000 * slot(1).getCount();
 			UT.Inventories.addStackToPlayerInventoryOrDrop(aPlayer instanceof PlayerEntity ? (PlayerEntity)aPlayer : null, slot(1), worldObj, xCoord, yCoord, zCoord);
 			slotKill(1);
 			return rDamage;
@@ -226,7 +226,7 @@ public class MultiTileEntityGeneratorSolid extends TileEntityBase09FacingSingle 
 	@Override public boolean canInsertItem2 (int aSlot, ItemStack aStack, byte aSide) {return aStack != null && aSlot == 0 && aSide != mFacing && mRecipes.containsInput(aStack, this, NI);}
 	@Override public boolean canExtractItem2(int aSlot, ItemStack aStack, byte aSide) {return aStack != null && aSlot == 1 && aSide != mFacing;}
 	@Override public boolean canDrop(int aInventorySlot) {return T;}
-	@Override public ItemStack[] getDefaultInventory(NBTTagCompound aNBT) {return new ItemStack[2];}
+	@Override public ItemStack[] getDefaultInventory(CompoundNBT aNBT) {return new ItemStack[2];}
 	
 	@Override public boolean isEnergyType(TagData aEnergyType, byte aSide, boolean aEmitting) {return aEmitting && aEnergyType == mEnergyTypeEmitted;}
 	@Override public boolean isEnergyEmittingTo(TagData aEnergyType, byte aSide, boolean aTheoretical) {return SIDES_TOP[aSide] && super.isEnergyEmittingTo(aEnergyType, aSide, aTheoretical);}

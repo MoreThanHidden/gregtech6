@@ -52,7 +52,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
@@ -68,7 +68,7 @@ public class MultiTileEntityBookShelf extends TileEntityBase09FacingSingle imple
 	public String mDungeonLootNameFront = "", mDungeonLootNameBack = "";
 	
 	@Override
-	public void readFromNBT2(NBTTagCompound aNBT) {
+	public void readFromNBT2(CompoundNBT aNBT) {
 		super.readFromNBT2(aNBT);
 		if (aNBT.hasKey("gt.dungeonloot.front")) mDungeonLootNameFront = aNBT.getString("gt.dungeonloot.front");
 		if (aNBT.hasKey("gt.dungeonloot.back")) mDungeonLootNameBack = aNBT.getString("gt.dungeonloot.back");
@@ -86,7 +86,7 @@ public class MultiTileEntityBookShelf extends TileEntityBase09FacingSingle imple
 	}
 	
 	@Override
-	public void writeToNBT2(NBTTagCompound aNBT) {
+	public void writeToNBT2(CompoundNBT aNBT) {
 		super.writeToNBT2(aNBT);
 		if (UT.Code.stringValid(mDungeonLootNameFront)) aNBT.setString("gt.dungeonloot.front", mDungeonLootNameFront);
 		if (UT.Code.stringValid(mDungeonLootNameBack)) aNBT.setString("gt.dungeonloot.back", mDungeonLootNameBack);
@@ -235,7 +235,7 @@ public class MultiTileEntityBookShelf extends TileEntityBase09FacingSingle imple
 		ItemStack tStack = aPlayer.getCurrentEquippedItem();
 		if (tStack != null && (BooksGT.BOOK_REGISTER.containsKey(new ItemStackContainer(tStack)) || BooksGT.BOOK_REGISTER.containsKey(new ItemStackContainer(tStack, W)))) {
 			slot(aSlot, ST.amount(1, tStack));
-			tStack.stackSize--;
+			tStack.getCount()--;
 			updateInventory();
 			playCollect();
 			return T;
@@ -350,7 +350,7 @@ public class MultiTileEntityBookShelf extends TileEntityBase09FacingSingle imple
 	// Inventory Stuff
 	@Override public int getInventoryStackLimit() {return 1;}
 	@Override public int getInventoryStackLimitGUI(int aSlot) {return 1;}
-	@Override public ItemStack[] getDefaultInventory(NBTTagCompound aNBT) {return new ItemStack[28];}
+	@Override public ItemStack[] getDefaultInventory(CompoundNBT aNBT) {return new ItemStack[28];}
 	@Override public boolean canDrop(int aInventorySlot) {return T;}
 	@Override public ItemStack getDefaultStack(int aSlot) {return ST.make(Items.book, 1, 0);}
 	

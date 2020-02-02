@@ -32,7 +32,7 @@ import gregapi.util.UT;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 
 /**
  * @author Gregorius Techneticies
@@ -584,7 +584,7 @@ public enum IL implements IItemContainer {
 	}
 	
 	@Override
-	public ItemStack getWithNameAndNBT(long aAmount, String aDisplayName, NBTTagCompound aNBT, Object... aReplacements) {
+	public ItemStack getWithNameAndNBT(long aAmount, String aDisplayName, CompoundNBT aNBT, Object... aReplacements) {
 		ItemStack rStack = get(1, aReplacements);
 		if (ST.invalid(rStack)) return null;
 		UT.NBT.set(rStack, aNBT);
@@ -615,7 +615,7 @@ public enum IL implements IItemContainer {
 	}
 	
 	@Override
-	public ItemStack getWithNBT(long aAmount, NBTTagCompound aNBT, Object... aReplacements) {
+	public ItemStack getWithNBT(long aAmount, CompoundNBT aNBT, Object... aReplacements) {
 		if (mHasNotBeenSet && Abstract_Mod.sFinalized < Abstract_Mod.sModCountUsingGTAPI) OUT.println("The Enum '" + name() + "' has not been set to an Item at this time!");
 		if (ST.invalid(mStack)) return ST.copyFirst(aReplacements);
 		ItemStack rStack = ST.amount(aAmount, OM.get_(mStack));

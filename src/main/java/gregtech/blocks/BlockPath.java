@@ -83,7 +83,7 @@ public class BlockPath extends BlockBaseMeta implements IBlockOnWalkOver, IRende
 		case  9: return new ArrayListNoNulls<>(F, IL.EB_Dirt_Inceptisol.get(1));
 		case 10: return new ArrayListNoNulls<>(F, IL.EB_Dirt_Mollisol.get(1));
 		case 11: return new ArrayListNoNulls<>(F, IL.EB_Dirt_Oxisol.get(1));
-		default: return new ArrayListNoNulls<>(F, ST.make(Blocks.dirt, 1, 0));
+		default: return new ArrayListNoNulls<>(F, ST.make(Blocks.DIRT, 1, 0));
 		}
 	}
 	
@@ -91,7 +91,7 @@ public class BlockPath extends BlockBaseMeta implements IBlockOnWalkOver, IRende
 	public boolean shouldSideBeRendered(IBlockAccess aWorld, int aX, int aY, int aZ, int aSide) {
 		if (SIDES_TOP[aSide]) return T;
 		Block tBlock = aWorld.getBlock(aX, aY, aZ);
-		return tBlock != this && tBlock != Blocks.farmland && !WD.visOpq(tBlock);
+		return tBlock != this && tBlock != Blocks.FARMLAND && !WD.visOpq(tBlock);
 	}
 	
 	@Override public int getRenderType() {return RendererBlockTextured.INSTANCE==null?0:RendererBlockTextured.INSTANCE.mRenderID;}
@@ -130,8 +130,8 @@ public class BlockPath extends BlockBaseMeta implements IBlockOnWalkOver, IRende
 	@Override public boolean isSealable(int aMeta, byte aSide) {return F;}
 	@Override public String getHarvestTool(int aMeta) {return TOOL_shovel;}
 	@Override public int getHarvestLevel(int aMeta) {return 0;}
-	@Override public float getBlockHardness(World aWorld, int aX, int aY, int aZ) {return Blocks.grass.getBlockHardness(aWorld, aX, aY, aZ) * 2;}
-	@Override public float getExplosionResistance(int aMeta) {return Blocks.grass.getExplosionResistance(null) * 1.5F;}
+	@Override public float getBlockHardness(World aWorld, int aX, int aY, int aZ) {return Blocks.GRASS.getBlockHardness(aWorld, aX, aY, aZ) * 2;}
+	@Override public float getExplosionResistance(int aMeta) {return Blocks.GRASS.getExplosionResistance(null) * 1.5F;}
 	@Override public boolean isSideSolid(int aMeta, byte aSide) {return SIDES_BOTTOM_HORIZONTAL[aSide];}
 	@Override public boolean isNormalCube(IBlockAccess aWorld, int aX, int aY, int aZ)  {return F;}
 	@Override public boolean isNormalCube() {return F;}

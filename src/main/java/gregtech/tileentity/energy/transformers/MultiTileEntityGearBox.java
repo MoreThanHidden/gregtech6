@@ -51,7 +51,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 
 /**
  * @author Gregorius Techneticies
@@ -63,7 +63,7 @@ public class MultiTileEntityGearBox extends TileEntityBase07Paintable implements
 	public byte mInputtedSides = 0, mOrder = 0;
 	
 	@Override
-	public void readFromNBT2(NBTTagCompound aNBT) {
+	public void readFromNBT2(CompoundNBT aNBT) {
 		super.readFromNBT2(aNBT);
 		if (aNBT.hasKey(NBT_STOPPED)) mJammed = aNBT.getBoolean(NBT_STOPPED);
 		if (aNBT.hasKey(NBT_ACTIVE)) mIgnorePower = aNBT.getBoolean(NBT_ACTIVE);
@@ -73,7 +73,7 @@ public class MultiTileEntityGearBox extends TileEntityBase07Paintable implements
 	}
 	
 	@Override
-	public void writeToNBT2(NBTTagCompound aNBT) {
+	public void writeToNBT2(CompoundNBT aNBT) {
 		super.writeToNBT2(aNBT);
 		UT.NBT.setBoolean(aNBT, NBT_STOPPED, mJammed);
 		UT.NBT.setBoolean(aNBT, NBT_ACTIVE, mIgnorePower);
@@ -81,7 +81,7 @@ public class MultiTileEntityGearBox extends TileEntityBase07Paintable implements
 	}
 	
 	@Override
-	public NBTTagCompound writeItemNBT2(NBTTagCompound aNBT) {
+	public CompoundNBT writeItemNBT2(CompoundNBT aNBT) {
 		super.writeItemNBT2(aNBT);
 		aNBT.setByte(NBT_CONNECTION, (byte)mAxleGear);
 		return aNBT;

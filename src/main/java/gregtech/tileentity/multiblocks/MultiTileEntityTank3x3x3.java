@@ -83,7 +83,7 @@ public abstract class MultiTileEntityTank3x3x3 extends MultiTileEntityTank {
 		super.onTick2(aTimer, aIsServerSide);
 		if (aIsServerSide && checkStructure(F)) {
 			FluidStack tFluid = mTank.getFluid();
-			if (tFluid != null && tFluid.amount > 0) {
+			if (tFluid != null && tFluid.getAmount() > 0) {
 				if (FL.temperature(mTank) >= mMaterial.mMeltingPoint && meltdown()) return;
 				if (!mAcidProof && FL.acid(mTank)) {
 					UT.Sounds.send(worldObj, SFX.MC_FIZZ, 1.0F, 0.5F, getCoords());

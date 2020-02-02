@@ -27,7 +27,7 @@ import gregapi.util.UT;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 
@@ -78,39 +78,39 @@ public class Behavior_Sonictron extends AbstractBehaviorDefault {
 	}
 	
 	public static int getCurrentIndex(ItemStack aStack) {
-		NBTTagCompound tNBTTagCompound = aStack.getTagCompound();
-		if (tNBTTagCompound == null) tNBTTagCompound = UT.NBT.make();
-		return tNBTTagCompound.getInteger("mCurrentIndex");
+		CompoundNBT tCompoundNBT = aStack.getTagCompound();
+		if (tCompoundNBT == null) tCompoundNBT = UT.NBT.make();
+		return tCompoundNBT.getInteger("mCurrentIndex");
 	}
 
 	public static int getTickTimer(ItemStack aStack) {
-		NBTTagCompound tNBTTagCompound = aStack.getTagCompound();
-		if (tNBTTagCompound == null) tNBTTagCompound = UT.NBT.make();
-		return tNBTTagCompound.getInteger("mTickTimer");
+		CompoundNBT tCompoundNBT = aStack.getTagCompound();
+		if (tCompoundNBT == null) tCompoundNBT = UT.NBT.make();
+		return tCompoundNBT.getInteger("mTickTimer");
 	}
 
-	public static NBTTagCompound setCurrentIndex(ItemStack aStack, int aIndex) {
-		NBTTagCompound tNBTTagCompound = aStack.getTagCompound();
-		if (tNBTTagCompound == null) tNBTTagCompound = UT.NBT.make();
-		tNBTTagCompound.setInteger("mCurrentIndex", aIndex);
-		return tNBTTagCompound;
+	public static CompoundNBT setCurrentIndex(ItemStack aStack, int aIndex) {
+		CompoundNBT tCompoundNBT = aStack.getTagCompound();
+		if (tCompoundNBT == null) tCompoundNBT = UT.NBT.make();
+		tCompoundNBT.setInteger("mCurrentIndex", aIndex);
+		return tCompoundNBT;
 	}
 
-	public static NBTTagCompound setTickTimer(ItemStack aStack, int aTime) {
-		NBTTagCompound tNBTTagCompound = aStack.getTagCompound();
-		if (tNBTTagCompound == null) tNBTTagCompound = UT.NBT.make();
-		tNBTTagCompound.setInteger("mTickTimer", aTime);
-		return tNBTTagCompound;
+	public static CompoundNBT setTickTimer(ItemStack aStack, int aTime) {
+		CompoundNBT tCompoundNBT = aStack.getTagCompound();
+		if (tCompoundNBT == null) tCompoundNBT = UT.NBT.make();
+		tCompoundNBT.setInteger("mTickTimer", aTime);
+		return tCompoundNBT;
 	}
 	
 	public static ItemStack[] getNBTInventory(ItemStack aStack) {
 		ItemStack[] tInventory = new ItemStack[64];
-		NBTTagCompound tNBT = aStack.getTagCompound();
+		CompoundNBT tNBT = aStack.getTagCompound();
 		if (tNBT == null) return tInventory;
 		
 		NBTTagList tNBT_ItemList = tNBT.getTagList("Inventory", 10);
 		for (int i = 0; i < tNBT_ItemList.tagCount(); i++) {
-			NBTTagCompound tag = tNBT_ItemList.getCompoundTagAt(i);
+			CompoundNBT tag = tNBT_ItemList.getCompoundTagAt(i);
 			byte slot = tag.getByte("Slot");
 			if (slot >= 0 && slot < tInventory.length) {
 				tInventory[slot] = ST.load(tag);
@@ -119,15 +119,15 @@ public class Behavior_Sonictron extends AbstractBehaviorDefault {
 		return tInventory;
 	}
 	
-	public static NBTTagCompound setNBTInventory(ItemStack aStack, ItemStack[] aInventory) {
-		NBTTagCompound tNBT = aStack.getTagCompound();
+	public static CompoundNBT setNBTInventory(ItemStack aStack, ItemStack[] aInventory) {
+		CompoundNBT tNBT = aStack.getTagCompound();
 		if (tNBT == null) tNBT = UT.NBT.make();
 		
 		NBTTagList tNBT_ItemList = new NBTTagList();
 		for (int i = 0; i < aInventory.length; i++) {
 			ItemStack stack = aInventory[i];
 			if (stack != null) {
-				NBTTagCompound tag = UT.NBT.make();
+				CompoundNBT tag = UT.NBT.make();
 				tag.setByte("Slot", (byte) i);
 				tNBT_ItemList.appendTag(ST.save(stack));
 			}

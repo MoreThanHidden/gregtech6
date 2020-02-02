@@ -29,7 +29,7 @@ import gregapi.data.LH;
 import gregapi.data.LH.Chat;
 import gregapi.util.UT;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 
 public class TE_Behavior_Energy_Stats extends TE_Behavior_Energy {
@@ -37,7 +37,7 @@ public class TE_Behavior_Energy_Stats extends TE_Behavior_Energy {
 	public boolean mOverloaded = F;
 	public TE_Behavior_Energy_Capacitor mStorage;
 	
-	public TE_Behavior_Energy_Stats(TileEntity aTileEntity, NBTTagCompound aNBT, TagData aEnergyType, TE_Behavior_Energy_Capacitor aStorage, long aSizeMin, long aSizeRec, long aSizeMax) {
+	public TE_Behavior_Energy_Stats(TileEntity aTileEntity, CompoundNBT aNBT, TagData aEnergyType, TE_Behavior_Energy_Capacitor aStorage, long aSizeMin, long aSizeRec, long aSizeMax) {
 		super(aTileEntity, aNBT, aEnergyType);
 		mStorage = aStorage; mMin = Math.abs(aSizeMin); mRec = Math.abs(aSizeRec); mMax = Math.abs(aSizeMax);
 	}

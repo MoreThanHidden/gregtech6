@@ -55,7 +55,7 @@ import gregapi.util.UT;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
@@ -178,7 +178,7 @@ public final class OreDictManager {
 	}
 	
 	public void fixStacksizes() {
-		for (ItemStack tStack : mAllRegisteredOres) tStack.stackSize = 1;
+		for (ItemStack tStack : mAllRegisteredOres) tStack.getCount() = 1;
 	}
 	
 	/**
@@ -336,7 +336,7 @@ public final class OreDictManager {
 		
 		//ORD.println(aModID + " → " + aRegName + " → " + aEvent.Name);
 		
-		aEvent.Ore.stackSize = 1;
+		aEvent.Ore.getCount() = 1;
 		
 		mAllRegisteredOres.add(aEvent.Ore);
 		
@@ -350,7 +350,7 @@ public final class OreDictManager {
 			}
 		}
 		
-		aEvent.Ore.stackSize = 1;
+		aEvent.Ore.getCount() = 1;
 		
 		if (aEvent.Name.contains(" ")) {
 			registerOreSafe(aEvent.Name.replaceAll(" ", ""), aEvent.Ore);
@@ -359,7 +359,7 @@ public final class OreDictManager {
 			if (tReRegistrations != null) for (String tName : tReRegistrations) registerOreSafe(tName, aEvent.Ore);
 		}
 		
-		aEvent.Ore.stackSize = 1;
+		aEvent.Ore.getCount() = 1;
 	}
 	
 	public void onOreRegistration2(String aModID, OreRegisterEvent aEvent) {
@@ -570,7 +570,7 @@ public final class OreDictManager {
 		ItemStack rStack = null;
 		if (tAssociation == null || (aUseBlackList && tAssociation.mBlocked)) return ST.copy(aStack);
 		if (tAssociation.mUnificationTarget == null) tAssociation.mUnificationTarget = sName2StackMap.get(tAssociation.toString());
-		if (ST.invalid(rStack = ST.amount(aStack.stackSize, tAssociation.mUnificationTarget))) return ST.copy(aStack);
+		if (ST.invalid(rStack = ST.amount(aStack.getCount(), tAssociation.mUnificationTarget))) return ST.copy(aStack);
 		rStack.setTagCompound(aStack.getTagCompound());
 		return rStack;
 	}
@@ -604,9 +604,9 @@ public final class OreDictManager {
 	public boolean setItemData_(ItemStack aStack, OreDictItemData aData) {
 		OreDictItemData tData = getAssociation_(aStack, F);
 		if (tData != null && (tData.mPrefix != OP.plate || tData.mMaterial.mMaterial != MT.Wood)) return F;
-		if (aStack.stackSize > 1) {
-			if (aData.mMaterial != null) aData.mMaterial.mAmount /= aStack.stackSize;
-			for (OreDictMaterialStack tMaterial : aData.mByProducts) tMaterial.mAmount /= aStack.stackSize;
+		if (aStack.getCount() > 1) {
+			if (aData.mMaterial != null) aData.mMaterial.mAmount /= aStack.getCount();
+			for (OreDictMaterialStack tMaterial : aData.mByProducts) tMaterial.mAmount /= aStack.getCount();
 			aStack = ST.amount(1, aStack);
 		}
 		if (!aData.mBlackListed) aData.mBlackListed = isBlacklisted(aStack);
@@ -640,7 +640,7 @@ public final class OreDictManager {
 		OreDictItemData rData = null;
 		if (aAllowOverride) {
 			OreDictItemData tData = null;
-			NBTTagCompound tNBT = aStack.getTagCompound();
+			CompoundNBT tNBT = aStack.getTagCompound();
 			if (tNBT != null && tNBT.hasKey(NBT_RECYCLING_MATS)) {
 				List<OreDictMaterialStack> tList = OreDictMaterialStack.loadList(NBT_RECYCLING_MATS, tNBT);
 				if (!tList.isEmpty()) rData = new OreDictItemData(tList.remove(0), tList.toArray(ZL_MS));

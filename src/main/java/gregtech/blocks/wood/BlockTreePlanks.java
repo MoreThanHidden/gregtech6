@@ -78,5 +78,5 @@ public class BlockTreePlanks extends BlockBasePlanksFlammable {
 		LH.add(getUnlocalizedName()+".15.name", "Frozen Slab");
 	}
 	
-	@Override public float getBlockHardness(World aWorld, int aX, int aY, int aZ) {return (aWorld.getBlockMetadata(aX, aY, aZ) < 12 ? 1.0F : 0.5F) * Blocks.planks.getBlockHardness(aWorld, aX, aY, aZ) * mHardnessMultiplier;}
+	@Override public float getBlockHardness(World aWorld, int aX, int aY, int aZ) {return (aWorld.getBlockMetadata(aX, aY, aZ) < 12 ? 1.0F : 0.5F) * Blocks.OAK_PLANKS.getBlockHardness(aWorld, aX, aY, aZ) * mHardnessMultiplier;}
 }

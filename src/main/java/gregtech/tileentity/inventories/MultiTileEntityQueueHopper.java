@@ -49,7 +49,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
@@ -61,20 +61,20 @@ public class MultiTileEntityQueueHopper extends TileEntityBase09FacingSingle imp
 	public byte mMode = 64;
 	
 	@Override
-	public void readFromNBT2(NBTTagCompound aNBT) {
+	public void readFromNBT2(CompoundNBT aNBT) {
 		super.readFromNBT2(aNBT);
 		mMode = aNBT.getByte(NBT_MODE);
 		if (mMode <= 0) mMode = 64;
 	}
 	
 	@Override
-	public void writeToNBT2(NBTTagCompound aNBT) {
+	public void writeToNBT2(CompoundNBT aNBT) {
 		super.writeToNBT2(aNBT);
 		if (mMode != 64) aNBT.setByte(NBT_MODE, mMode);
 	}
 	
 	@Override
-	public NBTTagCompound writeItemNBT2(NBTTagCompound aNBT) {
+	public CompoundNBT writeItemNBT2(CompoundNBT aNBT) {
 		aNBT = super.writeItemNBT2(aNBT);
 		if (mMode != 64) aNBT.setByte(NBT_MODE, mMode);
 		return aNBT;
@@ -171,7 +171,7 @@ public class MultiTileEntityQueueHopper extends TileEntityBase09FacingSingle imp
 						if (!slotHas(0)) {
 							slot(0, WD.suck(tDelegator));
 							if (slotHas(0)) {
-								tMovedItems += slot(0).stackSize;
+								tMovedItems += slot(0).getCount();
 								updateInventory();
 							}
 						}

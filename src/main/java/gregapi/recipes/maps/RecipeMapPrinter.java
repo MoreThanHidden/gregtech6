@@ -38,7 +38,7 @@ import gregapi.util.ST;
 import gregapi.util.UT;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.FluidStack;
@@ -58,7 +58,7 @@ public class RecipeMapPrinter extends RecipeMap {
 		if (rRecipe != null || aInputs == null || aInputs.length <= 0 || aInputs[0] == null || aFluids == null || aFluids.length <= 0 || aFluids[0] == null || GAPI_POST.mFinishedServerStarted <= 0) return rRecipe;
 		
 		ItemStack tUSB = null, tPaper = null;
-		NBTTagCompound tData = null;
+		CompoundNBT tData = null;
 		for (ItemStack aInput : aInputs) if (aInput != null) {
 			if (tData == null) {
 				if (OM.is_(OD_USB_STICKS[1], aInput)) {
@@ -87,7 +87,7 @@ public class RecipeMapPrinter extends RecipeMap {
 			if (OM.is_("gt:canvas", tPaper)) {
 				if (tData.hasKey(NBT_CANVAS_BLOCK) && (!tPaper.hasTagCompound() || !tPaper.getTagCompound().hasKey(NBT_CANVAS_BLOCK))) {
 					rRecipe = new Recipe(F, F, F, ST.array(ST.amount(1, tPaper), ST.amount(0, tUSB)), ST.array(ST.amount(1, tPaper)), null, null, FL.array(FL.mul(DYE_FLUIDS_CHEMICAL[DYE_INDEX_Black], 1, 9, T), FL.mul(DYE_FLUIDS_CHEMICAL[DYE_INDEX_Cyan], 1, 9, T), FL.mul(DYE_FLUIDS_CHEMICAL[DYE_INDEX_Magenta], 1, 9, T), FL.mul(DYE_FLUIDS_CHEMICAL[DYE_INDEX_Yellow], 1, 9, T)), null, 64, 16, 0);
-					NBTTagCompound tNBT = rRecipe.mOutputs[0].getTagCompound();
+					CompoundNBT tNBT = rRecipe.mOutputs[0].getTagCompound();
 					if (tNBT == null) tNBT = UT.NBT.make();
 					tNBT.setInteger(NBT_CANVAS_BLOCK, tData.getInteger(NBT_CANVAS_BLOCK));
 					tNBT.setInteger(NBT_CANVAS_META, tData.getInteger(NBT_CANVAS_META));
@@ -133,7 +133,7 @@ public class RecipeMapPrinter extends RecipeMap {
 					}
 					boolean tUseManyPages = (tPages != null && tPages.tagCount() > 50);
 					rRecipe = new Recipe(F, F, F, ST.array(ST.amount(tUseManyPages?6:3, tPaper), ST.amount(0, tUSB)), ST.array(tUseManyPages?IL.Paper_Printed_Pages_Many.get(1):IL.Paper_Printed_Pages.get(1)), null, null, FL.array(FL.mul(DYE_FLUIDS_CHEMICAL[DYE_INDEX_Black], 1, tUseManyPages?1:2, T)), null, tUseManyPages?1024:512, 16, 0);
-					UT.NBT.set(rRecipe.mOutputs[0], (NBTTagCompound)tData.copy());
+					UT.NBT.set(rRecipe.mOutputs[0], (CompoundNBT)tData.copy());
 					return rRecipe;
 				}
 				short tID = tData.getShort(NBT_REPLICATOR_DATA);

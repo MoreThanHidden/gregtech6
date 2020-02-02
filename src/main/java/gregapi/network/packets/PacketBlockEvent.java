@@ -23,7 +23,7 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 
 import gregapi.network.INetworkHandler;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.ChunkPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -43,7 +43,7 @@ public class PacketBlockEvent extends PacketCoordinates {
 		mData = aData;
 	}
 	
-	public PacketBlockEvent(ChunkCoordinates aCoords, byte aID, byte aData) {
+	public PacketBlockEvent(ChunkPos aCoords, byte aID, byte aData) {
 		super(aCoords);
 		mID = aID;
 		mData = aData;

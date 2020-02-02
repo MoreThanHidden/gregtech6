@@ -53,8 +53,8 @@ public class BlockDiggable extends BlockBaseMeta implements IBlockOnWalkOver {
 		LH.add(getUnlocalizedName()+ ".1.name", "Brown Clay");
 		LH.add(getUnlocalizedName()+ ".2.name", "Turf");
 		
-		RM.generify(ST.make(this, 1, 1), ST.make(Blocks.clay, 1, 0));
-		RM.add_smelting(ST.make(this, 1, 0), ST.make(Blocks.dirt, 1, 1));
+		RM.generify(ST.make(this, 1, 1), ST.make(Blocks.CLAY, 1, 0));
+		RM.add_smelting(ST.make(this, 1, 0), ST.make(Blocks.DIRT, 1, 1));
 		RM.add_smelting(ST.make(this, 1, 1), ST.make(Blocks.hardened_clay, 1, 0));
 		OM.data(ST.make(this, 1, 1), MT.ClayBrown, U*4);
 		OM.data(ST.make(this, 1, 2), MT.Peat, U);
@@ -93,6 +93,6 @@ public class BlockDiggable extends BlockBaseMeta implements IBlockOnWalkOver {
 	@Override public boolean isSealable      (int   aMeta, byte aSide) {return F;}
 	@Override public String getHarvestTool   (int   aMeta) {return TOOL_shovel;}
 	@Override public int getHarvestLevel     (int   aMeta) {return 0;}
-	@Override public float getBlockHardness(World aWorld, int aX, int aY, int aZ) {return Blocks.dirt.getBlockHardness(aWorld, aX, aY, aZ);}
-	@Override public float getExplosionResistance(int aMeta) {return Blocks.dirt.getExplosionResistance(null);}
+	@Override public float getBlockHardness(World aWorld, int aX, int aY, int aZ) {return Blocks.DIRT.getBlockHardness(aWorld, aX, aY, aZ);}
+	@Override public float getExplosionResistance(int aMeta) {return Blocks.DIRT.getExplosionResistance(null);}
 }

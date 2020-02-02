@@ -93,7 +93,7 @@ public class BlockBaseLilyPad extends BlockBaseMeta implements IPlantable, IRend
 		if (!aWorld.canMineBlock(aPlayer, aX, aY, aZ) || !aPlayer.canPlayerEdit(aX, aY, aZ, tPos.sideHit, aStack)) return aStack;
 		if (aWorld.getBlock(aX, aY, aZ).getMaterial() == Material.water && aWorld.getBlockMetadata(aX, aY, aZ) == 0 && aWorld.isAirBlock(aX, aY+1, aZ)) {
 			aWorld.setBlock(aX, aY+1, aZ, this, ST.meta_(aStack), 3);
-			if (!UT.Entities.hasInfiniteItems(aPlayer)) {aStack.stackSize--;}
+			if (!UT.Entities.hasInfiniteItems(aPlayer)) {aStack.getCount()--;}
 		}
 		return aStack;
 	}

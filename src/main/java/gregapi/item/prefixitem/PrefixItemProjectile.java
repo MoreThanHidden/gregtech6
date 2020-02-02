@@ -43,7 +43,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
@@ -105,8 +105,8 @@ public class PrefixItemProjectile extends PrefixItem implements IItemProjectile 
 				UT.Enchantments.applyBullshitA((EntityLivingBase)aEntity, aPlayer, aStack);
 				UT.Enchantments.applyBullshitB(aPlayer, aEntity, aStack);
 			}
-			if (!UT.Entities.hasInfiniteItems(aPlayer)) aStack.stackSize--;
-			if (aStack.stackSize <= 0) aPlayer.destroyCurrentEquippedItem();
+			if (!UT.Entities.hasInfiniteItems(aPlayer)) aStack.getCount()--;
+			if (aStack.getCount() <= 0) aPlayer.destroyCurrentEquippedItem();
 			return F;
 		}
 		return F;
@@ -117,7 +117,7 @@ public class PrefixItemProjectile extends PrefixItem implements IItemProjectile 
 		super.updateItemStack(aStack);
 		short aMetaData = ST.meta_(aStack);
 		if (UT.Code.exists(aMetaData, mMaterialList) && !mMaterialList[aMetaData].mEnchantmentTools.isEmpty()) {
-			NBTTagCompound tNBT = UT.NBT.getNBT(aStack);
+			CompoundNBT tNBT = UT.NBT.getNBT(aStack);
 			if (!tNBT.getBoolean("gt.u")) {
 				tNBT.setBoolean("gt.u", T);
 				UT.NBT.set(aStack, tNBT);
@@ -142,7 +142,7 @@ public class PrefixItemProjectile extends PrefixItem implements IItemProjectile 
 			tProjectile.setProjectileStack(ST.amount(1, aStack));
 			tProjectile.canBePickedUp = 1;
 			aWorld.spawnEntityInWorld(tProjectile);
-			if (aStack.stackSize < 100) aStack.stackSize--;
+			if (aStack.getCount() < 100) aStack.getCount()--;
 			return aStack;
 		}
 		

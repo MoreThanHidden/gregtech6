@@ -220,7 +220,7 @@ public class GT_API_Proxy_Client extends GT_API_Proxy {
 		Item aItem = ST.item(aEvent.itemStack);
 
 		if (aEvent.itemStack.getTagCompound() == null) {
-			if (aBlock == Blocks.dirt && aBlockMeta == 1) {
+			if (aBlock == Blocks.DIRT && aBlockMeta == 1) {
 				aEvent.toolTip.set(0, "Coarse Dirt");
 			}
 			if (MD.RC.mLoaded && "Railcraft:part.plate".equalsIgnoreCase(aRegName)) {

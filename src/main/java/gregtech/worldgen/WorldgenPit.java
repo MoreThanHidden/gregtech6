@@ -64,9 +64,9 @@ public class WorldgenPit extends WorldgenObject {
 				tBlock = aWorld.getBlock(tX+i, tY, tZ+j);
 				if (tBlock == mBlock && mMeta == aWorld.getBlockMetadata(tX+i, tY, tZ+j)) {tGenerated++; continue;}
 				if (!tBlock.isOpaqueCube()) {if (tGenerated > 0) break; continue;}
-				if (tBlock == Blocks.dirt) {
+				if (tBlock == Blocks.DIRT) {
 					if (tGenerated <= 0 && (tLastBlock.getMaterial() == Material.wood || tLastBlock.getMaterial() == Material.gourd)) continue;
-				} else if (tBlock != Blocks.sand && tBlock != Blocks.clay) {
+				} else if (tBlock != Blocks.sand && tBlock != Blocks.CLAY) {
 					if (tGenerated > 0) {
 						if (tBlock.getMaterial() != Material.rock && tBlock != Blocks.gravel) break;
 					} else {

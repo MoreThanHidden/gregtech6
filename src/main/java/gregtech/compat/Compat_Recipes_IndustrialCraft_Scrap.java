@@ -50,8 +50,8 @@ public class Compat_Recipes_IndustrialCraft_Scrap extends CompatMods {
 			COMPAT_IC2.scrapbox(2.00F, ST.make(Items.wooden_pickaxe, 1, 0));
 			COMPAT_IC2.scrapbox(2.00F, ST.make(Items.sign, 1, 0));
 			COMPAT_IC2.scrapbox(9.50F, ST.make(Items.stick, 1, 0));
-			COMPAT_IC2.scrapbox(5.00F, ST.make(Blocks.dirt, 1, 0));
-			COMPAT_IC2.scrapbox(3.00F, ST.make(Blocks.grass, 1, 0));
+			COMPAT_IC2.scrapbox(5.00F, ST.make(Blocks.DIRT, 1, 0));
+			COMPAT_IC2.scrapbox(3.00F, ST.make(Blocks.GRASS, 1, 0));
 			COMPAT_IC2.scrapbox(3.00F, ST.make(Blocks.gravel, 1, 0));
 			COMPAT_IC2.scrapbox(0.50F, ST.make(Blocks.pumpkin, 1, 0));
 			COMPAT_IC2.scrapbox(1.00F, ST.make(Blocks.soul_sand, 1, 0));
