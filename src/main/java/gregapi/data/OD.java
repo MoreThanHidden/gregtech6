@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2019 Gregorius Techneticies
+ * Copyright (c) 2020 GregTech-6 Team
  *
  * This file is part of GregTech.
  *
@@ -20,6 +20,7 @@
 package gregapi.data;
 
 import gregapi.oredict.OreDictManager;
+import net.minecraft.item.ItemStack;
 
 /**
  * @author Gregorius Techneticies
@@ -74,6 +75,7 @@ public enum OD {
 	, container1000glue
 	, container250glue
 	, enderChest
+	, soulsand
 	, pestleAndMortar
 	, materialPressedwax
 	, materialWaxcomb
@@ -83,11 +85,13 @@ public enum OD {
 	, plankAnyWood
 	, plankWood
 	, paperEmpty
+	, paperMap
 	, stairWood
 	, slabWood
 	, beamWood
 	, logWood
 	, logRubber
+	, woodLog
 	, flower
 	, bamboo
 	, record
@@ -144,9 +148,17 @@ public enum OD {
 	, grainBait
 	, veggieBait
 	, fishtrapBait
+	, bookEmpty
+	, bookWritten
+	, bookWritable
+	, bookEnchanted
+	, listAllmeatsubstitute
 	;
 	
 	OD() {
 		OreDictManager.INSTANCE.addKnownName(name());
 	}
+	
+	public boolean is (ItemStack aStack) {return OreDictManager.isItemStackInstanceOf (aStack, name());}
+	public boolean is_(ItemStack aStack) {return OreDictManager.isItemStackInstanceOf_(aStack, name());}
 }

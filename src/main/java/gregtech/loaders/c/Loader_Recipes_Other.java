@@ -50,6 +50,8 @@ public class Loader_Recipes_Other implements Runnable {
 	@Override public void run() {
 		dust.addListener(new IOreDictListenerEvent() {@Override public void onOreRegistration(OreDictRegistrationContainer aEvent) {if (aEvent.mMaterial.mReRegistrations.contains(ANY.Wax) && !ST.isGT_(aEvent.mStack)) CR.remove(aEvent.mStack);}});
 		
+		RM.Compressor.addRecipe1(T, 16, 16, OM.dust(MT.SoulSand, U), ST.make(Blocks.soul_sand, 1, 0));
+		
 		for (OreDictMaterial tWax : ANY.Wax.mToThis) {
 		RM.Compressor.addRecipe1(T, 16, 16, OM.dust(tWax, U ), plate.mat(tWax, 1));
 		RM.Compressor.addRecipe1(T, 16, 16, OM.dust(tWax, U4), foil .mat(tWax, 1));
@@ -142,7 +144,7 @@ public class Loader_Recipes_Other implements Runnable {
 		addListener(rockGt.dat(MT.Netherrack), new IOreDictListenerEvent() {@Override public void onOreRegistration(OreDictRegistrationContainer aEvent) {RM.add_smelting(aEvent.mStack, rockGt.mat(MT.NetherBrick, 1));}});
 		
 		
-		addListener(new Object[] {OD.itemRubber, "ingotIron", "oreCoal", "oreIron", "oreHematite", "oreMagnetite", "oreBogIron", "oreSiderite", "oreTaconite", "oreGold", "oreRedstone", "oreLapis", "oreDiamond", "oreEmerald", "oreBauxite", "oreAluminium", "oreTitanium", "oreTungsten", "oreSulfur", "oreSaltpeter", "oreNiter", "oreNitre"}, new IOreDictListenerEvent() {@Override public void onOreRegistration(OreDictRegistrationContainer aEvent) {
+		addListener(new Object[] {OD.itemRubber, "gemHexorium", "ingotIron", "oreCoal", "oreIron", "oreHematite", "oreMagnetite", "oreBogIron", "oreSiderite", "oreTaconite", "oreGold", "oreRedstone", "oreLapis", "oreDiamond", "oreEmerald", "oreBauxite", "oreAluminium", "oreTitanium", "oreTungsten", "oreSulfur", "oreSaltpeter", "oreNiter", "oreNitre"}, new IOreDictListenerEvent() {@Override public void onOreRegistration(OreDictRegistrationContainer aEvent) {
 			RM.rem_smelting(aEvent.mStack);
 		}});
 		addListener(OD.itemResin, new IOreDictListenerEvent() {@Override public void onOreRegistration(OreDictRegistrationContainer aEvent) {
@@ -363,7 +365,10 @@ public class Loader_Recipes_Other implements Runnable {
 		CR.remove(x, x, x, x, ST.make(Items.coal, 1, 1), x, x, x, x);
 		CR.remove(y = dust.mat(MT.KNO3, 1), y, x, dust.mat(MT.Charcoal, 1));
 		CR.remove(y, x, y, y, ST.make(Items.coal, 1, 1), y, y, y, y);
+		CR.remove(y, y, y, y, ST.make(Items.coal, 1, 1), y, y, y, y);
 		CR.remove(y, y, x, dust.mat(MT.Coal, 1));
+		CR.remove(ST.make(Items.quartz, 1, 0), ST.make(Items.coal, 1, 0));
+		CR.remove(ST.make(Items.quartz, 1, 0), ST.make(Items.coal, 1, 1));
 		CR.remove(NI, x = ST.make(Items.coal, 1, 0), NI, x, y = ST.make(Items.iron_ingot, 1, 0), x, NI, x, NI);
 		CR.remove(NI, NI, NI, NI, y, NI, NI, y, NI);
 		CR.remove(NI, NI, NI, NI, y = ingot.mat(MT.Al, 1), NI, NI, y, NI);
@@ -555,11 +560,11 @@ public class Loader_Recipes_Other implements Runnable {
 		RM.Mixer            .addRecipeX(T, 16,   16, ST.array(OM.dust(MT.Redstone       ), OM.dust(MT.Blizz), OM.dust(MT.Snow,  U4), OM.dust(MT.Niter)), OM.dust(MT.Cryotheum, 2*U));
 		RM.Mixer            .addRecipeX(T, 16,   64, ST.array(OM.dust(MT.Redstone   ,U*4), OM.dust(MT.Blizz, U*4), ST.make(Blocks.SNOW, 1, W), OM.dust(MT.Niter, U*4)), OM.dust(MT.Cryotheum, 8*U));
 		RM.Mixer            .addRecipeX(T, 16,   64, ST.array(OM.dust(MT.Redstone   ,U*4), OM.dust(MT.Blizz, U*4), OM.dust(MT.Snow), OM.dust(MT.Niter, U*4)), OM.dust(MT.Cryotheum, 8*U));
-		RM.Mixer            .addRecipeX(T, 16,   32, ST.array(OM.dust(MT.Fe             ), OM.dust(MT.LiveRoot), OM.dust(MT.Au,  U9)), OM.dust(MT.IronWood, U*2));
-		RM.Mixer            .addRecipe2(T, 16,   32, OM.dust(MT.GildedIron          ), OM.dust(MT.LiveRoot  ), OM.dust(MT.IronWood,   U*2));
-		RM.Mixer            .addRecipe2(T, 16,   64, OM.dust(MT.Bi                  ), OM.dust(MT.Brass, 4*U  ), OM.dust(MT.BismuthBronze, 5*U2));
-		RM.Mixer            .addRecipe2(T, 16,   32, OM.dust(MT.Bi              , U4), OM.dust(MT.Brass,   U  ), OM.dust(MT.BismuthBronze, 5*U8));
-		RM.Mixer            .addRecipe2(T, 16,   16, OM.dust(MT.Bi              , U9), OM.dust(MT.Brass, 4* U9), OM.dust(MT.BismuthBronze, 5*U18));
+		if (FL.Pyrotheum.exists() && FL.Cryotheum.exists() && FL.Petrotheum.exists() && FL.Aerotheum.exists() && FL.Mana_TE.exists())
+		RM.Mixer            .addRecipe0(T, 16,   16, FL.array(FL.Pyrotheum.make(1), FL.Cryotheum.make(1), FL.Petrotheum.make(1), FL.Aerotheum.make(1)), FL.array(FL.Mana_TE.make(1)), ZL_IS);
+		
+		RM.Mixer            .addRecipeX(T, 16,   32, ST.array(OM.dust(MT.Fe), OM.dust(MT.LiveRoot), OM.dust(MT.Au,  U9)), OM.dust(MT.IronWood, U*2));
+		RM.Mixer            .addRecipe2(T, 16,   32, OM.dust(MT.GildedIron ), OM.dust(MT.LiveRoot), OM.dust(MT.IronWood, U*2));
 		
 		// Dyes
 		for (FluidStack[] tDyes : new FluidStack[][] {DYE_FLUIDS_WATER, DYE_FLUIDS_FLOWER, DYE_FLUIDS_CHEMICAL}) {
@@ -719,10 +724,10 @@ public class Loader_Recipes_Other implements Runnable {
 		RM.CokeOven     .addRecipe1(T,  0,  3600, chunkGt                   .mat(MT.Coal    , 4), NF, MT.Creosote   .liquid(   U2, F), ingot     .mat(MT.CoalCoke, 1));
 		RM.CokeOven     .addRecipe1(T,  0,  3600, ingot                     .mat(MT.Coal    , 1), NF, MT.Creosote   .liquid(   U2, F), ingot     .mat(MT.CoalCoke, 1));
 		RM.CokeOven     .addRecipe1(T,  0,  3600, gem                       .mat(MT.Coal    , 1), NF, MT.Creosote   .liquid(   U2, F), gem       .mat(MT.CoalCoke, 1));
-		RM.CokeOven     .addRecipe1(T,  0,  3600, crushedPurified           .mat(MT.Coal    , 1), NF, MT.Creosote   .liquid(   U2, F), chunkGt   .mat(MT.CoalCoke, 5));
-		RM.CokeOven     .addRecipe1(T,  0,  3600, crushedPurifiedTiny       .mat(MT.Coal    , 9), NF, MT.Creosote   .liquid(   U2, F), chunkGt   .mat(MT.CoalCoke, 5));
-		RM.CokeOven     .addRecipe1(T,  0,  3600, crushedCentrifuged        .mat(MT.Coal    , 1), NF, MT.Creosote   .liquid(   U2, F), chunkGt   .mat(MT.CoalCoke, 6));
-		RM.CokeOven     .addRecipe1(T,  0,  3600, crushedCentrifugedTiny    .mat(MT.Coal    , 9), NF, MT.Creosote   .liquid(   U2, F), chunkGt   .mat(MT.CoalCoke, 6));
+		RM.CokeOven     .addRecipe1(T,  0,  3600, crushedPurified           .mat(MT.Coal    , 1), NF, MT.Creosote   .liquid(   U2, F), chunkGt   .mat(MT.CoalCoke, 1), chunkGt.mat(MT.CoalCoke, 1), chunkGt.mat(MT.CoalCoke, 1), chunkGt.mat(MT.CoalCoke, 1), chunkGt.mat(MT.CoalCoke, 1));
+		RM.CokeOven     .addRecipe1(T,  0,  3600, crushedPurifiedTiny       .mat(MT.Coal    , 9), NF, MT.Creosote   .liquid(   U2, F), chunkGt   .mat(MT.CoalCoke, 1), chunkGt.mat(MT.CoalCoke, 1), chunkGt.mat(MT.CoalCoke, 1), chunkGt.mat(MT.CoalCoke, 1), chunkGt.mat(MT.CoalCoke, 1));
+		RM.CokeOven     .addRecipe1(T,  0,  3600, crushedCentrifuged        .mat(MT.Coal    , 1), NF, MT.Creosote   .liquid(   U2, F), chunkGt   .mat(MT.CoalCoke, 1), chunkGt.mat(MT.CoalCoke, 1), chunkGt.mat(MT.CoalCoke, 1), chunkGt.mat(MT.CoalCoke, 1), chunkGt.mat(MT.CoalCoke, 1), chunkGt.mat(MT.CoalCoke, 1));
+		RM.CokeOven     .addRecipe1(T,  0,  3600, crushedCentrifugedTiny    .mat(MT.Coal    , 9), NF, MT.Creosote   .liquid(   U2, F), chunkGt   .mat(MT.CoalCoke, 1), chunkGt.mat(MT.CoalCoke, 1), chunkGt.mat(MT.CoalCoke, 1), chunkGt.mat(MT.CoalCoke, 1), chunkGt.mat(MT.CoalCoke, 1), chunkGt.mat(MT.CoalCoke, 1));
 		RM.CokeOven     .addRecipe1(T,  0, 32400, blockGem                  .mat(MT.Coal    , 1), NF, MT.Creosote   .liquid( 9*U2, F), blockGem  .mat(MT.CoalCoke, 1));
 		RM.CokeOven     .addRecipe1(T,  0, 32400, blockIngot                .mat(MT.Coal    , 1), NF, MT.Creosote   .liquid( 9*U2, F), blockIngot.mat(MT.CoalCoke, 1));
 		
@@ -730,10 +735,10 @@ public class Loader_Recipes_Other implements Runnable {
 		RM.CokeOven     .addRecipe1(T,  0,  3600, chunkGt                   .mat(MT.Lignite , 4), NF, MT.Creosote   .liquid( 3*U4, F), ingot     .mat(MT.LigniteCoke, 1));
 		RM.CokeOven     .addRecipe1(T,  0,  3600, ingot                     .mat(MT.Lignite , 1), NF, MT.Creosote   .liquid( 3*U4, F), ingot     .mat(MT.LigniteCoke, 1));
 		RM.CokeOven     .addRecipe1(T,  0,  3600, gem                       .mat(MT.Lignite , 1), NF, MT.Creosote   .liquid( 3*U4, F), gem       .mat(MT.LigniteCoke, 1));
-		RM.CokeOven     .addRecipe1(T,  0,  3600, crushedPurified           .mat(MT.Lignite , 1), NF, MT.Creosote   .liquid( 3*U4, F), chunkGt   .mat(MT.LigniteCoke, 5));
-		RM.CokeOven     .addRecipe1(T,  0,  3600, crushedPurifiedTiny       .mat(MT.Lignite , 9), NF, MT.Creosote   .liquid( 3*U4, F), chunkGt   .mat(MT.LigniteCoke, 5));
-		RM.CokeOven     .addRecipe1(T,  0,  3600, crushedCentrifuged        .mat(MT.Lignite , 1), NF, MT.Creosote   .liquid( 3*U4, F), chunkGt   .mat(MT.LigniteCoke, 6));
-		RM.CokeOven     .addRecipe1(T,  0,  3600, crushedCentrifugedTiny    .mat(MT.Lignite , 9), NF, MT.Creosote   .liquid( 3*U4, F), chunkGt   .mat(MT.LigniteCoke, 6));
+		RM.CokeOven     .addRecipe1(T,  0,  3600, crushedPurified           .mat(MT.Lignite , 1), NF, MT.Creosote   .liquid( 3*U4, F), chunkGt   .mat(MT.LigniteCoke, 1), chunkGt.mat(MT.LigniteCoke, 1), chunkGt.mat(MT.LigniteCoke, 1), chunkGt.mat(MT.LigniteCoke, 1), chunkGt.mat(MT.LigniteCoke, 1));
+		RM.CokeOven     .addRecipe1(T,  0,  3600, crushedPurifiedTiny       .mat(MT.Lignite , 9), NF, MT.Creosote   .liquid( 3*U4, F), chunkGt   .mat(MT.LigniteCoke, 1), chunkGt.mat(MT.LigniteCoke, 1), chunkGt.mat(MT.LigniteCoke, 1), chunkGt.mat(MT.LigniteCoke, 1), chunkGt.mat(MT.LigniteCoke, 1));
+		RM.CokeOven     .addRecipe1(T,  0,  3600, crushedCentrifuged        .mat(MT.Lignite , 1), NF, MT.Creosote   .liquid( 3*U4, F), chunkGt   .mat(MT.LigniteCoke, 1), chunkGt.mat(MT.LigniteCoke, 1), chunkGt.mat(MT.LigniteCoke, 1), chunkGt.mat(MT.LigniteCoke, 1), chunkGt.mat(MT.LigniteCoke, 1), chunkGt.mat(MT.LigniteCoke, 1));
+		RM.CokeOven     .addRecipe1(T,  0,  3600, crushedCentrifugedTiny    .mat(MT.Lignite , 9), NF, MT.Creosote   .liquid( 3*U4, F), chunkGt   .mat(MT.LigniteCoke, 1), chunkGt.mat(MT.LigniteCoke, 1), chunkGt.mat(MT.LigniteCoke, 1), chunkGt.mat(MT.LigniteCoke, 1), chunkGt.mat(MT.LigniteCoke, 1), chunkGt.mat(MT.LigniteCoke, 1));
 		RM.CokeOven     .addRecipe1(T,  0, 32400, blockGem                  .mat(MT.Lignite , 1), NF, MT.Creosote   .liquid(27*U4, F), blockGem  .mat(MT.LigniteCoke, 1));
 		RM.CokeOven     .addRecipe1(T,  0, 32400, blockIngot                .mat(MT.Lignite , 1), NF, MT.Creosote   .liquid(27*U4, F), blockIngot.mat(MT.LigniteCoke, 1));
 		
@@ -818,6 +823,28 @@ public class Loader_Recipes_Other implements Runnable {
 		
 		RM.Nanofab.addRecipe2(T, 16,3072, ST.tag(17), dustSmall.mat(MT.C,48), pipeHuge.mat(MT.C, 1));
 		RM.Nanofab.addRecipe2(T, 16,3072, ST.tag(17), dust     .mat(MT.C,12), pipeHuge.mat(MT.C, 1));
+		
+		
+		if (FL.Ender_TE.exists()) {
+		RM.Massfab   .addRecipe2(T,  16, 144    , ST.tag(1), OP.dustDiv72.mat(MT.AncientDebris, 1), NF, FL.Ender_TE.make(250    ), ZL_IS);
+		RM.Massfab   .addRecipe2(T,  16, 144*  8, ST.tag(1), OP.dustTiny .mat(MT.AncientDebris, 1), NF, FL.Ender_TE.make(250*  8), ZL_IS);
+		RM.Massfab   .addRecipe2(T,  16, 144* 18, ST.tag(1), OP.dustSmall.mat(MT.AncientDebris, 1), NF, FL.Ender_TE.make(250* 18), ZL_IS);
+		RM.Massfab   .addRecipe2(T,  16, 144* 72, ST.tag(1), OP.dust     .mat(MT.AncientDebris, 1), NF, FL.Ender_TE.make(250* 72), ZL_IS);
+		RM.Massfab   .addRecipe2(T,  16, 144* 72, ST.tag(1), OP.ingot    .mat(MT.AncientDebris, 1), NF, FL.Ender_TE.make(250* 72), ZL_IS);
+		RM.Massfab   .addRecipe2(T,  16, 144*648, ST.tag(1), OP.blockDust.mat(MT.AncientDebris, 1), NF, FL.Ender_TE.make(250*648), ZL_IS);
+		RM.Replicator.addRecipe1(T,  16, 144    , ST.tag(0), FL.Ender_TE.make(250), NF, OP.gem.mat(MT.EnderPearl, 1));
+		RM.Lightning .addRecipe1(T, 512, 512, OP.blockSolid.mat(MT.Netherite, 1), FL.array(FL.Ender_TE.make(1000), FL.Oil_Soulsand.make(5000)), ZL_FS, OP.gem.mat(MT.NetherStar, 1));
+		}
+		RM.Massfab   .addRecipe2(T,  16, 144    , ST.tag(0), OP.dustDiv72.mat(MT.AncientDebris, 1), NF, FL.Ender.make(L    ), ZL_IS);
+		RM.Massfab   .addRecipe2(T,  16, 144*  8, ST.tag(0), OP.dustTiny .mat(MT.AncientDebris, 1), NF, FL.Ender.make(L*  8), ZL_IS);
+		RM.Massfab   .addRecipe2(T,  16, 144* 18, ST.tag(0), OP.dustSmall.mat(MT.AncientDebris, 1), NF, FL.Ender.make(L* 18), ZL_IS);
+		RM.Massfab   .addRecipe2(T,  16, 144* 72, ST.tag(0), OP.dust     .mat(MT.AncientDebris, 1), NF, FL.Ender.make(L* 72), ZL_IS);
+		RM.Massfab   .addRecipe2(T,  16, 144* 72, ST.tag(0), OP.ingot    .mat(MT.AncientDebris, 1), NF, FL.Ender.make(L* 72), ZL_IS);
+		RM.Massfab   .addRecipe2(T,  16, 144*648, ST.tag(0), OP.blockDust.mat(MT.AncientDebris, 1), NF, FL.Ender.make(L*648), ZL_IS);
+		RM.Replicator.addRecipe1(T,  16, 144    , ST.tag(0), FL.Ender.make(L), NF, OP.gem.mat(MT.EnderPearl, 1));
+		RM.Lightning .addRecipe1(T, 512, 512, OP.blockSolid.mat(MT.Netherite, 1), FL.array(FL.Ender.make(L*4), FL.Oil_Soulsand.make(5000)), ZL_FS, OP.gem.mat(MT.NetherStar, 1));
+		
+		
 		
 		
 		RM.Fusion.addRecipe1(F, -8192,  730, ST.tag(1), FL.array(MT.D     .gas   (U*2, T)                        ), FL.array(MT.He_3  .gas   (  U2, F), MT.T     .gas   (  U2, F)                                                      ), ZL_IS                ).setSpecialNumber(  730L*8192L*16L);

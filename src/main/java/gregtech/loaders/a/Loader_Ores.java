@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2019 Gregorius Techneticies
+ * Copyright (c) 2020 GregTech-6 Team
  *
  * This file is part of GregTech.
  *
@@ -208,6 +208,9 @@ public class Loader_Ores implements Runnable {
 		rockset(MD.CHSL, "marble"                       , 0, "chisel.marble"        , OP.oreMarble              , MT.Marble);
 		rockset(MD.CHSL, "limestone"                    , 0, "chisel.limestone"     , OP.oreLimestone           , MT.Limestone);
 		
+		rockset(MD.NePl, "Blackstone"                   , 0, "nepl.blackstone"      , OP.oreBlackstone          , MT.Blackstone);
+		rockset(MD.NePl, "Basalt"                       , 0, "nepl.basalt"          , OP.oreBasalt              , MT.Basalt);
+		
 		rockset(MD.EtFu, "stone"                        , 1, "etfu.granite"         , OP.oreVanillagranite      , MT.Granite);
 		rockset(MD.EtFu, "stone"                        , 3, "etfu.diorite"         , OP.oreDiorite             , MT.Diorite);
 		rockset(MD.EtFu, "stone"                        , 5, "etfu.andesite"        , OP.oreAndesite            , MT.Andesite);
@@ -355,6 +358,8 @@ public class Loader_Ores implements Runnable {
 	}
 	
 	public static boolean rockset(ModData aMod, Block aRock, int aMetaA, int aMetaB, Block aCobble, int aMeta, String aName, OreDictPrefix aPrefix, OreDictMaterial aDrops, float aBaseHardness, float aBaseResistance, int aHarvestLevelMinimum, boolean aGravity, boolean aEnderDragonProof, boolean aStoneOverrideable) {
+		boolean tHidden = F;
+		
 		if (aMod.mLoaded) {
 			if (aRock == NB || aRock == null) {
 				if (D1) throw new IllegalArgumentException("The Stone of the Mod '" + aMod.mID + "' with the Category '" + aName + "' is missing despite the Mod being loaded.");
@@ -364,6 +369,7 @@ public class Loader_Ores implements Runnable {
 				aMeta = aMetaA = aMetaB = aHarvestLevelMinimum = 0;
 				aBaseHardness = aBaseResistance = 1;
 				aGravity = aEnderDragonProof = F;
+				tHidden = T;
 			} else {
 				if (aCobble == NB || aCobble == null) {aCobble = aRock; aMeta = aMetaA;}
 			}
@@ -374,12 +380,13 @@ public class Loader_Ores implements Runnable {
 			aMeta = aMetaA = aMetaB = aHarvestLevelMinimum = 0;
 			aBaseHardness = aBaseResistance = 1;
 			aGravity = aEnderDragonProof = F;
+			tHidden = T;
 		}
 		
 		PrefixBlock
-		tOre1 = new PrefixBlock_(MD.GT, "gt.meta.ore.normal."+aName, aPrefix        , aMod.mLoaded ? null                       : ((PrefixBlock)BlocksGT.ore        ).mDrops, BlockTextureCopied.get(aRock  , aMetaA==W?0:aMetaA), Material.rock, Block.soundTypeStone, TOOL_pickaxe, aBaseHardness  , aBaseResistance  ,  0, aHarvestLevelMinimum, aGravity, aEnderDragonProof, OreDictMaterial.MATERIAL_ARRAY),
-		tOre2 = new PrefixBlock_(MD.GT, "gt.meta.ore.broken."+aName, aPrefix        , aMod.mLoaded ? null                       : ((PrefixBlock)BlocksGT.oreBroken  ).mDrops, BlockTextureCopied.get(aCobble, aMeta ==W?0:aMeta ), Material.rock, Block.soundTypeStone, TOOL_pickaxe, aBaseHardness/2, aBaseResistance/2, -1, aHarvestLevelMinimum, T       , aEnderDragonProof, OreDictMaterial.MATERIAL_ARRAY),
-		tOre3 = new PrefixBlock_(MD.GT, "gt.meta.ore.small." +aName, OP.oreSmall    , aMod.mLoaded ? new Drops_SmallOre(aDrops) : ((PrefixBlock)BlocksGT.oreSmall   ).mDrops, BlockTextureCopied.get(aRock  , aMetaA==W?0:aMetaA), Material.rock, Block.soundTypeStone, TOOL_pickaxe, aBaseHardness  , aBaseResistance  , -1, aHarvestLevelMinimum, aGravity, aEnderDragonProof, OreDictMaterial.MATERIAL_ARRAY);
+		tOre1 = new PrefixBlock_(MD.GT, "gt.meta.ore.normal."+aName, aPrefix        , aMod.mLoaded ? null                       : ((PrefixBlock)BlocksGT.ore        ).mDrops, BlockTextureCopied.get(aRock  , aMetaA==W?0:aMetaA), Material.rock, Block.soundTypeStone, TOOL_pickaxe, aBaseHardness  , aBaseResistance  ,  0, aHarvestLevelMinimum, aGravity, aEnderDragonProof, OreDictMaterial.MATERIAL_ARRAY).setHidden(tHidden),
+		tOre2 = new PrefixBlock_(MD.GT, "gt.meta.ore.broken."+aName, aPrefix        , aMod.mLoaded ? null                       : ((PrefixBlock)BlocksGT.oreBroken  ).mDrops, BlockTextureCopied.get(aCobble, aMeta ==W?0:aMeta ), Material.rock, Block.soundTypeStone, TOOL_pickaxe, aBaseHardness/2, aBaseResistance/2, -1, aHarvestLevelMinimum, T       , aEnderDragonProof, OreDictMaterial.MATERIAL_ARRAY).setHidden(tHidden),
+		tOre3 = new PrefixBlock_(MD.GT, "gt.meta.ore.small." +aName, OP.oreSmall    , aMod.mLoaded ? new Drops_SmallOre(aDrops) : ((PrefixBlock)BlocksGT.oreSmall   ).mDrops, BlockTextureCopied.get(aRock  , aMetaA==W?0:aMetaA), Material.rock, Block.soundTypeStone, TOOL_pickaxe, aBaseHardness  , aBaseResistance  , -1, aHarvestLevelMinimum, aGravity, aEnderDragonProof, OreDictMaterial.MATERIAL_ARRAY).setHidden(tHidden);
 		
 		if (aMod.mLoaded) {
 			if (aStoneOverrideable) {

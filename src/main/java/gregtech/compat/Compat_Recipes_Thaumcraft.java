@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2019 Gregorius Techneticies
+ * Copyright (c) 2020 GregTech-6 Team
  *
  * This file is part of GregTech.
  *
@@ -65,7 +65,7 @@ public class Compat_Recipes_Thaumcraft extends CompatMods {
 		CR.delate(IL.TC_Phial.get(1));
 		CR.shaped(IL.TC_Phial.get(8), CR.DEF_NCC, " C ", "G G", " G ", 'C', "itemClay", 'G', ST.make(Blocks.glass, 1, W));
 		
-		RM.Bath.addRecipe1(T, 0, 128, ST.make(Items.string, 1, W), MT.Tallow.liquid(U*2, T), NF, ST.make(MD.TC, "blockCandle", 3, 0));
+		RM.Bath.addRecipe1(T, 0, 128, ST.make(Items.string, 1, W), MT.Tallow.liquid(U*2, T), NF, ST.make(MD.TC, "blockCandle", 1, 0), ST.make(MD.TC, "blockCandle", 1, 0), ST.make(MD.TC, "blockCandle", 1, 0));
 		
 		RM.Mixer.addRecipeX(T, 16, 16, ST.array(OM.dust(MT.Sugar)               , IL.TC_Nugget_Chicken  .wild(1), IL.TC_Nugget_Fish.wild(1), IL.TC_Nugget_Beef.wild(1)), IL.TC_Triple_Meat_Treat.get(1));
 		RM.Mixer.addRecipeX(T, 16, 16, ST.array(OM.dust(MT.Sugar)               , IL.TC_Nugget_Chicken  .wild(1), IL.TC_Nugget_Fish.wild(1), IL.TC_Nugget_Pork.wild(1)), IL.TC_Triple_Meat_Treat.get(1));
@@ -76,7 +76,7 @@ public class Compat_Recipes_Thaumcraft extends CompatMods {
 		RM.Mixer.addRecipeX(T, 16, 16, ST.array(OP.gemChipped.mat(MT.Sugar, 4)  , IL.TC_Nugget_Chicken  .wild(1), IL.TC_Nugget_Beef.wild(1), IL.TC_Nugget_Pork.wild(1)), IL.TC_Triple_Meat_Treat.get(1));
 		RM.Mixer.addRecipeX(T, 16, 16, ST.array(OP.gemChipped.mat(MT.Sugar, 4)  , IL.TC_Nugget_Fish     .wild(1), IL.TC_Nugget_Beef.wild(1), IL.TC_Nugget_Pork.wild(1)), IL.TC_Triple_Meat_Treat.get(1));
 		
-		RM.compact(ST.make(Items.rotten_flesh, 9, W), 9, IL.TC_Block_Flesh.get(1));
+		RM.compact(ST.make(Items.rotten_flesh, 9, W), IL.TC_Block_Flesh.get(1));
 		RM.unpack(IL.TC_Block_Flesh.get(1), ST.make(Items.rotten_flesh, 9, 0));
 		
 		RM.compact(IL.TC_Tallow.get(9), 9, IL.TC_Block_Tallow.get(1));
@@ -95,6 +95,7 @@ public class Compat_Recipes_Thaumcraft extends CompatMods {
 		RM.compact(ST.make(tShard, 6, i), 6, ST.make(tCrystal, 1, i));
 		RM.unpack(ST.make(tCrystal, 1, i), ST.make(tShard, 6, i));
 		}
+		RM.Unboxinator.addRecipe1(T, 16, 16, ST.make(tCrystal, 1, 6), ST.make(tShard, 1, 0), ST.make(tShard, 1, 1), ST.make(tShard, 1, 2), ST.make(tShard, 1, 3), ST.make(tShard, 1, 4), ST.make(tShard, 1, 5));
 		
 		String tKey;
 		OreDictMaterial tMat;

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2019 Gregorius Techneticies
+ * Copyright (c) 2020 GregTech-6 Team
  *
  * This file is part of GregTech.
  *
@@ -50,7 +50,6 @@ public class LoaderWoodDictionary implements Runnable {
 		OUT.println("GT_API_POST: Initialize Wood Dictionary.");
 		
 		// Initializing the List of Decorative Planks
-		PlankData.PLANKS[ 43] = ST.make(MD.TCFM, "TaintPlank", 1, 0);
 		Block tBlock = ST.block(MD.MoCr, "MoCWoodPlank");
 		PlankData.PLANKS[ 44] = ST.make(tBlock, 1, 0);
 		PlankData.PLANKS[ 45] = ST.make(tBlock, 1, 1);
@@ -64,7 +63,7 @@ public class LoaderWoodDictionary implements Runnable {
 		PlankData.PLANKS[121] = ST.make(MD.ERE, "planks_scorched", 1, 0);
 		PlankData.PLANKS[122] = ST.make(MD.ERE, "planks_varnished", 1, 0);
 		PlankData.PLANKS[125] = IL.MaCu_Polished_Planks.get(1);
-		// No Gaps in this List, so 233 is next!
+		// No Gaps in this List, so 235 is next!
 		
 		
 		// Vanilla Trees
@@ -187,6 +186,10 @@ public class LoaderWoodDictionary implements Runnable {
 			new SaplingEntry(ST.make(MD.TC, "blockCustomPlant", 1, 1), new WoodEntry(IL.TC_Silverwood_Log.get(1), new BeamEntry(ST.make(BlocksGT.Beam3, 1, 1), new PlankEntry(IL.TC_Silverwood_Planks.get(1), ST.make(MD.TC, "blockCosmeticSlabWood", 1, 1), ST.make(MD.TC, "blockStairsSilverwood", 1, 0), MT.Silverwood, 47), 2, 1800), 2, 2000), ST.make(MD.TC, "blockMagicalLeaves", 1, 1));
 			CR.shaped(IL.TC_Greatwood_Planks .get(1), CR.DEF_NCC, "S", "S", 'S', ST.make(MD.TC, "blockCosmeticSlabWood", 1, 0));
 			CR.shaped(IL.TC_Silverwood_Planks.get(1), CR.DEF_NCC, "S", "S", 'S', ST.make(MD.TC, "blockCosmeticSlabWood", 1, 1));
+		}
+		// Taint Tree
+		if (MD.TCFM.mLoaded) {
+			new SaplingEntry(ST.make(MD.TCFM, "TaintSapling", 1, 0), new WoodEntry(ST.make(MD.TCFM, "TaintLog", 1, 0), new PlankEntry(ST.make(MD.TCFM, "TaintPlank", 1, 0), 43), 0, 0), ST.make(MD.TCFM, "TaintLeaves", 1, 0));
 		}
 		// Twilight Forest Trees
 		if (MD.TF.mLoaded) {
@@ -685,6 +688,14 @@ public class LoaderWoodDictionary implements Runnable {
 			new SaplingEntry(ST.make(MD.ERE, "saplingCypress"   , 1, W), WoodDictionary.WOODS.get(MD.ERE, "logCypress"   , W), ST.make(MD.ERE, "leavesCypress"   , 1, W));
 			new SaplingEntry(ST.make(MD.ERE, "saplingSap"       , 1, W), WoodDictionary.WOODS.get(MD.ERE, "logSap"       , W), ST.make(MD.ERE, "leavesSap"       , 1, W));
 			new SaplingEntry(ST.make(MD.ERE, "saplingMarshwood" , 1, W), WoodDictionary.WOODS.get(MD.ERE, "logMarshwood" , W), ST.make(MD.ERE, "leavesMarshwood" , 1, W));
+		}
+		// Netherite Plus Planks
+		if (MD.NePl.mLoaded) {
+			OreDictionary.registerOre(OD.plankWood.toString(), ST.make(MD.NePl, "CrimsonPlanks", 1, 0));
+			OreDictionary.registerOre(OD.plankWood.toString(), ST.make(MD.NePl, "WarpedPlanks" , 1, 0));
+			
+			new PlankEntry(ST.make(MD.NePl, "CrimsonPlanks", 1, W), 233);
+			new PlankEntry(ST.make(MD.NePl, "WarpedPlanks" , 1, W), 234);
 		}
 		// Chisel Planks
 		if (MD.CHSL.mLoaded) {

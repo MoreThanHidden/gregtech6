@@ -1,22 +1,112 @@
 This is the most recent Changelog. It also contains some of the changes inside the >>>UPCOMING<<< Versions (most of the time). This is for 1.7.10 btw.
 
 
-6.12.04: (Not released yet, happens whenever a Bugfix needs to be released, Bear is still testing GT6, while I'm working on my Game)
+6.13.08: (Not released yet, happens whenever a Bugfix needs to be released, Bear is still testing GT6, while I'm working on my Game)
 Nothing (I tend to only add finished Stuff to the Changelog).
 
 
-6.12.03: (Not released yet, happens whenever a Bugfix needs to be released, Bear is still testing GT6, while I'm working on my Game)
+6.13.07: (Not released yet, happens whenever a Bugfix needs to be released, Bear is still testing GT6, while I'm working on my Game)
 Nothing (I tend to only add finished Stuff to the Changelog).
 
 
-6.12.02: (Not released yet, happens whenever a Bugfix needs to be released, Bear is still testing GT6, while I'm working on my Game)
-[NOTE] This one automatically triggers the outdated Major Version Notification to nonupdated Users (once it is released), because ofcourse the first one or two of a Major Version tend to be buggy.
+6.13.06: (Not released yet, happens whenever a Bugfix needs to be released, Bear is still testing GT6, while I'm working on my Game)
+Nothing (I tend to only add finished Stuff to the Changelog).
+
+
+6.13.05: (Not released yet, happens whenever a Bugfix needs to be released, Bear is still testing GT6, while I'm working on my Game)
+Nothing (I tend to only add finished Stuff to the Changelog).
+
+
+6.13.04: (Not released yet, happens whenever a Bugfix needs to be released, Bear is still testing GT6, while I'm working on my Game)
+Nothing (I tend to only add finished Stuff to the Changelog).
+
+
+6.13.03: (Not released yet, happens whenever a Bugfix needs to be released, Bear is still testing GT6, while I'm playing Dwarf Fortress for the detriment of all other activities...)
+[COMPAT] CoFH-Core should now much less likely crash SinglePlayer Worlds on Startup with the FMLProxyPacket Race Condition. OvermindDL1 made an ASM® thingy to fix it so my original brutal way isn't needed anymore.
+[IMPROVED] The Extender Manual now has a few more Lines to explain what Extenders are actually doing. I also added a Tooltip to Two-Faced Energy Converters (such as the Peltier Cooler) to remind people that Universal Extenders do exist and can be used to literally cut Corners, when there is no "Thermal Conductor Wires" or similar available. (Someone on my IRC got false Information while I was afk and has left before I could reply, and I hope they see this in the Changelog)
+[ADDED] Tapes can now be put in Shelves. Remote Activators can also be put in Shelves now, but are hidden as a Book like most things you might not want people to notice, such as Levers or Keys.
+[ADDED] The Shelf in Workshops in GT6 Dungeons now contains two Rolls of Duct Tape, which should always be enough to haul both of the Stone Mass Storages out and back to wherever your Base is.
+
+
+6.13.02:
+[COMPAT] HBM Nuclear Tech has some more Compatiblity Data attached to it. Mainly Shelf Data. The Alloys it has are a little bit too weird.
+[COMPAT] HEXCrafts Hexorium Ore is generated in all possible ways when installed, with RGB ones closer to Surface and Black and White ones closer to Bedrock. Also some Hexorium related Recipes added. Its Energized Monoliths can also be found as Decoration in GT Dungeons.
+[FIXED] A weird Interaction with Robot Arms and Extenders that resulted in Extenders sometimes choosing the secondary Facing as destination for Items, even though the Items did not come from the promary Facing, including targetting things like GT6 Red Alloy Wires that dont even have Slots to put shit into, resulting in a Crash of the Block that has the Robot Arm.
+[FIXED] Tooltips for Mob Spawn Proofing will now show it whenever Optifine breaks the mechanic in Singleplayer, because clearly removing Metadata support from World functions is a good Idea and "totally fixable" on my end...
+[FIXED] GT6 Redstone Wiring sometimes checked multiple/infinite times per tick for Vanilla signals. This was leading to Game Freezes with Thermal Expansion.
+[FIXED] Some Biomes from Enhanced Biomes were not counted as River for my Worldgen.
+[FIXED] Skeletons were not shooting the right GT Arrows since a long time. Now I made an actual List of Arrows to shoot, instead of grabbing any of the existing Arrows. This also means no Radiation Arrow shooting Skeletons anymore.
+[FIXED] Made Config Files always migrate to Lowercase File Names so random Garbage with Windows and older Config Files wont happen again.
+[CHANGED] The Capsule and Cell Extruder Recipes were not really well coded, so I fixed them up. Should make it easier to work with for the GT6U Team too.
+[CHANGED] Moderated Reactor Rods now lose durability twice as fast compared to what it was before.
+[CHANGED] Molten Midasium is now able to turn Lead into Gold at a ratio of 1 Midasium + 4 Lead = 4 Gold. This is better than using a Generifier on Midasium to directly make it into Gold 1:1.
+[ADDED] There is now small Rocks in the Nether, some of which contain tiny amounts of Ancient Debris, and are as rare as Meteorites on the Surface. Glowstone, NetherQuartz and Flint can be found in them too.
+[ADDED] Config to disable the nutrition System for Sugar, Fat and Dehydration. Alcohol and Caffeine stay though, since those are definitely things people intentionally consume for buffs and such.
+[ADDED] Netherite Drum, Fluid Pipes/Capsules and Anvil. Netherite also counts as Acid Proof now, due to its high Gold content. Also added Gold Fluid Pipes/Capsules while I was at it.
+[ADDED] Laser-O-Meter Sensor for Laser Fiber Wires.
+
+
+6.13.01:
+[NOTE] Sorry for letting this one take so long.
+[NOTE] I got a report that Riverwater, Swampwater and Oceanwater cannot be scanned with the Thaumometer, I can not replicate that Issue though, so I guess it is either fixed or something is wrong with their Modpack.
+[COMPAT] Netherite Plus got Compatibility now. It backports Netherite to 1.7.10. Soulfire Torch Placement by Tools, Record Shelving, Blackstone, Biomass, and the two Wood Types should all work in GregTech Stuff, also Netherite Ingots are made the Crucible way now instead of Crafting Debris with Gold Ingots. https://www.curseforge.com/minecraft/mc-mods/netheriteplus
+[FIXED] Some Localisation Issues with Reika's Fluids, it should be fine now. It will work with all other Unlocalized Fluids too, so GT6 will display the most proper Fluid Name that it can display now.
+[FIXED] Seems like QwerTech might have messed up the Recipes for putting Planks in a Bathing Pot to get Treated Wood. This Issue might be fixed now for Vanilla Planks.
+[FIXED] The GT6 Axe was still slowed down on my end, when TreeCapitator was actually installed, resulting in a Double Slowdown.
+[FIXED] Heat Exchangers and Diesel Motors were wasting Fuel in certain Situations. Typically when they were operated while constantly out of Fuel.
+[FIXED] Failing to Load Save Files in Singleplayer when you already loaded another World before.
+[FIXED] Pam's Harvestcraft Fishtrap Bait Recipe for Mixing Bowl had a lower amount of Output than intended.
+[FIXED] Thaumcraft Golems were not chopping GT6 Logs, because it checks for the wrong OreDict String, and because it checks for Block IDs using Block Objects which is kinda screwed up, so I had to fix that too.
+[FIXED] 7 Bits are definitely not enough to store Numbers that can go up to 12 Billion. Fusion Reactor Start Energy is now properly saved when unloaded.
+[FIXED] Terrafirmacraft Plus not being detected as Terrafirmacraft.
+[FIXED] Clay Ore that comes from Hematite Bedrock Drilling is now processable.
+[FIXED] Some Ars Magica Unification things.
+[FIXED] The way I overrode the Railcraft Plate Names was kinda jank so I made it use the GregTech Language File now.
+[FIXED] JABBA Dollys can no longer pick up GT6 Shelves. Somehow they were still able to be picked up even though I prevented them from working on GT Blocks as a whole, ages ago.
+[FIXED] Infinite Items Glitch caused by InvTweaks making 111 Stacks and NEI keeping those at an Infinite Level, causing Infinite Item Duplication, if a Stack with higher than its custom Maximum Size enters a GT6 GUI Slot, while the GUI is being kept open. Now if that happens I will just cap the Stacksize at 64, potentially deleting Items, but that is what you get for InvTweaks being screwed up.
+[CHANGED] When Machines can process multiple Items in a row in one go, they wont process more than a Minutes worth of Stuff at a time, assuming maximum Power Input. This applies to things like the Crusher, Sifter, Compressor, Squeezer, Electrolyzer and Centrifuge for example.
+[CHANGED] Bath Recipes that have an Output Stacksize of more than 1 now have their Outputs spread over the 6 Output Slots. This should make it easier to parallel process Ores in a Multiblock Bath. (I may or may not have slightly buffed the Outputs of some Ore Recipes too)
+[CHANGED] Blastproofness Tooltip now also mentions Strong Dynamite Proofness and doesn't stop at TNT-Proof anymore.
+[CHANGED] NEI Fuel Lists are now no longer listing the confusing and irrelevant EU/t Value.
+[CHANGED] More Reactor Test Stuffs from Erik3003.
+[CHANGED] Crucibles now glow when they are within 100 Kelvin of melting down.
+[ADDED] Netherite things, such as Crucibles, Burning Boxes and all the Shelf Stuff. The Crucible Tier is same as Meteoric Steel. The good Netherite Tools are made by bathing Diamond in molten Netherite. The bad Netherite Tools are, well, not that good. Ancient Debris does generate in the Nether now as rare small Ore.
+[ADDED] Infinite Bedrock Veins for Ancient Debris in the Nether. Relatively high Probability compared to all other Bedrock Veins. Will also exist without Netherrite Plus.
+[ADDED] Ancient Debris aka "Netherite Scraps" can now be used in the Massfabricator to make liquid Enderpearl. Which then can be used in a Replicator to make it into an actual Enderpearl. Dont ask me what sense it makes, the Massfabricator does it, not me.
+[ADDED] The HV Lightning Processor can be used to turn Blocks of Solid Netherite combined with a few other Ingredients into Netherstars.
+[ADDED] Uranium Hexaflouride Processing Chain by Erik3003. And fixed by Greg, because the Maths of the Recipes were "Perfectly Balanced without Exploits", except for the obvious dupes of every single Recipe added.
+[ADDED] Ownership Reset Config for people who locked themselves out of Stuff like Mechanical Safes in SinglePlayer.
+[ADDED] Small Cinnabar Ore to the Nether.
+[ADDED] Ars Magica Chimerite Ore when it is installed.
+[ADDED] Steam can now be put in Chem Tubes.
+[ADDED]
+Erik3003s Nuclear Reactor changes made it into this Version.
+He wrote a PDF as a Guide too, which I linked on the Downloads Page, and also here: https://gregtech.mechaenetia.com/1.7.10/gt6fission.pdf
+
+
+6.13.00:
+[BROKEN] DO NOT USE!
+
+
+6.12.02:
+[FIXED] TerraFirmaCraft Attack Damage Multiplier for GT6 Tools to be 80 instead of 10 and actually showing in the Tooltip.
+[FIXED] Thaumcraft Aspects for Nuggets and Ingots now check if they are supposed to be Metallum, and if not, then they will replace it with Ordo.
+[FIXED] Reactors blew up when no Coolant was in them while a minimal amount of Power was left over and they did not have any Rods.
+[FIXED] IC2-Classic Watermills should now accept Ocean and River Water. This requires a pending update on the IC2-Classic Side aswell.
+[FIXED] GT6 Tools should now work with Treecapitator installed as long as Treecapitator detects them as valid Tools.
+[FIXED] A Rare NEI Recipe List Crash. (Concurrent Modification Exception when clicking Progress Bar)
+[FIXED] Bedrock Ores did not generate Indicator Flowers and Indicator Rocks in Twilight Forest due to its Terrains normal Height of Y31 instead of Y63.
+[FIXED] The Code that made Plates, Ingots and Rocks placeable did not check if the Stack was already a Block, meaning it just replaced things like Greatwood Planks or Silverwood Planks with the Stack-of-Plates Block.
 [FIXED] Gearboxes sometimes breaking/overloading on World Load.
 [FIXED] Some Issue with Coke Ovens and other Ignition based Basic Machines, hopefully.
-[FIXED] Bumbliaries lacking Tooltips.
+[FIXED] Bumbliaries were lacking Tooltips.
 [FIXED] Reactor Rods in general were not ON/OFF sensitive.
+[FIXED] The Running-Possible Sensors now also return Redstone when the Output happens to be blocked at that moment.
 [FIXED] Made Tooltips for Power Input/Output of Machines now have a special verbiage for a Minimum of "1 Unit per Tick" or less, by saying "up to MAX per Tick" instead.
-[ADDED] Reactors can use Distilled Water as Coolant, but that uses a different System so beware.
+[CHANGED] Coke Ovens now have 9 Output Slots due to the Recipe that outputs 5/6 Chunks of Coal Coke, so that each Coke Chunk gets 1 Slot.
+[ADDED] Chili Crop which was missing.
+[ADDED] Snow Golems can have their poop picked up by GT6 Hoppers automatically without constantly breaking a Snow Layer Block. Also works with Et Futurums silent replacement for Snow Golems, yes I luckily noticed that...
+[ADDED] Reactors can use Distilled Water as Coolant, but that uses a different System so beware. Also it is not tested or finished yet! Also Reactor Explosions are disabled yet again until.
 [ADDED] Geiger Counter Sensor courtesy of Erik3003.
 
 

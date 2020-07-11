@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2019 Gregorius Techneticies
+ * Copyright (c) 2020 GregTech-6 Team
  *
  * This file is part of GregTech.
  *
@@ -47,8 +47,8 @@ import net.minecraftforge.fluids.FluidStack;
  * @author Gregorius Techneticies
  */
 public class RecipeMapPrinter extends RecipeMap {
-	public RecipeMapPrinter(Collection<Recipe> aRecipeList, String aUnlocalizedName, String aNameLocal, String aNameNEI, long aProgressBarDirection, long aProgressBarAmount, String aNEIGUIPath, long aInputItemsCount, long aOutputItemsCount, long aMinimalInputItems, long aInputFluidCount, long aOutputFluidCount, long aMinimalInputFluids, long aMinimalInputs, long aPower, String aNEISpecialValuePre, long aNEISpecialValueMultiplier, String aNEISpecialValuePost, boolean aShowVoltageAmperageInNEI, boolean aNEIAllowed, boolean aConfigAllowed, boolean aNeedsOutputs) {
-		super(aRecipeList, aUnlocalizedName, aNameLocal, aNameNEI, aProgressBarDirection, aProgressBarAmount, aNEIGUIPath, aInputItemsCount, aOutputItemsCount, aMinimalInputItems, aInputFluidCount, aOutputFluidCount, aMinimalInputFluids, aMinimalInputs, aPower, aNEISpecialValuePre, aNEISpecialValueMultiplier, aNEISpecialValuePost, aShowVoltageAmperageInNEI, aNEIAllowed, aConfigAllowed, aNeedsOutputs);
+	public RecipeMapPrinter(Collection<Recipe> aRecipeList, String aUnlocalizedName, String aNameLocal, String aNameNEI, long aProgressBarDirection, long aProgressBarAmount, String aNEIGUIPath, long aInputItemsCount, long aOutputItemsCount, long aMinimalInputItems, long aInputFluidCount, long aOutputFluidCount, long aMinimalInputFluids, long aMinimalInputs, long aPower, String aNEISpecialValuePre, long aNEISpecialValueMultiplier, String aNEISpecialValuePost, boolean aShowVoltageAmperageInNEI, boolean aNEIAllowed, boolean aConfigAllowed, boolean aNeedsOutputs, boolean aCombinePower) {
+		super(aRecipeList, aUnlocalizedName, aNameLocal, aNameNEI, aProgressBarDirection, aProgressBarAmount, aNEIGUIPath, aInputItemsCount, aOutputItemsCount, aMinimalInputItems, aInputFluidCount, aOutputFluidCount, aMinimalInputFluids, aMinimalInputs, aPower, aNEISpecialValuePre, aNEISpecialValueMultiplier, aNEISpecialValuePost, aShowVoltageAmperageInNEI, aNEIAllowed, aConfigAllowed, aNeedsOutputs, aCombinePower);
 	}
 	
 	@Override
@@ -112,7 +112,7 @@ public class RecipeMapPrinter extends RecipeMap {
 				}
 				return rRecipe;
 			}
-			if (OM.is_(OD.paperEmpty, tPaper)) {
+			if (OD.paperEmpty.is_(tPaper)) {
 				if (IL.GC_Schematic_1.exists() && tData.hasKey("gc_schematics_1")) return new Recipe(F, F, F, ST.array(ST.amount(8, tPaper), ST.amount(0, tUSB)), ST.array(IL.GC_Schematic_1.getWithMeta(1, tData.getShort("gc_schematics_1"))), null, null, FL.array(FL.mul(DYE_FLUIDS_CHEMICAL[DYE_INDEX_Black], 4, 1, T)), null, 2048, 16, 0);
 				if (IL.GC_Schematic_2.exists() && tData.hasKey("gc_schematics_2")) return new Recipe(F, F, F, ST.array(ST.amount(8, tPaper), ST.amount(0, tUSB)), ST.array(IL.GC_Schematic_2.getWithMeta(1, tData.getShort("gc_schematics_2"))), null, null, FL.array(FL.mul(DYE_FLUIDS_CHEMICAL[DYE_INDEX_Black], 4, 1, T)), null, 2048, 16, 0);
 				if (IL.GC_Schematic_3.exists() && tData.hasKey("gc_schematics_3")) return new Recipe(F, F, F, ST.array(ST.amount(8, tPaper), ST.amount(0, tUSB)), ST.array(IL.GC_Schematic_3.getWithMeta(1, tData.getShort("gc_schematics_3"))), null, null, FL.array(FL.mul(DYE_FLUIDS_CHEMICAL[DYE_INDEX_Black], 4, 1, T)), null, 2048, 16, 0);

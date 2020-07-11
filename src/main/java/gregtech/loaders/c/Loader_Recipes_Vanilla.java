@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2019 Gregorius Techneticies
+ * Copyright (c) 2020 GregTech-6 Team
  *
  * This file is part of GregTech.
  *
@@ -259,6 +259,11 @@ public class Loader_Recipes_Vanilla implements Runnable {
 		RM.generify(ST.make(Items.coal, 1, 0), OP.ingot.mat(MT.Coal    , 1));
 		RM.generify(ST.make(Items.coal, 1, 1), OP.ingot.mat(MT.Charcoal, 1));
 		
+		CR.shaped(OP.gem  .mat(MT.NetherizedDiamond, 1), DEF, "  ", " X", 'X', OP.ingot.dat(MT.NetherizedDiamond));
+		CR.shaped(OP.ingot.mat(MT.NetherizedDiamond, 1), DEF, "  ", " X", 'X', OP.gem  .dat(MT.NetherizedDiamond));
+		RM.generify(OP.gem  .mat(MT.NetherizedDiamond, 1), OP.ingot.mat(MT.NetherizedDiamond, 1));
+		RM.generify(OP.ingot.mat(MT.NetherizedDiamond, 1), OP.gem  .mat(MT.NetherizedDiamond, 1));
+		
 		
 		CR.shaped(ST.make(Items.lead                    , 1, 0), DEF_NAC_MIR                    , " SS", " GS", "S  ", 'S', OD.itemString, 'G', OD.itemGlue);
 		CR.shaped(ST.make(Items.lead                    , 1, 0), DEF_NAC_MIR                    , " SS", " GS", "S  ", 'S', OD.itemString, 'G', OD.slimeball);
@@ -272,7 +277,7 @@ public class Loader_Recipes_Vanilla implements Runnable {
 		CR.shaped(ST.make(Items.comparator              , 1, 0), DEF | DEL_OTHER_SHAPED_RECIPES , " T ", "TQT", "SSS", 'S', OP.stoneSmooth, 'T', OD.craftingRedstoneTorch, 'Q', OD.craftingQuartz);
 		CR.shaped(ST.make(Blocks.piston                 , 1, 0), DEF | DEL_OTHER_SHAPED_RECIPES , "WWW", "CBC", "CRC", 'W', OD.plankAnyWood, 'C', OP.stoneCobble, 'B', OD.craftingPistonIngot, 'R', OD.itemRedstone);
 		CR.shaped(ST.make(Blocks.sticky_piston          , 1, 0), DEF | DEL_OTHER_SHAPED_RECIPES ,  "G" ,  "P"        , 'G', OD.craftingPistonGlue, 'P', Blocks.piston);
-		CR.shaped(ST.make(Items.bow                     , 1, 0), DEF_MIR                        , " WS", "W S", " WS", 'S', OD.itemString, 'W', OP.stick.dat(ANY.Wood));
+		CR.shaped(ST.make(Items.bow                     , 1, 0), DEF_MIR                        , " WS", "WkS", " WS", 'S', OD.itemString, 'W', OP.stick.dat(ANY.Wood));
 		CR.shaped(ST.make(Blocks.dropper                , 1, 0), DEF | DEL_OTHER_SHAPED_RECIPES , "CCC", "C C", "CRC", 'C', OP.stoneCobble, 'R', OD.itemRedstone);
 		CR.shaped(ST.make(Blocks.dispenser              , 1, 0), DEF | DEL_OTHER_SHAPED_RECIPES , "CCC", "CBC", "CRC", 'C', OP.stoneCobble, 'R', OD.itemRedstone, 'B', ST.make(Items.bow, 1, 0));
 		CR.shaped(ST.make(Blocks.dispenser              , 1, 0), DEF_MIR                        , " WS", "WDS", " WS", 'S', OD.itemString, 'W', OP.stick.dat(ANY.Wood), 'D', Blocks.dropper);
@@ -398,10 +403,11 @@ public class Loader_Recipes_Vanilla implements Runnable {
 		RM.Hammer       .addRecipe1(T, 16,  16, ST.make(Blocks.packed_ice               , 1, W), OM.dust(MT.Ice, 2*U));
 		RM.Hammer       .addRecipe1(T, 16,  16, ST.make(Blocks.hardened_clay            , 1, W), OM.dust(MT.Clay, 2*U));
 		RM.Hammer       .addRecipe1(T, 16,  16, ST.make(Blocks.stained_hardened_clay    , 1, W), OM.dust(MT.Clay, 2*U));
-		RM.Hammer       .addRecipe1(T, 16,  16, ST.make(Blocks.stained_glass            , 1, W), OM.dust(MT.Glass));
 		RM.Hammer       .addRecipe1(T, 16,  16, ST.make(Blocks.glass                    , 1, W), OM.dust(MT.Glass));
-		RM.Hammer       .addRecipe1(T, 16,  16, ST.make(Blocks.stained_glass_pane       , 1, W), OM.dust(MT.Glass, 3*U8));
+		RM.Hammer       .addRecipe1(T, 16,  16, ST.make(Blocks.stained_glass            , 1, W), OM.dust(MT.Glass));
 		RM.Hammer       .addRecipe1(T, 16,  16, ST.make(Blocks.glass_pane               , 1, W), OM.dust(MT.Glass, 3*U8));
+		RM.Hammer       .addRecipe1(T, 16,  16, ST.make(Blocks.stained_glass_pane       , 1, W), OM.dust(MT.Glass, 3*U8));
+		RM.Hammer       .addRecipe1(T, 16,  16, IL.NePl_Quartz_Bricks.get(                   1), OP.gem.mat(MT.NetherQuartz, 4));
 		RM.Hammer       .addRecipe1(T, 16,  16, ST.make(Blocks.quartz_block             , 1, W), OP.gem.mat(MT.NetherQuartz, 4));
 		RM.Hammer       .addRecipe1(T, 16,  16, ST.make(Blocks.double_stone_slab        , 1, 7), OP.gem.mat(MT.NetherQuartz, 4));
 		RM.Hammer       .addRecipe1(T, 16,  16, ST.make(Blocks.quartz_stairs            , 1, W), OP.gem.mat(MT.NetherQuartz, 6));
@@ -419,6 +425,7 @@ public class Loader_Recipes_Vanilla implements Runnable {
 		RM.Crusher      .addRecipe1(T, 16,  32, IL.Module_Stone_Generator.get(               0), ST.make(Blocks.cobblestone, 1, 0));
 		RM.Crusher      .addRecipe1(T, 16,  32, ST.make(Blocks.cobblestone              , 1, 0), ST.make(Blocks.gravel, 1, 0));
 		RM.Crusher      .addRecipe1(T, 16,  16, ST.make(Blocks.sandstone                , 1, W), ST.make(Blocks.sand, 1, 0));
+		RM.Crusher      .addRecipe1(T, 16,  32, IL.NePl_Quartz_Bricks.get(                   1), OP.gem.mat(MT.NetherQuartz, 4));
 		RM.Crusher      .addRecipe1(T, 16,  32, ST.make(Blocks.quartz_block             , 1, W), OP.gem.mat(MT.NetherQuartz, 4));
 		RM.Crusher      .addRecipe1(T, 16,  16, ST.make(Blocks.double_stone_slab        , 1, 7), OP.gem.mat(MT.NetherQuartz, 4));
 		RM.Crusher      .addRecipe1(T, 16,  48, ST.make(Blocks.quartz_stairs            , 1, W), OP.gem.mat(MT.NetherQuartz, 6));
@@ -460,6 +467,9 @@ public class Loader_Recipes_Vanilla implements Runnable {
 		RM.sawing(16, 128, F, 100, ST.make(Blocks.trapped_chest             , 1, W), IL.Plank.get(8), ST.make(Blocks.tripwire_hook, 1, 0));
 		RM.sawing(16, 128, F, 100, ST.make(Blocks.noteblock                 , 1, W), IL.Plank.get(8), OP.dust.mat(MT.Redstone, 1));
 		RM.sawing(16, 128, F, 100, ST.make(Blocks.jukebox                   , 1, W), IL.Plank.get(8), OP.gem.mat(MT.Diamond, 1));
+		RM.sawing(16,  64, F, 100, ST.make(Items.painting                   , 1, W), ST.make(Items.stick, 8, 0));
+		RM.sawing(16,  64, F, 100, ST.make(Items.item_frame                 , 1, W), ST.make(Items.stick, 8, 0));
+		RM.sawing(16,  40, F, 100, ST.make(Blocks.ladder                    , 1, W), ST.make(Items.stick, 2, 0), OM.dust(MT.Wood, OP.stick.mAmount / 3));
 		RM.sawing(16,  16, T,  50, ST.make(Blocks.melon_block               , 1, W), ST.make(Items.melon, 8, 0), ST.make(Items.melon_seeds, 1, 0));
 		
 		CR.shapeless(IL.Plank.get(1), CR.DEF_NAC_NCC, new Object[] {OreDictToolNames.saw, ST.make(Blocks.wooden_button          , 1, W)});
@@ -523,8 +533,8 @@ public class Loader_Recipes_Vanilla implements Runnable {
 		RM.Freezer      .addRecipe1(T, 16,  128, ST.tag(9), FL.DistW.make(1000), NF, OP.dust.mat(MT.Snow, 1));
 		
 		RM.Mortar       .addRecipe1(T, 16, 32, ST.make(Blocks.glass             , 1, W), OM.dust(MT.Glass));
-		RM.Mortar       .addRecipe1(T, 16, 32, ST.make(Blocks.stained_glass     , 1, W), OM.dust(MT.Glass, 3*U8));
-		RM.Mortar       .addRecipe1(T, 16, 32, ST.make(Blocks.glass_pane        , 1, W), OM.dust(MT.Glass));
+		RM.Mortar       .addRecipe1(T, 16, 32, ST.make(Blocks.stained_glass     , 1, W), OM.dust(MT.Glass));
+		RM.Mortar       .addRecipe1(T, 16, 32, ST.make(Blocks.glass_pane        , 1, W), OM.dust(MT.Glass, 3*U8));
 		RM.Mortar       .addRecipe1(T, 16, 32, ST.make(Blocks.stained_glass_pane, 1, W), OM.dust(MT.Glass, 3*U8));
 		RM.Mortar       .addRecipe1(T, 16, 32, ST.make(Items.bone, 1, W), IL.Dye_Bonemeal.get(2));
 		RM.Mortar       .addRecipe1(T, 16, 32, ST.make(Items.blaze_rod, 1, W), ST.make(Items.blaze_powder, 2, 0));
@@ -772,6 +782,7 @@ public class Loader_Recipes_Vanilla implements Runnable {
 		RM.biomass(ST.make(Blocks.melon_block, 1, W));
 		RM.biomass(ST.make(Blocks.pumpkin, 1, W));
 		RM.biomass(ST.make(Blocks.cactus, 8, W));
+		RM.biomass(ST.make(Blocks.vine, 8, W));
 		RM.biomass(ST.make(Items.reeds, 8, W));
 		RM.biomass(ST.make(Items.melon, 9, W));
 		RM.biomass(ST.make(Items.wheat, 9, W));

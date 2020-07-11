@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2019 Gregorius Techneticies
+ * Copyright (c) 2020 GregTech-6 Team
  *
  * This file is part of GregTech.
  *
@@ -54,6 +54,9 @@ public class ItemStackMap<K extends ItemStackContainer, V> extends HashMap<ItemS
 	public boolean containsKey(Block aBlock, long aMeta, boolean aWildcard) {
 		return containsKey(new ItemStackContainer(aBlock, 1, aMeta)) || (aWildcard && aMeta != W && containsKey(new ItemStackContainer(aBlock, 1, W)));
 	}
+	public boolean containsKey(ItemStack aStack, boolean aWildcard) {
+		return containsKey(new ItemStackContainer(aStack)) || (aWildcard && containsKey(new ItemStackContainer(aStack, W)));
+	}
 	
 	public V get(long aID, long aMeta) {
 		return get(new ItemStackContainer(aID, 1, aMeta));
@@ -68,6 +71,9 @@ public class ItemStackMap<K extends ItemStackContainer, V> extends HashMap<ItemS
 		return aMod.mLoaded ? get(new ItemStackContainer(ST.make(aMod, aName, 1, aMeta))) : null;
 	}
 	
+	public V put(IItemContainer aKey, V aValue) {
+		return put(aKey.get(1), aValue);
+	}
 	public V put(ItemStack aKey, V aValue) {
 		return put(new ItemStackContainer(aKey), aValue);
 	}

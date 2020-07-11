@@ -170,11 +170,17 @@ public class LH {
 	, TOOLTIP_LIQUIDPROOF = "gt.lang.proof.liquid"
 	, TOOLTIP_PLASMAPROOF = "gt.lang.proof.plasma"
 	, TOOLTIP_HEATPROOF = "gt.lang.proof.heat"
+	, TOOLTIP_REMINDER_EXTENDERS = "gt.lang.reminder.extenders"
 	, TOOLTIP_SEALABLE_ANY = "gt.lang.sealable.any"
 	, TOOLTIP_SEALABLE_SOME = "gt.lang.sealable.some"
 	, TOOLTIP_SEALABLE_BUGGED = "gt.lang.sealable.bug"
 	, TOOLTIP_PISTONPUSHABLE = "gt.lang.pistonpush"
 	, TOOLTIP_SPAWNPROOF = "gt.lang.spawnproof"
+	, TOOLTIP_SPAWNPROOF_OPTIFINE = "gt.lang.spawnproof.optifine"
+	, TOOLTIP_SPAWNPROOF_MP_BUG = "gt.lang.spawnproof.mp.bug"
+	, TOOLTIP_SPAWNPROOF_MP_BROKEN = "gt.lang.spawnproof.mp.broken"
+	, TOOLTIP_SPAWNPROOF_SP_BUG = "gt.lang.spawnproof.sp.bug"
+	, TOOLTIP_SPAWNPROOF_SP_BROKEN = "gt.lang.spawnproof.sp.broken"
 	, TOOLTIP_BLASTPOWER = "gt.lang.blastpower"
 	, TOOLTIP_BLASTRANGE = "gt.lang.blastrange"
 	, TOOLTIP_BLASTFORTUNE = "gt.lang.blastfortune"
@@ -200,6 +206,7 @@ public class LH {
 	, TOOLTIP_BLAST_RESISTANCE_GHAST = "gt.lang.blast.resist.ghast.proof"
 	, TOOLTIP_BLAST_RESISTANCE_CREEPER = "gt.lang.blast.resist.creeper.proof"
 	, TOOLTIP_BLAST_RESISTANCE_TNT = "gt.lang.blast.resist.tnt.proof"
+	, TOOLTIP_BLAST_RESISTANCE_DYNAMITE = "gt.lang.blast.resist.dynamite.proof"
 	, TOOLTIP_BLAST_RESISTANCE_NOT_NUKE = "gt.lang.blast.resist.nuke.not"
 	, TOOLTIP_BETWEENLANDS_RESISTANCE = "gt.lang.betweenlands.resist"
 	, PROSPECTING_LAVA = "gt.lang.prospecting.lava"
@@ -237,7 +244,7 @@ public class LH {
 	
 	public static final String percent(long aNumber) {return (aNumber/100) + ((aNumber%100)>9?"."+aNumber%100:".0"+(aNumber%100));}
 	
-	public static final String getToolTipBlastResistance(Block aBlock, double aResistance) {return Chat.WHITE + get(LH.TOOLTIP_BLASTRESISTANCE) + Chat.ORANGE + ((int)aResistance) + "." + (((int)(aResistance * 10)) % 10) + (aResistance < 4 ? Chat.BLINKING_RED + " " + get(LH.TOOLTIP_BLAST_RESISTANCE_TERRIBLE) : aResistance < 12 ? Chat.RED + " " + get(LH.TOOLTIP_BLAST_RESISTANCE_GHAST) : aResistance < 16 ? Chat.YELLOW + " " + get(LH.TOOLTIP_BLAST_RESISTANCE_CREEPER) : aResistance < 3330 || !MD.IC2.mLoaded || (aBlock != NB && aBlock != null && COMPAT_IC2 != null && COMPAT_IC2.isExplosionWhitelisted(aBlock)) ? Chat.GREEN + " " + get(LH.TOOLTIP_BLAST_RESISTANCE_TNT) : Chat.BLINKING_CYAN + " " + get(LH.TOOLTIP_BLAST_RESISTANCE_NOT_NUKE));}
+	public static final String getToolTipBlastResistance(Block aBlock, double aResistance) {return Chat.WHITE + get(LH.TOOLTIP_BLASTRESISTANCE) + Chat.ORANGE + ((int)aResistance) + "." + (((int)(aResistance * 10)) % 10) + (aResistance < 4 ? Chat.BLINKING_RED + " " + get(LH.TOOLTIP_BLAST_RESISTANCE_TERRIBLE) : aResistance < 12 ? Chat.RED + " " + get(LH.TOOLTIP_BLAST_RESISTANCE_GHAST) : aResistance < 16 ? Chat.YELLOW + " " + get(LH.TOOLTIP_BLAST_RESISTANCE_CREEPER) : aResistance <= 40 ? Chat.GREEN + " " + get(LH.TOOLTIP_BLAST_RESISTANCE_TNT) : aResistance < 3330 || (aBlock != NB && aBlock != null && COMPAT_IC2 != null && COMPAT_IC2.isExplosionWhitelisted(aBlock)) ? Chat.GREEN + " " + get(LH.TOOLTIP_BLAST_RESISTANCE_DYNAMITE) : Chat.BLINKING_CYAN + " " + get(LH.TOOLTIP_BLAST_RESISTANCE_NOT_NUKE));}
 	
 	public static final String getToolTipEfficiency(long aEfficiency) {aEfficiency = Math.abs(aEfficiency); return Chat.YELLOW + get(EFFICIENCY) + ": " + Chat.WHITE + percent(aEfficiency) + "%";}
 	
@@ -249,12 +256,12 @@ public class LH {
 			if (TD.Energy.ALL_EU.contains(aEnergyOUT.mType)) {
 				aList.add(LH.getToolTipEfficiency(UT.Code.units(10000, aEnergyIN.mRec, aEnergyOUT.mRec*aMultiplier, F)));
 			} else {
-				if (aEnergyOUT.mType == TD.Energy.RF        ) aList.add(LH.getToolTipEfficiency(UT.Code.units(10000, aEnergyIN.mRec*RF_PER_EU, aEnergyOUT.mRec*aMultiplier, F)));
+				if (aEnergyOUT.mType == TD.Energy.RF  ) aList.add(LH.getToolTipEfficiency(UT.Code.units(10000, aEnergyIN.mRec*RF_PER_EU, aEnergyOUT.mRec*aMultiplier, F)));
 			}
 		} else {
 			if (TD.Energy.ALL_EU.contains(aEnergyOUT.mType)) {
-				if (aEnergyIN.mType == TD.Energy.RF     ) aList.add(LH.getToolTipEfficiency(UT.Code.units(10000, aEnergyIN.mRec, aEnergyOUT.mRec*aMultiplier*RF_PER_EU, F)));
-				if (aEnergyIN.mType == TD.Energy.STEAM  ) aList.add(LH.getToolTipEfficiency(UT.Code.units(10000, aEnergyIN.mRec, aEnergyOUT.mRec*aMultiplier*STEAM_PER_EU, F)));
+				if (aEnergyIN.mType == TD.Energy.RF   ) aList.add(LH.getToolTipEfficiency(UT.Code.units(10000, aEnergyIN.mRec, aEnergyOUT.mRec*aMultiplier*RF_PER_EU, F)));
+				if (aEnergyIN.mType == TD.Energy.STEAM) aList.add(LH.getToolTipEfficiency(UT.Code.units(10000, aEnergyIN.mRec, aEnergyOUT.mRec*aMultiplier*STEAM_PER_EU, F)));
 			}
 		}
 	}
@@ -434,11 +441,17 @@ public class LH {
 		add(TOOLTIP_LIQUIDPROOF                         , "Can handle Liquids");
 		add(TOOLTIP_PLASMAPROOF                         , "Can handle Plasma");
 		add(TOOLTIP_HEATPROOF                           , "Can handle Temperatures up to: ");
+		add(TOOLTIP_REMINDER_EXTENDERS                  , "Remember to use Universal Extenders if you need to literally cut Corners");
 		add(TOOLTIP_SEALABLE_ANY                        , "This Block can seal Air at any Side");
 		add(TOOLTIP_SEALABLE_SOME                       , "This Block can seal Air at some Sides");
 		add(TOOLTIP_SEALABLE_BUGGED                     , "Shouldn't seal Air, but sometimes does because opaque");
 		add(TOOLTIP_PISTONPUSHABLE                      , "Pistons can push this Block");
 		add(TOOLTIP_SPAWNPROOF                          , "Mobs cannot Spawn on this Block");
+		add(TOOLTIP_SPAWNPROOF_OPTIFINE                 , "Mob Protection broken because Optifine has removed Metadata Support from Vanilla.");
+		add(TOOLTIP_SPAWNPROOF_MP_BUG                   , "Mobs should Spawn on this Block, even if the NEI Overlay says the opposite.");
+		add(TOOLTIP_SPAWNPROOF_MP_BROKEN                , "Mobs cannot Spawn on this Block, even if the NEI Overlay says the opposite.");
+		add(TOOLTIP_SPAWNPROOF_SP_BUG                   , "Mobs cannot, but should Spawn on this Block.");
+		add(TOOLTIP_SPAWNPROOF_SP_BROKEN                , "Mobs can, but shouldn't Spawn on this Block.");
 		add(TOOLTIP_BLASTPOWER                          , "Blast Power: ");
 		add(TOOLTIP_BLASTRANGE                          , "Blast Range: ");
 		add(TOOLTIP_BLASTFORTUNE                        , "Blast Fortune Level: ");
@@ -464,7 +477,8 @@ public class LH {
 		add(TOOLTIP_BLAST_RESISTANCE_GHAST              , "(Ghast Proof)");
 		add(TOOLTIP_BLAST_RESISTANCE_CREEPER            , "(Creeper Proof)");
 		add(TOOLTIP_BLAST_RESISTANCE_TNT                , "(TNT Proof)");
-		add(TOOLTIP_BLAST_RESISTANCE_NOT_NUKE           , "(IC2 Nukes will go right through!)");
+		add(TOOLTIP_BLAST_RESISTANCE_DYNAMITE           , "(Strong Dynamite Proof)");
+		add(TOOLTIP_BLAST_RESISTANCE_NOT_NUKE           , "(IC2 Nukes still go right through!)");
 		add(TOOLTIP_BETWEENLANDS_RESISTANCE             , "Resistant to the Effects of the Betweenlands");
 		add(PROSPECTING_LAVA                            , "There is Lava behind this Rock.");
 		add(PROSPECTING_LIQUID                          , "There is a Liquid behind this Rock.");
@@ -528,6 +542,8 @@ public class LH {
 		, RAINBOW_SLOW = BLACK
 		, BLINKING_CYAN = CYAN
 		, BLINKING_RED = RED
+		, BLINKING_ORANGE = ORANGE
+		, BLINKING_GRAY = GRAY
 		;
 	}
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2019 Gregorius Techneticies
+ * Copyright (c) 2020 GregTech-6 Team
  *
  * This file is part of GregTech.
  *
@@ -79,6 +79,7 @@ public class MD {
 	, MO                = new ModData(ModIDs.MO                 , "Matter Overdrive")
 	
 	, TFC               = new ModData(ModIDs.TFC                , "TerraFirmaCraft")
+	, TFCP              = new ModData(ModIDs.TFCP               , "TerraFirmaCraft Plus")
 	
 	, MET               = new ModData("Metallurgy"              , "Metallurgy")
 	
@@ -87,6 +88,7 @@ public class MD {
 	, ZTONES            = new ModData(ModIDs.ZTONES             , "Ztones")
 	, CHSL              = new ModData(ModIDs.CHSL               , "Chisel")
 	
+	, NePl              = new ModData(ModIDs.NePl               , "Netherite Plus")
 	, EtFu              = new ModData(ModIDs.EtFu               , "Et Futurum")
 	, BB                = new ModData(ModIDs.BB                 , "Better Beginnings")
 	, DYNAMIC_TREES     = new ModData(ModIDs.DYNAMIC_TREES      , "Dynamic Trees")
@@ -147,6 +149,7 @@ public class MD {
 	, OC                = new ModData(ModIDs.OC                 , "Open Computers")
 	, CC                = new ModData(ModIDs.CC                 , "ComputerCraft")
 	
+	, TreeCap           = new ModData(ModIDs.TreeCap            , "Treecapitator")
 	, HaC               = new ModData(ModIDs.HaC                , "HarvestCraft")
 	, CookBook          = new ModData(ModIDs.CookBook           , "Cooking for Blockheads")
 	, APC               = new ModData(ModIDs.APC                , "AppleCore")
@@ -174,6 +177,7 @@ public class MD {
 	, SmAc              = new ModData(ModIDs.SmAc               , "Simple Achievements")
 	, HQM               = new ModData(ModIDs.HQM                , "Hardcore Questing Mode")
 	
+	, HEX               = new ModData(ModIDs.HEX                , "HEXCraft")
 	, DE                = new ModData(ModIDs.DE                 , "Draconic Evolution")
 	, AV                = new ModData(ModIDs.AV                 , "Avaritia")
 	
@@ -229,8 +233,9 @@ public class MD {
 	, WR_CBE_A          = new ModData(ModIDs.WR_CBE_A           , "Wireless Redstone Chickenbones Edition")
 	, WR_CBE_L          = new ModData(ModIDs.WR_CBE_L           , "Wireless Redstone Chickenbones Edition")
 	
-	, COFH_API          = new ModData(ModIDs.COFH_API           , "CoFHAPI")
-	, COFH_API_ENERGY   = new ModData(ModIDs.COFH_API_ENERGY    , "CoFHAPI Energy")
+	, COFH_API          = new ModData(ModIDs.COFH_API           , "CoFH-API")
+	, COFH_API_ENERGY   = new ModData(ModIDs.COFH_API_ENERGY    , "CoFH-API Energy")
+	, COFH_CORE         = new ModData(ModIDs.COFH_CORE          , "CoFH-Core")
 	
 	, OB                = new ModData(ModIDs.OB                 , "Open Blocks")
 	, MNTL              = new ModData(ModIDs.MNTL               , "Mantle")

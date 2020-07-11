@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2019 Gregorius Techneticies
+ * Copyright (c) 2020 GregTech-6 Team
  *
  * This file is part of GregTech.
  *
@@ -83,6 +83,7 @@ public enum IL implements IItemContainer {
 	EB_Dirt_Alfisol, EB_Dirt_Andisol, EB_Dirt_Gelisol, EB_Dirt_Histosol, EB_Dirt_Inceptisol, EB_Dirt_Mollisol, EB_Dirt_Oxisol,
 	EB_Grass_Alfisol, EB_Grass_Andisol, EB_Grass_Gelisol, EB_Grass_Histosol, EB_Grass_Inceptisol, EB_Grass_Mollisol, EB_Grass_Oxisol,
 	ENVM_Spoiled_Milk_Bucket, ENVM_Rotten_Food, ENVM_Bottle_Water_Dirty, ENVM_Bottle_Water_Cold, ENVM_Bottle_Water_Salty,
+	NePl_Torch, NePl_Blackstone, NePl_Blackstone_Bricks, NePl_Blackstone_Polished, NePl_Basalt, NePl_Basalt_Polished, NePl_SoulSoil, NePl_Quartz_Bricks,
 	EtFu_Chorus_Fruit, EtFu_Chorus_Popped, EtFu_Rabbit_Foot, EtFu_Beet_Seeds, EtFu_Dragon_Breath, EtFu_Path, EtFu_Dirt, EtFu_Gravel,
 	EtFu_Granite, EtFu_Diorite, EtFu_Andesite, EtFu_Granite_Smooth, EtFu_Diorite_Smooth, EtFu_Andesite_Smooth,
 	GaSu_Granite, GaSu_Diorite, GaSu_Andesite, GaSu_Granite_Smooth, GaSu_Diorite_Smooth, GaSu_Andesite_Smooth, GaSu_Basalt, GaSu_Basalt_Smooth, GaSu_Beet_Seeds,
@@ -98,8 +99,8 @@ public enum IL implements IItemContainer {
 	Myst_Desk_Block, Myst_Desk_Item, Myst_Bookstand, Myst_Lectern, Myst_Crystal, Myst_Receptacle, Myst_Ink_Mixer, Myst_Book_Binder, Myst_Ink_Vial,
 	ARS_Cerublossom, ARS_DesertNova,
 	BOTA_Paintslinger,
-	BOTA_Ender_Air_Bottle,
-	BOTA_Livingrock, BOTA_Granite, BOTA_Diorite, BOTA_Andesite, BOTA_Granite_Smooth, BOTA_Diorite_Smooth, BOTA_Andesite_Smooth, BOTA_Granite_Bricks, BOTA_Diorite_Bricks, BOTA_Andesite_Bricks, BOTA_Granite_Chiseled, BOTA_Diorite_Chiseled, BOTA_Andesite_Chiseled, BOTA_Prismarine, BOTA_Prismarine_Bricks, BOTA_Prismarine_Dark,
+	BOTA_Ender_Air_Bottle, BOTA_Mana_String, BOTA_Red_String,
+	BOTA_Livingrock, BOTA_Granite, BOTA_Diorite, BOTA_Andesite, BOTA_Basalt, BOTA_Granite_Smooth, BOTA_Diorite_Smooth, BOTA_Andesite_Smooth, BOTA_Basalt_Smooth, BOTA_Granite_Bricks, BOTA_Diorite_Bricks, BOTA_Andesite_Bricks, BOTA_Basalt_Bricks, BOTA_Granite_Chiseled, BOTA_Diorite_Chiseled, BOTA_Andesite_Chiseled, BOTA_Basalt_Chiseled, BOTA_Prismarine, BOTA_Prismarine_Bricks, BOTA_Prismarine_Dark,
 	ALF_LivingCobble, ALF_DreamWood, ALF_DreamSapling, ALF_DreamLeaves, ALF_Ice, ALF_Gateway_Core,
 	TC_Cinderpearl, TC_Shimmerleaf, TC_Vishroom,
 	TC_Greatwood_Log, TC_Greatwood_Planks, TC_Silverwood_Log, TC_Silverwood_Planks,
@@ -152,6 +153,7 @@ public enum IL implements IItemContainer {
 	RC_Crowbar_Iron, RC_Crowbar_Steel, RC_Crowbar_Thaumium, RC_Crowbar_Voidmetal,
 	RC_Creosote_Bottle, RC_Creosote_Bucket, RC_Creosote_Can, RC_Creosote_Capsule, RC_Creosote_RefractoryCapsule,
 	IE_Creosote_Bottle, IE_Creosote_Bucket, IE_Hammer, IE_Slag, IE_Blueprint_Projectiles_Common, IE_Blueprint_Projectiles_Specialized, IE_Blueprint_Projectiles_Electrodes, IE_Crate, IE_Treated_Planks, IE_Treated_Slab, IE_Treated_Stairs,
+	HBM_Mercury_Bottle, HBM_Mercury_Drop,
 	ICBM_Concrete,
 	IC2_Debug,
 	IC2_Fertilizer, IC2_Grin_Powder, IC2_Spray_WeedEx,
@@ -175,7 +177,7 @@ public enum IL implements IItemContainer {
 	IC2_SuBattery, IC2_ReBattery, IC2_AdvBattery, IC2_EnergyCrystal, IC2_LapotronCrystal,
 	IC2_Iridium_Ore, IC2_Iridium_Shard,
 	GC_Infinite_Oxygen, GC_Infinite_Battery,
-	GC_Torch_Glowstone, GC_Canister, GC_OxyTank_1, GC_OxyTank_2, GC_OxyTank_3, GC_OxyTank_4, GC_OxyTank_5, GC_OxyTank_6, GC_OxyTank_Env,
+	GC_Torch_Glowstone, GC_Canister, GC_OxyTank_1, GC_OxyTank_2, GC_OxyTank_3, GC_OxyTank_4, GC_OxyTank_5, GC_OxyTank_6, GC_OxyTank_7, GC_OxyTank_Env,
 	GC_Schematic_1, GC_Schematic_2, GC_Schematic_3,
 	Arrow_Head_Glass_Emtpy, Arrow_Head_Glass_Poison, Arrow_Head_Glass_Poison_Long, Arrow_Head_Glass_Poison_Strong, Arrow_Head_Glass_Slowness, Arrow_Head_Glass_Slowness_Long, Arrow_Head_Glass_Weakness, Arrow_Head_Glass_Weakness_Long, Arrow_Head_Glass_Holy_Water,
 	Arrow_Wooden_Glass_Emtpy, Arrow_Wooden_Glass_Poison, Arrow_Wooden_Glass_Poison_Long, Arrow_Wooden_Glass_Poison_Strong, Arrow_Wooden_Glass_Slowness, Arrow_Wooden_Glass_Slowness_Long, Arrow_Wooden_Glass_Weakness, Arrow_Wooden_Glass_Weakness_Long, Arrow_Wooden_Glass_Holy_Water,

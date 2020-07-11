@@ -39,22 +39,14 @@ import gregapi.code.ModData;
 import gregapi.code.ObjectStack;
 import gregapi.code.TagData;
 import gregapi.damage.DamageSources;
-import gregapi.data.ANY;
-import gregapi.data.CS;
+import gregapi.data.*;
 import gregapi.data.CS.ArmorsGT;
 import gregapi.data.CS.BlocksGT;
 import gregapi.data.CS.FluidsGT;
 import gregapi.data.CS.IconsGT;
 import gregapi.data.CS.ItemsGT;
 import gregapi.data.CS.PotionsGT;
-import gregapi.data.FL;
-import gregapi.data.IL;
-import gregapi.data.LH;
-import gregapi.data.MD;
-import gregapi.data.MT;
-import gregapi.data.RM;
 import gregapi.data.TC.TC_AspectStack;
-import gregapi.data.TD;
 import gregapi.enchants.Enchantment_Radioactivity;
 import gregapi.fluid.FluidGT;
 import gregapi.fluid.FluidTankGT;
@@ -1489,10 +1481,10 @@ public class UT {
 			long tR = 0, tG = 0, tB = 0, tPixels = 0;
 			for (int tWidth = 0; tWidth < icon.getWidth(); tWidth++) for (int tHeight = 0; tHeight < icon.getHeight(); tHeight++) {
 				int tPixel = icon.getRGB(tWidth, tHeight);
-				if (((tPixel >>> 24) & 255) > 128) {
+				if ((     (tPixel >>> 24) & 255) > 128) {
 					tR += (tPixel >>> 16) & 255;
-					tG += (tPixel >>> 8) & 255;
-					tB += tPixel & 255;
+					tG += (tPixel >>>  8) & 255;
+					tB +=  tPixel         & 255;
 					tPixels++;
 				}
 			}
@@ -1501,8 +1493,14 @@ public class UT {
 		
 		/** toUpperCases the first Character of the String and returns it */
 		public static String capitalise(String aString) {
-			if (aString != null && !aString.isEmpty()) return aString.substring(0, 1).toUpperCase() + aString.substring(1);
-			return "";
+			return aString == null ? "" : aString.length() <= 1 ? aString.toUpperCase() : aString.substring(0, 1).toUpperCase() + aString.substring(1);
+		}
+		
+		/** toUpperCases the first Character of each Word in the String and returns it */
+		public static String capitaliseWords(String aString) {
+			StringBuilder rString = new StringBuilder();
+			for (String tString : aString.split(" ")) if (!tString.isEmpty()) rString.append(capitalise(tString)).append(" ");
+			return rString.toString().trim();
 		}
 		
 		/** @return the opposite facing of this Side of a Block, with a boundary check. */
@@ -2370,7 +2368,7 @@ public class UT {
 			if (aPlayer == null || ST.invalid(aStack)) return F;
 			OreDictItemData tData = OM.association_(aStack);
 			Block aBlock = ST.block(aStack);
-			if (BlocksGT.Log1 == aBlock || BlocksGT.Log1FireProof == aBlock || OM.is_("beamWood", aStack) || OM.is_("logWood", aStack) || OM.is_("logRubber", aStack)) {
+			if (BlocksGT.Log1 == aBlock || BlocksGT.Log1FireProof == aBlock || OD.woodLog.is_(aStack) || OD.beamWood.is_(aStack) || OD.logWood.is_(aStack) || OD.logRubber.is_(aStack)) {
 				aPlayer.triggerAchievement(AchievementList.openInventory);
 				aPlayer.triggerAchievement(AchievementList.mineWood);
 			}
